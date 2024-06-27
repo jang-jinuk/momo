@@ -48,6 +48,8 @@ public class User {
 
     private Instant userModifyDate;
 
-    private enum userAdmin;
+    private enum userAdmin{
+        USER, ADMIN
+    };
 
 }
