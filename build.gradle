@@ -1,0 +1,87 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.momo'
+version = '0.0.1-SNAPSHOT'
+
+java {
+//    아래 줄은 문제 생기면 활성화
+//    sourceCompatibility = '11'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    기본 Spring Boot Starter 설정
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+    // OAuth2 인증 관련
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    
+    // 메일 관련 처리
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+//    추가 설정
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+//    thymeleaf Layout 사용
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+
+    // 책 설정 시작 --------------------
+    implementation 'org.modelmapper:modelmapper:3.1.0'
+
+    // Swagger 설정
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+
+    //796p JWT 설정
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    //852p QueryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    annotationProcessor 'javax.persistence:javax.persistence-api'
+    annotationProcessor 'javax.annotation:javax.annotation-api'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jpa'
+
+
+    //788p JSON GSON 설정 (나중에 필요없으면 제거)
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    // 책 설정 끝 ---------------
+
+
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
