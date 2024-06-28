@@ -1,5 +1,6 @@
 package com.momo.momopjt.user;
 
 public interface UserService {
-    void plususer
+    void register(UserDto userDto);
 }
+
