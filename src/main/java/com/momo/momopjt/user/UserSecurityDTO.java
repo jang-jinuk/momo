@@ -17,11 +17,11 @@ public class UserSecurityDTO extends User {
     private String userId;
     private String userPw;
     private String userEmail;
-    private boolean userState; // 유저상태
+    private boolean enabled; // 유저상태
     private boolean userSocial;
 
     public UserSecurityDTO(String username, String password, String email,
-                           boolean userState, boolean userSocial,
+                           boolean enabled, char userSocial,
                            Collection<? extends GrantedAuthority> authorities){
 
         super(username, password, authorities);
@@ -29,7 +29,7 @@ public class UserSecurityDTO extends User {
         this.userId = username;
         this.userPw = password;
         this.userEmail = email;
-        this.userState = userState;
-        this.userSocial = userSocial;
+        this.enabled = enabled;
+        //this.userSocial=userSocial;
     }
 }
