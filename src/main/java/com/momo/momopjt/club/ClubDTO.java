@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClubDTO {
-    private Long id;
+    private Long clubNo;
 
     private Photo clubMainPhoto;
 
