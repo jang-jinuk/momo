@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="footer">
+    <style>
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #222;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    box-sizing: border-box;
+    color: #ffffff;
+
+}
+
+.footer-list {
+    font-size: 8px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 10px;
+}
+
+.footer-section h2 {
+    margin-bottom: 10px;
+}
+
+.footer-section p,
+.footer-section ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+
+
+.footer-bottom {
+    text-align: center;
+    padding: 10px;
+    background-color: #222;
+    font-size: 10px;
+}
+
+
+
+
+</style>
+<div class="footer-container">
+    <div class="footer-section about">
+        <h6>모모 주식회사</h6>
+        <ul class="footer-list">
+            <li>이메일: momo@gmail.com</li>
+            <li>전화: 02-837-9922</li>
+            <li>주소: 서울특별시 구로구 시흥대로163길 33 주호타워 2층,3층</li>
+        </ul>
+    </div>
+</div>
+<div class="footer-bottom">
+    <p>&copy; 2024 MOMO All rights reserved</p>
+</div>
+</div>
+</html>
