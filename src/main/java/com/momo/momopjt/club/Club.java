@@ -13,8 +13,9 @@ import java.time.Instant;
 @Table(name = "club")
 public class Club {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "clubNo", nullable = false)
-    private Long id;
+    private Long clubNo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "clubMainPhoto", nullable = false)
