@@ -47,7 +47,5 @@ public class UserDto {
 
     private Instant userModifyDate;
 
-    private enum userAdmin {
-        USER, ADMIN;
-    }
+
 }
