@@ -59,7 +59,7 @@ public class UserTests {
         User user = User.builder()
 
                 .userNo(2L) //LONG타입
-                .userId("user122")  //String 타입
+                .userId("user1412")  //String 타입
                 .userPw("12343")  //String 타입
                 .userNickname("momoguy1")  //String 타입
                 .userEmail("email1@momo.com") //String 타입
