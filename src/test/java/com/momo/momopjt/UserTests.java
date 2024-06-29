@@ -6,20 +6,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Log4j2
+@ContextConfiguration(classes = MomoApplication.class)
 public class UserTests {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
         //비밀번호 암호화
     private PasswordEncoder passwordEncoder;
@@ -78,6 +82,20 @@ public class UserTests {
                 .build();
 
         userRepository.save(user);
+    }
+
+    @Test
+    public void 회원조회테스트(){
+        Optional<User> result = userRepository.getWithRoles("user1412");
+        User user = result.orElseThrow();
+
+        log.info(user);
+        log.info(user.getRoleSet());
+
+        user.getRoleSet().forEach(userRole -> log.info(userRole.name()));
+
+
+
     }
 }
 
