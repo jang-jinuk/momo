@@ -5,9 +5,10 @@
       layout:decorate="~{layout/basic.html}">
 
 <head>
-    <title>MOMO</title>
+    <title>MOMO join page</title>
     <meta charset="UTF-8">
 </head>
+<body>
 <div layout:fragment="content">
     <div class="row mt-3">
         <div class="col">
@@ -18,21 +19,22 @@
                 <div class="card-body">
                     <form id="registerForm" action="/user/join" method="post">
                         <div class="input-group mb-3">
-                        <span class="input-group-text">아이디</span>
-                        <input type="text" name="userId" class="form-control">
+                            <span class="input-group-text">아이디</span>
+                            <input type="text" name="userId" class="form-control">
                         </div>
 
-                         <div class="input-group mb-3">
-                             <span class="input-group-text">비밀번호</span>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">비밀번호</span>
                             <input type="password" name="userPw" class="form-control">
-                            </div>
+                        </div>
+
+                        <!-- 비밀번호 확인 부분 주석 -->
                         <!--
                         <div class="input-group mb-3">
                             <span class="input-group-text">비밀번호 확인</span>
                             <input type="password" name="userPw2" class="form-control">
                         </div>
-                                                                !-->
-
+                        -->
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">닉네임</span>
@@ -56,15 +58,18 @@
                             <input type="date" class="form-control" name="userBirth" required>
                         </div>
 
-                        <div class="input-group mb3">
+                        <!-- 나이 입력 부분 주석 -->
+                        <!--
+                        <div class="input-group mb-3">
                             <span class="input-group-text">나이</span>
                             <input type="number" class="form-control" name="userAge" min="0" max="120" required>
                         </div>
+                        -->
 
-                        <div class="input-group mb3">
-                                <span class="input-group-text">이메일</span>
-                                <input type="email" class="form-control" name="userEmail" required>
-                            </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">이메일</span>
+                            <input type="email" class="form-control" name="userEmail" required>
+                        </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">관심사</span>
@@ -86,15 +91,19 @@
                                 <button type="submit" class="btn btn-primary submitBtn">등록</button>
                                 <button type="reset" class="btn btn-secondary">취소</button>
                             </div>
-
-                    </div>
+                        </div>
                     </form>
                 </div><!--end card body-->
             </div><!--end card-->
-        </div><!end col-->
+        </div><!--end col-->
     </div><!--end row-->
-
-
 </div>
 <script layout:fragment="script" th:inline="javascript">
+    const error = [[${error}]];
+
+    if (error && error === 'userId') {
+        alert("동일한 ID를 가진 계정이 존재합니다.");
+    }
 </script>
+</body>
+</html>

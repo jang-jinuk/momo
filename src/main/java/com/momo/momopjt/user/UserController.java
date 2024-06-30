@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -19,6 +20,9 @@ import java.time.Period;
 @RequiredArgsConstructor
 @Log4j2
 public class UserController {
+
+    private final UserService userService;
+
     @GetMapping("/login")
     public String login() {
 
@@ -31,12 +35,18 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String joinPost(User user) {
+    public String joinPost(UserJoinDTO userJoinDTO, RedirectAttributes redirectAttributes) {
         log.info("join post...");
-        log.info(user);
+        log.info(userJoinDTO);
 
-        return "redirect:/login";
-        //main 생길시 넣을거임
+        try{
+            userService.join(userJoinDTO);
+        } catch (UserService.UserIdException e){
+            redirectAttributes.addFlashAttribute("error","userId");
+            return "redirect:/user/login"; // 리턴시 메인 추가되면 변경예정 ~.~
+        }
+        redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/user/login";  //회원가입후 로그인
     }
 
 

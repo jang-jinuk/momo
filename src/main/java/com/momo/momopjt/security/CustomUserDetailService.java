@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-
     private final UserRepository userRepository;
 
     @Override
@@ -37,21 +36,19 @@ public class CustomUserDetailService implements UserDetailsService {
 
         User user = result.get();
 
-        UserSecurityDTO userSecurityDTO =
-                new UserSecurityDTO(
-                        user.getUserId(),
-                        user.getUserPw(),
-                        user.getUserEmail(),
-                        false,
-                        user.getUserSocial(),
-                        user.getRoleSet()
-                                .stream().map(userRole -> new SimpleGrantedAuthority("ROLE_" +userRole.name()))
-                                .collect(Collectors.toList())
-                );
-        log.info("userSecurityDTO");
-        log.info(userSecurityDTO);
+        UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
+                user.getUserId(),
+                user.getUserPw(),
+                user.getUserEmail(),
+                true, // enabled 상태
+                user.getUserSocial(),
+                user.getRoleSet().stream()
+                        .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.name()))
+                        .collect(Collectors.toList())
+        );
+
+        log.info("userSecurityDTO: " + userSecurityDTO);
 
         return userSecurityDTO;
     }
-
 }

@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -28,24 +29,25 @@ public class UserTests {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-        //비밀번호 암호화
+    //비밀번호 암호화
     private PasswordEncoder passwordEncoder;
     private CustomUserDetailService customUserDetailService;
+
     @Test
         //회원 추가 테스트
-    void insertUserTests(){
+    void insertUserTests() {
 
-        IntStream.rangeClosed(1,100).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
 
             User user = User.builder()
-                    .userId("user"+i)
+                    .userId("user" + i)
                     .userPw(passwordEncoder.encode("1111"))
-                    .userEmail("email"+i+"@aaa.bbb")
-                            .build();
+                    .userEmail("email" + i + "@aaa.bbb")
+                    .build();
 
             user.addRole(UserRole.USER);
 
-            if(i >= 90){
+            if (i >= 90) {
                 user.addRole(UserRole.ADMIN);
             }
             userRepository.save(user);
@@ -54,7 +56,7 @@ public class UserTests {
     }
 
     @Test
-    void 회원가입 (){
+    void 회원가입() {
         //시간 설정
         Instant now = Instant.now();
 
@@ -67,7 +69,7 @@ public class UserTests {
         User user = User.builder()
 
                 .userNo(2L) //LONG타입
-                .userId("user1412")  //String 타입
+                .userId("user142")  //String 타입
                 .userPw("12343")  //String 타입
                 .userNickname("momoguy1")  //String 타입
                 .userEmail("email1@momo.com") //String 타입
@@ -89,28 +91,26 @@ public class UserTests {
     }
 
     @Test
-    public void 회원조회테스트(){
-        Optional<User> result = userRepository.getWithRoles("user1412");
+    @Transactional
+    public void 회원조회테스트() {
+        Optional<User> result = userRepository.getWithRoles("user142");
         User user = result.orElseThrow();
 
-        log.info(user);
-        log.info(user.getRoleSet());
+        log.info(user.toString());
+        log.info(user.getRoleSet().toString());
 
         user.getRoleSet().forEach(userRole -> log.info(userRole.name()));
-
     }
 
     @Test
-    public void 회원탈퇴테스트(){
-
-        String userId = "user1412";
+    public void 회원탈퇴테스트() {
+        String userId = "user142"; // String 타입의 userId 사용
         Optional<User> result = userRepository.getWithRoles(userId);
         User user = result.orElseThrow();
 
-        userRepository.deleteById(user.getUserId());
+        userRepository.deleteById(user.getUserNo()); // userNo 사용
 
-        Optional<User> deleteResult = userRepository.findById(user.getUserId());
+        Optional<User> deleteResult = userRepository.findById(user.getUserNo()); // userNo 사용
         Assertions.assertThat(deleteResult).isEmpty();
     }
-
 }
