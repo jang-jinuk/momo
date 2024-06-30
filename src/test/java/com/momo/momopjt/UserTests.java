@@ -1,7 +1,9 @@
 package com.momo.momopjt;
 
+import com.momo.momopjt.security.CustomUserDetailService;
 import com.momo.momopjt.user.*;
 import lombok.extern.log4j.Log4j2;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static com.momo.momopjt.user.QUser.user;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -27,6 +30,7 @@ public class UserTests {
     @Autowired
         //비밀번호 암호화
     private PasswordEncoder passwordEncoder;
+    private CustomUserDetailService customUserDetailService;
     @Test
         //회원 추가 테스트
     void insertUserTests(){
@@ -94,8 +98,19 @@ public class UserTests {
 
         user.getRoleSet().forEach(userRole -> log.info(userRole.name()));
 
-
-
     }
-}
 
+    @Test
+    public void 회원탈퇴테스트(){
+
+        String userId = "user1412";
+        Optional<User> result = userRepository.getWithRoles(userId);
+        User user = result.orElseThrow();
+
+        userRepository.deleteById(user.getUserId());
+
+        Optional<User> deleteResult = userRepository.findById(user.getUserId());
+        Assertions.assertThat(deleteResult).isEmpty();
+    }
+
+}

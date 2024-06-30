@@ -44,7 +44,7 @@ public class User {
 
     private Character userState;
 
-    private Character userSocial;              //Character에서 boolean으로 변경
+    private Character userSocial;
 
     private String userPhoto;
 
@@ -83,6 +83,10 @@ public class User {
     public void changeSocial(char userSocial){
         this.userSocial = userSocial;
     }
+
+
+
+
 
 
 }

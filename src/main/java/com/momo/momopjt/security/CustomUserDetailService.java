@@ -6,12 +6,14 @@ import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
+
 
     private final UserRepository userRepository;
 
@@ -50,4 +53,5 @@ public class CustomUserDetailService implements UserDetailsService {
 
         return userSecurityDTO;
     }
+
 }

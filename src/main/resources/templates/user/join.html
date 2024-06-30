@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+    <title>MOMO</title>
+    <meta charset="UTF-8">
+</head>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    MOMO 회원가입
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" action="/user/join" method="post">
+                        <div class="input-group mb-3">
+                        <span class="input-group-text">아이디</span>
+                        <input type="text" name="userId" class="form-control">
+                        </div>
+
+                         <div class="input-group mb-3">
+                             <span class="input-group-text">비밀번호</span>
+                            <input type="password" name="userPw" class="form-control">
+                            </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">비밀번호 확인</span>
+                            <input type="password" name="userPw2" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">닉네임</span>
+                            <input type="text" name="userNickname" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">성별</span>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="userGender" id="male" value="male">
+                                <label class="form-check-label" for="male">남성</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="userGender" id="female" value="female">
+                                <label class="form-check-label" for="female">여성</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">생년월일</span>
+                            <input type="date" class="form-control" name="userBirth" required>
+                        </div>
+
+                        <div class="input-group mb3">
+                            <span class="input-group-text">나이</span>
+                            <input type="number" class="form-control" name="userAge" min="0" max="120" required>
+                        </div>
+
+                        <div class="input-group mb3">
+                                <span class="input-group-text">이메일</span>
+                                <input type="email" class="form-control" name="userEmail" required>
+                            </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">관심사</span>
+                            <input type="text" name="userCategory" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">주소</span>
+                            <input type="text" name="userAddress" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Mbti</span>
+                            <input type="text" name="userMbti" class="form-control">
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-primary submitBtn">등록</button>
+                                <button type="reset" class="btn btn-secondary">취소</button>
+                            </div>
+
+                    </div>
+                    </form>
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!end col-->
+    </div><!--end row-->
+
+
+</div>
+<script layout:fragment="script" th:inline="javascript">
+</script>
