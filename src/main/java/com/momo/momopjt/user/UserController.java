@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.Period;
+import javax.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/user")
@@ -23,10 +26,22 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
-    public String login() {
+    @GetMapping("/home")
+    public String home() {
+        return "home"; // home.html 템플릿을 반환합니다.
+    }
 
-        return "login";
+    @GetMapping("/login")
+    public void loginGET(HttpServletRequest request) {
+        String errorCode = request.getParameter("errorCode");
+        String logout = request.getParameter("logout");
+
+        log.info("login get........");
+        log.info("logout: " + logout);
+
+        if (logout != null) {
+            log.info("user logout......");
+        }
     }
 
     @GetMapping("/join")
@@ -35,20 +50,25 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String joinPost(UserJoinDTO userJoinDTO, RedirectAttributes redirectAttributes) {
+    public String joinPost(@Valid UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("join post...");
         log.info(userJoinDTO);
 
-        try{
-            userService.join(userJoinDTO);
-        } catch (UserService.UserIdException e){
-            redirectAttributes.addFlashAttribute("error","userId");
-            return "redirect:/user/login"; // 리턴시 메인 추가되면 변경예정 ~.~
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/user/join";
         }
-        redirectAttributes.addFlashAttribute("result", "success");
-        return "redirect:/user/login";  //회원가입후 로그인
-    }
 
+        try {
+            userService.join(userJoinDTO);
+        } catch (UserService.UserIdException e) {
+            redirectAttributes.addFlashAttribute("error", "userId");
+            return "redirect:/user/join";
+        }
+
+        redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/user/login";  // 회원가입 후 로그인
+    }
 
     @PostMapping("/submit")
     public String handleFormSubmit(
@@ -80,6 +100,4 @@ public class UserController {
 
         return "result"; // 결과를 표시할 뷰의 이름
     }
-
-
 }
