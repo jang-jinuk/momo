@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - UserTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>UserTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.momo.momopjt.html">com.momo.momopjt</a> &gt; UserTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.900s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">회원가입()</td>
+<td class="success">0.900s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>17:53:14.191 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+17:53:14.211 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+17:53:14.272 [Test worker] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.momo.momopjt.UserTests] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+17:53:14.295 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.momo.momopjt.UserTests], using SpringBootContextLoader
+17:53:14.303 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.momo.momopjt.UserTests]: class path resource [com/momo/momopjt/UserTests-context.xml] does not exist
+17:53:14.304 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.momo.momopjt.UserTests]: class path resource [com/momo/momopjt/UserTestsContext.groovy] does not exist
+17:53:14.305 [Test worker] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.momo.momopjt.UserTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+17:53:14.307 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.momo.momopjt.UserTests]: UserTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:53:14.390 [Test worker] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.momo.momopjt.UserTests]
+17:53:14.500 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [C:\Users\tlsdn\IdeaProjects\momopjt\build\classes\java\main\com\momo\momopjt\MomoApplication.class]
+17:53:14.502 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.momo.momopjt.MomoApplication for test class com.momo.momopjt.UserTests
+17:53:14.689 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [com.momo.momopjt.UserTests]: using defaults.
+17:53:14.690 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener, org.springframework.security.test.context.support.ReactorContextTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+17:53:14.721 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@77e2a6e2, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@5710768a, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@199e4c2b, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@6e0d4a8, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@64d7b720, org.springframework.test.context.support.DirtiesContextTestExecutionListener@30272916, org.springframework.test.context.transaction.TransactionalTestExecutionListener@5bb3d42d, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@5bf61e67, org.springframework.security.test.context.support.WithSecurityContextTestExecutionListener@2c1dc8e, org.springframework.test.context.event.EventPublishingTestExecutionListener@b273a59, org.springframework.security.test.context.support.ReactorContextTestExecutionListener@4e7095ac, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@251ebf23, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@29b732a2, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@1b70203f, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@51671b08, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@15051a0, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1162410a]
+17:53:14.727 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@5c84624f testClass = UserTests, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@63034ed1 testClass = UserTests, locations = '{}', classes = '{class com.momo.momopjt.MomoApplication}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[org.springframework.boot.test.autoconfigure.actuate.metrics.MetricsExportContextCustomizerFactory$DisableMetricExportContextCustomizer@339bf286, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@56276db8, org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@4d098f9b, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@293d0107, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@277f7dd3, org.springframework.boot.test.context.SpringBootTestArgs@1, org.springframework.boot.test.context.SpringBootTestWebEnvironment@5b3f61ff], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -&gt; true]], class annotated with @DirtiesContext [false] with mode [null].
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.7.5)
+
+2024-06-28 17:53:15.460  INFO 6692 --- [    Test worker] com.momo.momopjt.UserTests               : Starting UserTests using Java 11.0.23 on DESKTOP-O6FQ813 with PID 6692 (started by tlsdn in C:\Users\tlsdn\IdeaProjects\momopjt)
+2024-06-28 17:53:15.462 DEBUG 6692 --- [    Test worker] com.momo.momopjt.UserTests               : Running with Spring Boot v2.7.5, Spring v5.3.23
+2024-06-28 17:53:15.464  INFO 6692 --- [    Test worker] com.momo.momopjt.UserTests               : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2024-06-28 17:53:18.004  INFO 6692 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-06-28 17:53:18.098  INFO 6692 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 1 JPA repository interfaces.
+2024-06-28 17:53:19.545  INFO 6692 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-06-28 17:53:19.739  INFO 6692 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2024-06-28 17:53:20.251  INFO 6692 --- [    Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-06-28 17:53:20.543  INFO 6692 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-06-28 17:53:20.722  INFO 6692 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-06-28 17:53:20.795  INFO 6692 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MariaDB53Dialect
+Hibernate: 
+    
+    create table user (
+       user_no bigint not null auto_increment,
+        user_address varchar(255),
+        user_age integer,
+        user_birth date,
+        user_category varchar(255),
+        user_create_date datetime(6),
+        user_email varchar(255),
+        user_gender char(1),
+        user_id varchar(255),
+        user_like_number integer,
+        user_mbti varchar(255),
+        user_modify_date datetime(6),
+        user_nickname varchar(255),
+        user_photo varchar(255),
+        user_pw varchar(255),
+        user_social char(1),
+        user_state char(1),
+        primary key (user_no)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table user_role_set (
+       user_user_no bigint not null,
+        role_set integer
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table user_role_set 
+       add constraint FKr9gbvf29req6g5b79kcwj7oqm 
+       foreign key (user_user_no) 
+       references user (user_no)
+2024-06-28 17:53:22.397  INFO 6692 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-06-28 17:53:22.411  INFO 6692 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-06-28 17:53:22.448 DEBUG 6692 --- [    Test worker] .PrePostAnnotationSecurityMetadataSource : @org.springframework.security.access.prepost.PreAuthorize(value=&quot;hasRole('USER')&quot;) found on: com.momo.momopjt.controller.ClubController
+2024-06-28 17:53:22.506 DEBUG 6692 --- [    Test worker] m.DelegatingMethodSecurityMetadataSource : Caching method [CacheKey[com.momo.momopjt.controller.ClubController; public java.lang.String com.momo.momopjt.controller.ClubController.registerPOST()]] with attributes [[authorize: 'hasRole('USER')', filter: 'null', filterTarget: 'null']]
+2024-06-28 17:53:22.555 TRACE 6692 --- [    Test worker] o.s.s.a.i.a.MethodSecurityInterceptor    : Validated configuration attributes
+2024-06-28 17:53:22.581 DEBUG 6692 --- [    Test worker] .PrePostAnnotationSecurityMetadataSource : @org.springframework.security.access.prepost.PreAuthorize(value=&quot;hasRole('USER')&quot;) found on: com.momo.momopjt.controller.ClubController
+2024-06-28 17:53:22.582 DEBUG 6692 --- [    Test worker] m.DelegatingMethodSecurityMetadataSource : Caching method [CacheKey[com.momo.momopjt.controller.ClubController; public void com.momo.momopjt.controller.ClubController.loginGet(java.lang.String,java.lang.String)]] with attributes [[authorize: 'hasRole('USER')', filter: 'null', filterTarget: 'null']]
+2024-06-28 17:53:22.583 DEBUG 6692 --- [    Test worker] .PrePostAnnotationSecurityMetadataSource : @org.springframework.security.access.prepost.PreAuthorize(value=&quot;hasRole('USER')&quot;) found on: com.momo.momopjt.controller.ClubController
+2024-06-28 17:53:22.583 DEBUG 6692 --- [    Test worker] m.DelegatingMethodSecurityMetadataSource : Caching method [CacheKey[com.momo.momopjt.controller.ClubController; public void com.momo.momopjt.controller.ClubController.registerGET()]] with attributes [[authorize: 'hasRole('USER')', filter: 'null', filterTarget: 'null']]
+2024-06-28 17:53:24.346  WARN 6692 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-06-28 17:53:25.121 TRACE 6692 --- [    Test worker] eGlobalAuthenticationAutowiredConfigurer : Eagerly initializing {customSecurityConfig=com.momo.momopjt.config.CustomSecurityConfig$$EnhancerBySpringCGLIB$$724cc5b5@64f2b1b4, org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration$WebSecurityEnablerConfiguration=org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration$WebSecurityEnablerConfiguration@e00c94e}
+2024-06-28 17:53:25.125 DEBUG 6692 --- [    Test worker] swordEncoderAuthenticationManagerBuilder : No authenticationProviders and no parentAuthenticationManager defined. Returning null.
+2024-06-28 17:53:25.261  INFO 6692 --- [    Test worker] c.m.momopjt.config.CustomSecurityConfig  : ------------configure----------------
+2024-06-28 17:53:25.524  INFO 6692 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@730611a0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@8b727cb, org.springframework.security.web.context.SecurityContextPersistenceFilter@5472c27a, org.springframework.security.web.header.HeaderWriterFilter@6a94bd69, org.springframework.security.web.csrf.CsrfFilter@480d3c40, org.springframework.security.web.authentication.logout.LogoutFilter@4a4352b4, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@14f08a97, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@43945480, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1b72f9a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6030eff1, org.springframework.security.web.session.SessionManagementFilter@7b6e196e, org.springframework.security.web.access.ExceptionTranslationFilter@20183e2d]
+2024-06-28 17:53:25.531  INFO 6692 --- [    Test worker] c.m.momopjt.config.CustomSecurityConfig  : ------------web configure----------
+2024-06-28 17:53:26.376  INFO 6692 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2024-06-28 17:53:27.323  WARN 6692 --- [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@3272c5b3. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-06-28 17:53:27.325  INFO 6692 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@3272c5b3
+2024-06-28 17:53:27.710  INFO 6692 --- [    Test worker] com.momo.momopjt.UserTests               : Started UserTests in 12.863 seconds (JVM running for 15.493)
+2016-10-31
+2024-06-28 17:53:28.015  INFO 6692 --- [    Test worker] com.momo.momopjt.UserTests               : -------- [06-28-11:17:45]-------you
+Hibernate: 
+    select
+        user0_.user_no as user_no1_0_0_,
+        user0_.user_address as user_add2_0_0_,
+        user0_.user_age as user_age3_0_0_,
+        user0_.user_birth as user_bir4_0_0_,
+        user0_.user_category as user_cat5_0_0_,
+        user0_.user_create_date as user_cre6_0_0_,
+        user0_.user_email as user_ema7_0_0_,
+        user0_.user_gender as user_gen8_0_0_,
+        user0_.user_id as user_id9_0_0_,
+        user0_.user_like_number as user_li10_0_0_,
+        user0_.user_mbti as user_mb11_0_0_,
+        user0_.user_modify_date as user_mo12_0_0_,
+        user0_.user_nickname as user_ni13_0_0_,
+        user0_.user_photo as user_ph14_0_0_,
+        user0_.user_pw as user_pw15_0_0_,
+        user0_.user_social as user_so16_0_0_,
+        user0_.user_state as user_st17_0_0_ 
+    from
+        user user0_ 
+    where
+        user0_.user_no=?
+Hibernate: 
+    insert 
+    into
+        user
+        (user_address, user_age, user_birth, user_category, user_create_date, user_email, user_gender, user_id, user_like_number, user_mbti, user_modify_date, user_nickname, user_photo, user_pw, user_social, user_state) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.8</a> at 2024. 6. 28. 오후 5:53:28</p>
+</div>
+</div>
+</body>
+</html>

@@ -21,7 +21,7 @@ public class UserTests {
     private UserRepository userRepository;
 
     @Autowired
-        //비밀번호 암호화
+    //비밀번호 암호화
     private PasswordEncoder passwordEncoder;
     @Test
         //회원 추가 테스트
@@ -33,7 +33,7 @@ public class UserTests {
                     .userId("user"+i)
                     .userPw(passwordEncoder.encode("1111"))
                     .userEmail("email"+i+"@aaa.bbb")
-                            .build();
+                    .build();
 
             user.addRole(UserRole.USER);
 
@@ -80,4 +80,3 @@ public class UserTests {
         userRepository.save(user);
     }
 }
-
