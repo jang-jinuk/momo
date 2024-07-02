@@ -1,7 +1,9 @@
+//모임 맴버 관리 기능
 package com.momo.momopjt.club;
 
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 
 @Service
+@Log4j2
 @Transactional
 @RequiredArgsConstructor
 public class UserAndClubServiceImpl implements UserAndClubService {
@@ -33,5 +36,6 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
     userAndClubRepository.save(userAndClub);
+    log.info("-------------가입 승인 완료-------------");
   }
 }
