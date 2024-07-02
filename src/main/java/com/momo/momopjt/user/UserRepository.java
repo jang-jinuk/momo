@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> getWithRoles(String userId);
 
     boolean existsByUserId(String userId); // userId로 존재 여부 확인
+
+    @EntityGraph(attributePaths ="roleSet")
+    Optional<User> findByUserEmail(String email);
 }

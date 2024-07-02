@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -20,17 +21,23 @@ public class UserSecurityDTO implements UserDetails {
     private String userEmail;
     private boolean enabled; // 유저 상태
     private Character userSocial; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc.
+    private Map<String,Object> props; // 소셜로그인 정보
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSecurityDTO(String username, String password, String email,
-                           boolean enabled, Character userSocial,
+    public UserSecurityDTO(String userId, String password, String email,
+                           boolean enabled, Character social,
                            Collection<? extends GrantedAuthority> authorities) {
-        this.userId = username;
+        this.userId = userId;
         this.userPw = password;
         this.userEmail = email;
         this.enabled = enabled;
-        this.userSocial = userSocial;
+        this.userSocial = social;
         this.authorities = authorities;
+    }
+
+    // 만약 소셜 로그인 정보를 반환하는 커스텀 메서드가 필요하다면, 별도로 정의합니다.
+    public Map<String,Object> getAttributes(){
+        return this.props;
     }
 
     @Override

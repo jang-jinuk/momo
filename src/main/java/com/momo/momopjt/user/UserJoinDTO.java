@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Data
 public class UserJoinDTO {
-//유효성 검사 추가
+    //유효성 검사 추가
     @NotBlank(message = "User ID is required")
     private String userId;
 

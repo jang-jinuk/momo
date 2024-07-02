@@ -69,7 +69,7 @@ public class UserTests {
         User user = User.builder()
 
                 .userNo(2L) //LONG타입
-                .userId("user142")  //String 타입
+                .userId("user1422")  //String 타입
                 .userPw("12343")  //String 타입
                 .userNickname("momoguy1")  //String 타입
                 .userEmail("email1@momo.com") //String 타입
@@ -87,13 +87,15 @@ public class UserTests {
                 .userModifyDate(now) //instant타입
                 .build();
 
+
+
         userRepository.save(user);
     }
 
     @Test
     @Transactional
     public void 회원조회테스트() {
-        Optional<User> result = userRepository.getWithRoles("user142");
+        Optional<User> result = userRepository.getWithRoles("user1422");
         User user = result.orElseThrow();
 
         log.info(user.toString());
@@ -104,7 +106,7 @@ public class UserTests {
 
     @Test
     public void 회원탈퇴테스트() {
-        String userId = "user142"; // String 타입의 userId 사용
+        String userId = "user1422"; // String 타입의 userId 사용
         Optional<User> result = userRepository.getWithRoles(userId);
         User user = result.orElseThrow();
 

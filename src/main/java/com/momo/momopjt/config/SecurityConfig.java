@@ -1,6 +1,7 @@
 package com.momo.momopjt.config;
 
 import com.momo.momopjt.security.CustomUserDetailService;
+import com.momo.momopjt.security.handler.CustomSocialLoginSuccessHandler;
 import com.momo.momopjt.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -28,57 +30,73 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final CustomUserDetailService customUserDetailService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  private final CustomUserDetailService customUserDetailService;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        log.info("------------configure----------------");
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/login",
-                        "/public/**", "/user/login", "/user/join","/user/home").permitAll() // 공용 접근 허용
-                .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
-                .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
-                .and()
-                .formLogin()
-                .loginPage("/user/login") // 로그인 페이지 설정
-                .defaultSuccessUrl("/user/home")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .permitAll()
-                .and()
-                .exceptionHandling()
-                .accessDeniedPage("/403");
-        //CSRF비활성화
-        http.csrf().disable();
+  @Bean   //OAuth2로그인 관련해서 CustomSocialLoginSuccessHandler를 로그인 성공 처리시 이용하는 부분
+  public AuthenticationSuccessHandler authenticationSuccessHandler(){
+    return new CustomSocialLoginSuccessHandler(passwordEncoder());
+  }
 
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    log.info("------------configure----------------");
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        log.info("------------web configure----------");
+    http
+        .authorizeRequests()
+        .antMatchers("/", "/home", "/register", "/login",
+            "/public/**", "/user/login", "/user/join","/user/home").permitAll() // 공용 접근 허용
+        .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
+        .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
+        .and()
+        .formLogin()
+        .loginPage("/user/login") // 로그인 페이지 설정
+        .defaultSuccessUrl("/user/home")
+        .permitAll()
+        .and()
+        .logout()
+        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
+        .logoutSuccessUrl("/login")
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
+        .permitAll()
+        .and()
+        .exceptionHandling()
+        .accessDeniedPage("/403");
+    //커스텀로그인페이지
+    http.formLogin().loginPage("/user/login");
 
-        // 정적 리소스 무시
-        return (web) -> web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
-    }
+    //CSRF비활성화
+    http.csrf().disable();
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
-        auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
-        return auth.build();
-    }
+    //카카오 로그인페이지
+    http.oauth2Login()
+        .loginPage("/user/login")
+        .successHandler(authenticationSuccessHandler());
+
+    return http.build();
+  }
+
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    log.info("------------web configure----------");
+
+    // 정적 리소스 무시
+    return (web) -> web.ignoring()
+        .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
+    auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
+    return auth.build();
+  }
+
+
 }
