@@ -15,10 +15,14 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.momo.momopjt.user.QUser.user;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -40,10 +44,10 @@ public class UserTests {
         IntStream.rangeClosed(1, 100).forEach(i -> {
 
             User user = User.builder()
-                    .userId("user" + i)
-                    .userPw(passwordEncoder.encode("1111"))
-                    .userEmail("email" + i + "@aaa.bbb")
-                    .build();
+                .userId("user" + i)
+                .userPw(passwordEncoder.encode("1111"))
+                .userEmail("email" + i + "@aaa.bbb")
+                .build();
 
             user.addRole(UserRole.USER);
 
@@ -68,25 +72,24 @@ public class UserTests {
 
         User user = User.builder()
 
-                .userNo(2L) //LONG타입
-                .userId("user1422")  //String 타입
-                .userPw("12343")  //String 타입
-                .userNickname("momoguy1")  //String 타입
-                .userEmail("email1@momo.com") //String 타입
-                .userGender('m') //char타입
-                .userAge(30) //Integer타입
-                .userBirth(date)  //LocalDate 타입
-                .userCategory("game") //String 타입
-                .userAddress("Seoul") //String 타입
-                .userMbti("INTP") //String 타입
-                .userState('O') //char타입
-                .userSocial('m') //char타입
-                .userPhoto("") //string타입
-                .userLikeNumber(0) //integer타입
-                .userCreateDate(now) //instant타입
-                .userModifyDate(now) //instant타입
-                .build();
-
+            .userNo(2L) //LONG타입
+            .userId("dbwjd1234")  //String 타입
+            .userPw("dbwjd")  //String 타입
+            .userNickname("momoguy1")  //String 타입
+            .userEmail("email1@momo.com") //String 타입
+            .userGender('m') //char타입
+            .userAge(30) //Integer타입
+            .userBirth(date)  //LocalDate 타입
+            .userCategory("game") //String 타입
+            .userAddress("Seoul") //String 타입
+            .userMbti("INTP") //String 타입
+            .userState('O') //char타입
+            .userSocial('m') //char타입
+            .userPhoto("") //string타입
+            .userLikeNumber(0) //integer타입
+            .userCreateDate(now) //instant타입
+            .userModifyDate(now) //instant타입
+            .build();
 
 
         userRepository.save(user);
@@ -95,7 +98,11 @@ public class UserTests {
     @Test
     @Transactional
     public void 회원조회테스트() {
-        Optional<User> result = userRepository.getWithRoles("user1422");
+        // socialTypes 컬렉션 생성
+        Collection<Character> socialTypes = Arrays.asList('k', 'n', 'g', 'm');
+
+        // findByUserIdAndUserSocialIn 메서드 호출
+        Optional<User> result = userRepository.findByUserIdAndUserSocialIn("dbwjd1234", socialTypes);
         User user = result.orElseThrow();
 
         log.info(user.toString());
@@ -105,14 +112,26 @@ public class UserTests {
     }
 
     @Test
+    @Transactional
     public void 회원탈퇴테스트() {
-        String userId = "user1422"; // String 타입의 userId 사용
-        Optional<User> result = userRepository.getWithRoles(userId);
-        User user = result.orElseThrow();
+        // 테스트에 사용할 userId와 socialTypes 설정
+        String userId = "dbwjd1234";
+        Collection<Character> socialTypes = Arrays.asList('k', 'n', 'g', 'm');
 
-        userRepository.deleteById(user.getUserNo()); // userNo 사용
+        // findByUserIdAndUserSocialIn 메서드 호출하여 Optional<User> 반환
+        Optional<User> result = userRepository.findByUserIdAndUserSocialIn(userId, socialTypes);
 
-        Optional<User> deleteResult = userRepository.findById(user.getUserNo()); // userNo 사용
-        Assertions.assertThat(deleteResult).isEmpty();
+        // Optional이 비어있을 경우 예외를 던짐
+        User user = result.orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지 않습니다."));
+
+        // 사용자를 삭제
+        userRepository.deleteById(user.getUserNo());
+
+        // 사용자 삭제 여부 확인
+        Optional<User> deleteResult = userRepository.findById(user.getUserNo());
+        Assertions.assertThat(deleteResult).isEmpty(); // AssertJ를 사용하여 Optional이 비어있는지 확인
+
+        // 삭제된 사용자를 다시 찾을 때 예외가 발생하는지 확인 (선택 사항)
+        assertThrows(NoSuchElementException.class, () -> userRepository.findById(user.getUserNo()).orElseThrow(() -> new NoSuchElementException("삭제된 사용자를 찾을 수 없습니다.")));
     }
 }

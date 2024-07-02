@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = "roleSet")
-    @Query("select u from User u where u.userId = :userId and u.userSocial = 'M'")
-    Optional<User> getWithRoles(String userId);
+    Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
 
     boolean existsByUserId(String userId); // userId로 존재 여부 확인
 

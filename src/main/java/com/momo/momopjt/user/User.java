@@ -1,6 +1,7 @@
 package com.momo.momopjt.user;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = "roleSet")
-
+@DynamicInsert
 @Table(name = "user", schema = "momodb")
 public class User {
     @Id
@@ -44,7 +45,7 @@ public class User {
 
     private Character userState;
 
-    private Character userSocial; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc
+    private Character userSocial = 'M'; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc
 
     private String userPhoto;
 
