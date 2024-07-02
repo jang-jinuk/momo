@@ -115,12 +115,12 @@ public class UserTests {
         Assertions.assertThat(deleteResult).isEmpty();
     }
 
-        @Test // 유효성 검사용 테스트기
+        @Test // SW 유효성 검사용 테스트기
         @DisplayName("정규 표현식 검사 TRUE/FALSE")
         public void okORnot()  {
 
-String pattern = "^[가-힣a-zA-Z0-9]{3,6}$"; //정규식
-String val = "3838283255490359573768769543868309824789255790870345923485570263745"; //판별될 놈
+String pattern = "^[IE][NS][TF][PJ]$"; //정규식
+String val = "INTP"; //판별될 놈
 
             boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
             log.info("...... [07-02-19:29:25]..........KSW");
