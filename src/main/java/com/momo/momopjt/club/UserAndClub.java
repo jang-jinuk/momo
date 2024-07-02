@@ -12,26 +12,26 @@ import java.time.Instant;
 @Entity
 @Table(name = "user_and_club")
 public class UserAndClub {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_and_club_no", nullable = false)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_and_club_no", nullable = false)
+  private Long id;
 
-    @Column(name = "is_leader")
-    private Boolean isLeader;
+  @Column(name = "is_leader")
+  private Boolean isLeader;
 
-    @Column(name = "join_date")
-    private Instant joinDate;
+  @Column(name = "join_date")
+  private Instant joinDate;
 
-    @Column(name = "is_wish")
-    private Character isWish;
+  @Column(name = "is_wish")
+  private Character isWish;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_no", nullable = false)
-    private User userNo;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "user_no", nullable = false)
+  private User userNo;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "club_no", nullable = false)
-    private Club clubNo;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "club_no", nullable = false)
+  private Club clubNo;
 
 }
