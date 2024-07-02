@@ -1,0 +1,37 @@
+package com.momo.momopjt.club;
+
+import com.momo.momopjt.user.User;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.Instant;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "user_and_club")
+public class UserAndClub {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_and_club_no", nullable = false)
+    private Long id;
+
+    @Column(name = "is_leader")
+    private Boolean isLeader;
+
+    @Column(name = "join_date")
+    private Instant joinDate;
+
+    @Column(name = "is_wish")
+    private Character isWish;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_no", nullable = false)
+    private User userNo;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "club_no", nullable = false)
+    private Club clubNo;
+
+}
