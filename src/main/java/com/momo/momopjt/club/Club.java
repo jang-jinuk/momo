@@ -14,32 +14,40 @@ import java.time.Instant;
 public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "clubNo", nullable = false)
+    @Column(name = "club_no", nullable = false)
     private Long clubNo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "clubMainPhoto", nullable = false)
-    private Photo clubMainPhoto;
+    @JoinColumn(name = "club_photo", nullable = false)
+    private Photo photoUuid;
 
-    @Column(name = "clubName", nullable = false, length = 50)
+    @Column(name = "club_name", nullable = false, length = 50)
     private String clubName;
 
-    @Column(name = "clubCategory", length = 100)
+    @Column(name = "club_category", length = 100)
     private String clubCategory;
 
-    @Column(name = "clubContent")
+    @Column(name = "club_content")
     private String clubContent;
 
-    @Column(name = "clubArea", length = 50)
+    @Column(name = "club_area", length = 50)
     private String clubArea;
 
-    @Column(name = "clubMax", nullable = false)
+    @Column(name = "club_max", nullable = false)
     private Integer clubMax;
 
-    @Column(name = "clubGender", nullable = false)
+    @Column(name = "club_gender", nullable = false)
     private Character clubGender;
 
-    @Column(name = "clubCreatedDate", nullable = false)
-    private Instant clubCreatedDate;
+    @Column(name = "club_create_date", nullable = false)
+    private Instant clubCreateDate;
 
+
+    public void change(Photo photoUuid, String clubCategory, String clubContent, String clubArea, Integer clubMax) {
+        this.photoUuid = photoUuid;
+        this.clubCategory = clubCategory;
+        this.clubContent = clubContent;
+        this.clubArea = clubArea;
+        this.clubMax = clubMax;
+    }
 }

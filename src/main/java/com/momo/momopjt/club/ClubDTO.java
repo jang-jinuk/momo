@@ -10,12 +10,13 @@ import java.time.Instant;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ClubDTO {
+
     private Long clubNo;
 
-    private Photo clubMainPhoto;
+    private Photo photoUuid;
 
     private String clubName;
 
@@ -29,5 +30,5 @@ public class ClubDTO {
 
     private Character clubGender;
 
-    private Instant clubCreatedDate;
+    private Instant clubCreateDate;
 }
