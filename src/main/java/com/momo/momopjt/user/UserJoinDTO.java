@@ -24,7 +24,7 @@ public class UserJoinDTO {
     private String userPw;
 
     @NotBlank(message = "Nickname is required")
-    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{3,6}$", message = "지켜라")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{3,6}$", message = "")
     private String userNickname;
 
     @NotNull(message = "Gender is required")
@@ -36,7 +36,7 @@ public class UserJoinDTO {
 
     @Email(message = "Email should be valid")//이 어노테이션은 믿을게 못돼요
     @NotBlank(message = "Email is required")
-    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "지키라고")//그래서 추가한 정규식입니다
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "")//그래서 추가한 정규식입니다
     private String userEmail;
 
     @NotBlank(message = "Category is required")
