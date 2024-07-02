@@ -38,4 +38,12 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
   }
+
+  //모임 탈퇴
+  @Override
+  public void disband(Long id) {
+    userAndClubRepository.deleteById(id);
+    log.info("-------------모임 탈퇴 완료-------------");
+  }
+
 }

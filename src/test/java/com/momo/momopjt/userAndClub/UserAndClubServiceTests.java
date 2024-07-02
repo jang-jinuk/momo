@@ -22,7 +22,7 @@ public class UserAndClubServiceTests {
     user.setUserNo(1L);
 
     Club club = new Club();
-    club.setClubNo(1L);
+    club.setClubNo(2L);
 
 
     UserAndClubDTO userAndClubDTO = UserAndClubDTO.builder()
@@ -39,4 +39,6 @@ public class UserAndClubServiceTests {
     log.info("-------------승인 요청-------------");
     userAndClubService.approveJoin(userNo);
   }
+
+
 }
