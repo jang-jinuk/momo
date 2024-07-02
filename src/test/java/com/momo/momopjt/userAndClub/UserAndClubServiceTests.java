@@ -40,5 +40,12 @@ public class UserAndClubServiceTests {
     userAndClubService.approveJoin(userNo);
   }
 
+  //맴버 탈퇴 기능 테스트
+  @Test
+  public void disbandTest() {
+    Long id = 2L;
+    log.info("-------------탈퇴 요청-------------");
+    userAndClubService.disband(id);
+  }
 
 }
