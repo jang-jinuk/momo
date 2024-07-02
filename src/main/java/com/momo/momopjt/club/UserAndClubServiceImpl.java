@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,6 +36,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     UserAndClub userAndClub = result.orElseThrow();
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
+    userAndClub.setIsLeader(false); //
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
   }
@@ -44,6 +46,14 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   public void disband(Long id) {
     userAndClubRepository.deleteById(id);
     log.info("-------------모임 탈퇴 완료-------------");
+  }
+
+  //모임 맴버 조회
+  @Override
+  public List<UserAndClubDTO> readMembers(Long clubNo) {
+    List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo);
+    List<UserAndClubDTO> userAndClubDTOS = modelMapper.map(userAndClubs, List.class);
+    return userAndClubDTOS;
   }
 
 }

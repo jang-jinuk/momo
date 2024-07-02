@@ -10,6 +10,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
+
 @Table(name = "user_and_club")
 public class UserAndClub {
   @Id
