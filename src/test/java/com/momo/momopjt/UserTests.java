@@ -4,12 +4,13 @@ import com.momo.momopjt.security.CustomUserDetailService;
 import com.momo.momopjt.user.*;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
-
+import java.util.regex.Pattern;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -113,4 +114,18 @@ public class UserTests {
         Optional<User> deleteResult = userRepository.findById(user.getUserNo()); // userNo 사용
         Assertions.assertThat(deleteResult).isEmpty();
     }
+
+        @Test // 유효성 검사용 테스트기
+        @DisplayName("정규 표현식 검사 TRUE/FALSE")
+        public void okORnot()  {
+
+String pattern = "^[가-힣a-zA-Z0-9]{3,6}$"; //정규식
+String val = "3838283255490359573768769543868309824789255790870345923485570263745"; //판별될 놈
+
+            boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
+            log.info("...... [07-02-19:29:25]..........KSW");
+            System.out.println(regex);
+            log.info("...... [07-02-19:29:20]..........KSW");
+        }
+
 }
