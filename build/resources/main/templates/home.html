@@ -11,14 +11,23 @@
     <nav>
         <ul>
             <li><a th:href="@{/home}">Home</a></li>
-            <li><a th:href="@{/login}">Login</a></li>
-            <li><a th:href="@{/join}">Join</a></li>
-            <li><a th:href="@{/logout}">Logout</a></li>
+            <li th:if="${#authentication.name == 'anonymousUser'}">
+                <a th:href="@{/login}">Login</a>
+            </li>
+            <li th:if="${#authentication.name == 'anonymousUser'}">
+                <a th:href="@{/join}">Join</a>
+            </li>
+            <li th:unless="${#authentication.name == 'anonymousUser'}">
+                <a th:href="@{/logout}">Logout</a>
+            </li>
         </ul>
     </nav>
 </header>
 
 <main>
+    <p th:if="${nickname != null}">
+        <span th:text="${nickname}"></span>님 반갑습니다~ >_<
+    </p>
     <h1>Welcome to the Home Page</h1>
     <p>여기는 홈 페이지입니다. 로그인을 하거나 회원가입을 할 수 있습니다.</p>
 </main>

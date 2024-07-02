@@ -4,8 +4,10 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Period;
-import javax.validation.Valid;
-import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("/user")
@@ -27,8 +28,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/home")
-    public String home() {
-        return "home"; // home.html 템플릿을 반환합니다.
+    public String home(@AuthenticationPrincipal UserDto userDto, Model model) {
+        if (userDto != null) {
+            model.addAttribute("nickname", ((UserDto) userDto).getUserNickname());
+        }
+        return "home"; // Thymeleaf 템플릿 이름
     }
 
     @GetMapping("/login")
@@ -100,4 +104,5 @@ public class UserController {
 
         return "result"; // 결과를 표시할 뷰의 이름
     }
+
 }
