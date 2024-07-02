@@ -1,25 +1,40 @@
-/*package com.momo.momopjt.user;
+package com.momo.momopjt.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+@Log4j2
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Override
-    public void register(UserDto userDto) {
+    public void join(UserJoinDTO userJoinDTO) throws UserIdException {
 
-        User user = new User();
+        String userId = userJoinDTO.getUserId();
 
-        user.setUserAddress(userDto.getUserAddress());
-//        쭉쭉추가추가추가
+        boolean exist = userRepository.existsByUserId(userId); // existsByUserId 사용
+        if (exist) {
+            throw new UserIdException();
+        }
+
+        User user = modelMapper.map(userJoinDTO, User.class);
+        user.changePassword(passwordEncoder.encode(userJoinDTO.getUserPw()));
+        user.addRole(UserRole.USER);
+
+        log.info("===============");
+        log.info(user);
+        log.info(user.getRoleSet());
 
         userRepository.save(user);
-
     }
 }
-
-*/
-

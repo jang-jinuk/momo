@@ -1,6 +1,13 @@
 package com.momo.momopjt.user;
 
+
 public interface UserService {
-    void register(UserDto userDto);
+
+    static class UserIdException extends Exception{
+
+    }
+
+    void join(UserJoinDTO userJoinDTO)throws UserIdException;
+    //void register(UserDto userDto);
 }
 

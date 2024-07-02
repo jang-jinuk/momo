@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Getter
-//@Setter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,7 +44,7 @@ public class User {
 
     private Character userState;
 
-    private Character userSocial;              //Character에서 boolean으로 변경
+    private Character userSocial; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc
 
     private String userPhoto;
 
@@ -61,28 +61,34 @@ public class User {
     //private Set<UserRole> roleSet = new HashSet<>();는
     // Java 코드에서 roleSet이라는 이름의 Set 컬렉션을 선언하고 초기화하는 것을 의미
     //중복불가
+    // 비밀번호 변경 메서드
     public void changePassword(String userPw){
         this.userPw = userPw;
     }
+    // 이메일 변경 메서드
     public void changeEmail(String userEmail){
         this.userEmail = userEmail;
     }
-
+    // 닉네임 변경 메서드
     public void changeNickname(String userNickname){
         this.userNickname = userNickname;
     }
-
+    // 역할 추가 메서드
     public void addRole(UserRole userRole){
         this.roleSet.add(userRole);
     }
-
+    // 역할 초기화 메서드
     public void clearRoles(){
         this.roleSet.clear();
     }
-
+    // 소셜 타입 변경 메서드
     public void changeSocial(char userSocial){
         this.userSocial = userSocial;
     }
+
+
+
+
 
 
 }

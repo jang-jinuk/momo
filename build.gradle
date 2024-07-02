@@ -77,9 +77,10 @@ dependencies {
 
     // 책 설정 끝 ---------------
 
+// 유정 추가부분
 
-
-
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
