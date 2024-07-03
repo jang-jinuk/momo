@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user")
@@ -103,6 +105,26 @@ public class UserController {
             @RequestParam("userAddress") String userAddress,
             @RequestParam("userMbti") String userMbti,
             Model model) {
+
+
+        // 정규표현식 패턴 정의
+        Pattern userIdPattern = Pattern.compile("^[a-zA-Z0-9]{5,15}$");
+        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+
+        // 유효성 검사
+        Matcher userIdMatcher = userIdPattern.matcher(userId);
+        Matcher emailMatcher = emailPattern.matcher(userEmail);
+
+        if (!userIdMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+
+        if (!emailMatcher.matches()) {
+            model.addAttribute("errorMessage", "이메일 형식이 유효하지 않습니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+
 
         // 현재 날짜를 기준으로 나이 계산
         LocalDate currentDate = LocalDate.now();
