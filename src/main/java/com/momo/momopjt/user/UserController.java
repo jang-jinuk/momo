@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/user")
@@ -37,19 +40,19 @@ public class UserController {
 
     @GetMapping("/login")
     public void loginGET(HttpServletRequest request) {
-        log.info("...... [07-03-13:09:40]..........KSW");
+        log.info("-------- [07-03-13:16:04]-------you");
         String errorCode = request.getParameter("errorCode");
-        log.info("...... [07-03-13:09:43]..........KSW");
+        log.info("-------- [07-03-13:16:11]-------you");
         String logout = request.getParameter("logout");
-        log.info("...... [07-03-13:09:45]..........KSW");
 
         log.info("login get........");
         log.info("logout: " + logout);
 
         if (logout != null) {
-            log.info("...... [07-03-13:09:47]..........KSW");
+            log.info("-------- [07-03-13:16:16]-------you");
             log.info("user logout......");
         }
+        log.info("-------- [07-03-13:16:20]-------you");
     }
 
     @GetMapping("/join")
@@ -64,7 +67,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/";
+            return "redirect:/user/join";
         }
 
         try {
@@ -76,6 +79,18 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home"; // 회원가입 후 홈으로
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            log.info("User logged out...");
+        }
+
+        redirectAttributes.addFlashAttribute("message", "You have been logged out successfully.");
+        return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
     }
 
     @PostMapping("/submit")
@@ -90,6 +105,26 @@ public class UserController {
             @RequestParam("userAddress") String userAddress,
             @RequestParam("userMbti") String userMbti,
             Model model) {
+
+
+        // 정규표현식 패턴 정의
+        Pattern userIdPattern = Pattern.compile("^[a-zA-Z0-9]{5,15}$");
+        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+
+        // 유효성 검사
+        Matcher userIdMatcher = userIdPattern.matcher(userId);
+        Matcher emailMatcher = emailPattern.matcher(userEmail);
+
+        if (!userIdMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+
+        if (!emailMatcher.matches()) {
+            model.addAttribute("errorMessage", "이메일 형식이 유효하지 않습니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+
 
         // 현재 날짜를 기준으로 나이 계산
         LocalDate currentDate = LocalDate.now();

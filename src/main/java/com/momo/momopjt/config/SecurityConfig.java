@@ -63,8 +63,8 @@ public class SecurityConfig {
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
         .logoutSuccessUrl("/user/home")
-        .invalidateHttpSession(true)
-        .deleteCookies("JSESSIONID")
+        .invalidateHttpSession(true)          //로그아웃 시 세션을 무효화
+        .deleteCookies("JSESSIONID")   //로그아웃 시 특정 쿠키(JSESSIONID)를 삭제
         .permitAll()
         .and()
         .exceptionHandling()
@@ -98,6 +98,12 @@ public class SecurityConfig {
     auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
     return auth.build();
   }
+  /*
+  이 코드는 Spring Security의 AuthenticationManager를 설정하는 방법을 보여줍니다.
+  사용자 정의 UserDetailsService와 비밀번호 인코더를 설정하여,
+  사용자 인증을 처리하는 AuthenticationManager를 생성하고 이를 Spring 컨텍스트에 빈으로 등록합니다.
+  이를 통해 애플리케이션 내에서 해당 AuthenticationManager를 주입받아 사용
+   */
 
 
 }
