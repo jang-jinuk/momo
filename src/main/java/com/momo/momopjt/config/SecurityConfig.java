@@ -49,14 +49,15 @@ public class SecurityConfig {
 
     http
         .authorizeRequests()
-        .antMatchers("/", "/home", "/register", "/login",
+        .antMatchers("/", "/home", "/register", "/login","/css/**","/js/**","/images/**",
             "/public/**", "/user/login", "/user/join","/user/home").permitAll() // 공용 접근 허용
         .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
+        .antMatchers("/user/join","/user/login","/user/home").permitAll()
         .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
         .and()
         .formLogin()
         .loginPage("/user/login") // 로그인 페이지 설정
-        .defaultSuccessUrl("/user/home")
+        .defaultSuccessUrl("/user/home") // 로그인 성공 후 이동할 페이지
         .permitAll()
         .and()
         .logout()

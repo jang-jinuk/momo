@@ -98,12 +98,6 @@
         </div><!--end col-->
     </div><!--end row-->
 </div>
-<script layout:fragment="script" th:inline="javascript">
-    const error = [[${error}]];
 
-    if (error && error === 'userId') {
-        alert("동일한 ID를 가진 계정이 존재합니다.");
-    }
-</script>
 </body>
 </html>

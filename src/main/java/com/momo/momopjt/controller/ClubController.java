@@ -1,4 +1,4 @@
-package com.momo.momopjt.controller;
+/*package com.momo.momopjt.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,3 +36,5 @@ public class ClubController {
         return "register";
     }
 }
+
+ */
