@@ -1,7 +1,9 @@
 //모임 맴버 관리 기능
-package com.momo.momopjt.club;
+package com.momo.momopjt.userAndClub;
 
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.club.Club;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -50,8 +52,9 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임 맴버 조회
   @Override
-  public List<UserAndClubDTO> readMembers(Long clubNo) {
-    List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo);
+  public List<UserAndClubDTO> readAllMembers(Club clubNo, Boolean isLeader) {
+    List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
+    log.info("--------------------쿼리실행 완료--------------------");
     List<UserAndClubDTO> userAndClubDTOS = modelMapper.map(userAndClubs, List.class);
     return userAndClubDTOS;
   }

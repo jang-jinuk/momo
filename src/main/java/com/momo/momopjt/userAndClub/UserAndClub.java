@@ -1,5 +1,6 @@
-package com.momo.momopjt.club;
+package com.momo.momopjt.userAndClub;
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;

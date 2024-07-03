@@ -1,13 +1,13 @@
 package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.club.UserAndClubDTO;
-import com.momo.momopjt.club.UserAndClubService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @SpringBootTest
 @Log4j2
@@ -19,10 +19,10 @@ public class UserAndClubServiceTests {
   @Test
   public void joinClubTest() {
     User user = new User();
-    user.setUserNo(1L);
+    user.setUserNo(4L);
 
     Club club = new Club();
-    club.setClubNo(2L);
+    club.setClubNo(3L);
 
 
     UserAndClubDTO userAndClubDTO = UserAndClubDTO.builder()
@@ -35,17 +35,26 @@ public class UserAndClubServiceTests {
   //가입 신청 승인 기능 테스트
   @Test
   public void approveJoinTest() {
-    Long userNo = 2L;
+    Long id = 8L;
     log.info("-------------승인 요청-------------");
-    userAndClubService.approveJoin(userNo);
+    userAndClubService.approveJoin(id);
   }
 
   //맴버 탈퇴 기능 테스트
   @Test
   public void disbandTest() {
-    Long id = 2L;
+    Long id = 3L;
     log.info("-------------탈퇴 요청-------------");
     userAndClubService.disband(id);
+  }
+
+  //특정 모임 맴버 조회 기능 테스트
+  @Test
+  public void readAllMembersTest() {
+    Club club = new Club();
+    club.setClubNo(3L);
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club,false);
+    log.info(userAndClubDTOS);
   }
 
 }
