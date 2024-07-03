@@ -13,4 +13,5 @@ public interface ClubService {
 
   Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO);
 
+  void disbandClub(Long clubNo);
 }

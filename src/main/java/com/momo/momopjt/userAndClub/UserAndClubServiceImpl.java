@@ -4,7 +4,6 @@ package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -64,12 +63,17 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 가입 신청 내역 조회
   @Override
   public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
-    log.info("------------ [07-03-12:44:49]----------jinuk");
     List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
-    log.info("------------ [07-03-12:44:52]----------jinuk");
     List<UserAndClubDTO> joinList = modelMapper.map(userAndClubs, List.class);
-    log.info("------------ [07-03-12:44:57]----------jinuk");
     return joinList;
+  }
+
+  // 해당 모임 맴버 전체 삭제
+  @Override
+  public void deleteAllMembers(Long clubNo) {
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    userAndClubRepository.deleteClubMembers(club);
   }
 
 }

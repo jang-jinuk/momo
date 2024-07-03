@@ -13,4 +13,6 @@ public interface UserAndClubService {
   List<UserAndClubDTO> readAllMembers(Club clubNo);
 
   List<UserAndClubDTO> readAllJoinList(Club clubNo);
+
+  void deleteAllMembers(Long clubNo);
 }

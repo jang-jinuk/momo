@@ -4,10 +4,13 @@ package com.momo.momopjt.club;
 
 import com.momo.momopjt.Photo.Photo;
 import com.momo.momopjt.Photo.PhotoDTO;
+import com.momo.momopjt.Photo.PhotoRepository;
 import com.momo.momopjt.Photo.PhotoService;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.userAndClub.UserAndClubServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -23,6 +26,8 @@ public class ClubServiceImpl implements ClubService {
   private final ClubRepository clubRepository;
   private final PhotoService photoService;
   private final ModelMapper modelMapper;
+  private final PhotoRepository photoRepository;
+  private final UserAndClubServiceImpl userAndClubServiceImpl;
 
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
@@ -75,5 +80,27 @@ public class ClubServiceImpl implements ClubService {
   }
 
   //모임 해산
+  @Override
+  public void disbandClub(Long clubNo) {
+    //해당 모임 맴버 전체 삭제
+    userAndClubServiceImpl.deleteAllMembers(clubNo);
+    log.info("------------ [07-03-15:12:55]----------jinuk");
+    //해당 모임 대표사진 조회
+    Optional<Club> result = clubRepository.findById(clubNo);
+    Club club = result.orElseThrow();
+    Photo photo = club.getPhotoUuid();
+    String clubPhoto = photo.getPhotoUuid();
+    log.info(clubPhoto);
+    
+    // 모임 해산
+    clubRepository.deleteById(clubNo);
+    log.info("------------ [07-03-15:13:27]----------jinuk");
+    
+    //해당 모임 대표사진 삭제
+    photoService.deletePhoto(clubPhoto);
+    log.info("------------ [07-03-15:13:43]----------jinuk");
+
+
+  }
 
 }

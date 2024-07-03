@@ -2,9 +2,9 @@ package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
 
-import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,4 +17,9 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   //joinDate가 null이면 가입 신청 상태, 값이 null이지 않으면 가입 승인 상태
   @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.joinDate IS NULL")
   List<UserAndClub> findJoinList(@Param("clubNo") Club clubNo);
+
+  //특정 모임 맴버 전체 삭제(모임 해산 기능)
+  @Modifying
+  @Query("DELETE FROM UserAndClub WHERE clubNo = :clubNo")
+  void deleteClubMembers(@Param("clubNo") Club clubNo);
 }
