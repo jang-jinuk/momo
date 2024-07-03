@@ -140,8 +140,8 @@ public class UserTests {
         @DisplayName("정규 표현식 검사 TRUE/FALSE")
         public void okORnot()  {
 
-String pattern = "^[IE][NS][TF][PJ]$"; //정규식
-String val = "INTP"; //판별될 놈
+String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{6,12}$"; //정규식
+String val = "dmgo235"; //판별될 놈
 
             boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
             log.info("...... [07-02-19:29:25]..........KSW");

@@ -19,14 +19,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void join(UserJoinDTO userJoinDTO) throws UserIdException {
-
         String userId = userJoinDTO.getUserId();
-
         boolean exist = userRepository.existsByUserId(userId); // existsByUserId 사용
         if (exist) {
             throw new UserIdException();
         }
-
         User user = modelMapper.map(userJoinDTO, User.class);
         user.changePassword(passwordEncoder.encode(userJoinDTO.getUserPw()));
         user.addRole(UserRole.USER);

@@ -75,6 +75,18 @@ public class UserController {
         } catch (UserService.UserIdException e) {
             redirectAttributes.addFlashAttribute("error", "userId");
             return "redirect:/user/join";
+        } catch (UserService.UserPwException e) {
+            redirectAttributes.addFlashAttribute("error", "userPw");
+            return "redirect:/user/join";
+        } catch (UserService.UserNickException e) {
+            redirectAttributes.addFlashAttribute("error", "userNick");
+            return "redirect:/user/join";
+        } catch (UserService.UserEmailException e) {
+            redirectAttributes.addFlashAttribute("error", "userEmail");
+            return "redirect:/user/join";
+        } catch (UserService.UserMbtiException e) {
+            redirectAttributes.addFlashAttribute("error", "userMbti");
+            return "redirect:/user/join";
         }
 
         redirectAttributes.addFlashAttribute("result", "success");
@@ -108,20 +120,36 @@ public class UserController {
 
 
         // 정규표현식 패턴 정의
-        Pattern userIdPattern = Pattern.compile("^[a-zA-Z0-9]{5,15}$");
+        Pattern IdPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{6,12}$");
+        Pattern PwPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])([a-zA-Z0-9!@#$%^&*(),.?\":{}|<>]){8,16}$");
+        Pattern NickPattern = Pattern.compile("^[가-힣a-zA-Z0-9]{3,6}$");
         Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-
+        Pattern MbtiPattern = Pattern.compile("^[IE][NS][TF][PJ]$");
         // 유효성 검사
-        Matcher userIdMatcher = userIdPattern.matcher(userId);
+        Matcher IdMatcher = IdPattern.matcher(userId);
+        Matcher PwMatcher = PwPattern.matcher(userPw);
+        Matcher NickMatcher = NickPattern.matcher(userNickname);
         Matcher emailMatcher = emailPattern.matcher(userEmail);
-
-        if (!userIdMatcher.matches()) {
-            model.addAttribute("errorMessage", "사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+        Matcher MbtiMatcher = MbtiPattern.matcher(userMbti);
+        // 유효성 에러 메세지
+        if (!IdMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 ID는 영문자, 숫자를 포함하는 6~12자로 구성되어야 합니다.");
             return "error"; // 에러를 표시할 뷰의 이름
         }
-
+        if (!PwMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 PW는 영문자, 숫자, 특수문자를 포함하는 8~16자로 구성되어야 합니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+        if (!NickMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 NICKNAME은 영문자와 숫자 3~6자로 구성되어야 합니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
         if (!emailMatcher.matches()) {
             model.addAttribute("errorMessage", "이메일 형식이 유효하지 않습니다.");
+            return "error"; // 에러를 표시할 뷰의 이름
+        }
+        if (!MbtiMatcher.matches()) {
+            model.addAttribute("errorMessage", "이딴건 MBTI가 아닙니다.");
             return "error"; // 에러를 표시할 뷰의 이름
         }
 

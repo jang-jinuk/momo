@@ -32,7 +32,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     // OAuth2 인증 관련
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     

@@ -7,25 +7,45 @@
 <head>
     <title>MOMO join page</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css">
     <script>
         function validateForm() {
             const userId = document.forms["registerForm"]["userId"].value;
+            const userPw = document.forms["registerForm"]["userPw"].value;
+            const userNick = document.forms["registerForm"]["userNickname"].value;
             const userEmail = document.forms["registerForm"]["userEmail"].value;
-            const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
-            const emailPattern = /^[A-Za-z0-9+_.-]+@(.+)$/;
+            const userMbti = document.forms["registerForm"]["userMbti"].value;
 
-            if (!userIdPattern.test(userId)) {
+            const IdPattern = /^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{6,12}&/;
+            const PwPattern = /^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])([a-zA-Z0-9!@#$%^&*(),.?\":{}|<>]){8,16}$/;
+            const NickPattern = /^[가-힣a-zA-Z0-9]{3,6}$/;
+            const emailPattern = /^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const MbtiPattern = /^[IE][NS][TF][PJ]$/;
+
+            if (!IdPattern.test(userId)) {
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
-                return false;
+                return ;
             }
 
+            if (!PwPattern.test(userPw)) {
+                alert("사용자 PW는 영문자, 숫자, 특수문자를 포함하는 8~16자로 구성되어야 합니다.");
+                return ;
+            }
+            if (!NickPattern.test(userNick)) {
+                alert("사용자 NICKNAME은 영문자와 숫자 3~6자로 구성되어야 합니다.");
+                return ;
+            }
             if (!emailPattern.test(userEmail)) {
                 alert("이메일 형식이 유효하지 않습니다.");
-                return false;
+                return ;
             }
-
+            if (!MbtiPattern.test(userMbti)) {
+                alert("이딴건 MBTI가 아닙니다.");
+                return ;
+            }
             return true;
         }
+
     </script>
 </head>
 <body>
