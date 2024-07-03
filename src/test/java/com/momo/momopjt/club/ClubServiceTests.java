@@ -62,7 +62,6 @@ public class ClubServiceTests {
   }
 
   @Test
-  @Transactional
   public void updateTest() {
 
     User user = new User();
@@ -79,10 +78,9 @@ public class ClubServiceTests {
         .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
-        .clubNo(1L)
+        .clubNo(2L)
         .clubArea("테스트 지역 수정")
         .clubCategory("테스트 카테고리 수정")
-        .clubName("테스트 모임 수정")
         .clubContent("테스트 모임 소개 수정")
         .clubMax(5)
         .build();

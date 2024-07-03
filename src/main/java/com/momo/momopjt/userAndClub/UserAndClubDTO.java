@@ -2,12 +2,12 @@ package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 
 @Data
 @Builder

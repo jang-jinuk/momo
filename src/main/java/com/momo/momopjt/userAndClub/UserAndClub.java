@@ -2,11 +2,10 @@ package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.time.Instant;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

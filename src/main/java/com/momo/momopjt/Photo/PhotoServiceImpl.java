@@ -1,12 +1,11 @@
 package com.momo.momopjt.Photo;
 
+import java.util.Optional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Builder
@@ -21,6 +20,8 @@ public class PhotoServiceImpl implements PhotoService {
   public Photo savePhoto(PhotoDTO photoDTO) {
     Photo photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
+    log.info(photo);
+    log.info(photo.getPhotoUuid());
     log.info("------------------Photo saved--------------------");
     return photo;
   }
