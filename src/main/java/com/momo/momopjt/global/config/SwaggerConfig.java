@@ -1,5 +1,6 @@
 package com.momo.momopjt.global.config;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,46 +15,46 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import java.util.List;
+
 
 @Configuration
 public class SwaggerConfig {
 
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.OAS_30)
-                .useDefaultResponseMessages(false)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.momo.momopjt"))
-                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-                .paths(PathSelectors.any())
-                .build()
-                .securitySchemes(List.of(apiKey())) // 815p
-                .securityContexts(List.of(securityContext())) // 815p
-                .apiInfo(apiInfo());
-    }
+  @Bean
+  public Docket api() {
+    return new Docket(DocumentationType.OAS_30)
+    .useDefaultResponseMessages(false)
+    .select()
+    .apis(RequestHandlerSelectors.basePackage("com.momo.momopjt"))
+    .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
+    .paths(PathSelectors.any())
+    .build()
+    .securitySchemes(List.of(apiKey())) // 815p
+    .securityContexts(List.of(securityContext())) // 815p
+    .apiInfo(apiInfo());
+  }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Boot 01 Project Swagger")
-                .build();
-    }
+  private ApiInfo apiInfo() {
+    return new ApiInfoBuilder()
+            .title("Boot 01 Project Swagger")
+            .build();
+  }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Bearer Token", "header");
-    }
+  private ApiKey apiKey() {
+    return new ApiKey("Authorization", "Bearer Token", "header");
+  }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth())
-                .operationSelector(selector ->
-                        selector.requestMappingPattern().startsWith("/api/"))
-                .build();
-    }
+  private SecurityContext securityContext() {
+    return SecurityContext.builder().securityReferences(defaultAuth())
+            .operationSelector(selector ->
+                    selector.requestMappingPattern().startsWith("/api/"))
+            .build();
+  }
 
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "global access");
+  private List<SecurityReference> defaultAuth() {
+    AuthorizationScope authorizationScope = new AuthorizationScope("global", "global access");
 
-        return List.of(new SecurityReference("Authorization", new AuthorizationScope[]{authorizationScope}));
-    }
+    return List.of(new SecurityReference("Authorization", new AuthorizationScope[]{authorizationScope}));
+  }
 
 }

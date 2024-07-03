@@ -1,33 +1,33 @@
 package com.momo.momopjt.club;
 
 import com.momo.momopjt.Photo.Photo;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class ClubDTO {
-    private Long clubNo;
 
-    private Photo clubMainPhoto;
+  private Long clubNo;
 
-    private String clubName;
+  private Photo photoUuid;
 
-    private String clubCategory;
+  private String clubName;
 
-    private String clubContent;
+  private String clubCategory;
 
-    private String clubArea;
+  private String clubContent;
 
-    private Integer clubMax;
+  private String clubArea;
 
-    private Character clubGender;
+  private Integer clubMax;
 
-    private Instant clubCreatedDate;
+  private Character clubGender;
+
+  private Instant clubCreateDate;
 }
