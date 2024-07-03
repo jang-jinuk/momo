@@ -1,6 +1,7 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.userAndSchedule.UserAndSchedule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,12 @@ public class Schedule {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "club_no", nullable = false)
   private Club clubNo;
+
+  @Column(name = "schedule_title", nullable = false, length = 50)
+  private String scheduleTitle;
+
+  @Column(name = "schedule_content", nullable = false, length = 500)
+  private String scheduleContent;
 
   @Column(name = "schedule_photo", nullable = false)
   private String schedulePhoto;

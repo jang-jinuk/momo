@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Data
 @Builder
@@ -19,7 +18,12 @@ public class ScheduleDTO {
 
   private Club clubNo;
 
-  private String schedulePhoto;
+  private String scheduleTitle;
+
+  private String scheduleContent;
+
+  @Builder.Default
+  private String schedulePhoto = "defaultschedulephoto";
 
   private Integer scheduleMax;
 
@@ -27,5 +31,4 @@ public class ScheduleDTO {
 
   private Instant scheduleStartDate;
 
-  private Set<UserAndSchedule> userAndSchedules = new LinkedHashSet<>();
 }

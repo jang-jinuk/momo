@@ -12,12 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAndScheduleDTO {
+
   private Long id;
 
   private User userNo;
 
   private Schedule scheduleNo;
 
-  private Integer participants;
+  @Builder.Default
+  private Integer participants = 1;
 
 }
