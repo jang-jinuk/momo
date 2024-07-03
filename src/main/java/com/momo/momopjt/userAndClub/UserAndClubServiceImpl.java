@@ -1,17 +1,17 @@
-//모임 맴버 관리 기능
 package com.momo.momopjt.userAndClub;
 
-import javax.transaction.Transactional;
+//모임 맴버 관리 기능
 
 import com.momo.momopjt.club.Club;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -58,6 +58,14 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     log.info("--------------------쿼리실행 완료--------------------");
     List<UserAndClubDTO> userAndClubDTOS = modelMapper.map(userAndClubs, List.class);
     return userAndClubDTOS;
+  }
+
+  //모임 가입 신청 내역 조회
+  @Override
+  public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
+    List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
+    List<UserAndClubDTO> joinList = modelMapper.map(userAndClubs, List.class);
+    return joinList;
   }
 
 }
