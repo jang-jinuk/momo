@@ -53,7 +53,7 @@ public class UserAndClubServiceTests {
   public void readAllMembersTest() {
     Club club = new Club();
     club.setClubNo(3L);
-    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club,false);
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     log.info(userAndClubDTOS);
   }
 

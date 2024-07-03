@@ -8,5 +8,5 @@ public interface UserAndClubService {
     void joinClub(UserAndClubDTO userAndClubDTO);
     void approveJoin(Long id);
     void disband(Long id);
-    List<UserAndClubDTO> readAllMembers(Club clubNo, Boolean isLeader);
+    List<UserAndClubDTO> readAllMembers(Club clubNo);
 }

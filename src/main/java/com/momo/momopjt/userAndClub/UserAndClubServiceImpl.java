@@ -52,7 +52,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임 맴버 조회
   @Override
-  public List<UserAndClubDTO> readAllMembers(Club clubNo, Boolean isLeader) {
+  public List<UserAndClubDTO> readAllMembers(Club clubNo) {
+    Boolean isLeader = false; //모임원등급으로 표시
     List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
     log.info("--------------------쿼리실행 완료--------------------");
     List<UserAndClubDTO> userAndClubDTOS = modelMapper.map(userAndClubs, List.class);
