@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import java.util.regex.Pattern;
 import javax.transaction.Transactional;
@@ -136,17 +137,18 @@ public class UserTests {
         assertThrows(NoSuchElementException.class, () -> userRepository.findById(user.getUserNo()).orElseThrow(() -> new NoSuchElementException("삭제된 사용자를 찾을 수 없습니다.")));
     }
 
+    @Commit
+    @Test
+    public void 카카오톡소셜테스트(){
+        String userId = "ppppp1p@navr.com";
+        String userPw = passwordEncoder.encode("1234");
+
+        userRepository.updatePassword(userId, userPw);
+    }
         @Test // SW 유효성 검사용 테스트기
         @DisplayName("정규 표현식 검사 TRUE/FALSE")
-        public void okORnot()  {
+        public void okORnot() {
 
-String pattern = "^[IE][NS][TF][PJ]$"; //정규식
-String val = "INTP"; //판별될 놈
-
-            boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
-            log.info("...... [07-02-19:29:25]..........KSW");
-            System.out.println(regex);
-            log.info("...... [07-02-19:29:20]..........KSW");
         }
 
 }

@@ -49,10 +49,9 @@ public class SecurityConfig {
 
     http
         .authorizeRequests()
-        .antMatchers("/", "/home", "/register", "/login","/css/**","/js/**","/images/**",
-            "/public/**", "/user/login", "/user/join","/user/home").permitAll() // 공용 접근 허용
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
+            "/public/**", "/user/login", "/user/join", "/user/home", "/user/editProfile", "/user/profile").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
-        .antMatchers("/user/join","/user/login","/user/home","/user/logout").permitAll()
         .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
         .and()
         .formLogin()
@@ -63,21 +62,16 @@ public class SecurityConfig {
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
         .logoutSuccessUrl("/user/home")
-        .invalidateHttpSession(true)          //로그아웃 시 세션을 무효화
-        .deleteCookies("JSESSIONID")   //로그아웃 시 특정 쿠키(JSESSIONID)를 삭제
+        .invalidateHttpSession(true)          // 로그아웃 시 세션을 무효화
+        .deleteCookies("JSESSIONID")   // 로그아웃 시 특정 쿠키(JSESSIONID)를 삭제
         .permitAll()
         .and()
         .exceptionHandling()
-        .accessDeniedPage("/403");
-    //커스텀로그인페이지
-    http.formLogin().loginPage("/user/login");
-
-    //CSRF비활성화
-    http.csrf().disable();
-
-    //카카오 로그인페이지
-    http.oauth2Login()
-        .loginPage("/user/login")
+        .accessDeniedPage("/403") // 접근 거부 시 이동할 페이지 설정
+        .and()
+        .csrf().disable() // CSRF 비활성화
+        .oauth2Login()
+        .loginPage("/user/login") // 카카오 로그인 페이지 설정
         .successHandler(authenticationSuccessHandler());
 
     return http.build();

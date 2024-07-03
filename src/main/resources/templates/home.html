@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- 스타일시트 경로 -->
+    <title>Home</title><!-- 스타일시트 경로 -->
 </head>
 
 <body>
@@ -20,6 +19,9 @@
             </li>
             <li th:unless="${#authentication.name == 'anonymousUser'}">
                 <a th:href="@{/user/logout}">Logout</a>
+            </li>
+            <li th:unless="${#authentication.name == 'anonymousUser'}">
+                <a th:href="@{/user/editProfile}">회원정보 수정</a>
             </li>
         </ul>
     </nav>

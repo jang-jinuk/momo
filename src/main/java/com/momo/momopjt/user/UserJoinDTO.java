@@ -15,28 +15,15 @@ import java.time.LocalDate;
 public class UserJoinDTO {
 
     private String userId;
-
-
     private String userPw;
-
-
     private String userEmail;
-
-
     private String userNickname;
-
     @NotNull(message = "Gender is required")
     private Character userGender;
-
     @NotNull(message = "Birth date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate userBirth;
-
-
     private String userCategory;
-
-
     private String userAddress;
-
     private String userMbti;
 }

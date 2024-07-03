@@ -8,6 +8,7 @@ public interface UserService {
     }
 
     void join(UserJoinDTO userJoinDTO)throws UserIdException;
-    //void register(UserDto userDto);
+
+
 }
 
