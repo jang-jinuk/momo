@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Period;
@@ -37,15 +38,19 @@ public class UserController {
 
     @GetMapping("/login")
     public void loginGET(HttpServletRequest request) {
+        log.info("-------- [07-03-13:16:04]-------you");
         String errorCode = request.getParameter("errorCode");
+        log.info("-------- [07-03-13:16:11]-------you");
         String logout = request.getParameter("logout");
 
         log.info("login get........");
         log.info("logout: " + logout);
 
         if (logout != null) {
+            log.info("-------- [07-03-13:16:16]-------you");
             log.info("user logout......");
         }
+        log.info("-------- [07-03-13:16:20]-------you");
     }
 
     @GetMapping("/join")
@@ -72,6 +77,18 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home"; // 회원가입 후 홈으로
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+            log.info("User logged out...");
+        }
+
+        redirectAttributes.addFlashAttribute("message", "You have been logged out successfully.");
+        return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
     }
 
     @PostMapping("/submit")

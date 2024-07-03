@@ -11,26 +11,24 @@
 <header>
     <nav>
         <ul>
-            <li><a th:href="@{/home}">Home</a></li>
+            <li><a th:href="@{home}">Home</a></li>
             <li th:if="${#authentication.name == 'anonymousUser'}">
-                <a th:href="@{/login}">Login</a>
+                <a th:href="@{/user/login}">Login</a>
             </li>
             <li th:if="${#authentication.name == 'anonymousUser'}">
-                <a th:href="@{/join}">Join</a>
+                <a th:href="@{/user/join}">Join</a>
             </li>
             <li th:unless="${#authentication.name == 'anonymousUser'}">
-                <a th:href="@{/logout}">Logout</a>
+                <a th:href="@{/user/logout}">Logout</a>
             </li>
         </ul>
     </nav>
 </header>
 
 <main>
-    <p th:if="${nickname != null}">
-        <span th:text="${nickname}"></span>님 반갑습니다~ >_<
-    </p>
-    <h1>Welcome to the Home Page</h1>
-    <p>여기는 홈 페이지입니다. 로그인을 하거나 회원가입을 할 수 있습니다.</p>
+    <h1> MOMO</h1>
+    <p th:if="${#authentication.name == 'anonymousUser'}">여기는 홈 페이지입니다. 로그인을 하거나 회원가입을 할 수 있습니다.</p>
+    <p th:unless="${#authentication.name == 'anonymousUser'}">반갑습니다</p>
 </main>
 
 <footer>
