@@ -19,10 +19,10 @@ public class UserAndClubServiceTests {
   @Test
   public void joinClubTest() {
     User user = new User();
-    user.setUserNo(3L);
+    user.setUserNo(5L);
 
     Club club = new Club();
-    club.setClubNo(2L);
+    club.setClubNo(3L);
 
 
     UserAndClubDTO userAndClubDTO = UserAndClubDTO.builder()

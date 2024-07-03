@@ -1,11 +1,8 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.Photo.Photo;
 import com.momo.momopjt.Photo.PhotoDTO;
-import com.momo.momopjt.Photo.PhotoService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +17,7 @@ public class ClubServiceTests {
   @Autowired
   private ClubService clubService;
 
+  //모임 생성 테스트
   @Test
   public void createTest() {
     User user = new User();
@@ -47,6 +45,7 @@ public class ClubServiceTests {
     clubService.createClub(clubDTO, photoDTO);
   }
 
+  //특정 모임 조회 테스트
   @Test
   @Transactional
   public void readOneTest() {
@@ -54,6 +53,7 @@ public class ClubServiceTests {
     log.info(clubDTO);
   }
 
+  //모든 모임 조회 테스트
   @Test
   @Transactional
   public void readAllTest() {
@@ -61,6 +61,7 @@ public class ClubServiceTests {
     log.info(clubDTOs);
   }
 
+  //모임 정보 수정 테스트
   @Test
   public void updateTest() {
 
@@ -85,5 +86,11 @@ public class ClubServiceTests {
         .clubMax(5)
         .build();
     clubService.updateClub(clubDTO, photoDTO);
+  }
+
+  //모인 해산 기능 테스트
+  @Test
+  public void disbandClubTest() {
+    clubService.disbandClub(3L);
   }
 }
