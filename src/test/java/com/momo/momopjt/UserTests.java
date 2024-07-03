@@ -73,9 +73,9 @@ public class UserTests {
 
         User user = User.builder()
 
-            .userNo(2L) //LONG타입
-            .userId("dbwjd1234")  //String 타입
-            .userPw("dbwjd")  //String 타입
+            .userNo(3L) //LONG타입
+            .userId("tete1")  //String 타입
+            .userPw("1234")  //String 타입
             .userNickname("momoguy1")  //String 타입
             .userEmail("email1@momo.com") //String 타입
             .userGender('m') //char타입

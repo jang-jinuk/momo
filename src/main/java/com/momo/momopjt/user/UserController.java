@@ -37,13 +37,17 @@ public class UserController {
 
     @GetMapping("/login")
     public void loginGET(HttpServletRequest request) {
+        log.info("...... [07-03-13:09:40]..........KSW");
         String errorCode = request.getParameter("errorCode");
+        log.info("...... [07-03-13:09:43]..........KSW");
         String logout = request.getParameter("logout");
+        log.info("...... [07-03-13:09:45]..........KSW");
 
         log.info("login get........");
         log.info("logout: " + logout);
 
         if (logout != null) {
+            log.info("...... [07-03-13:09:47]..........KSW");
             log.info("user logout......");
         }
     }
@@ -60,7 +64,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/user/join";
+            return "redirect:/";
         }
 
         try {

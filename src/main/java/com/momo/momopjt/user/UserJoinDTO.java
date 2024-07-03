@@ -24,7 +24,7 @@ public class UserJoinDTO {
     private String userPw;
 
     @NotBlank(message = "Nickname is required")
-    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{3,6}$", message = "")
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{3,6}$", message = "aa")
     private String userNickname;
 
     @NotNull(message = "Gender is required")

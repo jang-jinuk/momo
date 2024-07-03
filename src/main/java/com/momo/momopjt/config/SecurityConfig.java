@@ -52,7 +52,7 @@ public class SecurityConfig {
         .antMatchers("/", "/home", "/register", "/login","/css/**","/js/**","/images/**",
             "/public/**", "/user/login", "/user/join","/user/home").permitAll() // 공용 접근 허용
         .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
-        .antMatchers("/user/join","/user/login","/user/home").permitAll()
+        .antMatchers("/user/join","/user/login","/user/home","/user/logout").permitAll()
         .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
         .and()
         .formLogin()
@@ -62,7 +62,7 @@ public class SecurityConfig {
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
-        .logoutSuccessUrl("/login")
+        .logoutSuccessUrl("/user/home")
         .invalidateHttpSession(true)
         .deleteCookies("JSESSIONID")
         .permitAll()
