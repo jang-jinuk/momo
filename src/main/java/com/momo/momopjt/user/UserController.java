@@ -71,7 +71,7 @@ public class UserController {
         }
 
         redirectAttributes.addFlashAttribute("result", "success");
-        return "redirect:/user/login";  // 회원가입 후 로그인
+        return "redirect:/user/home"; // 회원가입 후 홈으로
     }
 
     @PostMapping("/submit")
