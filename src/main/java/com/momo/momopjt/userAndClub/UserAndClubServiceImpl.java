@@ -4,6 +4,7 @@ package com.momo.momopjt.userAndClub;
 
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -45,7 +46,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임 탈퇴
   @Override
-  public void disband(Long id) {
+  public void leaveClub(Long id) {
     userAndClubRepository.deleteById(id);
     log.info("-------------모임 탈퇴 완료-------------");
   }
@@ -56,15 +57,18 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     Boolean isLeader = false; //모임원등급으로 표시
     List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
     log.info("--------------------쿼리실행 완료--------------------");
-    List<UserAndClubDTO> userAndClubDTOS = modelMapper.map(userAndClubs, List.class);
-    return userAndClubDTOS;
+    List<UserAndClubDTO> memberList = modelMapper.map(userAndClubs, List.class);
+    return memberList;
   }
 
   //모임 가입 신청 내역 조회
   @Override
   public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
+    log.info("------------ [07-03-12:44:49]----------jinuk");
     List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
+    log.info("------------ [07-03-12:44:52]----------jinuk");
     List<UserAndClubDTO> joinList = modelMapper.map(userAndClubs, List.class);
+    log.info("------------ [07-03-12:44:57]----------jinuk");
     return joinList;
   }
 

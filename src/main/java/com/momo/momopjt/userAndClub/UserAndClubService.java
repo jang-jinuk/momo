@@ -8,7 +8,7 @@ public interface UserAndClubService {
 
   void approveJoin(Long id);
 
-  void disband(Long id);
+  void leaveClub(Long id);
 
   List<UserAndClubDTO> readAllMembers(Club clubNo);
 

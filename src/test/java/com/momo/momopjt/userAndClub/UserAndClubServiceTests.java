@@ -19,10 +19,10 @@ public class UserAndClubServiceTests {
   @Test
   public void joinClubTest() {
     User user = new User();
-    user.setUserNo(4L);
+    user.setUserNo(3L);
 
     Club club = new Club();
-    club.setClubNo(3L);
+    club.setClubNo(2L);
 
 
     UserAndClubDTO userAndClubDTO = UserAndClubDTO.builder()
@@ -45,7 +45,7 @@ public class UserAndClubServiceTests {
   public void disbandTest() {
     Long id = 3L;
     log.info("-------------탈퇴 요청-------------");
-    userAndClubService.disband(id);
+    userAndClubService.leaveClub(id);
   }
 
   //특정 모임 맴버 조회 기능 테스트
@@ -57,4 +57,13 @@ public class UserAndClubServiceTests {
     log.info(userAndClubDTOS);
   }
 
+  //모임 가입 신청 내역 조회 기능 테스트
+  @Test
+  public void readAllJoinListTest() {
+    Club club = new Club();
+    club.setClubNo(2L);
+
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllJoinList(club);
+    log.info(userAndClubDTOS);
+  }
 }

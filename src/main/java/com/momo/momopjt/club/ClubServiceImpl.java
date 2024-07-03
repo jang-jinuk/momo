@@ -74,6 +74,6 @@ public class ClubServiceImpl implements ClubService {
     return club.getClubNo();
   }
 
-  //모임 삭제
-  //모임 가입 신청 및 승인 기능구현 후 구현 예정
+  //모임 해산
+
 }

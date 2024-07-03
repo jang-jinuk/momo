@@ -12,4 +12,5 @@ public interface ClubService {
   List<ClubDTO> readAllClub();
 
   Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO);
+
 }
