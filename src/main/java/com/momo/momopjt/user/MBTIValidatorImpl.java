@@ -13,6 +13,7 @@ public class MBTIValidatorImpl implements ConstraintValidator<ValidMBTI, String>
             "INFJ", "INFP", "ENFJ", "ENFP",
             "ISTJ", "ISFJ", "ESTJ", "ESFJ",
             "ISTP", "ISFP", "ESTP", "ESFP"
+
     );
 
     @Override
