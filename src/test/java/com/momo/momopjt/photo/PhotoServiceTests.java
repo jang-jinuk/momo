@@ -1,7 +1,7 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.Photo.PhotoDTO;
-import com.momo.momopjt.Photo.PhotoService;
+import com.momo.momopjt.photo.Photo.PhotoDTO;
+import com.momo.momopjt.photo.Photo.PhotoService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;

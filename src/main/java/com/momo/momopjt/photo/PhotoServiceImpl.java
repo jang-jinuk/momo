@@ -2,7 +2,6 @@ package com.momo.momopjt.photo;
 
 import java.util.Optional;
 
-import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

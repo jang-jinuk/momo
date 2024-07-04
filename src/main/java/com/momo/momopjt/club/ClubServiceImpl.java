@@ -9,7 +9,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.userAndClub.UserAndClubServiceImpl;
+import com.momo.momopjt.userandclub.UserAndClubServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -32,7 +32,7 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setPhotoUuid(photo);
+    clubDTO.setClubPhoto(photo);
     Club club = modelMapper.map(clubDTO, Club.class);
     Long clubNo = clubRepository.save(club).getClubNo();
     return clubNo;
@@ -65,11 +65,11 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setPhotoUuid(photo);
+    clubDTO.setClubPhoto(photo);
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
     log.info(clubDTO);
-    club.change(clubDTO.getPhotoUuid(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
+    club.change(clubDTO.getClubPhoto(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
             clubDTO.getClubArea(), clubDTO.getClubMax()
     );
     clubRepository.save(club);
@@ -85,10 +85,10 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     Club club = result.orElseThrow();
-    Photo photo = club.getPhotoUuid();
+    Photo photo = club.getClubPhoto();
     String clubPhoto = photo.getPhotoUuid();
     log.info(clubPhoto);
-    
+
     // 모임 해산
     clubRepository.deleteById(clubNo);
 
