@@ -24,6 +24,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath userAddress = createString("userAddress");
 
+    public final NumberPath<Integer> userAge = createNumber("userAge", Integer.class);
+
     public final DatePath<java.time.LocalDate> userBirth = createDate("userBirth", java.time.LocalDate.class);
 
     public final StringPath userCategory = createString("userCategory");
