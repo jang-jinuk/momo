@@ -53,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 참가인원이 마감되지 않았으면 불러온 일정에 현재 참가인원 수를 추가한다.
   // 참가인원 테이블에 참가자 정보와 일정 번호를 저장한다.
   @Override
-  public void joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+  public Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
@@ -73,6 +73,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     } else {
       log.info("인원이 마감되었습니다.");
     }
+
+    return schedule.getScheduleParticipants();
   }
 
 
@@ -81,7 +83,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 해당 일정 참가자 목록에서 해당 회원을 제외한다.
   // 일정 현재 참가인원을 한명 차감한다.
   @Override
-  public void leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+  public Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
@@ -93,6 +95,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     schedule.setScheduleParticipants(participants - 1);
     scheduleRepository.save(schedule);
     log.info("------------ [참가 취소 완료] ------------");
+
+    return schedule.getScheduleParticipants();
   }
 
 
