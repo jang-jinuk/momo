@@ -20,7 +20,7 @@ public class UserDto {
     private String userEmail;
     private String userNickname;
     private Character userGender;
-    private Integer userAge;
+    //private Integer userAge;
     private LocalDate userBirth;
     private String  userCategory;
     private String userAddress;

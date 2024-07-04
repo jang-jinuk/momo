@@ -10,15 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Matcher;
@@ -93,105 +91,55 @@ public class UserController {
     }
 
 
-    @PostMapping("/submit")
-    public String handleFormSubmit(
-        @RequestParam("userId") String userId,
-        @RequestParam("userNickname") String userNickname,
-        @RequestParam("userPw") String userPw,
-        @RequestParam("userGender") char userGender,
-        @RequestParam("userBirth") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate userBirth,
-        @RequestParam("userEmail") String userEmail,
-        @RequestParam("userCategory") String userCategory,
-        @RequestParam("userAddress") String userAddress,
-        @RequestParam("userMbti") String userMbti,
-        Model model) {
-
-        // 유효성 검사 패턴
-        Pattern userIdPattern = Pattern.compile("^[a-zA-Z0-9]{5,15}$");
-        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        Pattern passwordPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[a-zA-Z\\d!@#$%^&*(),.?\":{}|<>]{8,20}$");
-
-        // Matcher 객체 생성
-        Matcher userIdMatcher = userIdPattern.matcher(userId);
-        Matcher emailMatcher = emailPattern.matcher(userEmail);
-        Matcher passwordMatcher = passwordPattern.matcher(userPw);
-
-        // 사용자 ID 유효성 검사
-        if (!userIdMatcher.matches()) {
-            model.addAttribute("errorMessage", "사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
-            return "error";
+    @GetMapping("/editProfile")
+    public String editProfileForm(Model model, @AuthenticationPrincipal User user) {
+        if (user == null) {
+            // 사용자 객체가 null일 경우 처리
+            model.addAttribute("errorMessage", "사용자 정보를 가져오는 데 실패했습니다.");
+            return "errorPage";  // 에러 페이지로 이동
         }
 
-        // 이메일 유효성 검사
-        if (!emailMatcher.matches()) {
-            model.addAttribute("errorMessage", "이메일 형식이 유효하지 않습니다.");
-            return "error";
-        }
-
-        // 비밀번호 유효성 검사
-        if (!passwordMatcher.matches()) {
-            model.addAttribute("errorMessage", "비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
-            return "error";
-        }
-
-        // 닉네임 유효성 검사
-        if (userNickname == null || userNickname.isEmpty()) {
-            model.addAttribute("errorMessage", "닉네임이 필요합니다.");
-            return "error";
-        }
-
-        // 성별 유효성 검사
-        if (userGender != 'm' && userGender != 'w') {
-            model.addAttribute("errorMessage", "성별이 유효하지 않습니다.");
-            return "error";
-        }
-
-        // 생년월일 유효성 검사
-        if (userBirth == null) {
-            model.addAttribute("errorMessage", "생년월일이 필요합니다.");
-            return "error";
-        }
-        /*
-        // 카테고리 유효성 검사 (필요한 경우 추가)
-        if (userCategory == null || userCategory.isEmpty()) {
-            model.addAttribute("errorMessage", "카테고리가 필요합니다.");
-            return "error";
-        }
-
-        // 주소 유효성 검사 (필요한 경우 추가)
-        if (userAddress == null || userAddress.isEmpty()) {
-            model.addAttribute("errorMessage", "주소가 필요합니다.");
-            return "error";
-        }
-
-        // MBTI 유효성 검사 (필요한 경우 추가)
-        if (userMbti == null || userMbti.isEmpty()) {
-            model.addAttribute("errorMessage", "MBTI가 필요합니다.");
-            return "error";
-        }
-
-         */
-
-        // DTO 객체 생성 및 필드 설정
         UserJoinDTO userJoinDTO = new UserJoinDTO();
-        userJoinDTO.setUserId(userId);
-        userJoinDTO.setUserNickname(userNickname);
-        userJoinDTO.setUserPw(userPw);
-        userJoinDTO.setUserGender(userGender);
-        userJoinDTO.setUserBirth(userBirth);
-        userJoinDTO.setUserEmail(userEmail);
-        userJoinDTO.setUserCategory(userCategory);
-        userJoinDTO.setUserAddress(userAddress);
-        userJoinDTO.setUserMbti(userMbti);
 
-        // 사용자 가입 처리
-        try {
-            userService.join(userJoinDTO);
-        } catch (UserService.UserIdException e) {
-            model.addAttribute("errorMessage", "이미 존재하는 사용자 ID입니다.");
-            return "error";
+        if (user.getUserNickname() != null) {
+            userJoinDTO.setUserNickname(user.getUserNickname());
+        }
+        if (user.getUserEmail() != null) {
+            userJoinDTO.setUserEmail(user.getUserEmail());
+        }
+        if (user.getUserCategory() != null) {
+            userJoinDTO.setUserCategory(user.getUserCategory());
+        }
+        if (user.getUserAddress() != null) {
+            userJoinDTO.setUserAddress(user.getUserAddress());
+        }
+        if (user.getUserMbti() != null) {
+            userJoinDTO.setUserMbti(user.getUserMbti());
         }
 
-        return "redirect:/user/editProfile";
+        model.addAttribute("user", userJoinDTO);
+        return "home";  // 뷰 이름을 "home"으로 변경
+    }
+
+    @PostMapping("/editProfile")
+    public String editProfile(@Valid @ModelAttribute("user") UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user) {
+        if (bindingResult.hasErrors()) {
+            return "user/editProfile";  // 에러가 있을 경우 동일한 뷰로 돌아감
+        }
+
+        if (user == null) {
+            // 사용자 객체가 null일 경우 처리
+            redirectAttributes.addFlashAttribute("errorMessage", "사용자 정보를 가져오는 데 실패했습니다.");
+            return "redirect:/login";  // 로그인 페이지로 리디렉션
+        }
+
+        try {
+            userService.updateUser(userJoinDTO, user);
+            redirectAttributes.addFlashAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
+            return "redirect:/user/home";  // 성공 시 리디렉션 경로 수정
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다.");
+            return "redirect:/user/editProfile";  // 에러 발생 시 동일한 경로로 리디렉션
+        }
     }
 }

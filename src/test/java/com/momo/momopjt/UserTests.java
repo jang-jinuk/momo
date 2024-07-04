@@ -1,6 +1,6 @@
 package com.momo.momopjt;
 
-import com.momo.momopjt.security.CustomUserDetailService;
+import com.momo.momopjt.global.security.CustomUserDetailService;
 import com.momo.momopjt.user.*;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
@@ -11,9 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
-import java.util.regex.Pattern;
+
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +22,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static com.momo.momopjt.user.QUser.user;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

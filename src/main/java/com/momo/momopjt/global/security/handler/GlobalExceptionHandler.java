@@ -1,4 +1,4 @@
-package com.momo.momopjt.security.handler;
+package com.momo.momopjt.global.security.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

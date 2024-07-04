@@ -1,4 +1,4 @@
-package com.momo.momopjt.config;
+package com.momo.momopjt.global.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

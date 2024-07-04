@@ -1,4 +1,4 @@
-package com.momo.momopjt.security;
+package com.momo.momopjt.global.security;
 
 
 import com.momo.momopjt.user.User;
