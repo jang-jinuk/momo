@@ -39,7 +39,6 @@ public class User {
     private Instant userCreateDate;
     private Instant userModifyDate;
 
-
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
@@ -70,5 +69,4 @@ public class User {
     public void changeSocial(char userSocial){
         this.userSocial = userSocial;
     }
-
 }

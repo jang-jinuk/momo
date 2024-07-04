@@ -5,13 +5,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 
 @Controller
 @RequestMapping("/join")
@@ -27,4 +24,3 @@ public class UserJoinController {
     return new ResponseEntity<>(userJoinDTO, HttpStatus.CREATED);
   }
 }
-

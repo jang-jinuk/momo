@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-
     private Long userNo;
     private String userId;
     private String userPw;
@@ -31,5 +30,4 @@ public class UserDto {
     private Integer userLikeNumber;
     private Instant userCreateDate;
     private Instant userModifyDate;
-
 }
