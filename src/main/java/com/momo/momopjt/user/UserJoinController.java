@@ -26,15 +26,5 @@ public class UserJoinController {
     // 회원가입 로직 처리 (예: 서비스 호출)
     return new ResponseEntity<>(userJoinDTO, HttpStatus.CREATED);
   }
-  @PostMapping("/join")
-  public String processForm(@Valid UserJoinDTO userJoinDTO, BindingResult result, Model model) {
-    if (result.hasErrors()) {
-      // 오류 메시지를 모델에 추가
-      model.addAttribute("errorMessage", result.getFieldError("userId").getDefaultMessage());
-      return "join";
-    }
-    // 정상 처리 로직
-    return "redirectToSuccess";
-  }
 }
 
