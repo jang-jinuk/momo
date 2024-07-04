@@ -1,4 +1,4 @@
-package com.momo.momopjt.Photo;
+package com.momo.momopjt.photo;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
