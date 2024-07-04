@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,12 +10,9 @@
 <body>
 <h1>회원정보 수정</h1>
 
+<form action="/user/editProfile" method="post">
   <!-- 회원정보 수정 폼 필드 -->
 
-  <div>
-    <label for="userId">사용자 ID</label>
-    <input type="text" id="userId" name="userId" value="현재 사용자 ID" readonly>
-  </div>
   <div>
     <label for="userNickname">닉네임</label>
     <input type="text" id="userNickname" name="userNickname" value="현재 닉네임" required>
@@ -24,17 +22,16 @@
     <input type="email" id="userEmail" name="userEmail" value="현재 이메일" required>
   </div>
   <div>
-    <label for="userEmail">관심사</label>
+    <label for="userCategory">관심사</label>
     <input type="text" id="userCategory" name="userCategory" value="현재 관심사" required>
   </div>
   <div>
     <label for="userAddress">주소</label>
     <input type="text" id="userAddress" name="userAddress" value="현재 주소" required>
   </div>
-
   <div>
-    <label for="userEmail">Mbti</label>
-    <input type="text" id="userMbti" name="userMbti" value="나의 Mbti" required>
+    <label for="userMbti">MBTI</label>
+    <input type="text" id="userMbti" name="userMbti" value="나의 MBTI" required>
   </div>
 
   <div class="mt-4">
@@ -42,7 +39,6 @@
       <button type="submit" class="btn btn-primary">저장</button>
       <button type="reset" class="btn btn-secondary">취소</button>
     </div>
-
   </div>
 </form>
 </body>

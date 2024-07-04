@@ -32,12 +32,13 @@ public class User {
     private String  userCategory;
     private String userAddress;
     private String userMbti;
-    private Character userState;
+    private Character userState = '0'; // 기본값 설정
     private Character userSocial = 'M'; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc
-    private String userPhoto;
-    private Integer userLikeNumber;
+    private String userPhoto = ""; // 기본값 설정
+    private Integer userLikeNumber = 0; // 기본값 설정
     private Instant userCreateDate;
     private Instant userModifyDate;
+
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
@@ -69,4 +70,5 @@ public class User {
     public void changeSocial(char userSocial){
         this.userSocial = userSocial;
     }
-}
+
+    }

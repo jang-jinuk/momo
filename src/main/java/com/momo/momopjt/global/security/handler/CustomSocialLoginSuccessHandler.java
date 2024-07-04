@@ -1,4 +1,4 @@
-package com.momo.momopjt.security.handler;
+package com.momo.momopjt.global.security.handler;
 
 
 import com.momo.momopjt.user.UserSecurityDTO;

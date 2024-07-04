@@ -22,4 +22,5 @@ public class UserJoinDTO {
     private String userCategory;
     private String userAddress;
     private String userMbti;
+    private Character userSocial = 'M';
 }
