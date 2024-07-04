@@ -51,4 +51,5 @@ public class Club {
     this.clubArea = clubArea;
     this.clubMax = clubMax;
   }
+  // remote club file
 }
