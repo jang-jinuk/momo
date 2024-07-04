@@ -1,10 +1,10 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no,
-          initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Simple Sidebar</title>
@@ -14,14 +14,12 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body class="align-middle">
-
-
     <div class="card align-self-center">
         <div class="card-header">
             LOGIN Page
         </div>
         <div class="card-body">
-            <form id="registerForm" action="/user/login" method="post">
+            <form id="loginForm" action="/user/login" method="post">
                 <div class="input-group mb-3">
                     <span class="input-group-text">아이디</span>
                     <input type="text" name="username" class="form-control" placeholder="USER ID">
@@ -40,6 +38,5 @@
             </form>
         </div>
     </div>
-</div>
 </body>
 </html>
