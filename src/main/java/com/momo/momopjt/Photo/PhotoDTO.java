@@ -1,4 +1,4 @@
-package com.momo.momopjt.Photo;
+package com.momo.momopjt.photo;
 
 import com.momo.momopjt.user.User;
 import java.time.Instant;
