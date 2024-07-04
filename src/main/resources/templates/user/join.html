@@ -7,14 +7,15 @@
 <head>
     <title>MOMO join page</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/styles.css">
-    <script>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script th:inline="javascript">
         function validateForm() {
             const userId = document.forms["registerForm"]["userId"].value;
+            const userNickname = document.forms["registerForm"]["userNickname"].value;
             const userPw = document.forms["registerForm"]["userPw"].value;
-            const userNick = document.forms["registerForm"]["userNickname"].value;
             const userEmail = document.forms["registerForm"]["userEmail"].value;
-            const userMbti = document.forms["registerForm"]["userMbti"].value;
+            const userGender = document.forms["registerForm"]["userGender"].value;
+            const userBirth = document.forms["registerForm"]["userBirth"].value;
 
             const IdPattern = /^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{6,12}&/;
             const PwPattern = /^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])([a-zA-Z0-9!@#$%^&*(),.?\":{}|<>]){8,16}$/;
@@ -24,28 +25,39 @@
 
             if (!IdPattern.test(userId)) {
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
-                return ;
+                return false;
             }
 
-            if (!PwPattern.test(userPw)) {
-                alert("사용자 PW는 영문자, 숫자, 특수문자를 포함하는 8~16자로 구성되어야 합니다.");
-                return ;
+            if (userNickname === "") {
+                alert("닉네임이 필요합니다.");
+                return false;
             }
-            if (!NickPattern.test(userNick)) {
-                alert("사용자 NICKNAME은 영문자와 숫자 3~6자로 구성되어야 합니다.");
-                return ;
+
+            if (!passwordPattern.test(userPw)) {
+                alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+                return false;
             }
+
             if (!emailPattern.test(userEmail)) {
                 alert("이메일 형식이 유효하지 않습니다.");
-                return ;
+                return false;
             }
-            if (!MbtiPattern.test(userMbti)) {
-                alert("이딴건 MBTI가 아닙니다.");
-                return ;
+
+            if (userGender !== "m" && userGender !== "w") {
+                alert("성별이 유효하지 않습니다.");
+                return false;
             }
+
+            if (userBirth === "") {
+                alert("생년월일이 필요합니다.");
+                return false;
+            }
+
+            // 추가 유효성 검사 (선택 사항)
+            // 예시: 카테고리, 주소, MBTI 등
+
             return true;
         }
-
     </script>
 </head>
 <body>
@@ -61,6 +73,15 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">아이디</span>
                             <input type="text" name="userId" class="form-control" required>
+                        </div>
+
+                        <!-- 아이디 중복 오류 메시지 -->
+                        <div th:if="${error == 'userId'}" class="alert alert-danger" role="alert">
+                            아이디가 중복되었습니다. 다른 아이디를 사용해주세요.
+                        </div>
+                        <!-- 기타 오류 메시지 -->
+                        <div th:if="${errors}" th:each="err : ${errors}" class="alert alert-danger" role="alert">
+                            <p th:text="${err.defaultMessage}"></p>
                         </div>
 
                         <div class="input-group mb-3">
@@ -98,14 +119,6 @@
                             <input type="date" class="form-control" name="userBirth" required>
                         </div>
 
-                        <!-- 나이 입력 부분 주석 -->
-                        <!--
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">나이</span>
-                            <input type="number" class="form-control" name="userAge" min="0" max="120" required>
-                        </div>
-                        -->
-
                         <div class="input-group mb-3">
                             <span class="input-group-text">이메일</span>
                             <input type="email" class="form-control" name="userEmail" required>
@@ -125,8 +138,7 @@
                             <span class="input-group-text">Mbti</span>
                             <input type="text" name="userMbti" class="form-control">
                         </div>
-                        <form action="/submit" method="post">
-                            <!-- 폼 필드들 -->
+
                         <div class="mt-4">
                             <div class="float-end">
                                 <button type="submit" class="btn btn-primary submitBtn">등록</button>
@@ -138,7 +150,7 @@
             </div><!--end card-->
         </div><!--end col-->
     </div><!--end row-->
-</div>
+</div><!--end layout:fragment-->
 
 </body>
 </html>

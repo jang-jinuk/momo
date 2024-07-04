@@ -4,7 +4,9 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,13 +59,12 @@ public class UserController {
 
     @GetMapping("/join")
     public void joinGet() {
-        log.info("join get...");
+        log.info("Processing GET request for /join");
     }
 
     @PostMapping("/join")
     public String joinPost(@Valid UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.info("join post...");
-        log.info(userJoinDTO);
+        log.info("Processing POST request for /join with data: {}", userJoinDTO);
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -75,17 +76,8 @@ public class UserController {
         } catch (UserService.UserIdException e) {
             redirectAttributes.addFlashAttribute("error", "userId");
             return "redirect:/user/join";
-        } catch (UserService.UserPwException e) {
-            redirectAttributes.addFlashAttribute("error", "userPw");
-            return "redirect:/user/join";
-        } catch (UserService.UserNickException e) {
-            redirectAttributes.addFlashAttribute("error", "userNick");
-            return "redirect:/user/join";
-        } catch (UserService.UserEmailException e) {
-            redirectAttributes.addFlashAttribute("error", "userEmail");
-            return "redirect:/user/join";
-        } catch (UserService.UserMbtiException e) {
-            redirectAttributes.addFlashAttribute("error", "userMbti");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred.");
             return "redirect:/user/join";
         }
 
@@ -105,71 +97,106 @@ public class UserController {
         return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
     }
 
+
     @PostMapping("/submit")
     public String handleFormSubmit(
-            @RequestParam("userId") String userId,
-            @RequestParam("userNickname") String userNickname,
-            @RequestParam("userPw") String userPw, // 비밀번호도 받지만 결과 페이지에 표시하지 않음
-            @RequestParam("userGender") char userGender,
-            @RequestParam("userBirth") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate userBirth,
-            @RequestParam("userEmail") String userEmail,
-            @RequestParam("userCategory") String userCategory,
-            @RequestParam("userAddress") String userAddress,
-            @RequestParam("userMbti") String userMbti,
-            Model model) {
+        @RequestParam("userId") String userId,
+        @RequestParam("userNickname") String userNickname,
+        @RequestParam("userPw") String userPw,
+        @RequestParam("userGender") char userGender,
+        @RequestParam("userBirth") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate userBirth,
+        @RequestParam("userEmail") String userEmail,
+        @RequestParam("userCategory") String userCategory,
+        @RequestParam("userAddress") String userAddress,
+        @RequestParam("userMbti") String userMbti,
+        Model model) {
 
-
-        // 정규표현식 패턴 정의
-        Pattern IdPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]{6,12}$");
-        Pattern PwPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])([a-zA-Z0-9!@#$%^&*(),.?\":{}|<>]){8,16}$");
-        Pattern NickPattern = Pattern.compile("^[가-힣a-zA-Z0-9]{3,6}$");
+        // 유효성 검사 패턴
+        Pattern userIdPattern = Pattern.compile("^[a-zA-Z0-9]{5,15}$");
         Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-        Pattern MbtiPattern = Pattern.compile("^[IE][NS][TF][PJ]$");
-        // 유효성 검사
-        Matcher IdMatcher = IdPattern.matcher(userId);
-        Matcher PwMatcher = PwPattern.matcher(userPw);
-        Matcher NickMatcher = NickPattern.matcher(userNickname);
+        Pattern passwordPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])[a-zA-Z\\d!@#$%^&*(),.?\":{}|<>]{8,20}$");
+
+        // Matcher 객체 생성
+        Matcher userIdMatcher = userIdPattern.matcher(userId);
         Matcher emailMatcher = emailPattern.matcher(userEmail);
-        Matcher MbtiMatcher = MbtiPattern.matcher(userMbti);
-        // 유효성 에러 메세지
-        if (!IdMatcher.matches()) {
-            model.addAttribute("errorMessage", "사용자 ID는 영문자, 숫자를 포함하는 6~12자로 구성되어야 합니다.");
-            return "error"; // 에러를 표시할 뷰의 이름
+        Matcher passwordMatcher = passwordPattern.matcher(userPw);
+
+        // 사용자 ID 유효성 검사
+        if (!userIdMatcher.matches()) {
+            model.addAttribute("errorMessage", "사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+            return "error";
         }
-        if (!PwMatcher.matches()) {
-            model.addAttribute("errorMessage", "사용자 PW는 영문자, 숫자, 특수문자를 포함하는 8~16자로 구성되어야 합니다.");
-            return "error"; // 에러를 표시할 뷰의 이름
-        }
-        if (!NickMatcher.matches()) {
-            model.addAttribute("errorMessage", "사용자 NICKNAME은 영문자와 숫자 3~6자로 구성되어야 합니다.");
-            return "error"; // 에러를 표시할 뷰의 이름
-        }
+
+        // 이메일 유효성 검사
         if (!emailMatcher.matches()) {
             model.addAttribute("errorMessage", "이메일 형식이 유효하지 않습니다.");
-            return "error"; // 에러를 표시할 뷰의 이름
-        }
-        if (!MbtiMatcher.matches()) {
-            model.addAttribute("errorMessage", "이딴건 MBTI가 아닙니다.");
-            return "error"; // 에러를 표시할 뷰의 이름
+            return "error";
         }
 
+        // 비밀번호 유효성 검사
+        if (!passwordMatcher.matches()) {
+            model.addAttribute("errorMessage", "비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+            return "error";
+        }
 
-        // 현재 날짜를 기준으로 나이 계산
-        LocalDate currentDate = LocalDate.now();
-        int userAge = Period.between(userBirth, currentDate).getYears();
+        // 닉네임 유효성 검사
+        if (userNickname == null || userNickname.isEmpty()) {
+            model.addAttribute("errorMessage", "닉네임이 필요합니다.");
+            return "error";
+        }
 
-        // 비밀번호는 추가하지 않음
-        model.addAttribute("userId", userId);
-        model.addAttribute("userNickname", userNickname);
-        model.addAttribute("userGender", userGender);
-        model.addAttribute("userBirth", userBirth);
-        model.addAttribute("userEmail", userEmail);
-        model.addAttribute("userCategory", userCategory);
-        model.addAttribute("userAge", userAge);
-        model.addAttribute("userAddress", userAddress);
-        model.addAttribute("userMbti", userMbti);
+        // 성별 유효성 검사
+        if (userGender != 'm' && userGender != 'w') {
+            model.addAttribute("errorMessage", "성별이 유효하지 않습니다.");
+            return "error";
+        }
 
-        return "result"; // 결과를 표시할 뷰의 이름
+        // 생년월일 유효성 검사
+        if (userBirth == null) {
+            model.addAttribute("errorMessage", "생년월일이 필요합니다.");
+            return "error";
+        }
+        /*
+        // 카테고리 유효성 검사 (필요한 경우 추가)
+        if (userCategory == null || userCategory.isEmpty()) {
+            model.addAttribute("errorMessage", "카테고리가 필요합니다.");
+            return "error";
+        }
+
+        // 주소 유효성 검사 (필요한 경우 추가)
+        if (userAddress == null || userAddress.isEmpty()) {
+            model.addAttribute("errorMessage", "주소가 필요합니다.");
+            return "error";
+        }
+
+        // MBTI 유효성 검사 (필요한 경우 추가)
+        if (userMbti == null || userMbti.isEmpty()) {
+            model.addAttribute("errorMessage", "MBTI가 필요합니다.");
+            return "error";
+        }
+
+         */
+
+        // DTO 객체 생성 및 필드 설정
+        UserJoinDTO userJoinDTO = new UserJoinDTO();
+        userJoinDTO.setUserId(userId);
+        userJoinDTO.setUserNickname(userNickname);
+        userJoinDTO.setUserPw(userPw);
+        userJoinDTO.setUserGender(userGender);
+        userJoinDTO.setUserBirth(userBirth);
+        userJoinDTO.setUserEmail(userEmail);
+        userJoinDTO.setUserCategory(userCategory);
+        userJoinDTO.setUserAddress(userAddress);
+        userJoinDTO.setUserMbti(userMbti);
+
+        // 사용자 가입 처리
+        try {
+            userService.join(userJoinDTO);
+        } catch (UserService.UserIdException e) {
+            model.addAttribute("errorMessage", "이미 존재하는 사용자 ID입니다.");
+            return "error";
+        }
+
+        return "redirect:/user/editProfile";
     }
-
 }

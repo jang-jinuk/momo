@@ -22,13 +22,17 @@ public class UserJoinDTO {
 //    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>])([a-zA-Z0-9!@#$%^&*(),.?\":{}|<>]){8,16}$",
 //        message = "영문 숫자 특수문자 8 ~ 16")
     private String userPw;
+    private String userEmail;
 //
 //    @NotBlank(message = "Nickname is required")
 //    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{3,6}$", message = "aa")
     private String userNickname;
+    @NotNull(message = "Gender is required")
 //
 //    @NotNull(message = "Gender is required")
     private Character userGender;
+    @NotNull(message = "Birth date is required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 //
 //    @NotNull(message = "Birth date is required")
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
