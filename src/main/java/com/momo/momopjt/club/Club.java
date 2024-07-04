@@ -1,11 +1,12 @@
 package com.momo.momopjt.club;
 
+
+
+import java.time.Instant;
+import javax.persistence.*;
 import com.momo.momopjt.photo.Photo;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,11 +16,11 @@ public class Club {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "club_no", nullable = false)
-  private Long id;
+  private Long clubNo;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "club_photo", nullable = false)
-  private Photo clubPhoto;
+  private Photo photoUuid;
 
   @Column(name = "club_name", nullable = false, length = 50)
   private String clubName;
@@ -42,4 +43,15 @@ public class Club {
   @Column(name = "club_create_date", nullable = false)
   private Instant clubCreateDate;
 
+  //모임 정보 수정 메소드
+  public void change(Photo photoUuid, String clubCategory, String clubContent,
+                     String clubArea, Integer clubMax) {
+    this.photoUuid = photoUuid;
+    this.clubCategory = clubCategory;
+    this.clubContent = clubContent;
+    this.clubArea = clubArea;
+    this.clubMax = clubMax;
+  }
+  // remote club file
+  int a = 1;
 }
