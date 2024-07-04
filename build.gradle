@@ -35,7 +35,7 @@ dependencies {
 
     // OAuth2 인증 관련
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    
+
     // 메일 관련 처리
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
@@ -77,6 +77,8 @@ dependencies {
 
     // 책 설정 끝 ---------------
 
+    //image Thumbnail
+    implementation 'net.coobird:thumbnailator:0.4.20'
 
 
 
