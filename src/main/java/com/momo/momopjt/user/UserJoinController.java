@@ -27,3 +27,4 @@ public class UserJoinController {
     return new ResponseEntity<>(userJoinDTO, HttpStatus.CREATED);
   }
 }
+

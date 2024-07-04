@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
 
     boolean existsByUserId(String userId); // userId로 존재 여부 확인
+    User findByUserId(String userId);
 
     @EntityGraph(attributePaths ="roleSet")
     Optional<User> findByUserEmail(String email);
@@ -29,6 +30,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query("update User u set u.userPw =:userPw where u.userId =:userId")
     void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
-
 
 }

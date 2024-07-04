@@ -16,11 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.Principal;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 @Controller
 @RequestMapping("/user")
@@ -29,6 +25,7 @@ import java.util.regex.Pattern;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDto userDto, Model model) {
@@ -91,55 +88,45 @@ public class UserController {
     }
 
 
-    @GetMapping("/editProfile")
-    public String editProfileForm(Model model, @AuthenticationPrincipal User user) {
+    @GetMapping("/update/{userId}")
+    public String updateGet(@PathVariable String userId, Model model) {
+        UserUpdateDTO userUpdateDTO = new UserUpdateDTO(); // 빈 객체 생성 또는 초기화
+
+        // 사용자 정보를 조회하여 폼에 바인딩
+        // 예시로 userRepository를 사용하여 사용자 정보를 조회하는 경우
+        User user = userRepository.findByUserId(userId);
         if (user == null) {
-            // 사용자 객체가 null일 경우 처리
-            model.addAttribute("errorMessage", "사용자 정보를 가져오는 데 실패했습니다.");
-            return "errorPage";  // 에러 페이지로 이동
+            throw new IllegalArgumentException("User not found with userId: " + userId);
         }
+        userUpdateDTO.setUserId(user.getUserId());
+//        userUpdateDTO.setUserPw(user.getUserPw());
+        userUpdateDTO.setUserEmail(user.getUserEmail());
+        userUpdateDTO.setUserNickname(user.getUserNickname());
+        userUpdateDTO.setUserCategory(user.getUserCategory());
+        userUpdateDTO.setUserAddress(user.getUserAddress());
+        userUpdateDTO.setUserMbti(user.getUserMbti());
 
-        UserJoinDTO userJoinDTO = new UserJoinDTO();
-
-        if (user.getUserNickname() != null) {
-            userJoinDTO.setUserNickname(user.getUserNickname());
-        }
-        if (user.getUserEmail() != null) {
-            userJoinDTO.setUserEmail(user.getUserEmail());
-        }
-        if (user.getUserCategory() != null) {
-            userJoinDTO.setUserCategory(user.getUserCategory());
-        }
-        if (user.getUserAddress() != null) {
-            userJoinDTO.setUserAddress(user.getUserAddress());
-        }
-        if (user.getUserMbti() != null) {
-            userJoinDTO.setUserMbti(user.getUserMbti());
-        }
-
-        model.addAttribute("user", userJoinDTO);
-        return "home";  // 뷰 이름을 "home"으로 변경
+        model.addAttribute("userUpdateDTO", userUpdateDTO);
+        return "user/update"; // 회원 정보 수정 폼을 나타내는 Thymeleaf 템플릿 이름
     }
 
-    @PostMapping("/editProfile")
-    public String editProfile(@Valid @ModelAttribute("user") UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal User user) {
+    @PostMapping("/update")
+    public String updatePost(@Valid UserUpdateDTO userUpdateDTO,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        String userId = userUpdateDTO.getUserId();
         if (bindingResult.hasErrors()) {
-            return "user/editProfile";  // 에러가 있을 경우 동일한 뷰로 돌아감
-        }
-
-        if (user == null) {
-            // 사용자 객체가 null일 경우 처리
-            redirectAttributes.addFlashAttribute("errorMessage", "사용자 정보를 가져오는 데 실패했습니다.");
-            return "redirect:/login";  // 로그인 페이지로 리디렉션
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/user/update/" + userId;
         }
 
         try {
-            userService.updateUser(userJoinDTO, user);
-            redirectAttributes.addFlashAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
-            return "redirect:/user/home";  // 성공 시 리디렉션 경로 수정
+            userService.updateUser(userUpdateDTO);
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "회원정보 수정 중 오류가 발생했습니다.");
-            return "redirect:/user/editProfile";  // 에러 발생 시 동일한 경로로 리디렉션
+            redirectAttributes.addFlashAttribute("error", "Failed to update user.");
+            return "redirect:/user/update/" + userId;
         }
+
+        redirectAttributes.addFlashAttribute("result", "success");
+        return "redirect:/user/home";
     }
 }
