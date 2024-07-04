@@ -52,4 +52,5 @@ public class Club {
     this.clubMax = clubMax;
   }
   // remote club file
+  int a = 1;
 }
