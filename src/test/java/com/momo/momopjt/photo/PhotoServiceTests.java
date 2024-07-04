@@ -1,7 +1,6 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.Photo.PhotoDTO;
-import com.momo.momopjt.Photo.PhotoService;
+import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,8 @@ import java.time.Instant;
 public class PhotoServiceTests {
 
     @Autowired
-    PhotoService photoService;
+    private PhotoService photoService;
+
 
     @Test
     public void savePhotoTest() {
