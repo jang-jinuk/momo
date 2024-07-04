@@ -1,7 +1,6 @@
 package com.momo.momopjt.schedule;
 
-import com.momo.momopjt.Photo.PhotoService;
-import com.momo.momopjt.Photo.PhotoServiceImpl;
+
 import com.momo.momopjt.userAndSchedule.UserAndScheduleDTO;
 import com.momo.momopjt.userAndSchedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Log4j2
@@ -19,7 +19,6 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ScheduleRepository scheduleRepository;
   private final ModelMapper modelMapper;
   private final UserAndScheduleService userAndScheduleService;
-  private final PhotoService photoService;
 
   //일정 생성
   @Override
@@ -39,4 +38,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     return scheduleNo;
   }
+
+
+  @Override
+  public List<ScheduleDTO> getOngoingSchedules() {
+    return List.of();
+  }
+
 }
