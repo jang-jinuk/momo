@@ -45,7 +45,7 @@ public class Club {
   private Instant clubCreateDate;
 
   //모임 정보 수정 메소드
-  public void change(Photo photoUuid, String clubCategory, String clubContent,
+  public void change(Photo clubPhoto, String clubCategory, String clubContent,
                      String clubArea, Integer clubMax) {
     this.clubPhoto = clubPhoto;
     this.clubCategory = clubCategory;
