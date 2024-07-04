@@ -18,9 +18,8 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
-  private ScheduleRepository scheduleRepository;
 
-  //모임 생성
+  //모임 생성 테스트
   @Test
   public void createScheduleTest() {
     Club club = new Club();
@@ -64,12 +63,35 @@ public class ScheduleServiceTests {
 
     Long scheduleNo = 1L;
 
+    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
+
     //When
-    Integer expectedParticipantsNumber = scheduleService.findSchedule(scheduleNo).getScheduleParticipants() + 1;
-    scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
-    Integer addedParticipantsNumber = scheduleService.findSchedule(scheduleNo).getScheduleParticipants();
+    Integer addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
     assertEquals(expectedParticipantsNumber, addedParticipantsNumber);
+  }
+
+  //참가 취소
+  @Test
+  public void leaveScheduleTest() {
+    //Given
+    User user = new User();
+    user.setUserNo(5L);
+    UserAndScheduleDTO userAndScheduleDTO = UserAndScheduleDTO.builder()
+        .userNo(user)
+        .build();
+
+    Long scheduleNo = 1L;
+
+    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() - 1;
+
+    //When
+    Integer subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+
+    //Then
+    assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);
   }
 }
