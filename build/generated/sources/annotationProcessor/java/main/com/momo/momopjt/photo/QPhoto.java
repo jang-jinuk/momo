@@ -1,4 +1,4 @@
-package com.momo.momopjt.Photo;
+package com.momo.momopjt.photo;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QPhoto extends EntityPathBase<Photo> {
 
-    private static final long serialVersionUID = -64993439L;
+    private static final long serialVersionUID = -1732862079L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

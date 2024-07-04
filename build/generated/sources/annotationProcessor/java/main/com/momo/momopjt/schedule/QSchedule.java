@@ -30,6 +30,8 @@ public class QSchedule extends EntityPathBase<Schedule> {
 
     public final NumberPath<Long> scheduleNo = createNumber("scheduleNo", Long.class);
 
+    public final NumberPath<Integer> scheduleParticipants = createNumber("scheduleParticipants", Integer.class);
+
     public final StringPath schedulePhoto = createString("schedulePhoto");
 
     public final StringPath schedulePlace = createString("schedulePlace");
@@ -38,7 +40,7 @@ public class QSchedule extends EntityPathBase<Schedule> {
 
     public final StringPath scheduleTitle = createString("scheduleTitle");
 
-    public final SetPath<com.momo.momopjt.userAndSchedule.UserAndSchedule, com.momo.momopjt.userAndSchedule.QUserAndSchedule> userAndSchedules = this.<com.momo.momopjt.userAndSchedule.UserAndSchedule, com.momo.momopjt.userAndSchedule.QUserAndSchedule>createSet("userAndSchedules", com.momo.momopjt.userAndSchedule.UserAndSchedule.class, com.momo.momopjt.userAndSchedule.QUserAndSchedule.class, PathInits.DIRECT2);
+    public final SetPath<com.momo.momopjt.userandschedule.UserAndSchedule, com.momo.momopjt.userandschedule.QUserAndSchedule> userAndSchedules = this.<com.momo.momopjt.userandschedule.UserAndSchedule, com.momo.momopjt.userandschedule.QUserAndSchedule>createSet("userAndSchedules", com.momo.momopjt.userandschedule.UserAndSchedule.class, com.momo.momopjt.userandschedule.QUserAndSchedule.class, PathInits.DIRECT2);
 
     public QSchedule(String variable) {
         this(Schedule.class, forVariable(variable), INITS);

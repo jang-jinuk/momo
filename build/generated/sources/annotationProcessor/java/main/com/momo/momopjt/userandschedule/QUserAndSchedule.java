@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndSchedule;
+package com.momo.momopjt.userandschedule;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,15 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUserAndSchedule extends EntityPathBase<UserAndSchedule> {
 
-    private static final long serialVersionUID = 403984931L;
+    private static final long serialVersionUID = -1033353693L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QUserAndSchedule userAndSchedule = new QUserAndSchedule("userAndSchedule");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final NumberPath<Integer> participants = createNumber("participants", Integer.class);
 
     public final com.momo.momopjt.schedule.QSchedule scheduleNo;
 

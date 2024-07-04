@@ -8,5 +8,6 @@ public interface ScheduleService {
    Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO uandScheduleDTO);
    ScheduleDTO findSchedule(Long scheduleNo);
    void joinSchedule(Long scheduleNo, UserAndScheduleDTO uandScheduleDTO);
+   void leaveSchedule(Long scheduleNo, UserAndScheduleDTO uandScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules();
 }

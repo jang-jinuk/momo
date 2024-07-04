@@ -57,7 +57,7 @@ public class ScheduleServiceTests {
   public void joinScheduleTest() {
     //Given
     User user = new User();
-    user.setUserNo(1L);
+    user.setUserNo(5L);
     UserAndScheduleDTO userAndScheduleDTO = UserAndScheduleDTO.builder()
         .userNo(user)
         .build();
