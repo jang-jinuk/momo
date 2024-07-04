@@ -2,14 +2,13 @@ package com.momo.momopjt.club;
 
 //모임 CRUD기능 구현
 
-import com.momo.momopjt.Photo.Photo;
-import com.momo.momopjt.Photo.PhotoDTO;
-import com.momo.momopjt.Photo.PhotoRepository;
-import com.momo.momopjt.Photo.PhotoService;
+import com.momo.momopjt.photo.Photo;
+import com.momo.momopjt.photo.PhotoDTO;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.userAndClub.UserAndClubServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

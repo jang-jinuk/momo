@@ -1,6 +1,6 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.Photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoDTO;
 
 import java.util.List;
 
