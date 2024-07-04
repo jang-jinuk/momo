@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndSchedule;
+package com.momo.momopjt.userandschedule;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +16,7 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
   private final ModelMapper modelMapper;
 
   @Override
-  public void createScheduleMaster(UserAndScheduleDTO userAndScheduleDTO) {
+  public void addParticipant(UserAndScheduleDTO userAndScheduleDTO) {
     userAndScheduleRepository.save(modelMapper.map(userAndScheduleDTO, UserAndSchedule.class));
   }
 }

@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndClub;
+package com.momo.momopjt.userandclub;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;

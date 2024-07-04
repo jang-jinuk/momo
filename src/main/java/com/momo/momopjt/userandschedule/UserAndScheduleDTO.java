@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndSchedule;
+package com.momo.momopjt.userandschedule;
 
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
@@ -18,8 +18,5 @@ public class UserAndScheduleDTO {
   private User userNo;
 
   private Schedule scheduleNo;
-
-  @Builder.Default
-  private Integer participants = 1;
 
 }

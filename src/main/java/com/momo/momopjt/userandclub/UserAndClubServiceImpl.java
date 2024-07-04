@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndClub;
+package com.momo.momopjt.userandclub;
 
 //모임 맴버 관리 기능
 

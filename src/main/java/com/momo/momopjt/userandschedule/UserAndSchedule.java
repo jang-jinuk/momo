@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndSchedule;
+package com.momo.momopjt.userandschedule;
 
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
@@ -24,8 +24,5 @@ public class UserAndSchedule {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "schedule_no", nullable = false)
   private Schedule scheduleNo;
-
-  @Column(name = "participants", nullable = false)
-  private Integer participants;
 
 }

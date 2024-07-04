@@ -1,4 +1,4 @@
-package com.momo.momopjt.Photo;
+package com.momo.momopjt.photo;
 
 public interface PhotoService {
   Photo savePhoto(PhotoDTO photoDTO);

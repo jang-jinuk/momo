@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
 import java.time.Instant;
+
 
 @Data
 @Builder
@@ -23,9 +22,12 @@ public class ScheduleDTO {
   private String scheduleContent;
 
   @Builder.Default
-  private String schedulePhoto = "defaultschedulephoto";
+  private String schedulePhoto = "default";
 
   private Integer scheduleMax;
+
+  @Builder.Default
+  private Integer scheduleParticipants = 1;
 
   private String schedulePlace;
 

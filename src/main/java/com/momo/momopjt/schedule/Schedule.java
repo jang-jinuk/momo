@@ -1,7 +1,7 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.userAndSchedule.UserAndSchedule;
+import com.momo.momopjt.userandschedule.UserAndSchedule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,6 +35,9 @@ public class Schedule {
 
   @Column(name = "schedule_max", nullable = false)
   private Integer scheduleMax;
+
+  @Column(name = "schedule_participants", nullable = false)
+  private Integer scheduleParticipants;
 
   @Column(name = "schedule_place")
   private String schedulePlace;
