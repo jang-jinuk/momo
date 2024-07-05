@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserDTO {
 
     private Long userNo;
     private String userId;
@@ -24,7 +24,7 @@ public class UserDto {
     private LocalDate userBirth;
     private String  userCategory;
     private String userAddress;
-    private String userMbti;
+    private String UserMBTI;
     private Character userState;
     private Character userSocial;
     private String userPhoto;
@@ -33,3 +33,5 @@ public class UserDto {
     private Instant userModifyDate;
 
 }
+
+

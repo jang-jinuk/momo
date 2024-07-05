@@ -4,12 +4,11 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+//이쪽에서 dto로
+// join dto updatedtpo -> userDTO (notnull기능추가하기) (피드백받아요!!!!!)
 @Log4j2
 @Data
 public class UserJoinDTO {

@@ -3,10 +3,7 @@ package com.momo.momopjt.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,13 +24,16 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
+
     @GetMapping("/home")
-    public String home(@AuthenticationPrincipal UserDto userDto, Model model) {
+    public String home(@AuthenticationPrincipal UserDTO userDto, Model model) {
         if (userDto != null) {
-            model.addAttribute("nickname", ((UserDto) userDto).getUserNickname());
+            model.addAttribute("nickname", ((UserDTO) userDto).getUserNickname());
         }
-        return "home"; // Thymeleaf 템플릿 이름
+        return "/home"; // Thymeleaf 템플릿 이름
     }
+
+
 
     @GetMapping("/login")
     public void loginGET(HttpServletRequest request) {
@@ -91,7 +91,6 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String updateGet(@PathVariable String userId, Model model) {
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO(); // 빈 객체 생성 또는 초기화
-
         // 사용자 정보를 조회하여 폼에 바인딩
         // 예시로 userRepository를 사용하여 사용자 정보를 조회하는 경우
         User user = userRepository.findByUserId(userId);
@@ -104,21 +103,21 @@ public class UserController {
         userUpdateDTO.setUserNickname(user.getUserNickname());
         userUpdateDTO.setUserCategory(user.getUserCategory());
         userUpdateDTO.setUserAddress(user.getUserAddress());
-        userUpdateDTO.setUserMbti(user.getUserMbti());
+        userUpdateDTO.setUserMBTI(user.getUserMBTI());
 
         model.addAttribute("userUpdateDTO", userUpdateDTO);
-        return "user/update"; // 회원 정보 수정 폼을 나타내는 Thymeleaf 템플릿 이름
+        return "user/update";
     }
 
     @PostMapping("/update")
     public String updatePost(@Valid UserUpdateDTO userUpdateDTO,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("Processing POST request for /update with data: {}", userUpdateDTO);
         String userId = userUpdateDTO.getUserId();
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/user/update/" + userId;
         }
-
         try {
             userService.updateUser(userUpdateDTO);
         } catch (Exception e) {

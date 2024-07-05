@@ -4,6 +4,7 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,6 @@ import java.time.Period;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -73,15 +73,15 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
         }
-
         user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
         user.changeEmail(userUpdateDTO.getUserEmail());
         user.changeNickname(userUpdateDTO.getUserNickname());
-        user.setUserCategory(userUpdateDTO.getUserCategory());
-        user.setUserAddress(userUpdateDTO.getUserAddress());
-        user.setUserMbti(userUpdateDTO.getUserMbti());
+        user.changeUserCategory(userUpdateDTO.getUserCategory());
+        user.changeAddress(userUpdateDTO.getUserAddress());
+        user.changeUserMbti(userUpdateDTO.getUserMBTI());
         user.setUserModifyDate(Instant.now());
 
         userRepository.save(user);
+
     }
 }

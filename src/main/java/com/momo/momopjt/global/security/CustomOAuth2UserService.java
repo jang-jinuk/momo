@@ -60,7 +60,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .userEmail(email)
                     .userSocial(userSocial)
                     .build();
-            user.addRole(UserRole.USER);
+
+            //user.addRole(UserRole.USER);
             userRepository.save(user);
             //UserSecurityDTO 구성 및 반환
             UserSecurityDTO userSecurityDTO = new UserSecurityDTO(email, "1111", email, true,

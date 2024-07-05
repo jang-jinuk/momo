@@ -34,6 +34,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     if (userSecurityDTO.getUserSocial() == 'Y'
         && (userSecurityDTO.getUserPw().equals("1111")
         || passwordEncoder.matches("1111", userSecurityDTO.getUserPw()))) {
+      log.info("-------- [IF]-------you");
 
       log.info("Should Change Password");
       log.info("Redirect to User Modify");
@@ -45,5 +46,6 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     } else {
       response.sendRedirect("/user/home");
     }
+    log.info("-------- [ELSE]-------you");
   }
 }
