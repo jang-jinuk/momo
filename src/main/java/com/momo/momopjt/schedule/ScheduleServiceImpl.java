@@ -134,10 +134,13 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
 
-
+  //마감되지 않은 일정 조회
+  // 마감 기준 : 정원마감, 일정마감
   @Override
-  public List<ScheduleDTO> getOngoingSchedules() {
-    return List.of();
+  public List<ScheduleDTO> getOngoingSchedules(Long scheduleNo) {
+     List<Schedule> schedule = scheduleRepository.findOngoingSchedules(scheduleNo);
+     List<ScheduleDTO> scheduleDTOList = modelMapper.map(schedule, List.class);
+     return scheduleDTOList;
   }
 
 }

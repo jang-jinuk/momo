@@ -11,5 +11,5 @@ public interface ScheduleService {
    Map<String, String> updateSchedule(ScheduleDTO scheduleDTO);
    Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
-   List<ScheduleDTO> getOngoingSchedules();
+   List<ScheduleDTO> getOngoingSchedules(Long scheduleNo);
 }
