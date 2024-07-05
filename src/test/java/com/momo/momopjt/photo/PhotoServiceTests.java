@@ -1,6 +1,5 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ public class PhotoServiceTests {
         user.setUserNo(1L);
 
         PhotoDTO photoDTO = PhotoDTO.builder()
-                .photoUuid("00001test")
+                .photoUUID("00001test")
                 .userNo(user)
                 .photoSize(10)
                 .photoCreateDate(Instant.now())

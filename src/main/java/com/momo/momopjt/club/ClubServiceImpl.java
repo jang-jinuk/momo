@@ -89,7 +89,7 @@ public class ClubServiceImpl implements ClubService {
     Optional<Club> result = clubRepository.findById(clubNo);
     Club club = result.orElseThrow();
     Photo photo = club.getPhotoUuid();
-    String clubPhoto = photo.getPhotoUuid();
+    String clubPhoto = photo.getPhotoUUID();
     log.info(clubPhoto);
     
     // 모임 해산
