@@ -3,11 +3,8 @@ package com.momo.momopjt.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,11 +26,11 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping("/home")
-    public String home(@AuthenticationPrincipal UserDto userDto, Model model) {
-        if (userDto != null) {
-            model.addAttribute("nickname", ((UserDto) userDto).getUserNickname());
+    public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
+        if (userDTO != null) {
+            model.addAttribute("nickname", userDTO.getUserNickname());
         }
-        return "home"; // Thymeleaf 템플릿 이름
+        return "/home"; // Thymeleaf 템플릿 이름
     }
 
     @GetMapping("/login")
@@ -58,20 +55,6 @@ public class UserController {
     @PostMapping("/join")
     public String joinPost(@Valid UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("Processing POST request for /join with data: {}", userJoinDTO);
-
-        public String processRegistration(@RequestParam("userId") String userId,
-            @RequestParam("userEmail") String userEmail,
-            Model model) {
-
-            // 여기서 userId와 userEmail을 이용해 유효성 검사 및 중복 체크 등을 수행
-            if (userService.isUserIdAlreadyExists(userId)) {
-                model.addAttribute("error", "이미 사용 중인 사용자 ID입니다.");
-                return "registrationForm"; // 다시 회원가입 폼으로 이동
-            }
-
-            // userService를 통해 사용자 등록 등의 비즈니스 로직을 수행
-
-            return "redirect:/welcome";
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -118,7 +101,7 @@ public class UserController {
         userUpdateDTO.setUserNickname(user.getUserNickname());
         userUpdateDTO.setUserCategory(user.getUserCategory());
         userUpdateDTO.setUserAddress(user.getUserAddress());
-        userUpdateDTO.setUserMbti(user.getUserMbti());
+        userUpdateDTO.setUserMBTI(user.getUserMBTI());
 
         model.addAttribute("userUpdateDTO", userUpdateDTO);
         return "user/update"; // 회원 정보 수정 폼을 나타내는 Thymeleaf 템플릿 이름
@@ -127,12 +110,12 @@ public class UserController {
     @PostMapping("/update")
     public String updatePost(@Valid UserUpdateDTO userUpdateDTO,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("Processing POST request for /update with data: {}", userUpdateDTO);
         String userId = userUpdateDTO.getUserId();
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/user/update/" + userId;
         }
-
         try {
             userService.updateUser(userUpdateDTO);
         } catch (Exception e) {

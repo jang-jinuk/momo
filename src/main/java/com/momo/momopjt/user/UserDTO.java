@@ -12,7 +12,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserDTO {
+
     private Long userNo;
     private String userId;
     private String userPw;
@@ -23,7 +24,7 @@ public class UserDto {
     private LocalDate userBirth;
     private String  userCategory;
     private String userAddress;
-    private String userMbti;
+    private String UserMBTI;
     private Character userState;
     private Character userSocial;
     private String userPhoto;

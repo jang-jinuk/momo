@@ -79,7 +79,7 @@ public class UserTests {
             .userBirth(date)  //LocalDate 타입
             .userCategory("game") //String 타입
             .userAddress("Seoul") //String 타입
-            .userMbti("INTP") //String 타입
+            .UserMBTI("INTP") //String 타입
             .userState('O') //char타입
             .userSocial('m') //char타입
             .userPhoto("") //string타입

@@ -27,5 +27,5 @@ public class UserUpdateDTO {
   @NotBlank
   private String userAddress;
   @NotBlank
-  private String userMbti;
+  private String userMBTI;
 }

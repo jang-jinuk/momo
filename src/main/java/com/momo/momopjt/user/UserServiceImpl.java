@@ -85,13 +85,12 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
         }
-
         user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
         user.changeEmail(userUpdateDTO.getUserEmail());
         user.changeNickname(userUpdateDTO.getUserNickname());
-        user.setUserCategory(userUpdateDTO.getUserCategory());
-        user.setUserAddress(userUpdateDTO.getUserAddress());
-        user.setUserMbti(userUpdateDTO.getUserMbti());
+        user.changeUserCategory(userUpdateDTO.getUserCategory());
+        user.changeAddress(userUpdateDTO.getUserAddress());
+        user.changeUserMbti(userUpdateDTO.getUserMBTI());
         user.setUserModifyDate(Instant.now());
 
         userRepository.save(user);

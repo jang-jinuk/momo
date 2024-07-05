@@ -9,58 +9,51 @@
 <body>
 <h1>회원정보 수정</h1>
 
-<form th:action="@{/user/update}" method="post">
-    <input type="text" name="userId" th:value="${userUpdateDTO.userId}" hidden>
+<form id="updateForm" th:action="@{/user/update}" method="post">
+    <input type="text" name="userId" th:value="${userUpdateDTO.userId}" hidden aria-label="User ID">
     <div>
         <label for="userNickname">닉네임</label>
         <input type="text" id="userNickname" name="userNickname" th:value="${userUpdateDTO.userNickname}" required>
-<!--        <span th:if="${#fields.hasErrors('userNickname')}" th:errors="${userNickname}"></span>-->
+        <!--        <span th:if="${#fields.hasErrors('userNickname')}" th:errors="${userNickname}"></span>-->
     </div>
 
-<!--    <div>-->
-<!--        <label for="userPw">비밀번호</label>-->
-<!--        <input type="text" id="userPw" name="userPw" th:value="${userUpdateDTO.userPw}" required>-->
-        <!--        <span th:if="${#fields.hasErrors('userEmail')}" th:errors="${userPw}"></span>-->
-<!--    </div>-->
     <div>
         <label for="userEmail">이메일</label>
         <input type="email" id="userEmail" name="userEmail" th:value="${userUpdateDTO.userEmail}" required>
-<!--        <span th:if="${#fields.hasErrors('userEmail')}" th:errors="${userEmail}"></span>-->
+        <!--        <span th:if="${#fields.hasErrors('userEmail')}" th:errors="${userEmail}"></span>-->
     </div>
 
     <div>
         <label for="userCategory">관심사</label>
         <input type="text" id="userCategory" name="userCategory" th:value="${userUpdateDTO.userCategory}" required>
-<!--        <span th:if="${#fields.hasErrors('userCategory')}" th:errors="${userCategory}"></span>-->
+        <!--        <span th:if="${#fields.hasErrors('userCategory')}" th:errors="${userCategory}"></span>-->
     </div>
 
     <div>
         <label for="userAddress">주소</label>
         <input type="text" id="userAddress" name="userAddress" th:value="${userUpdateDTO.userAddress}" required>
-<!--        <span th:if="${#fields.hasErrors('userAddress')}" th:errors="${userAddress}"></span>-->
+        <!--        <span th:if="${#fields.hasErrors('userAddress')}" th:errors="${userAddress}"></span>-->
     </div>
 
     <div>
         <label for="userMbti">MBTI</label>
         <input type="text" id="userMbti" name="userMbti" th:value="${userUpdateDTO.userMbti}" required>
-<!--        <span th:if="${#fields.hasErrors('userMbti')}" th:errors="${userMbti}"></span>-->
+        <!--        <span th:if="${#fields.hasErrors('userMbti')}" th:errors="${userMbti}"></span>-->
     </div>
 
     <div class="mt-4">
         <div class="float-end">
             <button type="submit" class="btn btn-primary">저장</button>
-            <button type="reset" class="btn btn-secondary">지우기</button>
+            <button type="reset" class="btn btn-secondary" onclick="resetForm()">지우기</button>
             <button type="button" class="btn btn-return" onclick="self.location='/user/home'">돌아가기</button>
         </div>
     </div>
 </form>
-<!--<script>-->
-<!--    document.querySelector(".btn-return").addEventListener("onclick",function (e){-->
 
-<!--        e.stopPropagation()-->
-<!--        //redirect to user/home-->
-<!--        document.location = "/user/home";-->
-<!--    })-->
-<!--</script>-->
+<script>
+    function resetForm() {
+        document.getElementById('updateForm').reset();
+    }
+</script>
 </body>
 </html>
