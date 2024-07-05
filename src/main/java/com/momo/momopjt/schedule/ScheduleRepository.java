@@ -10,14 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-//  @Query("SELECT s.scheduleNo, s.clubNo, s.scheduleTitle, s.scheduleContent, s.schedulePhoto, " +
-//      "s.schedulePlace, s.scheduleStartDate, s.scheduleMax, s. " +
-//      "FROM Schedule s " +
-//      "JOIN UserAndSchedule u WHERE s.clubNo = :clubNo " +
-//      "AND s.scheduleMax > s.scheduleParticipants " +
-//      "AND s.scheduleStartDate > :instant")
-//  List<Schedule> findSchedules(@Param("clubNo") Long clubNo, @Param("instant") Instant instant);
-
-
-
+  @Query("SELECT s.scheduleNo, s.scheduleTitle, s.scheduleContent, s.schedulePhoto, " +
+      "s.schedulePlace, s.scheduleStartDate, s.scheduleMax " +
+      "FROM Schedule s WHERE s.clubNo = :clubNo And s.scheduleMax != s.scheduleParticipants AND s.scheduleStartDate > current_timestamp")
+  List<Schedule> findOngoingSchedules(@Param("clubNo") Long clubNo);
 }
