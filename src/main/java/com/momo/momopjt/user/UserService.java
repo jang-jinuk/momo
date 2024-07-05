@@ -2,14 +2,12 @@ package com.momo.momopjt.user;
 
 
 public interface UserService {
-    void updateUser(UserJoinDTO userJoinDTO, User user);
-    static class UserIdException extends Exception{
+
+    void join(UserJoinDTO userJoinDTO) throws UserIdException;
+
+    void updateUser(UserUpdateDTO userUpdateDTO);
+
+    static class UserIdException extends Exception {
+        // 추가적인 예외 처리가 필요한 경우에만 사용
     }
-    void join(UserJoinDTO userJoinDTO)throws UserIdException;
-
-    //Id Email 증복 체크
-    boolean checkUserIdDuplicate(String userId);
-    boolean checkUserEmailDuplicate(String userEmail);
-    //serviceImpe에서 계속
 }
-

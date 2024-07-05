@@ -72,30 +72,26 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private int calculateAge(@NotNull(message = "Birth date is required") LocalDate birthDate) {
+    private int calculateAge(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     @Override
-    public void updateUser(UserJoinDTO userJoinDTO, User user) {
-        // userJoinDTO에서 업데이트할 사용자 정보 추출
-        String userNickname = userJoinDTO.getUserNickname();
-        String userEmail = userJoinDTO.getUserEmail();
-        String userPw = userJoinDTO.getUserPw();
-        String userCategory = userJoinDTO.getUserCategory();
-        String userAddress = userJoinDTO.getUserAddress();
-        String userMbti = userJoinDTO.getUserMbti();
+    @Transactional
+    public void updateUser(UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findByUserId(userUpdateDTO.getUserId());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
+        }
 
-        // user 객체의 정보 업데이트
-        if (userNickname != null) user.setUserNickname(userNickname);
-        if (userEmail != null) user.setUserEmail(userEmail);
-        if (userPw != null) user.setUserPw(userPw);
-        if (userCategory != null) user.setUserCategory(userCategory);
-        if (userAddress != null) user.setUserAddress(userAddress);
-        if (userMbti != null) user.setUserMbti(userMbti);
+        user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
+        user.changeEmail(userUpdateDTO.getUserEmail());
+        user.changeNickname(userUpdateDTO.getUserNickname());
+        user.setUserCategory(userUpdateDTO.getUserCategory());
+        user.setUserAddress(userUpdateDTO.getUserAddress());
+        user.setUserMbti(userUpdateDTO.getUserMbti());
+        user.setUserModifyDate(Instant.now());
 
-        // 업데이트된 사용자 정보를 데이터베이스에 저장하는 등의 로직 작성
         userRepository.save(user);
     }
-
 }
