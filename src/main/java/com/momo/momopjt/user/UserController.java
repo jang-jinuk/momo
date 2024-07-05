@@ -4,6 +4,7 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -142,4 +143,15 @@ public class UserController {
             return "redirect:/user/editProfile";  // 에러 발생 시 동일한 경로로 리디렉션
         }
     }
+
+    //ID Email 증복체크
+    @GetMapping("/user-userId/{userId}/exists")
+    public ResponseEntity<Boolean> checkUserIdDuplicate(@PathVariable String userId){
+        return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
+    }
+    @GetMapping("/user-userEmail/{userEmail}/exists")
+    public ResponseEntity<Boolean> checkUserEmailDuplicate(@PathVariable String userEmail){
+        return ResponseEntity.ok(userService.checkUserEmailDuplicate(userEmail));
+    }
+    //user service에서 이어집니다...
 }

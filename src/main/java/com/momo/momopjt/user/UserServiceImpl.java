@@ -61,6 +61,16 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+    //Id Email 체크
+    @Override
+    public boolean checkUserIdDuplicate(String userId) {
+        return userRepository.existsUserByUserId(userId);
+    }
+    @Override
+    public boolean checkUserEmailDuplicate(String userEmail) {
+        return userRepository.existsUserByUserEmail(userEmail);
+    }
+
 
     private int calculateAge(@NotNull(message = "Birth date is required") LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();

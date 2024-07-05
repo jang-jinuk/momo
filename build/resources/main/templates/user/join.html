@@ -3,15 +3,17 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/basic.html}">
-<html lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <head>
+<head>
     <title>MOMO join page</title>
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-H+K7U5CnXl1h5zOL+2aA8p6Znxl8HMafDHEerFF2x0w="
+                crossorigin="anonymous">
+        </script>
+
     <script th:inline="javascript">
         function validateForm() {
             const userId = document.forms["registerForm"]["userId"].value;
@@ -31,29 +33,82 @@
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
                 return false;
             }
+
             if (!passwordPattern.test(userPw)) {
                 alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
                 return false;
             }
+
             if (!NicknamePattern.test(userNickname)) {
                 alert("닉네임이 필요합니다.");
                 return false;
             }
+
             if (!emailPattern.test(userEmail)) {
                 alert("이메일 형식이 유효하지 않습니다.");
                 return false;
             }
+
             if (userGender !== "m" && userGender !== "w") {
                 alert("성별이 유효하지 않습니다.");
                 return false;
             }
+
             if (userBirth === "") {
                 alert("생년월일이 필요합니다.");
                 return false;
             }
+
+            // 여기서부터 AJAX 호출로 중복 체크 추가
+            checkUserId();
+            checkUserEmail();
+
+            return true;
+        }
             // 추가 유효성 검사 (선택 사항)
             // 예시: 카테고리, 주소, MBTI 등
-            return true;
+
+        async function checkUserId() {
+            const userId = document.forms["registerForm"]["userId"].value.trim();
+            const response = await fetch('/user/user-userId/' + userId + '/exists');
+            const isDuplicate = await response.json();
+
+            if (isDuplicate) {
+                alert("이미 사용 중인 사용자 ID 입니다. 다른 ID를 입력해주세요.");
+                return false;
+            }
+        }
+
+        async function checkUserEmail() {
+            const userEmail = document.forms["registerForm"]["userEmail"].value.trim();
+            const response = await fetch('/user/user-userEmail/' + userEmail + '/exists');
+            const isDuplicate = await response.json();
+
+            if (isDuplicate) {
+                alert("이미 사용 중인 이메일입니다. 다른 이메일을 입력해주세요.");
+                return false;
+            }
+            // 폼 제출 시 유효성 검사 및 중복 체크
+            $("#registerForm").submit(async function (event) {
+                event.preventDefault(); // 폼 제출 기본 동작 막기
+
+                const isValid = validateForm();
+                if (!isValid) {
+                    return false;
+                }
+                const isUserIdValid = await checkUserId();
+                if (!isUserIdValid) {
+                    return false;
+                }
+
+                const isUserEmailValid = await checkUserEmail();
+                if (!isUserEmailValid) {
+                    return false;
+                }
+
+                // 유효성 검사 및 중복 체크를 모두 통과하면 서버로 폼 데이터 전송
+                this.submit();
+            });
         }
     </script>
 </head>
