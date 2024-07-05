@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +41,6 @@ public class UserTests {
     @Test
         //회원 추가 테스트
     void insertUserTests() {
-
         IntStream.rangeClosed(1, 100).forEach(i -> {
 
             User user = User.builder()
@@ -48,14 +48,12 @@ public class UserTests {
                 .userPw(passwordEncoder.encode("1111"))
                 .userEmail("email" + i + "@aaa.bbb")
                 .build();
-
             user.addRole(UserRole.USER);
 
             if (i >= 90) {
                 user.addRole(UserRole.ADMIN);
             }
             userRepository.save(user);
-
         });
     }
 
@@ -63,10 +61,9 @@ public class UserTests {
     void 회원가입() {
         //시간 설정
         Instant now = Instant.now();
-
         //시간 설정 2
-
         LocalDate date = LocalDate.parse("2016-10-31", DateTimeFormatter.ISO_DATE);
+
         System.out.println(date);
         log.info("-------- [06-28-11:17:45]-------you");
 
@@ -90,7 +87,6 @@ public class UserTests {
             .userCreateDate(now) //instant타입
             .userModifyDate(now) //instant타입
             .build();
-
 
         userRepository.save(user);
     }
@@ -137,23 +133,33 @@ public class UserTests {
 
     @Commit
     @Test
-    public void 카카오톡소셜테스트(){
+    public void 카카오톡소셜테스트() {
         String userId = "ppppp1p@navr.com";
         String userPw = passwordEncoder.encode("1234");
 
         userRepository.updatePassword(userId, userPw);
     }
-        @Test // SW 유효성 검사용 테스트기
-        @DisplayName("정규 표현식 검사 TRUE/FALSE")
-        public void okORnot() {
 
-String pattern = "^[a-zA-Z0-9]+@([\\w-]+\\.)+[\\w-]{2,5}$"; //정규식
-String val = "rlatlsdn34@daum.net.df"; //판별될 놈
+    @Test // SW 유효성 검사용 테스트기
+    @DisplayName("정규 표현식 검사 TRUE/FALSE")
+    public void okORnot() {
 
-            boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
-            log.info("...... [07-02-19:29:25]..........KSW");
-            System.out.println(regex);
-            log.info("...... [07-02-19:29:20]..........KSW");
-        }
+        String pattern = "^[a-zA-Z0-9]+@([\\w-]+\\.)+[\\w-]{2,5}$"; //정규식
+        String val = "rlatlsdn34@daum.net.df"; //판별될 놈
 
+        boolean regex = Pattern.matches(pattern, val); // 맞는지 아닌지 T/F
+        log.info("...... [07-02-19:29:25]..........KSW");
+        System.out.println(regex);
+        log.info("...... [07-02-19:29:20]..........KSW");
+    }
+
+//    @Test
+//    @DisplayName("ID EMAIL 검사")
+//    public void testIDEM() {
+//
+//        1. 이메일이 입력됨 DTO에 담아짐
+//        1. 데이터베이스에 userId 조회
+//        2. 값이 존재하는지 확인 후 T / F값 반환
+//        3. 반환된 값으로 html에서 메세지 출력 후 기능
+//    }
 }

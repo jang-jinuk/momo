@@ -59,6 +59,20 @@ public class UserController {
     public String joinPost(@Valid UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("Processing POST request for /join with data: {}", userJoinDTO);
 
+        public String processRegistration(@RequestParam("userId") String userId,
+            @RequestParam("userEmail") String userEmail,
+            Model model) {
+
+            // 여기서 userId와 userEmail을 이용해 유효성 검사 및 중복 체크 등을 수행
+            if (userService.isUserIdAlreadyExists(userId)) {
+                model.addAttribute("error", "이미 사용 중인 사용자 ID입니다.");
+                return "registrationForm"; // 다시 회원가입 폼으로 이동
+            }
+
+            // userService를 통해 사용자 등록 등의 비즈니스 로직을 수행
+
+            return "redirect:/welcome";
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/user/join";
@@ -100,7 +114,6 @@ public class UserController {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
         userUpdateDTO.setUserId(user.getUserId());
-//        userUpdateDTO.setUserPw(user.getUserPw());
         userUpdateDTO.setUserEmail(user.getUserEmail());
         userUpdateDTO.setUserNickname(user.getUserNickname());
         userUpdateDTO.setUserCategory(user.getUserCategory());
@@ -132,13 +145,13 @@ public class UserController {
     }
 
     //ID Email 증복체크
-    @GetMapping("/user-userId/{userId}/exists")
-    public ResponseEntity<Boolean> checkUserIdDuplicate(@PathVariable String userId){
-        return ResponseEntity.ok(userService.checkUserIdDuplicate(userId));
+    public ResponseEntity<?> checkUserId(@RequestBody String userId) {
+        boolean isUnique = userService.isUserIdgoyou(userId);
+        return ResponseEntity.ok().body(isUnique);
+   }
+
+    public ResponseEntity<?> checkUserEmail(@RequestBody String userEmail) {
+        boolean isUnique = userService.isUserEmailgoyou(userEmail);
+        return ResponseEntity.ok().body(isUnique);
     }
-    @GetMapping("/user-userEmail/{userEmail}/exists")
-    public ResponseEntity<Boolean> checkUserEmailDuplicate(@PathVariable String userEmail){
-        return ResponseEntity.ok(userService.checkUserEmailDuplicate(userEmail));
-    }
-    //user service에서 이어집니다...
 }

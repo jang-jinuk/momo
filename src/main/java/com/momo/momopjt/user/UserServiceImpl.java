@@ -4,6 +4,7 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,14 +62,15 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+
     //Id Email 체크
     @Override
-    public boolean checkUserIdDuplicate(String userId) {
-        return userRepository.existsUserByUserId(userId);
+    public boolean isUserIdgoyou(String userId){
+        return !userRepository.existsByUserId(userId);
     }
     @Override
-    public boolean checkUserEmailDuplicate(String userEmail) {
-        return userRepository.existsUserByUserEmail(userEmail);
+    public boolean isUserEmailgoyou(String userEmail){
+        return !userRepository.existsByUserId(userEmail);
     }
 
 

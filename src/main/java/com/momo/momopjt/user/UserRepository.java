@@ -31,4 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("update User u set u.userPw =:userPw where u.userId =:userId")
     void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
 
+    //Id Email 중복 체크
+//    boolean existsByUserId(String userId);
+    boolean existsByUserEmail(String userEmail);
 }

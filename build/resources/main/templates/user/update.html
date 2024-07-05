@@ -50,17 +50,17 @@
         <div class="float-end">
             <button type="submit" class="btn btn-primary">저장</button>
             <button type="reset" class="btn btn-secondary">지우기</button>
-            <button type="button" class="btn btn-return" ><!--onclick="self.location='/user/home'"--><a href="/user/home">돌아가기</a></button>
+            <button type="button" class="btn btn-return" onclick="self.location='/user/home'">돌아가기</button>
         </div>
     </div>
 </form>
-<script>
-    document.querySelector(".btn-return").addEventListener("onclick",function (e){
+<!--<script>-->
+<!--    document.querySelector(".btn-return").addEventListener("onclick",function (e){-->
 
-        e.stopPropagation()
-        //redirect to user/home
-        document.location = "/user/home";
-    })
-</script>
+<!--        e.stopPropagation()-->
+<!--        //redirect to user/home-->
+<!--        document.location = "/user/home";-->
+<!--    })-->
+<!--</script>-->
 </body>
 </html>
