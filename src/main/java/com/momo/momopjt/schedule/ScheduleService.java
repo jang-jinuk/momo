@@ -5,9 +5,10 @@ import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import java.util.List;
 
 public interface ScheduleService {
-   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO uandScheduleDTO);
+   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO);
    ScheduleDTO findSchedule(Long scheduleNo);
-   Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO uandScheduleDTO);
-   Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO uandScheduleDTO);
+   Long updateSchedule(ScheduleDTO scheduleDTO);
+   Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
+   Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules();
 }
