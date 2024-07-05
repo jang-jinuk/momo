@@ -7,8 +7,11 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.*;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -52,6 +55,36 @@ public class ScheduleServiceTests {
     scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
   }
 
+  //일정 정보 수정 테스트
+  @Test
+  public void updateScheduleTest() {
+    //Given
+    Club club = new Club();
+    club.setClubNo(1L);
+
+    LocalDateTime localDateTime = LocalDateTime.of(2024, 8, 10, 15, 0);
+
+    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+
+    Instant instant = zonedDateTime.toInstant();
+
+    ScheduleDTO scheduleDTO = ScheduleDTO.builder()
+        .scheduleNo(1L)
+        .clubNo(club)
+        .scheduleTitle("일정 제목 수정.")
+        .scheduleContent("일정 내용 수정.")
+        .scheduleMax(10)
+        .schedulePlace("서울시 도봉구")
+        .scheduleStartDate(instant)
+        .build();
+
+    //When
+    Map<String, String> result = scheduleService.updateSchedule(scheduleDTO);
+    //Then
+    assertEquals(scheduleDTO.getScheduleNo(),Long.parseLong(result.get("result")));
+  }
+
+  //일정 참가 테스트
   @Test
   public void joinScheduleTest() {
     //Given
