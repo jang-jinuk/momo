@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,10 @@ public class UserController {
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDTO userDto, Model model) {
         if (userDto != null) {
-            model.addAttribute("nickname", ((UserDTO) userDto).getUserNickname());
+            model.addAttribute("nickname", userDto.getUserNickname());
         }
         return "/home"; // Thymeleaf 템플릿 이름
     }
-
 
 
     @GetMapping("/login")
@@ -55,15 +55,15 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String joinPost(@Valid UserJoinDTO userJoinDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.info("Processing POST request for /join with data: {}", userJoinDTO);
+    public String joinPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("Processing POST request for /join with data: {}", userDTO);
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/user/join";
         }
         try {
-            userService.join(userJoinDTO);
+            userService.join(userDTO);
         } catch (UserService.UserIdException e) {
             redirectAttributes.addFlashAttribute("error", "userId");
             return "redirect:/user/join";
@@ -75,6 +75,7 @@ public class UserController {
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home"; // 회원가입 후 홈으로
     }
+
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
@@ -90,37 +91,41 @@ public class UserController {
 
     @GetMapping("/update/{userId}")
     public String updateGet(@PathVariable String userId, Model model) {
-        UserUpdateDTO userUpdateDTO = new UserUpdateDTO(); // 빈 객체 생성 또는 초기화
-        // 사용자 정보를 조회하여 폼에 바인딩
-        // 예시로 userRepository를 사용하여 사용자 정보를 조회하는 경우
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
-        userUpdateDTO.setUserId(user.getUserId());
-//        userUpdateDTO.setUserPw(user.getUserPw());
-        userUpdateDTO.setUserEmail(user.getUserEmail());
-        userUpdateDTO.setUserNickname(user.getUserNickname());
-        userUpdateDTO.setUserCategory(user.getUserCategory());
-        userUpdateDTO.setUserAddress(user.getUserAddress());
-        userUpdateDTO.setUserMBTI(user.getUserMBTI());
 
-        model.addAttribute("userUpdateDTO", userUpdateDTO);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getUserId());
+        userDTO.setUserEmail(user.getUserEmail());
+        userDTO.setUserNickname(user.getUserNickname());
+        userDTO.setUserCategory(user.getUserCategory());
+        userDTO.setUserAddress(user.getUserAddress());
+        userDTO.setUserMBTI(user.getUserMBTI());
+
+        model.addAttribute("userDTO", userDTO);
         return "user/update";
     }
 
     @PostMapping("/update")
-    public String updatePost(@Valid UserUpdateDTO userUpdateDTO,
+//    @Transactional
+    public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.info("Processing POST request for /update with data: {}", userUpdateDTO);
-        String userId = userUpdateDTO.getUserId();
+        log.info("Processing POST request for /update with data: {}", userDTO);
+        String userId = userDTO.getUserId();
+        log.info("-------- [asdf]-------you");
+
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            log.error(bindingResult.getAllErrors().toString());
             return "redirect:/user/update/" + userId;
         }
+        log.info("-------- [qwer]-------you");
         try {
-            userService.updateUser(userUpdateDTO);
+            userService.updateUser(userDTO);
         } catch (Exception e) {
+            log.error("Failed to update user with userId: {}", userId, e);
             redirectAttributes.addFlashAttribute("error", "Failed to update user.");
             return "redirect:/user/update/" + userId;
         }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,27 +24,28 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     @Override
     @Transactional
-    public void join(UserJoinDTO userJoinDTO) throws UserIdException {
+    public void join(UserDTO userDTO) throws UserIdException {
 
-        String userId = userJoinDTO.getUserId();
+        String userId = userDTO.getUserId();
 
         boolean exist = userRepository.existsByUserId(userId); // existsByUserId 사용
         if (exist) {
             throw new UserIdException();
         }
 
-        User user = modelMapper.map(userJoinDTO, User.class);
+        User user = modelMapper.map(userDTO, User.class);
 
         // 비밀번호 암호화
-        user.changePassword(passwordEncoder.encode(userJoinDTO.getUserPw()));
+        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
 
         // 역할 설정
         user.addRole(UserRole.USER);
 
         // 나이 계산
-        int userAge = calculateAge(userJoinDTO.getUserBirth());
+        int userAge = calculateAge(userDTO.getUserBirth());
         user.setUserAge(userAge);
 
         // 현재 날짜 설정
@@ -67,21 +69,63 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void updateUser(UserUpdateDTO userUpdateDTO) {
-        User user = userRepository.findByUserId(userUpdateDTO.getUserId());
+//    @Transactional
+    public void updateUser(UserDTO userDTO) {
+        log.info("-------- [07-05-15:29:08]-------you");
+        // 1. 사용자 찾기
+        User user = userRepository.findByUserId(userDTO.getUserId());
+        log.info(user);
+        log.info("-------- [user]-------you");
         if (user == null) {
-            throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
+            throw new IllegalArgumentException("User not found with userId: " + userDTO.getUserId());
         }
-        user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
-        user.changeEmail(userUpdateDTO.getUserEmail());
-        user.changeNickname(userUpdateDTO.getUserNickname());
-        user.changeUserCategory(userUpdateDTO.getUserCategory());
-        user.changeAddress(userUpdateDTO.getUserAddress());
-        user.changeUserMbti(userUpdateDTO.getUserMBTI());
+
+        // 2. 비밀번호 업데이트
+        if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
+            user.setUserPw(passwordEncoder.encode(userDTO.getUserPw()));
+        }
+        log.info("-------- [07-05-15:29:14]-------you");
+        // 3. 이메일 업데이트
+        if (userDTO.getUserEmail() != null && !userDTO.getUserEmail().isEmpty()) {
+            user.setUserEmail(userDTO.getUserEmail());
+        }
+
+        // 4. 닉네임 업데이트
+        if (userDTO.getUserNickname() != null && !userDTO.getUserNickname().isEmpty()) {
+            user.setUserNickname(userDTO.getUserNickname());
+        }
+
+        // 5. 카테고리 업데이트
+        if (userDTO.getUserCategory() != null && !userDTO.getUserCategory().isEmpty()) {
+            user.setUserCategory(userDTO.getUserCategory());
+        }
+
+        // 6. 주소 업데이트
+        if (userDTO.getUserAddress() != null && !userDTO.getUserAddress().isEmpty()) {
+            user.setUserAddress(userDTO.getUserAddress());
+        }
+
+        // 7. MBTI 업데이트
+        if (userDTO.getUserMBTI() != null && !userDTO.getUserMBTI().isEmpty()) {
+            user.setUserMBTI(userDTO.getUserMBTI());
+        }
+
+        // 8. 소셜 타입 업데이트
+        if (userDTO.getUserSocial() != null) {
+            user.setUserSocial(userDTO.getUserSocial());
+        }
+
+        // 9. 수정일 업데이트
         user.setUserModifyDate(Instant.now());
 
-        userRepository.save(user);
-
+        // 10. 변경사항 저장
+        try {
+            log.info("-------- [07-05-15:28:51]-------you");
+            userRepository.save(user);
+        } catch (DataAccessException e) {
+            log.info("-------- [07-05-15:28:56]-------you");
+            // 데이터베이스 저장 중 문제가 발생한 경우 처리
+            throw new RuntimeException("Failed to update user with userId: " + user.getUserId(), e);
+        }
     }
 }
