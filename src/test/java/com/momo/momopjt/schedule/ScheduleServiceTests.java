@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.*;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,26 +26,26 @@ public class ScheduleServiceTests {
   //모임 생성 테스트
   @Test
   public void createScheduleTest() {
+    //Given
     Club club = new Club();
     club.setClubNo(1L);
 
     User user = new User();
-    user.setUserNo(3L);
+    user.setUserNo(4L);
 
-    LocalDateTime localDateTime = LocalDateTime.of(2024, 8, 4, 13, 30);
+    LocalDateTime localDateTime = LocalDateTime.of(2024, 9, 5, 12, 40);
 
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
 
     Instant instant = zonedDateTime.toInstant();
 
-
     //일정 정보
     ScheduleDTO scheduleDTO = ScheduleDTO.builder()
         .clubNo(club)
-        .scheduleTitle("일정 제목 테스트6")
-        .scheduleContent("일정 내용 테스트6")
-        .scheduleMax(15)
-        .schedulePlace("서울시 양천구")
+        .scheduleTitle("마감되지 않은 일정")
+        .scheduleContent("마감되지 않은 일정")
+        .scheduleMax(5)
+        .schedulePlace("서울시 강남구")
         .scheduleStartDate(instant)
         .build();
     //일정 주체자 정보
@@ -52,7 +53,12 @@ public class ScheduleServiceTests {
         .userNo(user)
         .build();
 
-    scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+    //When
+     Long createScheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+
+    //Then
+    Long expectedScheduleNo = scheduleService.findSchedule(createScheduleNo).getScheduleNo();
+    assertEquals(createScheduleNo, expectedScheduleNo);
   }
 
   //일정 정보 수정 테스트
@@ -89,12 +95,12 @@ public class ScheduleServiceTests {
   public void joinScheduleTest() {
     //Given
     User user = new User();
-    user.setUserNo(5L);
+    user.setUserNo(3L);
     UserAndScheduleDTO userAndScheduleDTO = UserAndScheduleDTO.builder()
         .userNo(user)
         .build();
 
-    Long scheduleNo = 1L;
+    Long scheduleNo = 4L;
 
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
     Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
@@ -126,5 +132,26 @@ public class ScheduleServiceTests {
 
     //Then
     assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);
+  }
+
+  //마감되지 않은 일정 조회 기능 테스트
+  @Test
+  public void getOngoingSchedulesTest() {
+    //Given
+    Club club = new Club();
+    club.setClubNo(1L);
+    //When
+    List<ScheduleDTO> scheduleDTOS = scheduleService.getOngoingSchedules(club);
+    //Then
+    scheduleDTOS.forEach(schedule -> log.info(
+        "no : {}, title : {}, content : {}, photo : {}, place : {}, max : {}, participants : {}, start_date : {}",
+        schedule.getScheduleNo(),
+        schedule.getScheduleTitle(),
+        schedule.getScheduleContent(),
+        schedule.getSchedulePhoto(),
+        schedule.getSchedulePlace(),
+        schedule.getScheduleMax(),
+        schedule.getScheduleParticipants(),
+        schedule.getScheduleStartDate()));
   }
 }
