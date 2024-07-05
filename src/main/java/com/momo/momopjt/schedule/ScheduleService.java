@@ -1,5 +1,6 @@
 package com.momo.momopjt.schedule;
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface ScheduleService {
    Map<String, String> updateSchedule(ScheduleDTO scheduleDTO);
    Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
-   List<ScheduleDTO> getOngoingSchedules(Long scheduleNo);
+   List<ScheduleDTO> getOngoingSchedules(Club clubNo);
 }

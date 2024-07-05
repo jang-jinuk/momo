@@ -1,6 +1,7 @@
 package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -137,8 +138,8 @@ public class ScheduleServiceImpl implements ScheduleService {
   //마감되지 않은 일정 조회
   // 마감 기준 : 정원마감, 일정마감
   @Override
-  public List<ScheduleDTO> getOngoingSchedules(Long scheduleNo) {
-     List<Schedule> schedule = scheduleRepository.findOngoingSchedules(scheduleNo);
+  public List<ScheduleDTO> getOngoingSchedules(Club clubNo) {
+     List<Schedule> schedule = scheduleRepository.findOngoingSchedules(clubNo);
      List<ScheduleDTO> scheduleDTOList = modelMapper.map(schedule, List.class);
      return scheduleDTOList;
   }
