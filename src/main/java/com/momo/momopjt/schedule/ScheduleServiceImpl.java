@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -139,8 +140,10 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 마감 기준 : 정원마감, 일정마감
   @Override
   public List<ScheduleDTO> getOngoingSchedules(Club clubNo) {
-     List<Schedule> schedule = scheduleRepository.findOngoingSchedules(clubNo);
-     List<ScheduleDTO> scheduleDTOList = modelMapper.map(schedule, List.class);
+     List<Schedule> schedules = scheduleRepository.findOngoingSchedules(clubNo);
+    List<ScheduleDTO> scheduleDTOList = schedules.stream()
+        .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
+        .collect(Collectors.toList());
      return scheduleDTOList;
   }
 

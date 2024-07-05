@@ -11,8 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-  @Query("SELECT s.scheduleNo, s.scheduleTitle, s.scheduleContent, s.schedulePhoto, " +
-      "s.schedulePlace, s.scheduleStartDate, s.scheduleMax " +
-      "FROM Schedule s WHERE s.clubNo = :clubNo And s.scheduleMax != s.scheduleParticipants AND s.scheduleStartDate > current_timestamp")
+  @Query("SELECT s FROM Schedule s WHERE s.clubNo = :clubNo And s.scheduleMax != s.scheduleParticipants " +
+      "AND s.scheduleStartDate > current_timestamp")
   List<Schedule> findOngoingSchedules(@Param("clubNo") Club clubNo);
 }
