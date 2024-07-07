@@ -13,4 +13,5 @@ public interface ScheduleService {
    Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules(Club clubNo);
+   void deleteSchedule(Long scheduleNo);
 }

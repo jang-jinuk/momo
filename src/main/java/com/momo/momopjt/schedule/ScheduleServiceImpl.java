@@ -147,4 +147,14 @@ public class ScheduleServiceImpl implements ScheduleService {
      return scheduleDTOList;
   }
 
+  //일정 삭제
+  @Override
+  public void deleteSchedule(Long scheduleNo) {
+    Schedule schedule = new Schedule();
+    schedule.setScheduleNo(scheduleNo);
+    userAndScheduleService.deleteParticipant(schedule);
+    log.info("------------ [일정 참석 인원 처리 완료] ------------");
+    scheduleRepository.deleteById(scheduleNo);
+    log.info("------------ [일정 삭제 처리 완료] ------------");
+  }
 }

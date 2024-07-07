@@ -13,4 +13,9 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
   @Modifying
   @Query("DELETE FROM UserAndSchedule WHERE scheduleNo = :scheduleNo AND userNo = :userNo")
   void deleteParticipant(@Param("scheduleNo") Schedule scheduleNo, @Param("userNo") User userNo);
+
+  @Modifying
+  @Query("DELETE FROM UserAndSchedule WHERE scheduleNo = :scheduleNo")
+  void deleteAllParticipant(@Param("scheduleNo") Schedule scheduleNo);
+
 }
