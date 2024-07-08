@@ -48,13 +48,13 @@ public class User {
     public void changePassword(String userPw){
         this.userPw = userPw;
     }
-    // 이메일 변경 메서드
-    public void changeEmail(String userEmail){
-        if(userEmail == null || userEmail.isEmpty() || !userEmail.contains("@")){
-            throw new IllegalArgumentException("Invalid email format");
-        }
-        this.userEmail = userEmail;
-    }
+//    // 이메일 변경 메서드
+//    public void changeEmail(String userEmail){
+//        if(userEmail == null || userEmail.isEmpty() || !userEmail.contains("@")){
+//            throw new IllegalArgumentException("Invalid email format");
+//        }
+//        this.userEmail = userEmail;
+//    }
     // 닉네임 변경 메서드
     public void changeNickname(String userNickname){
         if(userNickname == null || userNickname.isEmpty()){

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
-
+import java.util.Optional;
 
 
 @Log4j2
@@ -122,5 +122,72 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public String findUsernameByEmail(String userEmail) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+
+        // Optional에 값이 있는지 확인하고 값 추출
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user.getUserId(); // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
+        } else {
+            return null; // 값이 없을 경우 null 반환
+        }
+    }
+
+    @Override
+    public boolean resetPassword(String userId, String userEmail, String newPassword) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // 사용자 아이디 비교
+            if (!userId.equals(user.getUserId())) {
+                return false; // 사용자 아이디가 일치하지 않는 경우
+            }
+
+            // 새 비밀번호가 null이거나 비어 있는지 확인
+            if (newPassword == null || newPassword.isEmpty()) {
+                return false; // 새 비밀번호가 비어 있는 경우
+            }
+
+            // 새 비밀번호가 기존 비밀번호와 동일한지 확인
+            if (passwordEncoder.matches(newPassword, user.getUserPw())) {
+                return false; // 새 비밀번호가 기존 비밀번호와 동일한 경우
+            }
+
+            // 새 비밀번호가 일정한 규칙을 충족하는지 검증 (예: 최소 길이)
+            if (newPassword.length() < 8) {
+                return false; // 예시로 최소 길이가 8자 이상이어야 한다고 가정
+            }
+
+            // 새 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setUserPw(encryptedPassword);
+
+            // UserRepository를 통해 사용자 정보 업데이트
+            userRepository.save(user);
+
+            return true; // 성공적으로 비밀번호를 재설정한 경우
+        } else {
+            return false; // 사용자를 찾지 못한 경우
+        }
+    }
+
+
+    private boolean isUserIdExists(String userId) {
+        User existingUser = userRepository.findByUserId(userId);
+        return existingUser != null;
+    }
+
+    @Override
+    public User findByEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail).orElse(null);
+    }
+    @Override
+    public User findByUserIdAndUserEmail(String userId, String userEmail) {
+        return userRepository.findByUserIdAndUserEmail(userId, userEmail);
+    }
 
 }

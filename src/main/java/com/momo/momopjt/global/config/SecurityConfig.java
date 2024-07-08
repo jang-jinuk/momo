@@ -44,7 +44,7 @@ public class SecurityConfig {
     http
         .authorizeRequests()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
-            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update","/user/find", "/user/**").permitAll()
+            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update","/user/find", "/user/**","/user/find/idPw").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
         .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
         .and()
