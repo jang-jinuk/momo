@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhotoDTO {
-  private String photoUuid;
+  private String photoUUID;
 
   private User userNo;
 

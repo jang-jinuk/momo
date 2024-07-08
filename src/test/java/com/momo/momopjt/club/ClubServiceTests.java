@@ -24,7 +24,7 @@ public class ClubServiceTests {
     user.setUserNo(1L);
 
     PhotoDTO photoDTO = PhotoDTO.builder()
-        .photoUuid("00002test")
+        .photoUUID("00002test")
         .userNo(user)
         .photoSize(10)
         .photoCreateDate(Instant.now())
@@ -69,7 +69,7 @@ public class ClubServiceTests {
     user.setUserNo(1L);
 
     PhotoDTO photoDTO = PhotoDTO.builder()
-        .photoUuid("00002test")
+        .photoUUID("00002test")
         .userNo(user)
         .photoSize(10)
         .photoCreateDate(Instant.now())

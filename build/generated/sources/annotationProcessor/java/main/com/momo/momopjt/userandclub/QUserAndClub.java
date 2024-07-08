@@ -1,4 +1,4 @@
-package com.momo.momopjt.userAndClub;
+package com.momo.momopjt.userandclub;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUserAndClub extends EntityPathBase<UserAndClub> {
 
-    private static final long serialVersionUID = -791041695L;
+    private static final long serialVersionUID = -1201562271L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
