@@ -27,7 +27,7 @@ public class ClubController {
     club.setClubNo(clubNo);
     log.info("------------ [07-08-18:07:16] ------------");
     List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
-    model.addAttribute("scheduleDTOList", scheduleDTOList);
+    model.addAttribute("schedules", scheduleDTOList);
     return "club/main";
   }
 
