@@ -19,15 +19,22 @@ import java.util.List;
 public class ClubController {
 
   @Autowired
-  ScheduleService scheduleService;
+  private ClubService clubService;
+  private ScheduleService scheduleService;
+
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model) {
     log.info("------------ [club main] ------------");
     Club club = new Club();
     club.setClubNo(clubNo);
-    log.info("------------ [07-08-18:07:16] ------------");
+    
+    ClubDTO clubDTO = clubService.readOneClub(clubNo);
+    model.addAttribute("club", clubDTO);
+    log.info("------------clubNo {}------------",clubDTO.getClubNo());
+    
     List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
     model.addAttribute("schedules", scheduleDTOList);
+    log.info("------------ [found shchedules] ------------");
     return "club/main";
   }
 
