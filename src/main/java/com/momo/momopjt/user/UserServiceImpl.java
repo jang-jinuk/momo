@@ -30,11 +30,12 @@ public class UserServiceImpl implements UserService {
         String userId = userJoinDTO.getUserId();
         String userEmail = userJoinDTO.getUserEmail();
         boolean existId = userRepository.existsByUserId(userId);
-        boolean existEmail = (userEmail.equals(userRepository.findByUserId(userId).getUserEmail()));// existsByUserId 사용
+        boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
         if (existId) {
             log.info("...... [Id중복]..........KSW");
             throw new UserIdException();
-        }else if(existEmail){
+        }
+        if(existEmail){
             log.info("...... [EMAIL중복]..........KSW");
             throw new UserEmailException();
         }

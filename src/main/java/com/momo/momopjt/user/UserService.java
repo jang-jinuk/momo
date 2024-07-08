@@ -8,7 +8,6 @@ public interface UserService {
     void updateUser(UserUpdateDTO userUpdateDTO);
 
     class UserIdException extends Exception {
-
         // 추가적인 예외 처리가 필요한 경우에만 사용
     }
     class UserEmailException extends Exception{

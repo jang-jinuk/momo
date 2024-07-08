@@ -65,11 +65,13 @@ public class UserController {
         try {
             userService.join(userJoinDTO);
         } catch (UserService.UserIdException e) {
-            redirectAttributes.addFlashAttribute("errorid", userJoinDTO.getUserId());
+            redirectAttributes.addFlashAttribute("errorId", "userId");
             return "redirect:/user/join";
+
         } catch (UserService.UserEmailException e) {
-            redirectAttributes.addFlashAttribute("erroremail", userJoinDTO.getUserEmail());
+            redirectAttributes.addFlashAttribute("errorEmail", "userEmail");
             return "redirect:/user/join";
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
             return "redirect:/user/join";

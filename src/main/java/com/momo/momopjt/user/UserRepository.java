@@ -22,6 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserId(String userId); // userId로 존재 여부 확인
     User findByUserId(String userId);
+    boolean existsByUserEmail(String userEmail);
 
     @EntityGraph(attributePaths ="roleSet")
     Optional<User> findByUserEmail(String email); // email로 존재하는 유저 찾아서 Optional<User>반환

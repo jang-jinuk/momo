@@ -35,7 +35,6 @@
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
                 return false;
             }
-            if(!userId)
             if (!passwordPattern.test(userPw)) {
                  alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
                  return false;
@@ -76,10 +75,12 @@
                             <span class="input-group-text">아이디</span>
                             <input type="text" name="userId" class="form-control" required>
                         </div>
-
+                        <div th:if="${errorId == 'userId'}" class="alert alert-danger" role="alert">
+                            아이디가 중복되었습니다. 다른 아이디를 사용해주세요.
+                        </div>
                         <div class="input-group mb-3">
                             <span class="input-group-text">비밀번호</span>
-                            <input type="password" name="userPw" class="form-control" required>
+                            <input type="password" name="userPw" class="form-control" required autocomplete="off">
                         </div>
 
                         <!-- 비밀번호 확인 부분 주석 -->
@@ -124,6 +125,9 @@
                             <span class="input-group-text">이메일</span>
                             <input type="email" class="form-control" name="userEmail" required>
                         </div>
+                        <div th:if="${errorEmail == 'userEmail'}" class="alert alert-danger" role="alert">
+                            이메일이 중복되었습니다. 다른 이메일을 사용해주세요.
+                        </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">관심사</span>
@@ -139,7 +143,11 @@
                             <span class="input-group-text">MBTI</span>
                             <input type="text" name="userMBTI" class="form-control">
                         </div>
+                        <div th:if="${errorException}" class="alert alert-danger" role="alert">
+                            [[${errorException}]]
+                        </div>
                         <form action="/submit" method="post">
+
                             <!-- 폼 필드들 -->
                         <div class="mt-4">
                             <div class="float-end">
@@ -154,7 +162,7 @@
         </div><!--end col-->
     </div><!--end row-->
 </div>
-
+<!-- 예외처리 확인용-->
 <h1>test</h1>
 ID 에러 :<div th:text="${errorid}"></div>
 email 에러 :<div th:text="${erroremail}"></div>
