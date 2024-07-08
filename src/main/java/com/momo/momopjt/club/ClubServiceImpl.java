@@ -34,7 +34,7 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setPhotoUuid(photo);
+    clubDTO.setPhotoUUID(photo);
     Club club = modelMapper.map(clubDTO, Club.class);
     Long clubNo = clubRepository.save(club).getClubNo();
     return clubNo;
@@ -67,11 +67,11 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setPhotoUuid(photo);
+    clubDTO.setPhotoUUID(photo);
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
     log.info(clubDTO);
-    club.change(clubDTO.getPhotoUuid(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
+    club.change(clubDTO.getPhotoUUID(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
             clubDTO.getClubArea(), clubDTO.getClubMax()
     );
     clubRepository.save(club);
@@ -88,7 +88,7 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     Club club = result.orElseThrow();
-    Photo photo = club.getPhotoUuid();
+    Photo photo = club.getPhotoUUID();
     String clubPhoto = photo.getPhotoUUID();
     log.info(clubPhoto);
     
