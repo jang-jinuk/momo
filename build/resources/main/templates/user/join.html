@@ -16,7 +16,7 @@
                 crossorigin="anonymous" -->
 
     <script th:inline="javascript">
-        //유효성 검사
+
         function validateForm() {
             const userId = document.forms["registerForm"]["userId"].value;
             const userNickname = document.forms["registerForm"]["userNickname"].value;
@@ -25,13 +25,12 @@
             const userGender = document.forms["registerForm"]["userGender"].value;
             const userBirth = document.forms["registerForm"]["userBirth"].value;
 
-            //유효성 검사 정규식 설정
+
             const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
             const emailPattern = /^[a-zA-Z0-9]+@([\w-]+\.)+[\w-]{2,4}$/;
             const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
             const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
 
-            //유효성 검사 걸렸을 때 거부 후 출력 메세지
             if (!userIdPattern.test(userId)) {
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
                 return false;
@@ -70,7 +69,6 @@
                 <div class="card-header">
                     MOMO 회원가입
                 </div>
-                <!-- 입력칸-->
                 <div class="card-body">
                     <form id="registerForm" name="registerForm" action="/user/join" method="post" onsubmit="return validateForm()">
                         <div class="input-group mb-3">
