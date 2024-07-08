@@ -31,13 +31,15 @@ public class NewsController {
   }
 
   @GetMapping("/read/{newsNo}")
-  public String NewsReadGet(@PathVariable("newsNo") int newsNo, Model model) {
+  public String NewsReadGet(@PathVariable("newsNo") Long newsNo, Model model) {
     log.info("--------------- [news/read getMapping]---------------");
+    News news = newsService.readNews(newsNo);
+    model.addAttribute("news", news);
     return "news/read";
   }
 
   @GetMapping("/update/{newsNo}")
-  public String NewsUpdateGet(@PathVariable("newsNo") int newsNo, Model model) {
+  public String NewsUpdateGet(@PathVariable("newsNo") Long newsNo, Model model) {
     log.info("--------------- [news/update getMapping]---------------");
     return "news/update";
   }

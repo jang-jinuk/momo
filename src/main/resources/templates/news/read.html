@@ -51,17 +51,22 @@
 
 <ul class="nav justify-content-center">
     <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">공 지</a>
+        <!--YY-->
+        <div class="nav-link disabled" th:text="${news.newsTag}"></div>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#"></a>
     </li>
     <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>
+        <div class="nav-link disabled" th:text="${news.newsTitle}"></div>
+<!--        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>-->
     </li>
     <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>
+        <div class="nav-link disabled" th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
+        </div>
+<!--        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>-->
     </li>
+<!--YY-->
 </ul>
 <div class="container">
     <div class="mb-6">
@@ -76,10 +81,11 @@
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <!--활성화된 신고하기 버튼-->
 <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
+<!--YY-->
         <button class="btn btn-danger"
                 th:onclick="window.location.href='../../report/create'"
                 type="button">신고하기</button>
-
+<!--YY-->
         <!--비활성화 신고하기 버튼-->
         <button type="button" class="btn btn-outline-primary" disabled>신고하기</button>
     </div>
