@@ -1,7 +1,7 @@
-package com.momo.momopjt;
+package com.momo.momopjt.user;
 
+import com.momo.momopjt.MomoApplication;
 import com.momo.momopjt.global.security.CustomUserDetailService;
-import com.momo.momopjt.user.*;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

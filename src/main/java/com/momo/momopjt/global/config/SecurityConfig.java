@@ -44,14 +44,17 @@ public class SecurityConfig {
     http
         .authorizeRequests()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
-            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update", "/user/profile", "/user/**").permitAll()
+            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update","/user/find", "/user/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
         .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
         .and()
+
         .formLogin()
         .loginPage("/user/login") // 로그인 페이지 설정
         .defaultSuccessUrl("/user/home") // 로그인 성공 후 이동할 페이지
+        .successHandler(authenticationSuccessHandler())
         .permitAll()
+
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
@@ -60,13 +63,14 @@ public class SecurityConfig {
         .deleteCookies("JSESSIONID") // 로그아웃 시 특정 쿠키(JSESSIONID)를 삭제
         .permitAll()
         .and()
+
         .exceptionHandling()
         .accessDeniedPage("/403") // 접근 거부 시 이동할 페이지 설정
         .and()
-        .csrf().disable() // CSRF 비활성화
-        .oauth2Login()
-        .loginPage("/user/login") // 카카오 로그인 페이지 설정
-        .successHandler(authenticationSuccessHandler());
+
+        .csrf().disable();// CSRF 비활성화
+
+    http.oauth2Login().loginPage("/user/home");
 
     return http.build();
   }

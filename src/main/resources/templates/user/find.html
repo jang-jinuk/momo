@@ -1,0 +1,33 @@
+<!-- find-reset-form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Username / Reset Password</title>
+</head>
+<body>
+<h2>MOMO 아이디, 비밀번호찾기 페이지</h2>
+
+<!-- 아이디 찾기 폼 -->
+<form action="/user/find/userEmail" method="post" th:object="${findUsernameRequest.userEmail}">
+    <h3>Find Username</h3>
+    <label for="findUserEmail">Email:</label><br>
+    <input type="email" id="findUserEmail" name="findUserEmail" required><br><br>
+    <button type="submit">이메일찾기</button>
+</form>
+
+<hr>
+
+<!-- 비밀번호 재설정 폼 -->
+<form action="/find/reset/userPw" method="post" th:object="${resetPasswordRequest}">
+    <h3>Reset Password</h3>Cannot resolve 'findUsernameRequest'
+    <label for="resetPasswordUserId">User ID:</label><br>
+    <input type="text" id="resetPasswordUserId" name="resetPasswordUserId" required><br><br>
+    <label for="resetPasswordEmail">Email:</label><br>
+    <input type="email" id="resetPasswordEmail" name="resetPasswordEmail" required><br><br>
+    <button type="submit">Reset Password</button>
+</form>
+</body>
+</html>

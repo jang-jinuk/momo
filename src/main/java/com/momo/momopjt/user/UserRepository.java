@@ -17,18 +17,18 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @EntityGraph(attributePaths = "roleSet")
-    Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
+ @EntityGraph(attributePaths = "roleSet")
+ Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
 
-    boolean existsByUserId(String userId); // userId로 존재 여부 확인
-    User findByUserId(String userId);
+ boolean existsByUserId(String userId); // userId로 존재 여부 확인
+ User findByUserId(String userId);
 
-    @EntityGraph(attributePaths ="roleSet")
-    Optional<User> findByUserEmail(String email);
+ @EntityGraph(attributePaths ="roleSet")
+ Optional<User> findByUserEmail(String email);
 
-    @Modifying
-    @Transactional
-    @Query("update User u set u.userPw =:userPw where u.userId =:userId")
-    void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
+ @Modifying
+ @Transactional
+ @Query("update User u set u.userPw =:userPw where u.userId =:userId")
+ void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
 
 }

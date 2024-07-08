@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -109,19 +108,16 @@ public class UserController {
     }
 
     @PostMapping("/update")
-//    @Transactional
     public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         log.info("Processing POST request for /update with data: {}", userDTO);
         String userId = userDTO.getUserId();
-        log.info("-------- [asdf]-------you");
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             log.error(bindingResult.getAllErrors().toString());
             return "redirect:/user/update/" + userId;
         }
-        log.info("-------- [qwer]-------you");
         try {
             userService.updateUser(userDTO);
         } catch (Exception e) {
@@ -133,4 +129,6 @@ public class UserController {
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home";
     }
+
+
 }
