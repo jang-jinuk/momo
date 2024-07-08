@@ -24,8 +24,6 @@ public class QUserAndSchedule extends EntityPathBase<UserAndSchedule> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Integer> participants = createNumber("participants", Integer.class);
-
     public final com.momo.momopjt.schedule.QSchedule scheduleNo;
 
     public final com.momo.momopjt.user.QUser userNo;

@@ -24,11 +24,13 @@ public class QSchedule extends EntityPathBase<Schedule> {
 
     public final com.momo.momopjt.club.QClub clubNo;
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath scheduleContent = createString("scheduleContent");
 
     public final NumberPath<Integer> scheduleMax = createNumber("scheduleMax", Integer.class);
+
+    public final NumberPath<Long> scheduleNo = createNumber("scheduleNo", Long.class);
+
+    public final NumberPath<Integer> scheduleParticipants = createNumber("scheduleParticipants", Integer.class);
 
     public final StringPath schedulePhoto = createString("schedulePhoto");
 
@@ -37,6 +39,8 @@ public class QSchedule extends EntityPathBase<Schedule> {
     public final DateTimePath<java.time.Instant> scheduleStartDate = createDateTime("scheduleStartDate", java.time.Instant.class);
 
     public final StringPath scheduleTitle = createString("scheduleTitle");
+
+    public final SetPath<com.momo.momopjt.userandschedule.UserAndSchedule, com.momo.momopjt.userandschedule.QUserAndSchedule> userAndSchedules = this.<com.momo.momopjt.userandschedule.UserAndSchedule, com.momo.momopjt.userandschedule.QUserAndSchedule>createSet("userAndSchedules", com.momo.momopjt.userandschedule.UserAndSchedule.class, com.momo.momopjt.userandschedule.QUserAndSchedule.class, PathInits.DIRECT2);
 
     public QSchedule(String variable) {
         this(Schedule.class, forVariable(variable), INITS);

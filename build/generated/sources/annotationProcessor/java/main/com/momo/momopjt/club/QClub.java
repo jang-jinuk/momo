@@ -22,8 +22,6 @@ public class QClub extends EntityPathBase<Club> {
 
     public static final QClub club = new QClub("club");
 
-    public final NumberPath<Integer> a = createNumber("a", Integer.class);
-
     public final StringPath clubArea = createString("clubArea");
 
     public final StringPath clubCategory = createString("clubCategory");
@@ -40,7 +38,7 @@ public class QClub extends EntityPathBase<Club> {
 
     public final NumberPath<Long> clubNo = createNumber("clubNo", Long.class);
 
-    public final com.momo.momopjt.photo.QPhoto clubPhoto;
+    public final com.momo.momopjt.photo.QPhoto photoUuid;
 
     public QClub(String variable) {
         this(Club.class, forVariable(variable), INITS);
@@ -60,7 +58,7 @@ public class QClub extends EntityPathBase<Club> {
 
     public QClub(Class<? extends Club> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.clubPhoto = inits.isInitialized("clubPhoto") ? new com.momo.momopjt.photo.QPhoto(forProperty("clubPhoto"), inits.get("clubPhoto")) : null;
+        this.photoUuid = inits.isInitialized("photoUuid") ? new com.momo.momopjt.photo.QPhoto(forProperty("photoUuid"), inits.get("photoUuid")) : null;
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.Set;
 public class Photo {
   @Id
   @Column(name = "photo_uuid", nullable = false)
-  private String photoUuid;
+  private String photoUUID;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)

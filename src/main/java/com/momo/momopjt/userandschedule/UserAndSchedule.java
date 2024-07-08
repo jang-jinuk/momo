@@ -25,7 +25,4 @@ public class UserAndSchedule {
   @JoinColumn(name = "schedule_no", nullable = false)
   private Schedule scheduleNo;
 
-  @Column(name = "participants", nullable = false)
-  private Integer participants;
-
 }
