@@ -4,7 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<!-- layout:decorate="~{layout/basic.html}" -->
 <head>
     <title>MOMO join page</title>
         <meta charset="UTF-8">
@@ -78,6 +77,11 @@
                         <div th:if="${errorId == 'userId'}" class="alert alert-danger" role="alert">
                             아이디가 중복되었습니다. 다른 아이디를 사용해주세요.
                         </div>
+                        <!-- 기타 오류 메시지 -->
+                        <div th:if="${errors}" th:each="err : ${errors}" class="alert alert-danger" role="alert">
+                            <p th:text="${err.defaultMessage}"></p>
+                        </div>
+
                         <div class="input-group mb-3">
                             <span class="input-group-text">비밀번호</span>
                             <input type="password" name="userPw" class="form-control" required autocomplete="off">
@@ -112,14 +116,6 @@
                             <span class="input-group-text">생년월일</span>
                             <input type="date" class="form-control" name="userBirth" required>
                         </div>
-
-                        <!-- 나이 입력 부분 주석 -->
-                        <!--
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">나이</span>
-                            <input type="number" class="form-control" name="userAge" min="0" max="120" required>
-                        </div>
-                        -->
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">이메일</span>

@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
+
 
 @Controller
 @RequestMapping("/join")
@@ -19,12 +19,12 @@ import javax.validation.constraints.Positive;
 public class UserJoinController {
 
   @PostMapping("/register")
-  public ResponseEntity<UserJoinDTO> registerUser(
-      @Valid @RequestBody UserJoinDTO userJoinDTO) {
+  public ResponseEntity<UserDTO> registerUser(
+      @Valid @RequestBody UserDTO DTO) {
 
     // 회원가입 로직 처리 (예: 서비스 호출)
 
-    return new ResponseEntity<>(userJoinDTO, HttpStatus.CREATED);
+    return new ResponseEntity<>(DTO, HttpStatus.CREATED);
   }
 }
 

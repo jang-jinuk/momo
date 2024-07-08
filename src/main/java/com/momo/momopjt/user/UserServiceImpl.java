@@ -4,13 +4,16 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 
 @Log4j2
@@ -24,11 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void join(UserJoinDTO userJoinDTO) throws UserIdException, UserEmailException {
+    public void join(UserDTO userDTO) throws UserIdException {
 
 //        UserId 중복 검사
-        String userId = userJoinDTO.getUserId();
-        String userEmail = userJoinDTO.getUserEmail();
+        String userId = userDTO.getUserId();
+        String userEmail = userDTO.getUserEmail();
         boolean existId = userRepository.existsByUserId(userId);
         boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
         if (existId) {
@@ -43,13 +46,13 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userJoinDTO, User.class);
 
         // 비밀번호 암호화
-        user.changePassword(passwordEncoder.encode(userJoinDTO.getUserPw()));
+        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
 
         // 역할 설정
         user.addRole(UserRole.USER);
 
         // 나이 계산
-        int userAge = calculateAge(userJoinDTO.getUserBirth());
+        int userAge = calculateAge(userDTO.getUserBirth());
         user.setUserAge(userAge);
 
         // 현재 날짜 설정
@@ -61,34 +64,132 @@ public class UserServiceImpl implements UserService {
         user.setUserState('0');
         user.setUserLikeNumber(0);
 
-        log.info("===============");
         log.info(user);
         log.info(user.getRoleSet());
+
         userRepository.save(user);
     }
 
-
-
+    //가입된 생년월일로 데이터베이스에 age항목에 넣는다.
     private int calculateAge(LocalDate birthDate) {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     @Override
-    @Transactional
-    public void updateUser(UserUpdateDTO userUpdateDTO) {
-        User user = userRepository.findByUserId(userUpdateDTO.getUserId());
+    public void updateUser(UserDTO userDTO) {
+        // 1. 사용자 찾기
+        User user = userRepository.findByUserId(userDTO.getUserId());
         if (user == null) {
-            throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
+            throw new IllegalArgumentException("User not found with userId: " + userDTO.getUserId());
         }
 
-        user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
-        user.changeEmail(userUpdateDTO.getUserEmail());
-        user.changeNickname(userUpdateDTO.getUserNickname());
-        user.setUserCategory(userUpdateDTO.getUserCategory());
-        user.setUserAddress(userUpdateDTO.getUserAddress());
-        user.setUserMBTI(userUpdateDTO.getUserMBTI());
+        // 2. 비밀번호 업데이트
+        if (userDTO.getUserPw() != null && !userDTO.getUserPw().isEmpty()) {
+            user.setUserPw(passwordEncoder.encode(userDTO.getUserPw()));
+        }
+        // 3. 이메일 업데이트
+        if (userDTO.getUserEmail() != null && !userDTO.getUserEmail().isEmpty()) {
+            user.setUserEmail(userDTO.getUserEmail());
+        }
+
+        // 4. 닉네임 업데이트
+        if (userDTO.getUserNickname() != null && !userDTO.getUserNickname().isEmpty()) {
+            user.setUserNickname(userDTO.getUserNickname());
+        }
+
+        // 5. 카테고리 업데이트
+        if (userDTO.getUserCategory() != null && !userDTO.getUserCategory().isEmpty()) {
+            user.setUserCategory(userDTO.getUserCategory());
+        }
+
+        // 6. 주소 업데이트
+        if (userDTO.getUserAddress() != null && !userDTO.getUserAddress().isEmpty()) {
+            user.setUserAddress(userDTO.getUserAddress());
+        }
+
+        // 7. MBTI 업데이트
+        if (userDTO.getUserMBTI() != null && !userDTO.getUserMBTI().isEmpty()) {
+            user.setUserMBTI(userDTO.getUserMBTI());
+        }
+
+        // 8. 소셜 타입 업데이트
+        //if (userDTO.getUserSocial() != null) {
+        //   user.setUserSocial(userDTO.getUserSocial());
+        //}
+
+        // 9. 수정일 업데이트
         user.setUserModifyDate(Instant.now());
 
-        userRepository.save(user);
+        // 10. 변경사항 저장
+        try {
+            userRepository.save(user);
+        } catch (DataAccessException e) {
+            // 데이터베이스 저장 중 문제가 발생한 경우 처리
+            throw new RuntimeException("Failed to update user with userId: " + user.getUserId(), e);
+        }
+    }
+
+    @Override
+    public String findUsernameByEmail(String userEmail) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+
+        // Optional에 값이 있는지 확인하고 값 추출
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return user.getUserId(); // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
+        } else {
+            return null; // 값이 없을 경우 null 반환
+        }
+    }
+
+    @Override
+    public boolean resetPassword(String userId, String userEmail, String newPassword) {
+        Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // 사용자 아이디 비교
+            if (!userId.equals(user.getUserId())) {
+                return false; // 사용자 아이디가 일치하지 않는 경우
+            }
+
+            // 새 비밀번호가 null이거나 비어 있는지 확인
+            if (newPassword == null || newPassword.isEmpty()) {
+                return false; // 새 비밀번호가 비어 있는 경우
+            }
+
+            // 새 비밀번호가 기존 비밀번호와 동일한지 확인
+            if (passwordEncoder.matches(newPassword, user.getUserPw())) {
+                return false; // 새 비밀번호가 기존 비밀번호와 동일한 경우
+            }
+
+            // 새 비밀번호가 일정한 규칙을 충족하는지 검증 (예: 최소 길이)
+            if (newPassword.length() < 8) {
+                return false; // 예시로 최소 길이가 8자 이상이어야 한다고 가정
+            }
+
+            // 새 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setUserPw(encryptedPassword);
+
+            // UserRepository를 통해 사용자 정보 업데이트
+            userRepository.save(user);
+
+            return true; // 성공적으로 비밀번호를 재설정한 경우
+        } else {
+            return false; // 사용자를 찾지 못한 경우
+        }
+    }
+
+
+    private boolean isUserIdExists(String userId) {
+        User existingUser = userRepository.findByUserId(userId);
+        return existingUser != null;
+    }
+
+    @Override
+    public User findByEmail(String userEmail) {
+        return userRepository.findByUserEmail(userEmail).orElse(null);
     }
 }

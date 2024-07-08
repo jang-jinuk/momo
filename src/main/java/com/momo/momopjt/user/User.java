@@ -31,7 +31,7 @@ public class User {
     private LocalDate userBirth;
     private String  userCategory;
     private String userAddress;
-    private String UserMBTI;
+    private String userMBTI;
     private Character userState = '0'; // 기본값 설정
     private Character userSocial = 'M'; // 'K' for Kakao, 'N' for Naver, 'G' for Google, etc
     private String userPhoto = ""; // 기본값 설정
@@ -48,13 +48,13 @@ public class User {
     public void changePassword(String userPw){
         this.userPw = userPw;
     }
-    // 이메일 변경 메서드
-    public void changeEmail(String userEmail){
-        if(userEmail == null || userEmail.isEmpty() || !userEmail.contains("@")){
-            throw new IllegalArgumentException("Invalid email format");
-        }
-        this.userEmail = userEmail;
-    }
+//    // 이메일 변경 메서드
+//    public void changeEmail(String userEmail){
+//        if(userEmail == null || userEmail.isEmpty() || !userEmail.contains("@")){
+//            throw new IllegalArgumentException("Invalid email format");
+//        }
+//        this.userEmail = userEmail;
+//    }
     // 닉네임 변경 메서드
     public void changeNickname(String userNickname){
         if(userNickname == null || userNickname.isEmpty()){
@@ -77,11 +77,11 @@ public class User {
         this.userAddress = userAddress;
     }
     // MBTI 변경 메서드
-    public void changeUserMbti(String userMbti){
-        if(userMbti == null || userMbti.isEmpty()){
+    public void changeUserMBTI(String userMBTI){
+        if(userMBTI == null || userMBTI.isEmpty()){
             throw new IllegalArgumentException("MBTI cannot be null or empty");
         }
-        this.UserMBTI = userMbti;
+        this.userMBTI = userMBTI;
     }
     // 역할 추가 메서드
     public void addRole(UserRole userRole){
@@ -92,7 +92,7 @@ public class User {
         this.roleSet.clear();
     }
     // 소셜 타입 변경 메서드
-    public void changeUserSocial(char userSocial){
+    public void changeUserSocial(Character userSocial){
         if(userSocial != 'K' && userSocial != 'N' && userSocial != 'G' && userSocial != 'M'){
             throw new IllegalArgumentException("Invalid social type");
         }

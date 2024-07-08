@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en"
         xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<!-- layout:decorate="~{layout/basic.html}" -->
 <head>
     <title>MOMO join page</title>
         <meta charset="UTF-8">
@@ -113,14 +113,6 @@
                             <input type="date" class="form-control" name="userBirth" required>
                         </div>
 
-                        <!-- 나이 입력 부분 주석 -->
-                        <!--
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">나이</span>
-                            <input type="number" class="form-control" name="userAge" min="0" max="120" required>
-                        </div>
-                        -->
-
                         <div class="input-group mb-3">
                             <span class="input-group-text">이메일</span>
                             <input type="email" class="form-control" name="userEmail" required>
@@ -142,9 +134,6 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">MBTI</span>
                             <input type="text" name="userMBTI" class="form-control">
-                        </div>
-                        <div th:if="${errorException}" class="alert alert-danger" role="alert">
-                            [[${errorException}]]
                         </div>
                         <form action="/submit" method="post">
 

@@ -40,7 +40,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> userLikeNumber = createNumber("userLikeNumber", Integer.class);
 
-    public final StringPath UserMBTI = createString("UserMBTI");
+    public final StringPath userMBTI = createString("userMBTI");
 
     public final DateTimePath<java.time.Instant> userModifyDate = createDateTime("userModifyDate", java.time.Instant.class);
 

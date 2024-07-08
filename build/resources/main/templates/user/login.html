@@ -1,12 +1,10 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+          content="width=device-width, user-scalable=no,
+          initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Simple Sidebar</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
@@ -34,10 +32,12 @@
                         <button type="submit" class="btn btn-primary submitBtn">LOGIN</button>
                         <a href="/oauth2/authorization/kakao" class="btn btn-warning ms-2">KAKAO</a>
                         <a href="/user/join" class="btn btn-primary ms-2">회원가입</a>
+                        <a href="/user/find/idPw" class="btn btn-link ms-2">아이디/비밀번호 찾기</a>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -36,14 +36,15 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
         || passwordEncoder.matches("1111", userSecurityDTO.getUserPw()))) {
 
       log.info("Should Change Password");
-      log.info("Redirect to User Modify");
-      response.sendRedirect("/user/modify");
+      log.info("Redirect to User update");
+      response.sendRedirect("/user/update");
       /* 자동가입된  회원도 PasswordEncoder를 이용해서 1111을 인코딩한 상태이므로
       matches()를 이용해서 검사하고 결과에 따라 /user/modify로 보내거나 /user/home으로 리다이렉트 시킨다.
        */
-      return;
+      return ;
     } else {
       response.sendRedirect("/user/home");
     }
   }
+
 }
