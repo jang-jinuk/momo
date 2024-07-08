@@ -14,21 +14,25 @@ class NewsServiceTests {
 
   @Autowired
   private NewsService newsService;
-  @Autowired
-  private NewsRepository newsRepository;
 
   //Test 순서대로 Create, Read, ReadAll, Update, Delete
   @Test
   void newsCreateTest(){
     log.info("----------------- [news create test]-----------------");
-    News tempNews = new News();
-    tempNews.setNewsNo(100L); // 없는거 지정하면 알아서 Auto-increment 들어감
-    tempNews.setNewsContent("createTestContent");
-    tempNews.setNewsCreateDate(Instant.now()); //
-    tempNews.setNewsModifyDate(null);
-    tempNews.setNewsTag("testTag"); // char(10) 넘지않게
-    tempNews.setNewsTitle("createTestTitle");
-    newsService.createNews(tempNews);
+
+    for (int i=1; i<100; i++) {
+
+      News tempNews = new News();
+      tempNews.setNewsNo(100L+i); // 없는거 지정하면 알아서 Auto-increment 들어감
+      tempNews.setNewsContent("TestContent"+i);
+      tempNews.setNewsCreateDate(Instant.now()); //
+      tempNews.setNewsModifyDate(null);
+      tempNews.setNewsTag("tag"+i%10);
+//      tempNews.setNewsTag("testTag"); // char(10) 넘지않게
+      tempNews.setNewsTitle("testTitle"+i);
+      newsService.createNews(tempNews);
+
+    }
 
   }
   @Test
