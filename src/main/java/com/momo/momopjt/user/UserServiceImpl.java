@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int PASSWORD_LENGTH = 10;
 
 
     @Override
@@ -189,6 +192,40 @@ public class UserServiceImpl implements UserService {
     public User findByUserIdAndUserEmail(String userId, String userEmail) {
         return userRepository.findByUserIdAndUserEmail(userId, userEmail);
     }
+    @Override
+    public String generateTemporaryPassword() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
 
+        for (int i = 0; i < PASSWORD_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            password.append(CHARACTERS.charAt(index));
+        }
+
+        return password.toString();
+    }
+    @Override
+    public void updateUserPassword(User user, String temporaryPassword) {
+        // 비밀번호 업데이트 로직
+        user.setUserPw(temporaryPassword);
+        // 데이터베이스에 저장하는 로직 추가
+    }
+
+    @Override
+    public User findByUserId(String userId) {
+        // userId로 사용자를 찾는 로직 구현
+        return new User(); // 예시로 반환
+    }
+    @Override
+    public boolean resetPasswordByUserId(String userId, String newPassword) {
+        // userId로 사용자를 찾고, 비밀번호를 reset하는 로직을 구현
+        User user = findByUserId(userId);
+        if (user != null) {
+            user.setUserPw(newPassword);
+            updateUser(UserDTO.builder().build());
+            return true;
+        }
+        return false;
+    }
 
 }

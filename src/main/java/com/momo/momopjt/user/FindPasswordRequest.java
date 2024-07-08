@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class FindPasswordRequest {
   private String userId;
-  private String email;
+  private String userEmail;
 
 }
