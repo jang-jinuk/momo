@@ -19,9 +19,37 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
+    public final ComparablePath<Character> isSocial = createComparable("isSocial", Character.class);
+
+    public final StringPath userAddress = createString("userAddress");
+
+    public final DatePath<java.time.LocalDate> userBirth = createDate("userBirth", java.time.LocalDate.class);
+
+    public final StringPath userCategory = createString("userCategory");
+
+    public final DateTimePath<java.time.Instant> userCreateDate = createDateTime("userCreateDate", java.time.Instant.class);
+
+    public final StringPath userEmail = createString("userEmail");
+
+    public final ComparablePath<Character> userGender = createComparable("userGender", Character.class);
+
     public final StringPath userId = createString("userId");
 
+    public final NumberPath<Integer> userLikeNumber = createNumber("userLikeNumber", Integer.class);
+
+    public final StringPath userMbti = createString("userMbti");
+
+    public final DateTimePath<java.time.Instant> userModifyDate = createDateTime("userModifyDate", java.time.Instant.class);
+
+    public final StringPath userNickname = createString("userNickname");
+
     public final NumberPath<Long> userNo = createNumber("userNo", Long.class);
+
+    public final StringPath userPhoto = createString("userPhoto");
+
+    public final StringPath userPw = createString("userPw");
+
+    public final ComparablePath<Character> userState = createComparable("userState", Character.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

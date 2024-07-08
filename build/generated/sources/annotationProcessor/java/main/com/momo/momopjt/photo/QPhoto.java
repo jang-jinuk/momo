@@ -26,13 +26,11 @@ public class QPhoto extends EntityPathBase<Photo> {
 
     public final StringPath photoOriginalName = createString("photoOriginalName");
 
-    public final StringPath photoSaveName = createString("photoSaveName");
-
     public final NumberPath<Integer> photoSize = createNumber("photoSize", Integer.class);
 
     public final StringPath photoThumbnail = createString("photoThumbnail");
 
-    public final StringPath photoUuid = createString("photoUuid");
+    public final StringPath photoUUID = createString("photoUUID");
 
     public final com.momo.momopjt.user.QUser userNo;
 

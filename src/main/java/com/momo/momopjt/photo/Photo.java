@@ -1,15 +1,14 @@
-package com.momo.momopjt;
+package com.momo.momopjt.photo;
 
-import com.momo.momopjt.article.Article;
-import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class Photo {
   @Id
   @Size(max = 255)
   @Column(name = "photo_uuid", nullable = false)
-  private String photoUuid;
+  private String photoUUID;
 
   @NotNull
   @Column(name = "photo_create_date", nullable = false)
