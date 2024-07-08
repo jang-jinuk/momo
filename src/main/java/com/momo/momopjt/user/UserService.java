@@ -1,6 +1,5 @@
 package com.momo.momopjt.user;
 
-
 public interface UserService {
 
     void join(UserJoinDTO userJoinDTO) throws UserIdException, UserEmailException;
