@@ -1,31 +1,33 @@
-<!DOCTYPE html>
-<html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>title</title>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<-->
 
-<!--sample template 참고용-->
-<a th:href="@{/hello}">Go to Hello</a>
-<a th:href="@{/hello(name='testname', age=15)}">Go to Hello</a> <!--파라미터 처리 추가됨-->
+<!--&lt;!&ndash;sample template 참고용&ndash;&gt;-->
+<!--<a th:href="@{/hello}">Go to Hello</a>-->
+<!--<a th:href="@{/hello(name='testname', age=15)}">Go to Hello</a> &lt;!&ndash;파라미터 처리 추가됨&ndash;&gt;-->
 
 
 
-<!--429p 참고-->
-<div>
-    <h3>sample layout header</h3>
-</div>
+<!--&lt;!&ndash;429p 참고&ndash;&gt;-->
+<!--<div>-->
+<!--    <h3>sample layout header</h3>-->
+<!--</div>-->
+<!--<th:block th:replace="fragments/header :: headerFragment"></th:block>-->
+<!--<body>-->
+<!--    <th:block layout:fragment="content"></th:block>-->
+<!--</body>-->
+<!--<th:block th:replace="fragments/footer :: footerFragment"></th:block>-->
+<!--<th:block layout:fragment="script">-->
 
-<div layout:fragment="content">
-    <p>page content</p>
-</div>
+<!--</th:block>-->
 
-<th:block layout:fragment="script">
+<!--</body>-->
+<!--</html>-->
 
-</th:block>
-
-</body>
-</html>
