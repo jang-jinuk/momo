@@ -24,14 +24,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserId(String userId);
 
     @EntityGraph(attributePaths ="roleSet")
-    Optional<User> findByUserEmail(String email);
+    Optional<User> findByUserEmail(String email); // email로 존재하는 유저 찾아서 Optional<User>반환
 
     @Modifying
     @Transactional
     @Query("update User u set u.userPw =:userPw where u.userId =:userId")
     void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
-
-    //Id Email 중복 체크
-//    boolean existsByUserId(String userId);
-    boolean existsByUserEmail(String userEmail);
 }

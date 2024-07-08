@@ -3,7 +3,6 @@ package com.momo.momopjt.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
+
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
         if (userDTO != null) {
@@ -32,6 +32,8 @@ public class UserController {
         }
         return "/home"; // Thymeleaf 템플릿 이름
     }
+
+
 
     @GetMapping("/login")
     public void loginGET(HttpServletRequest request) {
@@ -63,16 +65,19 @@ public class UserController {
         try {
             userService.join(userJoinDTO);
         } catch (UserService.UserIdException e) {
-            redirectAttributes.addFlashAttribute("error", "userId");
+            redirectAttributes.addFlashAttribute("errorid", userJoinDTO.getUserId());
+            return "redirect:/user/join";
+        } catch (UserService.UserEmailException e) {
+            redirectAttributes.addFlashAttribute("erroremail", userJoinDTO.getUserEmail());
             return "redirect:/user/join";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "An unexpected error occurred.");
+            redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
             return "redirect:/user/join";
         }
-
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home"; // 회원가입 후 홈으로
     }
+
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         HttpSession session = request.getSession(false);
@@ -97,6 +102,7 @@ public class UserController {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
         userUpdateDTO.setUserId(user.getUserId());
+//        userUpdateDTO.setUserPw(user.getUserPw());
         userUpdateDTO.setUserEmail(user.getUserEmail());
         userUpdateDTO.setUserNickname(user.getUserNickname());
         userUpdateDTO.setUserCategory(user.getUserCategory());
@@ -125,16 +131,5 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home";
-    }
-
-    //ID Email 증복체크
-    public ResponseEntity<?> checkUserId(@RequestBody String userId) {
-        boolean isUnique = userService.isUserIdgoyou(userId);
-        return ResponseEntity.ok().body(isUnique);
-   }
-
-    public ResponseEntity<?> checkUserEmail(@RequestBody String userEmail) {
-        boolean isUnique = userService.isUserEmailgoyou(userEmail);
-        return ResponseEntity.ok().body(isUnique);
     }
 }

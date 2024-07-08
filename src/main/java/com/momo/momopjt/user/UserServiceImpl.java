@@ -4,12 +4,10 @@ package com.momo.momopjt.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
@@ -26,14 +24,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void join(UserJoinDTO userJoinDTO) throws UserIdException {
+    public void join(UserJoinDTO userJoinDTO) throws UserIdException, UserEmailException {
 
+//        UserId 중복 검사
         String userId = userJoinDTO.getUserId();
-
-        boolean exist = userRepository.existsByUserId(userId); // existsByUserId 사용
-        if (exist) {
+        String userEmail = userJoinDTO.getUserEmail();
+        boolean existId = userRepository.existsByUserId(userId);
+        boolean existEmail = (userEmail.equals(userRepository.findByUserId(userId).getUserEmail()));// existsByUserId 사용
+        if (existId) {
+            log.info("...... [Id중복]..........KSW");
             throw new UserIdException();
+        }else if(existEmail){
+            log.info("...... [EMAIL중복]..........KSW");
+            throw new UserEmailException();
         }
+//      Email 중복 검사
 
         User user = modelMapper.map(userJoinDTO, User.class);
 
@@ -59,19 +64,9 @@ public class UserServiceImpl implements UserService {
         log.info("===============");
         log.info(user);
         log.info(user.getRoleSet());
-
         userRepository.save(user);
     }
 
-    //Id Email 체크
-    @Override
-    public boolean isUserIdgoyou(String userId){
-        return !userRepository.existsByUserId(userId);
-    }
-    @Override
-    public boolean isUserEmailgoyou(String userEmail){
-        return !userRepository.existsByUserId(userEmail);
-    }
 
 
     private int calculateAge(LocalDate birthDate) {
@@ -85,12 +80,13 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userUpdateDTO.getUserId());
         }
+
         user.changePassword(passwordEncoder.encode(userUpdateDTO.getUserPw()));
         user.changeEmail(userUpdateDTO.getUserEmail());
         user.changeNickname(userUpdateDTO.getUserNickname());
-        user.changeUserCategory(userUpdateDTO.getUserCategory());
-        user.changeAddress(userUpdateDTO.getUserAddress());
-        user.changeUserMbti(userUpdateDTO.getUserMBTI());
+        user.setUserCategory(userUpdateDTO.getUserCategory());
+        user.setUserAddress(userUpdateDTO.getUserAddress());
+        user.setUserMBTI(userUpdateDTO.getUserMBTI());
         user.setUserModifyDate(Instant.now());
 
         userRepository.save(user);
