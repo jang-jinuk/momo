@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
             throw new UserEmailException();
         }
 //      Email 중복 검사
-
         User user = modelMapper.map(userJoinDTO, User.class);
 
         // 비밀번호 암호화
