@@ -7,13 +7,13 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.time.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -22,6 +22,8 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
+  @Autowired
+  private ScheduleRepository scheduleRepository;
 
   //모임 생성 테스트
   @Test
@@ -153,5 +155,12 @@ public class ScheduleServiceTests {
         schedule.getScheduleMax(),
         schedule.getScheduleParticipants(),
         schedule.getScheduleStartDate()));
+  }
+
+  //일정 삭제 테스트
+  @Test
+  public void deleteScheduleTest() {
+    Long deleteScheduleNo = 5L;
+    scheduleService.deleteSchedule(deleteScheduleNo);
   }
 }
