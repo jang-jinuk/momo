@@ -15,10 +15,12 @@ public interface UserService {
 
     User findByEmail(String userEmail);
 
+    User findByUserIdAndUserEmail(String userId, String userEmail);
+
+
+
     static class UserIdException extends Exception {
         // 추가적인 예외 처리가 필요한 경우에만 사용
     }
-
-    User findByUserIdAndUserEmail(String userId, String userEmail);
 
 }

@@ -1,27 +1,52 @@
+
+
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아이디 및 비밀번호 찾기</title>
+    <title>Find User ID / Password</title>
 </head>
 <body>
-<h2>아이디 찾기</h2>
-<form action="/find/userid" method="post" th:object="${findUserIdRequest}">
-    <label for="findUserEmail">이메일:</label><br>
-    <input type="email" id="findUserEmail" name="findUserEmail" th:field="*{findUserEmail}" required><br><br>
-<!--    <span th:if="${errorMessageUserId}" th:text="${errorMessageUserId}" style="color: red"></span><br>-->
-    <span th:if="${userId}" th:text="'찾은 아이디: ' + ${userId}"></span><br><br>
-    <button type="submit">아이디 찾기</button>
+<h1>Find User ID / Password</h1>
+
+<!-- 아이디 찾기 폼 -->
+<form action="/user/userid" method="post" th:object="${findUserIdRequest}">
+
+    <div>
+        <label for="findUserEmail">Email:</label>
+        <input type="email" id="findUserEmail" name="findUserEmail" th:field="*{findUserEmail}" required />
+    </div>
+    <button type="submit">Find User ID</button>
 </form>
 
-<h2>비밀번호 찾기</h2>
+<!-- 아이디 찾기 결과 -->
+<div th:if="${userId}">
+    <p>Your User ID is: <span th:text="${userId}"></span></p>
+</div>
+<div th:if="${errorMessageUserId}">
+    <p th:text="${errorMessageUserId}" class="error"></p>
+</div>
+
+<!-- 비밀번호 찾기 폼 -->
 <form action="/find/password" method="post" th:object="${findPasswordRequest}">
-    <label for="findPasswordEmail">이메일:</label><br>
-    <input type="email" id="findPasswordEmail" name="findPasswordEmail" th:field="*{findPasswordEmail}" required><br><br>
-    <span th:if="${errorMessage}" th:text="${errorMessage}" style="color: red"></span><br>
-    <span th:if="${resetPasswordMessage}" th:text="${resetPasswordMessage}" style="color: green"></span><br><br>
-    <button type="submit">비밀번호 찾기</button>
+    <div>
+<!--        <label for="userId">User ID:</label>-->
+<!--        <input type="text" id="userId" name="userId" th:field="*{userId}" required />-->
+    </div>
+    <div>
+<!--        <label for="email">Email:</label>-->
+<!--        <input type="email" id="email" name="email" th:field="*{email}" required />-->
+    </div>
+    <button type="submit">Find Password</button>
 </form>
+
+<!--&lt;!&ndash; 비밀번호 찾기 결과 메시지 &ndash;&gt;-->
+<!--<div th:if="${resetPasswordMessage}">-->
+<!--    <p th:text="${resetPasswordMessage}"></p>-->
+<!--</div>-->
+<!--<div th:if="${errorMessage}">-->
+<!--    <p th:text="${errorMessage}" class="error"></p>-->
+<!--</div>-->
 </body>
 </html>
