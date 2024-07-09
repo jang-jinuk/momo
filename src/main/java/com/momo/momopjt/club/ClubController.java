@@ -20,21 +20,24 @@ public class ClubController {
 
   @Autowired
   private ClubService clubService;
+  @Autowired
   private ScheduleService scheduleService;
 
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model) {
     log.info("------------ [club main] ------------");
-    Club club = new Club();
-    club.setClubNo(clubNo);
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
     log.info("------------clubNo {}------------",clubDTO.getClubNo());
-    
+
+    Club club = new Club();
+    club.setClubNo(clubNo);
+
     List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
     model.addAttribute("schedules", scheduleDTOList);
     log.info("------------ [found shchedules] ------------");
+
     return "club/main";
   }
 
