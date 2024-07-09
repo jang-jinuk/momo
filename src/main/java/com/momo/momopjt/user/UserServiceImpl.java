@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void join(UserDTO userDTO) throws UserIdException, UserEmailException {
+    public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
 
 //        UserId 중복 검사
         String userId = userDTO.getUserId();
@@ -38,11 +38,9 @@ public class UserServiceImpl implements UserService {
         boolean existId = userRepository.existsByUserId(userId);
         boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
         if (existId) {
-            log.info("...... [Ib 중복]..........KSW");
             throw new UserIdException();
         }
         if(existEmail){
-            log.info("...... [EMAIL 중복]..........KSW");
             throw new UserEmailException();
         }
 //      Email 중복 검사
@@ -183,12 +181,6 @@ public class UserServiceImpl implements UserService {
         } else {
             return false; // 사용자를 찾지 못한 경우
         }
-    }
-
-
-    private boolean isUserIdExists(String userId) {
-        User existingUser = userRepository.findByUserId(userId);
-        return existingUser != null;
     }
 
     @Override

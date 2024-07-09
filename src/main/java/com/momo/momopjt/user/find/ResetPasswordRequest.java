@@ -1,4 +1,4 @@
-package com.momo.momopjt.user;
+package com.momo.momopjt.user.find;
 
 import lombok.*;
 

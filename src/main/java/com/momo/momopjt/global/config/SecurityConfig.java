@@ -46,7 +46,7 @@ public class SecurityConfig {
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
-            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update", "/user/find/**", "/user/find/id", "/find/userid","/user/find/pw", "/user/**").permitAll()
+            "/public/**", "/user/**","/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
 //        .anyRequest().authenticated()
         .and()

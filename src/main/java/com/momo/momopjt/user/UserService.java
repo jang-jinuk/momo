@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    void join(UserDTO userDTO) throws UserIdException, UserEmailException;
+    void signup(UserDTO userDTO) throws UserIdException, UserEmailException;
 
     void updateUser(UserDTO userDTO);
 

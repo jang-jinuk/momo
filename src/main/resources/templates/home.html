@@ -15,7 +15,7 @@
                 <a th:href="@{/user/login}">Login</a>
             </li>
             <li th:if="${#authentication.name == 'anonymousUser'}">
-                <a th:href="@{/user/join}">Join</a>
+                <a th:href="@{/user/signup}">signup</a>
             </li>
             <li th:unless="${#authentication.name == 'anonymousUser'}">
                 <a th:href="@{/user/logout}">Logout</a>

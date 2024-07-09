@@ -12,11 +12,11 @@ import javax.validation.Valid;
 
 
 @Controller
-@RequestMapping("/join")
+@RequestMapping("/signup")
 @RequiredArgsConstructor
 @Log4j2
 @Validated
-public class UserJoinController {
+public class UserSignUpController {
 
   @PostMapping("/register")
   public ResponseEntity<UserDTO> registerUser(
