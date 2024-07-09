@@ -66,12 +66,13 @@
         </div>
 <!--        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>-->
     </li>
-<!--YY-->
+
 </ul>
 <div class="container">
     <div class="mb-6">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" th:text="${news.newsContent}"></textarea>
     </div>
+<!--YY-->
     <div class="d-grid gap-4 col-2 mx-auto">
         <button class="btn btn-primary" type="button">등록/수정</button>
 <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
