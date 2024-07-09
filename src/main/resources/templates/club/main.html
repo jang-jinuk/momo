@@ -20,13 +20,14 @@
                     <p th:text="${club.clubContent}">Club Content</p>
                 </div>
             </div>
+                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband}'|">탈퇴하기</button>
         </div>
 
         <br>
         <hr>
         <h2>일정</h2>
         <span>
-            <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 등록</button>
+            <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
         </span>
         <div class="row">
             <div class="col-4" th:each="schedule : ${schedules}">
@@ -49,25 +50,70 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-outline-success">더보기</button>
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
+        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
+        <hr>
+        <h2>게시글</h2>
+        <span>
+            <button class="btn btn-outline-success" th:onclick="|location.href='@{/article/create}'|">게시글 등록</button>
+        </span>
+        <div class="container">
 
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
             </div>
-            <div class="col-3">
-
-            </div>
-            <div class="col-3">
-
-            </div>
-            <div class="col-3">
-
+            <br>
+            <div class="row">
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                        <h4 class="card-title">게시글 제목</h4>
+                    </div>
+                </div>
             </div>
         </div>
+        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
     </div>
-
-
 </th:block>
 <th:block layout:fragment="script">
     <script>
