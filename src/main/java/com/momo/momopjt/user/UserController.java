@@ -148,7 +148,6 @@ public class UserController {
         return "user/find/id";
     }
 
-
     // 아이디 찾기
     @PostMapping("/userid")
     public String findUserId(@ModelAttribute("findUserIdRequest") FindUserIdRequest findUserIdRequest, Model model) {
@@ -161,7 +160,6 @@ public class UserController {
             model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
             logger.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
         }
-
         return "user/find/id";
     }
 
@@ -171,7 +169,6 @@ public class UserController {
         model.addAttribute("findPasswordRequest", new FindPasswordRequest());
         return "user/find/pw";
     }
-
     // 비밀번호 찾기 처리
     @PostMapping("/find/password")
     public String findPassword(@ModelAttribute("findPasswordRequest") FindPasswordRequest findPasswordRequest,
@@ -198,17 +195,13 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
             logger.error("Error during password reset request processing", e);
         }
-
         return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리다이렉트
     }
-
-
     @GetMapping("/reset/userPw")
     public String showResetPasswordForm(Model model) {
         model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
         return "user/find/resetPassword";
     }
-
     // 비밀번호 재설정 처리 (토큰 없이)
     @PostMapping("/reset/userPw")
     public String resetPassword(@ModelAttribute("resetPasswordRequest") ResetPasswordRequest resetPasswordRequest,
@@ -216,8 +209,7 @@ public class UserController {
                                 Model model) {
         String userId = resetPasswordRequest.getUserId();
         String newPassword = resetPasswordRequest.getPassword();
-
-        // 비밀번호 일치 검사
+    // 비밀번호 일치 검사
         if (!newPassword.equals(resetPasswordRequest.getConfirmPassword())) {
             model.addAttribute("passwordMismatchError", "비밀번호가 일치하지 않습니다.");
             model.addAttribute("resetPasswordRequest", resetPasswordRequest);
