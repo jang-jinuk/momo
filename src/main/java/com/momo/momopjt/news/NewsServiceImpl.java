@@ -1,12 +1,13 @@
 package com.momo.momopjt.news;
 
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -16,11 +17,14 @@ public class NewsServiceImpl implements NewsService {
   @Autowired
   private NewsRepository newsRepository;
 
+  @Autowired
+  private ModelMapper modelMapper;
+
   //공지 생성
   @Override
-  public void createNews(News news) {
+  public void createNews(NewsDTO newsDTO) {
     log.info("----------------- [createNews]-----------------");
-
+    News news = modelMapper.map(newsDTO, News.class);
     newsRepository.save(news);
 
   }
@@ -43,10 +47,28 @@ public class NewsServiceImpl implements NewsService {
 
   //공지 업데이트
   @Override
-  public void updateNews(News news) {
+  public void updateNews(NewsDTO newsDTO) {
     log.info("----------------- [UpdateNews]-----------------");
+    News news = newsRepository.findById(newsDTO.getNewsNo()).orElseThrow();
 
-    newsRepository.save(news);
+    // mapper 사용으로 주석처리
+    /*
+    news.setNewsNo(news.getNewsNo());
+    news.setNewsContent(newsDTO.getNewsContent());
+    news.setNewsCreateDate(newsDTO.getNewsCreateDate());
+    news.setNewsModifyDate(Instant.now());
+    news.setNewsTag(newsDTO.getNewsTag());
+    news.setNewsTitle(newsDTO.getNewsTitle());
+    */
+
+    News updateNews = modelMapper.map(newsDTO, News.class);
+
+    updateNews.setNewsModifyDate(Instant.now());
+
+    log.info("----------------- [updateNews]-----------------");
+    log.info(updateNews.toString());
+
+    newsRepository.save(updateNews);
 
   }
 

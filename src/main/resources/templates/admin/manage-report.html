@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<header class="bg-light py-2">
+    <div class="container d-flex justify-content-between align-items-center">
+        <h6 th:text="${logoText}">momo</h6>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-dark">회원관리</button>
+            <button type="button" class="btn btn-light">게시판 관리</button>
+            <button type="button" class="btn btn-danger">신고하기</button>
+        </div>
+    </div>
+</header>
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid d-flex flex-column align-items-center">
+        <a class="navbar-brand">신고된 회원 관리</a>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<table class="container">
+    <thead>
+    <tr>
+        <th scope="col">번호</th>
+        <th scope="col">신고자 아이디</th>
+        <th scope="col">아이디</th>
+        <th scope="col">닉네임</th>
+        <th scope="col">신고내용</th>
+        <th scope="col">신고일</th>
+        <th scope="col">정지처리중</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>정상인</td>
+        <td>lamTroll</td>
+        <td>욕설맨</td>
+        <td>욕설</td>
+        <td>2024-05-17</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지해제</button>
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>음란물</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>폭력</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>욕설</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지해제</button>
+        </td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>신고맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>룩앤미</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>담타맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>배고파맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>영창맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지하기</button>
+        </td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>모기맨</td>
+        <td>shit123</td>
+        <td>신고당했맨</td>
+        <td>부적절한 아이디</td>
+        <td>2024-05-13</td>
+        <td>
+            처리중
+            <button type="button" class="btn btn-danger btn-sm ml-2">정지해제</button>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">4</a></li>
+        <li class="page-item"><a class="page-link" href="#">5</a></li>
+        <li class="page-item"><a class="page-link" href="#">6</a></li>
+        <li class="page-item"><a class="page-link" href="#">7</a></li>
+        <li class="page-item"><a class="page-link" href="#">8</a></li>
+        <li class="page-item"><a class="page-link" href="#">9</a></li>
+
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+
+</nav>
+</body>
+</html>

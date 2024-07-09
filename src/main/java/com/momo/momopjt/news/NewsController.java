@@ -52,22 +52,26 @@ public class NewsController {
 
 
   @PostMapping("/create")
-  public String newsCreatePost(){
+  public String newsCreatePost(NewsDTO newsDTO){
     log.info("----------------- [news/create PostMapping]-----------------");
-    return null;
+    newsService.createNews(newsDTO);
+
+
+    return "redirect:/news/main";
   }
 
   
   @PostMapping("/update/{newsNo}")
-  public String newsUpdatePost(){
+  public String newsUpdatePost(NewsDTO newsDTO){
     log.info("----------------- [news/update PostMapping]-----------------");
-    return null;
+    newsService.updateNews(newsDTO);
+    return "redirect:/news/update/" + newsDTO.getNewsNo();
   }
 
   @PostMapping("/delete/{newsNo}")
   public String newsDeletePost(@PathVariable("newsNo") int newsNo){
     log.info("----------------- [news/delete postMapping]-----------------");
-    return "sendredirect:news/main";
+    return "redirect:news/main";
   }
 
 
