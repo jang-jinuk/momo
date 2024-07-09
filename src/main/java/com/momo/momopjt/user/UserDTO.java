@@ -29,7 +29,7 @@ public class UserDTO {
     //@NotNull(message = "Gender is required")
     private Character userGender;
     private Integer userAge;
-//    @NotNull(message = "Birth date is required")
+    //    @NotNull(message = "Birth date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate userBirth;
     private String  userCategory;

@@ -20,14 +20,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public void join(UserDTO userDTO) throws UserIdException {
+    public void join(UserDTO userDTO) throws UserIdException, UserEmailException {
 
 //        UserId 중복 검사
         String userId = userDTO.getUserId();
@@ -35,15 +34,15 @@ public class UserServiceImpl implements UserService {
         boolean existId = userRepository.existsByUserId(userId);
         boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
         if (existId) {
-            log.info("...... [Id중복]..........KSW");
+            log.info("...... [Ib 중복]..........KSW");
             throw new UserIdException();
         }
         if(existEmail){
-            log.info("...... [EMAIL중복]..........KSW");
+            log.info("...... [EMAIL 중복]..........KSW");
             throw new UserEmailException();
         }
 //      Email 중복 검사
-        User user = modelMapper.map(userJoinDTO, User.class);
+        User user = modelMapper.map(userDTO, User.class);
 
         // 비밀번호 암호화
         user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
@@ -191,5 +190,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail).orElse(null);
+    }
+
+    @Override
+    public User findByUserIdAndUserEmail(String userId, String userEmail) {
+        return null;
     }
 }

@@ -45,8 +45,7 @@ public class User {
     private Set<UserRole> roleSet = new HashSet<>();
 
     // 비밀번호 변경 메서드
-    public void changePassword(String userPw){
-        this.userPw = userPw;
+    public void changePassword(String userPw){this.userPw = userPw;
     }
 //    // 이메일 변경 메서드
 //    public void changeEmail(String userEmail){

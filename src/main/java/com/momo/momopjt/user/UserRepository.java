@@ -17,20 +17,20 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
- @EntityGraph(attributePaths = "roleSet")
- Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
+  @EntityGraph(attributePaths = "roleSet")
+  Optional<User> findByUserIdAndUserSocialIn(String userId, Collection<Character> socialTypes);
 
-    boolean existsByUserId(String userId); // userId로 존재 여부 확인
-    User findByUserId(String userId);
-    boolean existsByUserEmail(String userEmail);
+  boolean existsByUserId(String userId); // userId로 존재 여부 확인
+  User findByUserId(String userId);
+  boolean existsByUserEmail(String userEmail);
 
- @EntityGraph(attributePaths ="roleSet")
- Optional<User> findByUserEmail(String email);
+  @EntityGraph(attributePaths ="roleSet")
+  Optional<User> findByUserEmail(String email);
 
- @Modifying
- @Transactional
- @Query("update User u set u.userPw =:userPw where u.userId =:userId")
- void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
+  @Modifying
+  @Transactional
+  @Query("update User u set u.userPw =:userPw where u.userId =:userId")
+  void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
 
- User  findByUserIdAndUserEmail(String userId, String email);
+  User  findByUserIdAndUserEmail(String userId, String email);
 }

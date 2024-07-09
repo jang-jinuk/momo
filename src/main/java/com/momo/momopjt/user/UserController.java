@@ -90,25 +90,12 @@ public class UserController {
         return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
     }
 
-
     @GetMapping("/update/{userId}")
     public String updateGet(@PathVariable String userId, Model model) {
-        UserUpdateDTO userUpdateDTO = new UserUpdateDTO(); // 빈 객체 생성 또는 초기화
-
-        // 사용자 정보를 조회하여 폼에 바인딩
-        // 예시로 userRepository를 사용하여 사용자 정보를 조회하는 경우
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
-        userUpdateDTO.setUserId(user.getUserId());
-//        userUpdateDTO.setUserPw(user.getUserPw());
-        userUpdateDTO.setUserEmail(user.getUserEmail());
-        userUpdateDTO.setUserNickname(user.getUserNickname());
-        userUpdateDTO.setUserCategory(user.getUserCategory());
-        userUpdateDTO.setUserAddress(user.getUserAddress());
-        userUpdateDTO.setUserMBTI(user.getUserMBTI());
-
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getUserId());
         userDTO.setUserEmail(user.getUserEmail());
@@ -182,7 +169,7 @@ public class UserController {
                                RedirectAttributes redirectAttributes) {
         String userId = findPasswordRequest.getUserId();
         String userEmail = findPasswordRequest.getEmail();
-        User user = userService. findByUserIdAndUserEmail(userId, userEmail);
+        User user = userService.findByUserIdAndUserEmail(userId, userEmail);
 
         if (user != null) {
             // 사용자가 존재하면 비밀번호 재설정 링크를 전송하는 로직을 추가할 수 있음
