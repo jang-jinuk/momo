@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <title>MOMO signup page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--                 integrity="sha256-H+K7U5CnXl1h5zOL+2aA8p6Znxl8HMafDHEerFF2x0w="
+                crossorigin="anonymous" -->
+
+    <script th:inline="javascript">
+
+        function validateForm() {
+            const userId = document.forms["registerForm"]["userId"].value;
+            const userNickname = document.forms["registerForm"]["userNickname"].value;
+            const userPw = document.forms["registerForm"]["userPw"].value;
+            const userEmail = document.forms["registerForm"]["userEmail"].value;
+            const userGender = document.forms["registerForm"]["userGender"].value;
+            const userBirth = document.forms["registerForm"]["userBirth"].value;
+
+
+            const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
+            const emailPattern = /^[a-zA-Z0-9]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
+            const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+
+            if (!userIdPattern.test(userId)) {
+                alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+                return false;
+            }
+            if (!passwordPattern.test(userPw)) {
+                 alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+                 return false;
+             }
+             if (!NicknamePattern.test(userNickname)) {
+                 alert("닉넴은 6글자 까지 필요합니다.");
+                 return false;
+             }
+            if (!emailPattern.test(userEmail)) {
+                alert("이메일 형식이 유효하지 않습니다.");
+                return false;
+            }
+            if (userGender !== "m" && userGender !== "w") {
+                alert("성별이 유효하지 않습니다.");
+                 return false;
+             }
+            if (userBirth === "") {
+                 alert("생년월일이 필요합니다.");
+                 return false;
+             }
+            return true;
+        }
+            // 추가 유효성 검사 (선택 사항)
+            // 예시: 카테고리, 주소, MBTI 등
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    MOMO 회원가입
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" name="registerForm" action="/user/signup" method="post" onsubmit="return validateForm()">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">아이디</span>
+                            <input type="text" name="userId" class="form-control" required>
+                        </div>
+                        <div th:if="${errorId == 'userId'}" class="alert alert-danger" role="alert">
+                            아이디가 중복되었습니다. 다른 아이디를 사용해주세요.
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">비밀번호</span>
+                            <input type="password" name="userPw" class="form-control" required autocomplete="off">
+                        </div>
+
+                        <!-- 비밀번호 확인 부분 주석 -->
+                        <!--
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">비밀번호 확인</span>
+                            <input type="password" name="userPw2" class="form-control">
+                        </div>
+                        -->
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">닉네임</span>
+                            <input type="text" name="userNickname" class="form-control" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">성별</span>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="userGender" id="male" value="m" required>
+                                <label class="form-check-label" for="male">남성</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="userGender" id="female" value="w" required>
+                                <label class="form-check-label" for="female">여성</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">생년월일</span>
+                            <input type="date" class="form-control" name="userBirth" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">이메일</span>
+                            <input type="email" class="form-control" name="userEmail" required>
+                        </div>
+                        <div th:if="${errorEmail == 'userEmail'}" class="alert alert-danger" role="alert">
+                            이메일이 중복되었습니다. 다른 이메일을 사용해주세요.
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">관심사</span>
+                            <input type="text" name="userCategory" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">주소</span>
+                            <input type="text" name="userAddress" class="form-control">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">MBTI</span>
+                            <input type="text" name="userMBTI" class="form-control">
+                        </div>
+                        <form action="/submit" method="post">
+
+                            <!-- 폼 필드들 -->
+                        <div class="mt-4">
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-primary submitBtn">등록</button>
+                                <button type="reset" class="btn btn-secondary">취소</button>
+                            </div>
+                        </div>
+                        </form>
+                    </form>
+                </div><!--end card body-->
+            </div><!--end card-->
+        </div><!--end col-->
+    </div><!--end row-->
+</div>
+<!--&lt;!&ndash; 예외처리 확인용&ndash;&gt;-->
+<!--<h1>test</h1>-->
+<!--ID 에러 :<div th:text="${errorid}"></div>-->
+<!--email 에러 :<div th:text="${erroremail}"></div>-->
+<!--기타 에러 :<div th:text="${errorException}"></div>-->
+<!--</body>-->
+<!--</html>-->

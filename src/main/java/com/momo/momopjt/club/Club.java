@@ -19,7 +19,7 @@ public class Club {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "club_photo", nullable = false)
-  private Photo photoUUID;
+  private Photo photoUuid;
 
   @Column(name = "club_name", nullable = false, length = 50)
   private String clubName;
