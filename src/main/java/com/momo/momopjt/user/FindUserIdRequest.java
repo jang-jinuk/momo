@@ -1,7 +1,6 @@
 package com.momo.momopjt.user;
 
-import lombok.Getter;
-import lombok.Setter;
+
 
 public class FindUserIdRequest {
 

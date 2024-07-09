@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 
 @SpringBootApplication
-
 public class MomoApplication {
+
 
     public static void main(String[] args) {
         SpringApplication.run(MomoApplication.class, args);
