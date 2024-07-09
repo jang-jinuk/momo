@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface NewsService {
 
-  void createNews(News news);
+  void createNews(NewsDTO newsDTO);
   News readNews(Long newsNo);
   List<News> readAllNews();
-  void updateNews(News news);
+  void updateNews(NewsDTO newsDTO);
   void deleteNews(Long newsNo);
 
 }

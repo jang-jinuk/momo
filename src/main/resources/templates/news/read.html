@@ -13,14 +13,17 @@
             flex-direction: column;
             align-items: center;
         }
+
         .navbar-brand {
             margin-bottom: 10px;
         }
+
         .search-form {
             width: 100%;
             display: flex;
             justify-content: center;
         }
+
         .search-form input {
             width: 300px;
         }
@@ -37,61 +40,99 @@
 <!--DY-->
 
 
-
 <nav class="navbar bg-body-tertiary"> <!--검색창 부분-->
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">공지사항</a>
         <form class="d-flex search-form" role="search">
             <i class="bi bi-search" style="position: absolute; margin-top: 10px; margin-left: 10px;"></i>
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="padding-left: 30px;">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                   style="padding-left: 30px;">
             <button class="btn btn-outline-success" type="submit">검색하기</button>
         </form>
     </div>
 </nav>
+<!--YY-->
+<!--<form id="newsForm" method="post"></form>-->
 
-<ul class="nav justify-content-center">
-    <li class="nav-item">
-        <!--YY-->
-        <div class="nav-link disabled" th:text="${news.newsTag}"></div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#"></a>
-    </li>
-    <li class="nav-item">
-        <div class="nav-link disabled" th:text="${news.newsTitle}"></div>
-<!--        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>-->
-    </li>
-    <li class="nav-item">
-        <div class="nav-link disabled" th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
+<form id="newsForm" name="registerForm" action="/news/create" method="post">
+    <ul class="nav justify-content-center">
+        <li class="nav-item input-group">
+            <span class="input-group-text">공지사항 태그</span>
+            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsTag}">
+        </li>
+        <li class="nav-item input-group">
+            <span class="input-group-text">공지사항 제목</span>
+            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsTitle}">
+        </li>
+        <li class="nav-item input-group">
+            <span class="input-group-text">공지사항 작성일</span>
+            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsCreateDate}">
+        </li>
+        <li class="nav-item input-group mb-3">
+            <span class="input-group-text">공지사항 수정일</span>
+            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsModifyDate}">
+        </li>
+    </ul>
+<!--
+    기본 양식 <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+            </li>
+-->
+<!--
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <input type="text" class="nav-link disabled" th:placeholder="${news.newsTag}">
+        </li>
+        <li class="nav-item">
+            <div class="nav-link disabled" th:text="${news.newsTitle}"></div>
+            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>&ndash;&gt;
+        </li>
+        <li class="nav-item">
+            <div class="nav-link disabled"
+                 th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
+            </div>
+            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>&ndash;&gt;
+        </li>
+
+    </ul>
+-->
+    <div class="container">
+        <div class="input-group mb-6">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"
+                      th:text="${news.newsContent}"></textarea>
         </div>
-<!--        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>-->
-    </li>
+        <!--YY-->
+        <div class="d-grid gap-4 col-2 mx-auto">
+            <button class="btn btn-primary" type="button" onclick="submitNewsForm('/news/create')">등록/수정</button>
+            <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
+            <button class="btn btn-primary" type="button" th:onclick="window.location.href='/news/main'">돌아가기</button>
 
-</ul>
-<div class="container">
-    <div class="mb-6">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" th:text="${news.newsContent}"></textarea>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <!--활성화된 신고하기 버튼-->
+            <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
+            <!--YY-->
+            <button class="btn btn-danger"
+                    th:onclick="window.location.href='../../report/create'"
+                    type="button">신고하기
+            </button>
+            <!--YY-->
+            <!--비활성화 신고하기 버튼-->
+            <button type="button" class="btn btn-outline-primary" disabled>신고하기</button>
+        </div>
     </div>
-<!--YY-->
-    <div class="d-grid gap-4 col-2 mx-auto">
-        <button class="btn btn-primary" type="button">등록/수정</button>
-<!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
-        <button class="btn btn-primary" type="button" th:onclick="window.location.href='/news/main'">돌아가기</button>
+</form>
+<script>
+    /*newsForm 제출*/
+    function submitNewsForm(action){
+        console.log("js-------------submitNewsForm start")
+        const form = document.getElementById('newsForm');
+        form.action = action;
+        form.submit();
+        console.log("js-------------submitNewsForm end")
+    }
 
-    </div>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <!--활성화된 신고하기 버튼-->
-<!--        <button type="button" class="btn btn-danger">신고하기</button>-->
-<!--YY-->
-        <button class="btn btn-danger"
-                th:onclick="window.location.href='../../report/create'"
-                type="button">신고하기</button>
-<!--YY-->
-        <!--비활성화 신고하기 버튼-->
-        <button type="button" class="btn btn-outline-primary" disabled>신고하기</button>
-    </div>
-</div>
-
+</script>
 </body>
 </html>
 <!---->
