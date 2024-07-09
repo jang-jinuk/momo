@@ -169,6 +169,7 @@ public class UserController {
         model.addAttribute("findPasswordRequest", new FindPasswordRequest());
         return "user/find/pw";
     }
+
     // 비밀번호 찾기 처리
     @PostMapping("/find/password")
     public String findPassword(@ModelAttribute("findPasswordRequest") FindPasswordRequest findPasswordRequest,
@@ -186,7 +187,7 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
                 logger.info("Temporary password sent to email: {}", userEmail);
 
-                return "redirect:/reset";
+                return "redirect:/user/home";
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
                 logger.warn("User not found for username: {} and email: {}", userId, userEmail);
@@ -195,13 +196,16 @@ public class UserController {
             redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
             logger.error("Error during password reset request processing", e);
         }
-        return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리다이렉트
+        return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리디렉트
     }
+
+    // 비밀번호 재설정 처리 (토큰 없이)
     @GetMapping("/reset/userPw")
     public String showResetPasswordForm(Model model) {
         model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
         return "user/find/resetPassword";
     }
+
     // 비밀번호 재설정 처리 (토큰 없이)
     @PostMapping("/reset/userPw")
     public String resetPassword(@ModelAttribute("resetPasswordRequest") ResetPasswordRequest resetPasswordRequest,
@@ -209,7 +213,8 @@ public class UserController {
                                 Model model) {
         String userId = resetPasswordRequest.getUserId();
         String newPassword = resetPasswordRequest.getPassword();
-    // 비밀번호 일치 검사
+
+        // 비밀번호 일치 검사
         if (!newPassword.equals(resetPasswordRequest.getConfirmPassword())) {
             model.addAttribute("passwordMismatchError", "비밀번호가 일치하지 않습니다.");
             model.addAttribute("resetPasswordRequest", resetPasswordRequest);
@@ -221,7 +226,7 @@ public class UserController {
 
             if (resetSuccess) {
                 redirectAttributes.addFlashAttribute("resetSuccessMessage", "비밀번호가 성공적으로 재설정되었습니다!");
-                return "redirect:/user/find/passwordResetSuccess";
+                return "redirect:/user/home"; // 여기서 경로 변경
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
                 return "redirect:/reset";
@@ -233,11 +238,6 @@ public class UserController {
         }
     }
 
-    // 비밀번호 재설정 성공 메시지 페이지 렌더링
-    @GetMapping("/find/passwordResetSuccess")
-    public String showPasswordResetSuccess() {
-        return "user/find/passwordResetSuccess";
-    }
 
     // 예외 처리 핸들러
     @ExceptionHandler(Exception.class)

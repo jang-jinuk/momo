@@ -224,18 +224,38 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserId(String userId) {
         // userId로 사용자를 찾는 로직 구현
-        return new User(); // 예시로 반환
+        return userRepository.findByUserId(userId); // UserRepository를 사용하여 실제 사용자 조회
     }
+
     @Override
     public boolean resetPasswordByUserId(String userId, String newPassword) {
         // userId로 사용자를 찾고, 비밀번호를 reset하는 로직을 구현
         User user = findByUserId(userId);
         if (user != null) {
-            user.setUserPw(newPassword);
-            updateUser(UserDTO.builder().build());
-            return true;
+            // 새 비밀번호가 null이거나 비어 있는지 확인
+            if (newPassword == null || newPassword.isEmpty()) {
+                return false; // 새 비밀번호가 비어 있는 경우
+            }
+
+            // 새 비밀번호가 기존 비밀번호와 동일한지 확인
+            if (passwordEncoder.matches(newPassword, user.getUserPw())) {
+                return false; // 새 비밀번호가 기존 비밀번호와 동일한 경우
+            }
+
+            // 새 비밀번호가 일정한 규칙을 충족하는지 검증 (예: 최소 길이)
+            if (newPassword.length() < 8) {
+                return false; // 예시로 최소 길이가 8자 이상이어야 한다고 가정
+            }
+
+            // 새 비밀번호 암호화
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setUserPw(encryptedPassword);
+
+            // UserRepository를 통해 사용자 정보 업데이트
+            userRepository.save(user);
+
+            return true; // 성공적으로 비밀번호를 재설정한 경우
         }
         return false;
     }
-
 }

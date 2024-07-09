@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsByUserId(String userId); // userId로 존재 여부 확인
   User findByUserId(String userId);
+ // User findByEmail(String email);
+  User findByUserIdAndUserEmail(String userId, String userEmail);
   boolean existsByUserEmail(String userEmail);
 
   @EntityGraph(attributePaths ="roleSet")
@@ -32,5 +34,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("update User u set u.userPw =:userPw where u.userId =:userId")
   void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
 
-  User  findByUserIdAndUserEmail(String userId, String email);
+
 }

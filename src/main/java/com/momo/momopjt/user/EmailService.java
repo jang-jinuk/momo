@@ -29,8 +29,8 @@ public class EmailService {
     try {
       SimpleMailMessage message = new SimpleMailMessage();
       message.setTo(userEmail);
-      message.setSubject("Your Temporary Password");
-      message.setText("Your temporary password is: " + temporaryPassword);
+      message.setSubject("MOMO-임시 비밀번호입니다.");
+      message.setText("임시 비밀번호로 로그인 후 비밀번호를 변경해주세요: " + temporaryPassword);
       mailSender.send(message);
       logger.info("Temporary password email sent to {}", userEmail);
     } catch (Exception e) {

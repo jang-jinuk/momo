@@ -1,13 +1,13 @@
 package com.momo.momopjt.user;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ResetPasswordRequest {
   private String userId;
   private String email;

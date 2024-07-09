@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>비밀번호 찾기</title>
+
     <!-- Bootstrap CSS -->
     <link th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h2>비밀번호 재설정</h2>
+    <h2>비밀번호 찾기</h2>
 
     <form id="passwordResetForm" action="/user/find/password" method="post" th:object="${findPasswordRequest}">
         <div class="form-group">
@@ -22,12 +22,12 @@
         <button type="submit" class="btn btn-primary">이메일 전송</button>
     </form>
 
-    <!-- 아이디 찾기 결과 모달 -->
+    <!-- 비밀번호 찾기 결과 모달 -->
     <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="resultModalLabel">비밀번호 재설정</h5>
+                    <h5 class="modal-title" id="resultModalLabel">비밀번호 찾기</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -63,6 +63,11 @@
                         // 성공 시 모달 창 표시
                         const modal = new bootstrap.Modal(document.getElementById('resultModal'));
                         modal.show();
+
+                        // 모달이 닫힌 후 홈 페이지로 리디렉트
+                        modal._element.addEventListener('hidden.bs.modal', function() {
+                            window.location.href = '/user/home';
+                        });
                     } else {
                         // 오류 처리 (필요한 경우)
                         alert('Error occurred. Please try again.');
