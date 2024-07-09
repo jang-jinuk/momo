@@ -28,7 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private EmailService emailService;
+    private final EmailService emailService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/home")

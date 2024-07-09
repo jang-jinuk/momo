@@ -48,7 +48,7 @@ public class SecurityConfig {
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
             "/public/**", "/user/login", "/user/join", "/user/home", "/user/update", "/user/find/**", "/user/find/id", "/find/userid","/user/find/pw", "/user/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
-        .anyRequest().authenticated()
+//        .anyRequest().authenticated()
         .and()
         .formLogin()
         .loginPage("/user/login")

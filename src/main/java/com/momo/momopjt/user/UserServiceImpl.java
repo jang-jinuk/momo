@@ -206,9 +206,12 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void updateUserPassword(User user, String temporaryPassword) {
+        String encodedPW = passwordEncoder.encode(temporaryPassword);
         // 비밀번호 업데이트 로직
-        user.setUserPw(temporaryPassword);
+        user.setUserPw(encodedPW);
         // 데이터베이스에 저장하는 로직 추가
+        log.info("-------- [07-09-11:49:35]-------you"+encodedPW);
+        userRepository.save(user);
     }
 
     @Override
