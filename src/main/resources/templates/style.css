@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.navbar {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    background-color: #CBF5AF;
+    padding: 1rem;
+}
+.navbar button {
+    background-color: #6DAF46; /* 기본 배경색을 다르게 설정 */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.navbar button:hover {
+    background-color: #4C8A29; /* 호버 시 배경색을 다르게 설정 */
+}

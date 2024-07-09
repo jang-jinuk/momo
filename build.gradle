@@ -35,7 +35,7 @@ dependencies {
 
     // OAuth2 인증 관련
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
+    
     // 메일 관련 처리
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
@@ -80,6 +80,18 @@ dependencies {
     //image Thumbnail
     implementation 'net.coobird:thumbnailator:0.4.20'
 
+    testImplementation'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //smtp 사용하여 이메일 발송
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    implementation 'javax.mail:mail:1.4.7'
+    // Spring Context Support
+    implementation 'org.springframework:spring-context-support:5.3.9'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
 
 
 }
