@@ -1,7 +1,11 @@
 package com.momo.momopjt.user;
 
+
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +26,8 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
-
+    private EmailService emailService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
@@ -90,12 +95,14 @@ public class UserController {
         return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
     }
 
+
     @GetMapping("/update/{userId}")
     public String updateGet(@PathVariable String userId, Model model) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
+
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(user.getUserId());
         userDTO.setUserEmail(user.getUserEmail());
@@ -135,32 +142,34 @@ public class UserController {
     // 유정작업중 -----------------------------------
 
 
-    @GetMapping("/find")
-    public String showFindForm(Model model) {
+    @GetMapping("/find-id")
+    public String showFindIdForm(Model model) {
         model.addAttribute("findUserIdRequest", new FindUserIdRequest());
-        model.addAttribute("findPasswordRequest", new FindPasswordRequest());
-        return "user/find/idPw";
+        return "user/find/id";
     }
 
-    // 아이디 찾기 처리
-    @PostMapping("/find/userid")
+
+    // 아이디 찾기
+    @PostMapping("/userid")
     public String findUserId(@ModelAttribute("findUserIdRequest") FindUserIdRequest findUserIdRequest, Model model) {
         String userEmail = findUserIdRequest.getFindUserEmail();
-        String userId = userService.findUsernameByEmail(userEmail); // 메서드명도 findUserIdByEmail로 변경
-
+        String userId = userService.findUsernameByEmail(userEmail);
         if (userId != null) {
-            model.addAttribute("userId", userId); // 변수명을 userId로 변경
+            model.addAttribute("userId", userId);
+            logger.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
         } else {
             model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
+            logger.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
         }
 
-        return "user/find/idPw";
+        return "user/find/id";
     }
+
     // 비밀번호 찾기 폼 렌더링
-    @GetMapping("/findPassword")
+    @GetMapping("/find-pw")
     public String showFindPasswordForm(Model model) {
         model.addAttribute("findPasswordRequest", new FindPasswordRequest());
-        return "user/find/idPw";
+        return "user/find/pw";
     }
 
     // 비밀번호 찾기 처리
@@ -168,51 +177,66 @@ public class UserController {
     public String findPassword(@ModelAttribute("findPasswordRequest") FindPasswordRequest findPasswordRequest,
                                RedirectAttributes redirectAttributes) {
         String userId = findPasswordRequest.getUserId();
-        String userEmail = findPasswordRequest.getEmail();
-        User user = userService.findByUserIdAndUserEmail(userId, userEmail);
+        String userEmail = findPasswordRequest.getUserEmail();
 
-        if (user != null) {
-            // 사용자가 존재하면 비밀번호 재설정 링크를 전송하는 로직을 추가할 수 있음
-            // 이메일 전송 등의 코드를 여기에 추가할 수 있음
-            redirectAttributes.addFlashAttribute("resetPasswordMessage", "Instructions to reset your password have been sent to your email.");
-            return "redirect:/findPassword";
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "User not found for username: " + userId + " and email: " + userEmail);
-            return "redirect:/findPassword";
+        try {
+            User user = userService.findByUserIdAndUserEmail(userId, userEmail);
+
+            if (user != null) {
+                String temporaryPassword = userService.generateTemporaryPassword();
+                userService.updateUserPassword(user, temporaryPassword);
+                emailService.sendTemporaryPasswordEmail(userEmail, temporaryPassword);
+                redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
+                logger.info("Temporary password sent to email: {}", userEmail);
+
+                return "redirect:/reset";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
+                logger.warn("User not found for username: {} and email: {}", userId, userEmail);
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            logger.error("Error during password reset request processing", e);
         }
+
+        return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리다이렉트
     }
 
-    // 비밀번호 재설정 폼 렌더링
-    @GetMapping("/reset")
+
+    @GetMapping("/reset/userPw")
     public String showResetPasswordForm(Model model) {
         model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
-        return "user/find/resetPassword"; // resetPassword.html에 해당하는 템플릿 이름
+        return "user/find/resetPassword";
     }
 
-    // 비밀번호 재설정 처리
+    // 비밀번호 재설정 처리 (토큰 없이)
     @PostMapping("/reset/userPw")
     public String resetPassword(@ModelAttribute("resetPasswordRequest") ResetPasswordRequest resetPasswordRequest,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
-        String userId = resetPasswordRequest.getResetPasswordUserId();
-        String userEmail = resetPasswordRequest.getResetPasswordEmail();
-        String newPassword = resetPasswordRequest.getResetPassword();
+        String userId = resetPasswordRequest.getUserId();
+        String newPassword = resetPasswordRequest.getPassword();
 
         // 비밀번호 일치 검사
-        if (!newPassword.equals(resetPasswordRequest.getResetPasswordConfirm())) {
-            model.addAttribute("passwordMismatchError", "Passwords do not match.");
-            model.addAttribute("resetPasswordRequest", resetPasswordRequest); // 모델에 다시 추가
+        if (!newPassword.equals(resetPasswordRequest.getConfirmPassword())) {
+            model.addAttribute("passwordMismatchError", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("resetPasswordRequest", resetPasswordRequest);
             return "user/find/resetPassword";
         }
 
-        // userService의 resetPassword() 메서드 호출
-        boolean resetSuccess = userService.resetPassword(userId, userEmail, newPassword);
+        try {
+            boolean resetSuccess = userService.resetPasswordByUserId(userId, newPassword);
 
-        if (resetSuccess) {
-            redirectAttributes.addFlashAttribute("resetSuccessMessage", "Password reset successful!");
-            return "redirect:/user/find/passwordResetSuccess"; // 비밀번호 재설정 성공 메시지 페이지로 리다이렉트
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to reset password. Please try again.");
+            if (resetSuccess) {
+                redirectAttributes.addFlashAttribute("resetSuccessMessage", "비밀번호가 성공적으로 재설정되었습니다!");
+                return "redirect:/user/find/passwordResetSuccess";
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
+                return "redirect:/reset";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            logger.error("Error during password reset", e);
             return "redirect:/reset";
         }
     }
@@ -220,6 +244,14 @@ public class UserController {
     // 비밀번호 재설정 성공 메시지 페이지 렌더링
     @GetMapping("/find/passwordResetSuccess")
     public String showPasswordResetSuccess() {
-        return "user/find/passwordResetSuccess"; // passwordResetSuccess.html에 해당하는 템플릿 이름
+        return "user/find/passwordResetSuccess";
+    }
+
+    // 예외 처리 핸들러
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errorMessage", "예상치 못한 오류가 발생했습니다. 다시 시도해 주세요.");
+        logger.error("Unhandled exception", e);
+        return "redirect:/find-pw";
     }
 }

@@ -43,34 +43,33 @@ public class SecurityConfig {
 
     http
         .authorizeRequests()
+        .antMatchers("/secured/**").authenticated()
+        .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
-            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update","/user/find", "/user/**","/user/find/idPw").permitAll()
-        .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지 접근 제한
-        .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
+            "/public/**", "/user/login", "/user/join", "/user/home", "/user/update", "/user/find/**", "/user/find/id", "/find/userid","/user/find/pw", "/user/**").permitAll()
+        .antMatchers("/admin/**").hasRole("ADMIN")
+        .anyRequest().authenticated()
         .and()
-
         .formLogin()
-        .loginPage("/user/login") // 로그인 페이지 설정
-        .defaultSuccessUrl("/user/home") // 로그인 성공 후 이동할 페이지
-        .successHandler(authenticationSuccessHandler())
+        .loginPage("/user/login")
+        .defaultSuccessUrl("/user/home")
+        .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
         .permitAll()
-
         .and()
         .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // 로그아웃 경로 설정
+        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
         .logoutSuccessUrl("/user/home")
-        .invalidateHttpSession(true) // 로그아웃 시 세션을 무효화
-        .deleteCookies("JSESSIONID") // 로그아웃 시 특정 쿠키(JSESSIONID)를 삭제
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
         .permitAll()
         .and()
-
         .exceptionHandling()
-        .accessDeniedPage("/403") // 접근 거부 시 이동할 페이지 설정
+        .accessDeniedPage("/403")
         .and()
-
-        .csrf().disable();// CSRF 비활성화
-
-    http.oauth2Login().loginPage("/user/home");
+        .oauth2Login() // OAuth2 로그인 설정
+        .loginPage("/user/login")
+        .and()
+        .csrf().disable();
 
     return http.build();
   }
