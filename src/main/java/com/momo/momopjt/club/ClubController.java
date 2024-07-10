@@ -9,8 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -23,9 +22,11 @@ public class ClubController {
   private ClubService clubService;
   @Autowired
   private ScheduleService scheduleService;
+  @Autowired
+  private HttpSession session;
 
   @GetMapping("/main/{clubNo}")
-  public String mainPage(@PathVariable("clubNo") Long clubNo, RedirectAttributes redirectAttributes, Model model) {
+  public String mainPage(@PathVariable("clubNo") Long clubNo, Model model) {
     log.info("------------ [club main] ------------");
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
@@ -37,11 +38,10 @@ public class ClubController {
 
     List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
     model.addAttribute("schedules", scheduleDTOList);
-    log.info("------------ [found shchedules] ------------");
+    log.info("------------ [found schedules] ------------");
 
-    redirectAttributes.addFlashAttribute("clubNo", clubDTO.getClubNo());
-    //세션에 clubNo을 임시 저장해주고 다음 요청에서 접근하여 사용할 수 있게 된다.
-
+    session.setAttribute("clubNo", clubDTO.getClubNo());
+    //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
     return "club/main";
   }
 
