@@ -2,9 +2,12 @@ package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,8 @@ public class ScheduleController {
 
   @Autowired
   ScheduleService scheduleService;
+  @Autowired
+  private UserService userService;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
@@ -30,14 +35,18 @@ public class ScheduleController {
 
   //일정 생성하기
   @PostMapping("/create")
-  public String scheduleCreate(ScheduleDTO scheduleDTO, Long userNo, String dateTime) {
-    User user = new User();
-    user.setUserNo(1L); //임시 유저 정보 (유저 관련 기능 완성 후 추가할 예정)
+  public String scheduleCreate(ScheduleDTO scheduleDTO,String dateTime) {
+
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+    log.info("------------ [현재 로그인 중인 정보] ------------");
+
     Club club = new Club(); // 임시 모임 정보(수정예정)
     club.setClubNo(1L);
     scheduleDTO.setClubNo(club);
-    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
-    userAndScheduleDTO.setUserNo(user);
 
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
