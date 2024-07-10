@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -35,7 +36,7 @@ public class ScheduleController {
 
   //일정 생성하기
   @PostMapping("/create")
-  public String scheduleCreate(ScheduleDTO scheduleDTO,String dateTime) {
+  public String scheduleCreate(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
@@ -44,10 +45,10 @@ public class ScheduleController {
     userAndScheduleDTO.setUserNo(user);
     log.info("------------ [현재 로그인 중인 정보] ------------");
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club(); // 임시 모임 정보(수정예정)
-    club.setClubNo(1L);
+    club.setClubNo(clubNo);
     scheduleDTO.setClubNo(club);
-
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
     Instant instant = zonedDateTime.toInstant();
@@ -56,6 +57,7 @@ public class ScheduleController {
 
     Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
     log.info("------------ [일정 등록 완료] ------------");
+
     return "/schedule/" + scheduleNo;
   }
 
