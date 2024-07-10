@@ -3,15 +3,13 @@ package com.momo.momopjt.user;
 
 
 import com.momo.momopjt.user.find.EmailService;
-import com.momo.momopjt.user.find.FindPasswordRequest;
-import com.momo.momopjt.user.find.FindUserIdRequest;
-import com.momo.momopjt.user.find.ResetPasswordRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +24,7 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 public class UserController {
 
     private final UserService userService;
