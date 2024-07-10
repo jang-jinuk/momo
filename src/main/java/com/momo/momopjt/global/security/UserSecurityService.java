@@ -2,13 +2,14 @@ package com.momo.momopjt.global.security;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserRole;
 import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
-
+import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Map;
 import java.util.Optional;
 

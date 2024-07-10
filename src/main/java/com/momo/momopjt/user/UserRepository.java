@@ -21,11 +21,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u where u.userId = :userId and u.userSocial in :userSocials")
   Optional<User> findByUserIdAndUserSocialIn(@Param("userId") String userId, @Param("userSocials") Collection<Character> userSocials);
 
+  Optional<User> findByUserIdAndUserSocial(String userId, Character userSocial);
+
   boolean existsByUserId(String userId); // userId로 존재 여부 확인
   User findByUserId(String userId);
   User findByUserIdAndUserEmail(String userId, String userEmail);
   boolean existsByUserEmail(String userEmail);
-
   @EntityGraph(attributePaths = "roleSet")
   @Query("select u from User u where u.userId = :userId and u.userSocial = 'K'")
   Optional<User> getWithRoles(@Param("userId") String userId);
@@ -33,6 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @EntityGraph(attributePaths = "roleSet")
   Optional<User> findByUserEmail(String email);
 }
+
 
 
 

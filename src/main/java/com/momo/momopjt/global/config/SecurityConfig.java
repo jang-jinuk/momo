@@ -1,7 +1,10 @@
 package com.momo.momopjt.global.config;
 
+import com.momo.momopjt.global.security.CustomOAuth2UserService;
 import com.momo.momopjt.global.security.CustomUserDetailService;
 import com.momo.momopjt.global.security.handler.CustomSocialLoginSuccessHandler;
+import com.momo.momopjt.user.UserDTO;
+import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,19 +26,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 public class SecurityConfig {
 
-
   private final CustomUserDetailService customUserDetailService;
+  private final UserRepository userRepository; // UserRepository 주입
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean   //OAuth2로그인 관련해서 CustomSocialLoginSuccessHandler를 로그인 성공 처리시 이용하는 부분
-  public AuthenticationSuccessHandler authenticationSuccessHandler(){
-    return new CustomSocialLoginSuccessHandler(passwordEncoder());
+  @Bean   // OAuth2 로그인 관련해서 CustomSocialLoginSuccessHandler를 로그인 성공 처리 시 이용하는 부분
+  public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    return new CustomSocialLoginSuccessHandler(passwordEncoder(), userRepository); // 두 개의 인자 전달
   }
 
   @Bean
@@ -48,7 +53,6 @@ public class SecurityConfig {
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
             "/public/**", "/user/**","/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
-//        .anyRequest().authenticated()
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/user/home")
@@ -67,11 +71,13 @@ public class SecurityConfig {
         .and()
         .csrf().disable();
 
-    http.oauth2Login().loginPage("/user/login");
+    http.oauth2Login()
+        .loginPage("/user/login")
+        .defaultSuccessUrl("/user/home", true) // 로그인 성공 시 리다이렉트 할 URL
+        .successHandler(authenticationSuccessHandler()); // 사용자 정의 핸들러 추가
+
     return http.build();
   }
-
-
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
