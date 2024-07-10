@@ -50,8 +50,7 @@ public class SecurityConfig {
         .antMatchers("/admin/**").hasRole("ADMIN")
 //        .anyRequest().authenticated()
         .and()
-        .formLogin()
-        .loginPage("/user/login")
+        .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/user/home")
         .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
         .permitAll()
@@ -66,11 +65,9 @@ public class SecurityConfig {
         .exceptionHandling()
         .accessDeniedPage("/403")
         .and()
-        .oauth2Login() // OAuth2 로그인 설정
-        .loginPage("/user/login")
-        .and()
         .csrf().disable();
 
+    http.oauth2Login().loginPage("/user/login");
     return http.build();
   }
 
