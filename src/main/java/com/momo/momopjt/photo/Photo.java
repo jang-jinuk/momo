@@ -40,7 +40,7 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
-  @OneToMany(mappedBy = "photoUUID")
+  @OneToMany(mappedBy = "clubPhoto")
   private Set<Club> clubs = new LinkedHashSet<>();
 
 }

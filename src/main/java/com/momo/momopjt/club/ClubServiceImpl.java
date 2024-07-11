@@ -88,7 +88,7 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     Club club = result.orElseThrow();
-    Photo photo = club.getPhotoUUID();
+    Photo photo = club.getClubPhoto();
     String clubPhoto = photo.getPhotoUUID();
     log.info(clubPhoto);
     

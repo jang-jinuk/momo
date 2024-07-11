@@ -19,7 +19,7 @@ public class Club {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "club_photo", nullable = false)
-  private Photo photoUuid;
+  private Photo clubPhoto;
 
   @Column(name = "club_name", nullable = false, length = 50)
   private String clubName;
@@ -43,9 +43,9 @@ public class Club {
   private Instant clubCreateDate;
 
   //모임 정보 수정 메소드
-  public void change(Photo photoUUID, String clubCategory, String clubContent,
+  public void change(Photo clubPhoto, String clubCategory, String clubContent,
                      String clubArea, Integer clubMax) {
-    this.photoUUID = photoUUID;
+    this.clubPhoto = clubPhoto;
     this.clubCategory = clubCategory;
     this.clubContent = clubContent;
     this.clubArea = clubArea;
