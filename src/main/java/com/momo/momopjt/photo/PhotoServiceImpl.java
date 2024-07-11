@@ -1,5 +1,6 @@
 package com.momo.momopjt.photo;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import com.momo.momopjt.club.ClubRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Builder
@@ -19,8 +21,18 @@ public class PhotoServiceImpl implements PhotoService {
   private final PhotoRepository photoRepository;
   private final ClubRepository clubRepository;
 
+
+
+
+
   @Override
-  public Photo savePhoto(PhotoDTO photoDTO) {
+  public Photo savePhoto(MultipartFile file, PhotoDTO photoDTO) throws IOException {
+
+    byte[] fileBytes = file.getBytes();
+    log.info("----------------- [file.getBytes]-----------------", fileBytes);
+//    byte[] testBytes = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05};
+    photoDTO.setPhotoData(fileBytes);
+
     Photo photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
     log.info(photo);
@@ -28,6 +40,33 @@ public class PhotoServiceImpl implements PhotoService {
     log.info("------------------Photo saved--------------------");
     return photo;
   }
+
+  @Override
+  public Photo updatePhoto(MultipartFile file, PhotoDTO photoDTO) throws IOException {
+
+    byte[] fileBytes = file.getBytes();// 실제 작동시 이걸로
+    log.info("----------------- [file.getBytes]-----------------", fileBytes);
+    //이건 임시
+    byte[] testNewBytes = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+
+    Photo photo = photoRepository.findById(photoDTO.getPhotoUUID()).orElseThrow();
+    photo.setPhotoData(testNewBytes);
+    if ( photo != null ){
+
+      Photo newPhoto = modelMapper.map(photoDTO, Photo.class);
+      photoRepository.save(newPhoto);
+      return newPhoto;
+
+    } else {
+
+    return photo;
+
+    }
+
+  }
+
+
+
 
   @Override
   public Photo getPhoto(String photoUUID) {
@@ -43,5 +82,9 @@ public class PhotoServiceImpl implements PhotoService {
   public void deletePhoto(String photoUUID) {
     photoRepository.deleteById(photoUUID);
   }
+
+
+
+
 
 }
