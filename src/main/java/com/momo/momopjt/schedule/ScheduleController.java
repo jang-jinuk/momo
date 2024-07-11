@@ -29,7 +29,9 @@ public class ScheduleController {
 
   @Autowired
   ScheduleService scheduleService;
+  @Autowired
   private UserService userService;
+  @Autowired
   private UserAndScheduleService userAndScheduleService;
 
   //일정 생성 페이지 이동
@@ -72,7 +74,9 @@ public class ScheduleController {
     model.addAttribute("scheduleDTO", scheduleDTO);
     Schedule schedule = new Schedule();
     schedule.setScheduleNo(scheduleNo);
+    log.info("------------ [시도] ------------");
     List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
+    log.info("------------ [완료] ------------");
     model.addAttribute("userDTOList", userDTOList);
     return "/schedule/view";
   }
