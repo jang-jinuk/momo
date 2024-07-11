@@ -1,9 +1,12 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
+import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Controller
 @Log4j2
@@ -25,8 +29,8 @@ public class ScheduleController {
 
   @Autowired
   ScheduleService scheduleService;
-  @Autowired
   private UserService userService;
+  private UserAndScheduleService userAndScheduleService;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
@@ -66,6 +70,10 @@ public class ScheduleController {
   public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
     model.addAttribute("scheduleDTO", scheduleDTO);
+    Schedule schedule = new Schedule();
+    schedule.setScheduleNo(scheduleNo);
+    List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
+    model.addAttribute("userDTOList", userDTOList);
     return "/schedule/view";
   }
 }
