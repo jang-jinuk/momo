@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="en"
         xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
@@ -12,8 +11,8 @@
               content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--                 integrity="sha256-H+K7U5CnXl1h5zOL+2aA8p6Znxl8HMafDHEerFF2x0w="
-                crossorigin="anonymous" -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c49c599e31e3ae0bf66bc45a2d2cf5d7"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script th:inline="javascript">
 
@@ -57,8 +56,39 @@
              }
             return true;
         }
-            // 추가 유효성 검사 (선택 사항)
-            // 예시: 카테고리, 주소, MBTI 등
+        // Kakao Maps API 사용하여 지도 생성
+        // Kakao Maps API 사용하여 지도 생성 및 주소 좌표 변환
+        function initMap() {
+            const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+            const mapOption = {
+                center: new kakao.maps.LatLng(37.5665, 126.9780), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+            const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+            const geocoder = new kakao.maps.services.Geocoder(); // 주소-좌표 변환 객체를 생성합니다
+
+            // 주소 검색 버튼 클릭 시
+            document.getElementById('searchAddress').addEventListener('click', function() {
+                const address = document.getElementById('address').value;
+                geocoder.addressSearch(address, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        map.setCenter(coords); // 지도의 중심을 검색된 좌표로 이동합니다
+
+                        // 좌표를 폼에 저장합니다
+                        document.getElementById('lat').value = result[0].y;
+                        document.getElementById('lng').value = result[0].x;
+                    } else {
+                        alert('주소 검색에 실패했습니다.');
+                    }
+                });
+            });
+        }
+
+        // 페이지 로드 시 지도 초기화
+        $(document).ready(function() {
+            initMap();
+        });
     </script>
 </head>
 <body>
@@ -93,8 +123,9 @@
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">닉네임</span>
-                            <input type="text" name="userNickname" class="form-control" required>
+                            <input type="text" name="userNickname" class="form-control" id="userNickname" required>
                         </div>
+
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">성별</span>
@@ -129,7 +160,12 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">주소</span>
                             <input type="text" name="userAddress" class="form-control">
+                            <button type="button" id="searchAddress" class="btn btn-secondary">주소 검색</button>
                         </div>
+                        <!-- 숨겨진 필드에 좌표 저장 -->
+                        <input type="hidden" id="lat" name="lat">
+                        <input type="hidden" id="lng" name="lng">
+                        <div id="map" style="width:100%;height:350px;"></div> <!-- 지도를 표시할 div -->
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">MBTI</span>
