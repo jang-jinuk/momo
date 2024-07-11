@@ -24,12 +24,34 @@
                         <p th:text="${scheduleDTO.schedulePlace}"></p>
                     </div>
                     <div class="col-12">
-                        <p th:text="${scheduleDTO.scheduleStartDate}"></p>
+                        <p th:text="${#dates.format(scheduleDTO.scheduleStartDate, 'yyyy년 MM월 dd일 HH:mm')}"></p>
                     </div>
                     <div class="col-12">
                     </div>
                 </div>
             </div>
+        </div>
+        <h2 style="display: inline">참여 중인 맴버</h2>
+        <span th:text="|${scheduleDTO.scheduleParticipants} / ${scheduleDTO.scheduleMax}|"></span>
+        <div class="row">
+            <table>
+                <tr>
+                    <th>
+                        사진
+                    </th>
+                    <th>
+                        닉네임
+                    </th>
+                    <th>
+                        거주지
+                    </th>
+                </tr>
+                <tr th:each="user : ${userDTOList}">
+                    <td>사진 자리</td>
+                    <td th:text="${user.userNickname}"></td>
+                    <td th:text="${user.userAddress}"></td>
+                </tr>
+            </table>
         </div>
         <div class="row">
             <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" readonly></textarea>
