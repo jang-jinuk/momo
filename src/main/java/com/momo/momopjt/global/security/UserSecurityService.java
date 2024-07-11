@@ -2,16 +2,15 @@ package com.momo.momopjt.global.security;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
-import com.momo.momopjt.user.UserRole;
 import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
-import org.springframework.dao.DataIntegrityViolationException;
 import java.util.Map;
 import java.util.Optional;
+import com.momo.momopjt.user.UserRole;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class UserSecurityService {
           .userSocial(userSocial)
           .build();
 
-      // user.addRole(UserRole.USER);
+      user.addRole(UserRole.USER);
       userRepository.save(user);
     } else {
       // 이미 존재하는 사용자의 경우 해당 정보를 가져옴

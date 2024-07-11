@@ -51,11 +51,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         switch (provider) {
             case "kakao":
                 email = getKakaoEmail(oAuth2User.getAttributes());
-                id = getKakaoId(oAuth2User.getAttributes());
+                id = getKakaoId(oAuth2User);
                 break;
             case "google":
                 email = oAuth2User.getAttribute("email");
                 id = oAuth2User.getAttribute("sub");
+                break;
+            case "naver":
+                email = getNaverEmail(oAuth2User.getAttributes());
+                id = getNaverId(oAuth2User);
                 break;
             default:
                 throw new OAuth2AuthenticationException("Unknown provider: " + provider);
@@ -94,11 +98,34 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return null;
     }
 
-    private String getKakaoId(Map<String, Object> paramMap) {
+    private String getKakaoId(OAuth2User oAuth2User) {
         log.info("KAKAO ID -------------------------");
 
-        String id = String.valueOf(paramMap.get("id"));
+        String id = oAuth2User.getAttribute("id");
         log.info("Kakao ID: {}", id);
+        return id;
+    }
+
+    private String getNaverEmail(Map<String, Object> paramMap) {
+        log.info("NAVER -------------------------");
+
+        Object response = paramMap.get("response");
+        log.info("Naver Response: {}", response);
+
+        if (response instanceof Map) {
+            Map<String, Object> responseMap = (Map<String, Object>) response;
+            String email = (String) responseMap.get("email");
+            log.info("Naver Email: {}", email);
+            return email;
+        }
+        return null;
+    }
+
+    private String getNaverId(OAuth2User oAuth2User) {
+        log.info("NAVER ID -------------------------");
+
+        String id = oAuth2User.getAttribute("id");
+        log.info("Naver ID: {}", id);
         return id;
     }
 }

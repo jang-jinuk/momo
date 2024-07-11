@@ -2,6 +2,7 @@ package com.momo.momopjt.global.config;
 
 import com.momo.momopjt.global.security.CustomOAuth2UserService;
 import com.momo.momopjt.global.security.CustomUserDetailService;
+import com.momo.momopjt.global.security.NaverOAuth2UserInfo;
 import com.momo.momopjt.global.security.handler.CustomSocialLoginSuccessHandler;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserRepository;
@@ -15,11 +16,20 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.Collections;
+import java.util.Map;
 
 
 @Log4j2
@@ -30,16 +40,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
   private final CustomUserDetailService customUserDetailService;
-  private final UserRepository userRepository; // UserRepository 주입
+  private final UserRepository userRepository;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
-  @Bean   // OAuth2 로그인 관련해서 CustomSocialLoginSuccessHandler를 로그인 성공 처리 시 이용하는 부분
+  @Bean
   public AuthenticationSuccessHandler authenticationSuccessHandler() {
-    return new CustomSocialLoginSuccessHandler(passwordEncoder(), userRepository); // 두 개의 인자 전달
+    return new CustomSocialLoginSuccessHandler(passwordEncoder(), userRepository);
   }
 
   @Bean
@@ -50,13 +60,12 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
-            "/public/**", "/user/**","/find/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/user/home")
-        .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
+        .successHandler(authenticationSuccessHandler())
         .permitAll()
         .and()
         .logout()
@@ -73,8 +82,10 @@ public class SecurityConfig {
 
     http.oauth2Login()
         .loginPage("/user/login")
-        .defaultSuccessUrl("/user/home", true) // 로그인 성공 시 리다이렉트 할 URL
-        .successHandler(authenticationSuccessHandler()); // 사용자 정의 핸들러 추가
+        .defaultSuccessUrl("/user/home", true)
+        .successHandler(authenticationSuccessHandler())
+        .userInfoEndpoint()
+        .userService(oAuth2UserService());
 
     return http.build();
   }
@@ -83,8 +94,39 @@ public class SecurityConfig {
   public WebSecurityCustomizer webSecurityCustomizer() {
     log.info("------------web configure----------");
 
-    // 정적 리소스 무시
     return (web) -> web.ignoring()
         .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+  }
+
+  @Bean
+  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+    DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+
+    return request -> {
+      OAuth2User oAuth2User = delegate.loadUser(request);
+
+      String registrationId = request.getClientRegistration().getRegistrationId();
+      String userNameAttributeName = request.getClientRegistration().getProviderDetails()
+          .getUserInfoEndpoint().getUserNameAttributeName();
+
+      Map<String, Object> attributes = oAuth2User.getAttributes();
+      Map<String, Object> additionalParameters = request.getAdditionalParameters();
+
+      // 사용자 정보를 파싱하는 로직을 추가합니다.
+      NaverOAuth2UserInfo userInfo = new NaverOAuth2UserInfo(attributes);
+
+      // 필요한 사용자 정보를 추출합니다.
+      String userId = userInfo.getId();
+      String userName = userInfo.getName();
+      String userEmail = userInfo.getEmail();
+
+      // 사용자 정보를 이용하여 데이터베이스에 사용자 정보를 저장하거나 갱신하는 로직을 추가할 수 있습니다.
+
+      return new DefaultOAuth2User(
+          Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+          attributes,
+          userNameAttributeName
+      );
+    };
   }
 }

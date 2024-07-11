@@ -33,11 +33,6 @@ public class UserSecurityDTO implements UserDetails {
         this.authorities = authorities;
     }
 
-    // 만약 소셜 로그인 정보를 반환하는 커스텀 메서드가 필요하다면, 별도로 정의합니다.
-    public Map<String,Object> getAttributes(){
-        return this.getProps();
-    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

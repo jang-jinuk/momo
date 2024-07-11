@@ -31,6 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u where u.userId = :userId and u.userSocial = 'K'")
   Optional<User> getWithRoles(@Param("userId") String userId);
 
+  boolean existsByUserNickname(String userNickname);
+
   @EntityGraph(attributePaths = "roleSet")
   Optional<User> findByUserEmail(String email);
 }

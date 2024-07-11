@@ -17,28 +17,22 @@ import java.time.LocalDate;
 public class UserDTO {
 
     private Long userNo;
-    //@NotBlank
     private String userId;
-    //@NotBlank
     private String userPw;
     @Email
-    //@NotBlank
     private String userEmail;
-    //@NotBlank
     private String userNickname;
-    //@NotNull(message = "Gender is required")
     private Character userGender;
     private Integer userAge;
-    //    @NotNull(message = "Birth date is required")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate userBirth;
     private String  userCategory;
     private String userAddress;
     private String userMBTI;
-    private Character userState;
+    private Character userState = '0';
     private Character userSocial='M';
-    private String userPhoto;
-    private Integer userLikeNumber;
+    private String userPhoto = ""; // 기본값 설정
+    private Integer userLikeNumber= 0; // 기본값 설정
     private Instant userCreateDate;
     private Instant userModifyDate;
 }

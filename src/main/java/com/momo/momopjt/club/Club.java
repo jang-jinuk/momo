@@ -1,8 +1,10 @@
 package com.momo.momopjt.club;
 
 
+import com.momo.momopjt.article.Article;
 import com.momo.momopjt.photo.Photo;
 import java.time.Instant;
+import java.util.List;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +44,8 @@ public class Club {
   @Column(name = "club_create_date", nullable = false)
   private Instant clubCreateDate;
 
+//  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//  private List<Article> articles;
   //모임 정보 수정 메소드
   public void change(Photo photoUuid, String clubCategory, String clubContent,
                      String clubArea, Integer clubMax) {
