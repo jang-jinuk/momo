@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule, Long> {
@@ -18,4 +19,6 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
   @Query("DELETE FROM UserAndSchedule WHERE scheduleNo = :scheduleNo")
   void deleteAllParticipant(@Param("scheduleNo") Schedule scheduleNo);
 
+  @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo")
+  List<UserAndSchedule> findByAllParticipants(@Param("scheduleNo") Schedule scheduleNo);
 }
