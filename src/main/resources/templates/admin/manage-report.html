@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신고 목록 페이지</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>신고 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>신고한자</th>
+        <th>신고당한자</th>
+        <th>신고자 닉네임(미구현)</th>
+        <th>죄목</th>
+        <th>날짜</th>
+        <th>정의의 철퇴(미구현)</th>
+        <th>용서?(미구현)</th>
+    </tr>
+    </thead>
+    <tbody id="reportTableBody">
+    <tr>
+
+    <tr th:each="report : ${reportDTOs}">
+        <td th:text="${report.reportNo}">Report No</td>
+        <td th:text="${report.reporterNo}">Report Name</td>
+        <td th:text="${report.reportedNo}">Report No</td>
+        <td>으아아아</td>
+        <td th:text="${report.reportCategory}">Report No</td>
+        <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd\'T\'HH:mm:ss')}">ReportDate</td>
+        <td>깡!</td>
+        <td>지우기</td>
+
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    var tableBody = document.getElementById('reportTableBody');
+
+    reports.forEach(function(report) {
+        var tr = document.createElement('tr');
+
+        var tdId = document.createElement('td');
+        tdId.textContent = report.id;
+        tr.appendChild(tdId);
+
+        var tdReporter = document.createElement('td');
+        tdReporter.textContent = report.reporter;
+        tr.appendChild(tdReporter);
+
+        var tdReported = document.createElement('td');
+        tdReported.textContent = report.reported;
+        tr.appendChild(tdReported);
+
+        // var tduserNickname = document.createElement('td');
+        // tduserNickname.textContent = report.userNickname;
+        // tr.appendChild(tduserNickname);
+
+        var tdcategory = document.createElement('td');
+        tdcategory.textContent = report.category;
+        tr.appendChild(tdcategory);
+
+        var tdDate = document.createElement('td');
+        tdDate.textContent = report.date;
+        tr.appendChild(tdDate);
+
+        var tdView = document.createElement('td');
+        var viewButton = document.createElement('button');
+        viewButton.textContent = '정지시키기';
+        viewButton.className = 'btn';
+        viewButton.addEventListener('click', function() {
+            alert('뚝배기!: ' + report.title);
+        });
+        tdView.appendChild(viewButton);
+        tr.appendChild(tdView);
+
+        var tdDelete = document.createElement('td');
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = '삭제';
+        deleteButton.className = 'btn';
+        deleteButton.addEventListener('click', function() {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                tableBody.removeChild(tr);
+            }
+        });
+        tdDelete.appendChild(deleteButton);
+        tr.appendChild(tdDelete);
+
+        tableBody.appendChild(tr);
+    });
+</script>
+</body>
+</html>

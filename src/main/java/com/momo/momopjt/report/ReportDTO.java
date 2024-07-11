@@ -14,7 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ReportDTO {
 
-  private Long id;
+  private Long reportNo;
 
   private User reporterNo;
 
