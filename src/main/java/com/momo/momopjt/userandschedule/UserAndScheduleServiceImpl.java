@@ -56,4 +56,17 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
     }
     return userDTOs;
   }
+
+  //일정에 참석한 회원인지 확인하는 기능
+  @Override
+  public Boolean isParticipanting(UserAndScheduleDTO userAndScheduleDTO) {
+    UserAndSchedule userAndSchedule = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
+        userAndScheduleDTO.getUserNo());
+
+    if (userAndSchedule == null) {
+      return false;
+    }
+
+    return true;
+  }
 }
