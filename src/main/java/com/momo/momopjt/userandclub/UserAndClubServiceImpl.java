@@ -67,7 +67,9 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   @Override
   public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
     List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
-    List<UserAndClubDTO> joinList = modelMapper.map(userAndClubs, List.class);
+    List<UserAndClubDTO> joinList = userAndClubs.stream()
+        .map(userAndClub -> modelMapper.map(userAndClub, UserAndClubDTO.class))
+        .collect(Collectors.toList());
     return joinList;
   }
 
