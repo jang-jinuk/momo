@@ -1,5 +1,6 @@
 package com.momo.momopjt.report;
 
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,12 +27,22 @@ public class ReportServiceImpl implements ReportService{
     //Report 를 받아와서 db에 저장한다.
     reportRepository.save(report);
   }
-  //조회
+  //자신 유저 아이디로 조회
+  /*@Override
+  public List<ReportDTO> readReport(ReportDTO reporterNo) {
+    Optional<Report> userport = reportRepository.findById(Report);
+    Report userports = userport.orElseThrow();
+    List<Report> listports = userports;
+    return listports.stream()
+        .map(report -> modelMapper.map(listports, ReportDTO.class))
+        .collect(Collectors.toList());
+  }*/
   @Override
-  public ReportDTO readReport(Long reportNo) {
-    Report report = reportRepository.findById(reportNo).orElseThrow();
-    ReportDTO reportDTO = modelMapper.map(report, ReportDTO.class);
-    return reportDTO;
+  public List<ReportDTO> readReport(User reporterNo) {
+    List<Report> reports = reportRepository.myReport(reporterNo);
+    return reports.stream()
+        .map(report -> modelMapper.map(report, ReportDTO.class))
+        .collect(Collectors.toList());
   }
   //모두 조회
   @Override

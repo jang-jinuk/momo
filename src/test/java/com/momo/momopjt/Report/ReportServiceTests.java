@@ -1,8 +1,10 @@
 package com.momo.momopjt.Report;
 
+import com.momo.momopjt.report.Report;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportRepository;
 import com.momo.momopjt.report.ReportService;
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -28,26 +31,30 @@ public class ReportServiceTests {
   @Autowired
   private ReportRepository reportRepository;
 
-//    신고했을때 DB에 추가
-//  @Test
-//  void reportCreateTest() {
-//    User user1 = userRepository.findById(1L).orElseThrow();
-//    User user2 = userRepository.findById(2L).orElseThrow();
-//// User 객체 생성 및 데이터베이스에 저장
-//    log.info("----------------- [news create test]-----------------");
-//    ReportDTO reportDTO = ReportDTO.builder()
-//        .reportNo(434L)
-//        .reporterNo(user1)
-//        .reportedNo(user2)
-//        .reportCategory("teeee")
-//        .reportDate(Instant.now())
-//        .reportResult('0')
-//        .build();
-//
+  //    신고했을때 DB에 추가
+  @Test
+  void reportCreateTest() {
+    User user1 = userRepository.findById(3L).orElseThrow();
+    User user2 = userRepository.findById(4L).orElseThrow();
+// User 객체 생성 및 데이터베이스에 저장
+
+    for(int i=0; i<50; i++) {
+      log.info("----------------- [news create test]-----------------");
+      Report report = new Report();
+      report.setReportNo(1L);
+      report.setReportCategory("bug"+i);
+      report.setReportDate(Instant.now());
+      report.setReportResult('1');
+      report.setReportedNo(user1);
+      report.setReporterNo(user2);
+      reportRepository.save(report);
+    }
+    log.info("...... [complate]..........KSW");
+
 //    Report report = modelMapper.map(reportDTO, Report.class);
 //    reportService.addReport(report); // ReportService 를 사용하여 Report 추가
 //  }
-  //신고내역 1개 조회
+    //신고내역 1개 조회
 //  @Test
 //  void reportReadTest(){
 //    log.info("----------------- [report read test]-----------------");
@@ -57,7 +64,7 @@ public class ReportServiceTests {
 //
 //    log.info("...... [07-10-17:23:10]..........KSW");
 //  }
-  //신고 수정(상태 수정)
+    //신고 수정(상태 수정)
 //  @Test
 //  void reportUpdateTest() {
 //    log.info("----------------- [report update test]-----------------");
@@ -97,4 +104,11 @@ public class ReportServiceTests {
 //        List<ReportDTO> repotr = reportService.readAllReport();
 //        log.info(repotr);
 //  }
+  }// reportCreateTest()
+
+  //신고한사람이 자기가 신고한 내역만 조회되게 TEST
+  @Test
+  void reportOnlyMy(){
+
   }
+}

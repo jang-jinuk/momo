@@ -20,12 +20,16 @@ public class UserController {
   @Autowired
   private ReportService reportService;
   //나의 신고 페이지
+
   @GetMapping("/my-report")
   public String report(Model model) {
     log.info("...... [get profile/my-report]..........KSW");
-    // 모든 리포트를 조회하여 모델에 추가
-    List<ReportDTO> sandReport = reportService.readAllReport();
-    model.addAttribute("reportDTO", sandReport);
+    // ID를 조회하여 모델에 추가
+    User user = new User();
+    user.setUserNo(4L);
+    List<ReportDTO> sandIdReport = reportService.readReport(user);
+    model.addAttribute("reportDTO", sandIdReport);
+    log.info("...... [aaaa]..........KSW");
     return "/user/profile/my-report";  // 뷰 반환
   }
 }

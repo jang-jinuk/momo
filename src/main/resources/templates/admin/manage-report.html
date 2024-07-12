@@ -41,7 +41,6 @@
     <tbody id="reportTableBody">
 
     <tr th:each="report : ${reportDTO}">
-
         <td th:text="${report.reportNo}"></td>
         <td th:text="${report.reporterNo.getUserId()}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
