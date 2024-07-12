@@ -54,8 +54,12 @@
             </table>
         </div>
         <div class="row">
-            <button class="btn btn-primary" th:onclick="|location.href='@{/schedule/join}'|">참가</button>
-            <button class="btn btn-danger" th:onclick="|location.href='@{/schedule/leave}'|">취소</button>
+            <div th:unless="${isParticipant}">
+                <button class="btn btn-primary join" th:onclick="|location.href='@{/schedule/join}'|">참가</button>
+            </div>
+            <div th:if="${isParticipant}">
+                <button class="btn btn-danger leave" th:onclick="|location.href='@{/schedule/leave}'|">취소</button>
+            </div>
         </div>
         <div class="row">
             <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" readonly></textarea>
