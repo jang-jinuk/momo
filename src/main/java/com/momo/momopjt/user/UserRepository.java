@@ -31,19 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("select u from User u where u.userId = :userId and u.userSocial = 'K'")
   Optional<User> getWithRoles(@Param("userId") String userId);
 
-  boolean existsByUserNickname(String userNickname);
 
   @EntityGraph(attributePaths = "roleSet")
   Optional<User> findByUserEmail(String email);
 }
-
-
-
-
-
-//  @Modifying
-//  @Transactional
-//  @Query("update User u set u.userPw =:userPw where u.userId =:userId")
-//  void updatePassword(@Param("userPw") String password, @Param("userId") String userId);
-
 

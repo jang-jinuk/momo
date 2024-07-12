@@ -18,6 +18,14 @@ public class ArticleServiceImpl implements ArticleService {
   @Autowired
   private ClubRepository clubRepository;
 
+  // 새로운 후기글을 생성하는 메서드
+  @Override
+  public ArticleDTO createArticle(ArticleDTO articleDTO) {
+    Article article = convertDTOToEntity(articleDTO);
+    Article savedArticle = articleRepository.save(article);
+    return convertEntityToDTO(savedArticle);
+  }
+
   // 모든 후기글을 가져오는 메서드
   @Override
   public List<ArticleDTO> getAllArticles() {
@@ -34,13 +42,6 @@ public class ArticleServiceImpl implements ArticleService {
         .orElseThrow(() -> new RuntimeException("Article not found"));
   }
 
-  // 새로운 후기글을 생성하는 메서드
-  @Override
-  public ArticleDTO createArticle(ArticleDTO articleDTO) {
-    Article article = convertDTOToEntity(articleDTO);
-    Article savedArticle = articleRepository.save(article);
-    return convertEntityToDTO(savedArticle);
-  }
 
   // 기존 후기글을 업데이트하는 메서드
   @Override
