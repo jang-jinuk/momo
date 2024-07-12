@@ -26,7 +26,6 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ScheduleRepository scheduleRepository;
   private final ModelMapper modelMapper;
   private final UserAndScheduleService userAndScheduleService;
-  private final UserAndScheduleRepository userAndScheduleRepository;
 
   //일정 생성
   @Override
@@ -99,10 +98,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     log.info("------------ [참가 가능 여부 확인]------------");
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
-    UserAndSchedule participant = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
-        userAndScheduleDTO.getUserNo());
 
-    if (participant != null) {
+    if (userAndScheduleService.isParticipanting(userAndScheduleDTO)) {
       return "이미 참가한 일정입니다.";
     } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);
@@ -133,10 +130,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //참석하지 않은 일정인지 확인
     userAndScheduleDTO.setScheduleNo(schedule);
-    UserAndSchedule participant = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
-        userAndScheduleDTO.getUserNo());
 
-    if (participant == null) {
+    if (!userAndScheduleService.isParticipanting(userAndScheduleDTO)) {
       return "참석하지 않은 일정입니다.";
     } else {
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
