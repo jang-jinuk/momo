@@ -21,4 +21,7 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
 
   @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo")
   List<UserAndSchedule> findByAllParticipants(@Param("scheduleNo") Schedule scheduleNo);
+
+  @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo AND us.userNo = :userNo")
+  UserAndSchedule findByParticipants(@Param("scheduleNo") Schedule scheduleNo, @Param("userNo") User userNo);
 }
