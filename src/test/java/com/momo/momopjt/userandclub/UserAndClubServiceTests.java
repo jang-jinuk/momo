@@ -22,7 +22,7 @@ public class UserAndClubServiceTests {
   @Test
   public void joinClubTest() {
     User user = new User();
-    user.setUserNo(5L);
+    user.setUserNo(4L);
 
     Club club = new Club();
     club.setClubNo(3L);

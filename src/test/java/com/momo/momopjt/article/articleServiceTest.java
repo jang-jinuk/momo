@@ -8,16 +8,13 @@ import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.time.Instant;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,14 +26,7 @@ public class articleServiceTest {
   private ArticleService articleService;
 
   @Autowired
-  private ArticleRepository articleRepository;
-
-  @Autowired
   private ClubService clubService;
-
-  @Autowired
-  private ClubRepository clubRepository;
-
   private Long testClubId;
 
 
