@@ -73,21 +73,39 @@ public class ScheduleController {
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
   public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model, RedirectAttributes redirectAttributes) {
+    //일정 조회
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    model.addAttribute("scheduleDTO", scheduleDTO);
+
+    //참가인원 조회
     Schedule schedule = new Schedule();
     schedule.setScheduleNo(scheduleNo);
-    log.info("------------ [시도] ------------");
     List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
-    log.info("------------ [완료] ------------");
-    model.addAttribute("userDTOList", userDTOList);
-    session.setAttribute("scheduleNo", scheduleNo);
+
+    //현재 로그인된 회원이 일정에 참석했는지 확인
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setScheduleNo(schedule);
+
+    //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    userAndScheduleDTO.setUserNo(user);
+
+    Boolean isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
+
+    model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
+    model.addAttribute("userDTOList", userDTOList); //참가자 정보
+    model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
+    session.setAttribute("scheduleNo", scheduleNo); //일정 번호
+
     return "/schedule/view";
   }
 
   @GetMapping("/join")
   public String attendSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+
+    //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -104,6 +122,8 @@ public class ScheduleController {
   @GetMapping("/leave")
   public String absentSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+
+    //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
