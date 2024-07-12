@@ -35,13 +35,11 @@ public class ReportServiceImpl implements ReportService{
   public List<ReportDTO> readAllReport() {
     // 모든 리포트를 조회하여 리스트에 저장
     List<Report> reports = reportRepository.findAll();
-
     // Report 리스트를 ReportDTO 리스트로 변환
     return reports.stream()
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
-
   //수정
   @Override
   public void updateReport(ReportDTO reportDTO) {
@@ -54,7 +52,7 @@ public class ReportServiceImpl implements ReportService{
   }
 // 삭제
 @Override
-public void deleteReport(Long id) {
-  reportRepository.deleteById(id);
+public void deleteReport(Long reportNo) {
+  reportRepository.deleteById(reportNo);
 }
 }

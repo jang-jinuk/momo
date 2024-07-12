@@ -28,37 +28,42 @@
 </head>
 <body>
 <h1>신고 목록</h1>
+
 <table>
     <thead>
     <tr>
+
         <th>번호</th>
         <th>신고한자</th>
         <th>신고당한자</th>
-        <th>신고자 닉네임(미구현)</th>
+        <th>신고당한자 닉네임</th>
         <th>죄목</th>
         <th>날짜</th>
-        <th>정의의 철퇴(미구현)</th>
-        <th>용서?(미구현)</th>
+        <th>정의의 철퇴(현재 삭제처리됨)</th>
+        <th>면죄</th>
     </tr>
     </thead>
     <tbody id="reportTableBody">
-    <tr>
 
-    <tr th:each="report : ${reportDTOs}">
-        <td th:text="${report.reportNo}">Report No</td>
-        <td th:text="${report.reporterNo}">Report Name</td>
-        <td th:text="${report.reportedNo}">Report No</td>
-        <td>으아아아</td>
-        <td th:text="${report.reportCategory}">Report No</td>
-        <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd\'T\'HH:mm:ss')}">ReportDate</td>
-        <td>깡!</td>
-        <td>지우기</td>
-
+    <tr th:each="report : ${reportDTO}">
+        <form th:action="@{/admin/delete}" method="post">
+        <td th:text="${report.reportNo}"></td>
+        <td th:text="${report.reporterNo.getUserId()}"></td>
+        <td th:text="${report.reportedNo.getUserId()}"></td>
+        <td th:text="${report.reportedNo.getUserNickname()}"></td>
+        <td th:text="${report.reportCategory}"></td>
+        <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
+        <td><input type="hidden" name="reportResult" th:value="${report.reportResult}">
+            <button type="submit" th:onclick="@{/admin/manage-report}">깡!</button></td>
+        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
+            <button type="submit" th:onclick="@{/admin/manage-report}">석방</button></td>
+        </form>
     </tr>
     </tbody>
 </table>
 
 <script>
+    <!-- /*
     var tableBody = document.getElementById('reportTableBody');
 
     reports.forEach(function(report) {
@@ -76,9 +81,9 @@
         tdReported.textContent = report.reported;
         tr.appendChild(tdReported);
 
-        // var tduserNickname = document.createElement('td');
-        // tduserNickname.textContent = report.userNickname;
-        // tr.appendChild(tduserNickname);
+        var tduserNickname = document.createElement('td');
+        tduserNickname.textContent = report.userNickname;
+        tr.appendChild(tduserNickname);
 
         var tdcategory = document.createElement('td');
         tdcategory.textContent = report.category;
@@ -112,6 +117,7 @@
 
         tableBody.appendChild(tr);
     });
+  */  -->
 </script>
 </body>
 </html>
