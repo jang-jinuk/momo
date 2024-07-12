@@ -86,7 +86,7 @@ public class ScheduleController {
   }
 
   @GetMapping("/attend")
-  public String addParticipant(Model model, HttpSession session) {
+  public String attendSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
@@ -100,5 +100,4 @@ public class ScheduleController {
 
     return "redirect:/schedule/" + scheduleNo;
   }
-
 }
