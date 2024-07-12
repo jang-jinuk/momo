@@ -131,8 +131,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
 
+    //참석하지 않은 일정인지 확인
+    userAndScheduleDTO.setScheduleNo(schedule);
     UserAndSchedule participant = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
         userAndScheduleDTO.getUserNo());
+
     if (participant == null) {
       return "참석하지 않은 일정입니다.";
     } else {
