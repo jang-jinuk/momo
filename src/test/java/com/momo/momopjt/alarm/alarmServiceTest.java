@@ -3,6 +3,7 @@ package com.momo.momopjt.alarm;
 
 import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ public class alarmServiceTest {
 
   private Alarm alarm;
   private AlarmDTO alarmDTO;
+
+  @Autowired
+  private UserRepository userRepository;
 
 
   @BeforeEach
@@ -104,10 +108,10 @@ public class alarmServiceTest {
     updatedAlarmDTO.setAlarmContent("Updated Content");
 
     // When
-    alarmService.updateAlarm(alarmNo, updatedAlarmDTO);
+    alarmService.updateAlarm(updatedAlarmDTO);
 
     // Then
-    Optional<Alarm> updatedAlarmOptional = alarmRepository.findById(alarmNo);
+    Optional<Alarm> updatedAlarmOptional = alarmRepository.findById(alarmDTO.getAlarmNo());
     assertTrue(updatedAlarmOptional.isPresent(), "Updated Alarm should be present");
 
 
@@ -118,6 +122,20 @@ public class alarmServiceTest {
 
     Long alarmNo = 13L;
     alarmService.deleteAlarm(alarmNo);
+  }
+
+  @Test
+  void findbyusernotest(){
+    User user = User.builder().userNo(3L).build();
+    for (Alarm alarm : alarmRepository.findAlarmByUserNo(user)) {
+      log.info(alarm.getAlarmContent());
+    }
+
+  }
+
+  @Test
+  void isReadTest(){
+    alarmService.isReadUpdate(userRepository.findById(3L).orElseThrow(), 16L);
   }
 }
 

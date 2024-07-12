@@ -1,6 +1,7 @@
 package com.momo.momopjt.alarm;
 
 import com.momo.momopjt.user.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@Log4j2
 public class AlarmServiceImpl implements AlarmService {
 
   private final AlarmRepository alarmRepository;
@@ -56,8 +58,8 @@ public class AlarmServiceImpl implements AlarmService {
   }
 
   @Override        //알람 업데이트
-  public void updateAlarm(Long alarmNo, AlarmDTO alarmDTO) {
-    Optional<Alarm> optionalAlarm = alarmRepository.findById(alarmNo);
+  public void updateAlarm(AlarmDTO alarmDTO) {
+    Optional<Alarm> optionalAlarm = alarmRepository.findById(alarmDTO.getAlarmNo());
     if (optionalAlarm.isPresent()) {
       Alarm alarm = optionalAlarm.get();
       alarm.setIsRead(alarmDTO.getIsRead());
@@ -72,6 +74,25 @@ public class AlarmServiceImpl implements AlarmService {
   public void deleteAlarm(Long alarmNo) {
     alarmRepository.deleteById(alarmNo);
   }
+
+  @Override
+  public void isReadUpdate(User user,Long alarmNo) {
+    log.info("-------- [isreadupdate]-------you");
+    List<Alarm> alarmList = alarmRepository.findAlarmByUserNo(user);
+
+    for (Alarm alarm : alarmList) {
+      if (alarmNo.equals(alarm.getAlarmNo())){
+        AlarmDTO alarmDTO = getAlarmById(alarmNo).orElseThrow();
+        alarmDTO.setIsRead('1');
+        updateAlarm(alarmDTO);
+        log.info("-------- [read update success]-------you");
+      } else {
+        log.info("-------- [alarm read update Fail]-------you");
+      }
+
+    }
+  }
+
   //Alarm 엔티티 객체를 AlarmDTO 객체로 변환
   private AlarmDTO convertToDTO(Alarm alarm) {
     AlarmDTO dto = new AlarmDTO();
