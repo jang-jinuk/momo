@@ -2,61 +2,41 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>신고페이지</title>
+    <title>나의 신고 페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-<header class="bg-light py-2">
-    <div class="container d-flex justify-content-between align-items-center">
-        <h6 th:text="${logoText}">momo</h6>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-dark">회원관리</button>
-            <button type="button" class="btn btn-light">게시판관리</button>
-            <button type="button" class="btn btn-danger">신고관리</button>
-        </div>
-    </div>
+<header>
+    <h6 th:text="${logoText}">momo</h6>
 </header>
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
-        <a class="navbar-brand">신고된 회원 관리</a>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        <a class="navbar-brand">내가 신고한 내역</a>
     </div>
 </nav>
 <table class="container">
     <thead>
     <tr>
-        <th>번호</th>
-        <th>신고한자</th>
-        <th>신고당한자</th>
-        <th>신고당한자 닉네임</th>
-        <th>죄목</th>
-        <th>날짜</th>
-        <th>정의의 철퇴(미구현)</th>
-        <th>면죄</th>
+        <th scope="col">신고한놈</th>
+        <th scope="col">신고한놈의 이름</th>
+        <th scope="col">사유</th>
+        <th scope="col">신고일</th>
+        <th scope="col">처리결과</th>
     </tr>
     </thead>
-    <tbody id="reportTableBody">
-
+    <tbody>
+    <tr>
     <tr th:each="report : ${reportDTO}">
-
-        <td th:text="${report.reportNo}"></td>
-        <td th:text="${report.reporterNo.getUserId()}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
         <td th:text="${report.reportedNo.getUserNickname()}"></td>
         <td th:text="${report.reportCategory}"></td>
         <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
-        <td><button onclick='alert("클릭!")'>깡!</button></td>
-        <form th:action="@{/admin/delete}" method="post">
-        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
-        <button type="submit" th:onclick="@{/admin/manage-report}">삭제</button></td>
-        </form>
+        <td th:text="${report.reportResult}"></td>
     </tr>
     </tbody>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </table>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
         <li class="page-item disabled">

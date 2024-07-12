@@ -1,5 +1,6 @@
 package com.momo.momopjt.report;
 
+import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService{
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
+  private final UserRepository userRepository;
 
   //생성
   @Override
@@ -49,6 +51,7 @@ public class ReportServiceImpl implements ReportService{
     } else {
       log.info("...... [업데이트 존재 x ]..........KSW");
     }
+//    userRepository.findById(userid).update()
   }
 // 삭제
 @Override
