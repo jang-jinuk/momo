@@ -114,7 +114,8 @@ public class ScheduleController {
     userAndScheduleDTO.setUserNo(user);
     log.info("------------ [회원 정보 전달] ------------");
 
-    scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    String message = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    model.addAttribute("message", message);
 
     return "redirect:/schedule/" + scheduleNo;
   }
@@ -132,7 +133,8 @@ public class ScheduleController {
     userAndScheduleDTO.setUserNo(user);
     log.info("------------ [회원 정보 전달] ------------");
 
-    scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    String message = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    model.addAttribute("message", message);
 
     return "redirect:/schedule/" + scheduleNo;
   }
