@@ -27,6 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   User findByUserId(String userId);
   User findByUserIdAndUserEmail(String userId, String userEmail);
   boolean existsByUserEmail(String userEmail);
+
   @EntityGraph(attributePaths = "roleSet")
   @Query("select u from User u where u.userId = :userId and u.userSocial = 'K'")
   Optional<User> getWithRoles(@Param("userId") String userId);

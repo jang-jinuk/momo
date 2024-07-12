@@ -187,10 +187,12 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
+
     @Override
     public User findByUserIdAndUserEmail(String userId, String userEmail) {
         return userRepository.findByUserIdAndUserEmail(userId, userEmail);
     }
+
     @Override
     public String generateTemporaryPassword() {
         SecureRandom random = new SecureRandom();

@@ -2,6 +2,8 @@ package com.momo.momopjt.userandclub;
 
 //모임 맴버 관리 기능
 
+import com.momo.momopjt.alarm.AlarmRepository;
+import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
 import java.util.List;
@@ -10,6 +12,7 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -68,12 +71,16 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return joinList;
   }
 
+  @Autowired
+  private AlarmService alarmService;
   // 해당 모임 맴버 전체 삭제
   @Override
   public void deleteAllMembers(Long clubNo) {
     Club club = new Club();
     club.setClubNo(clubNo);
+    List<UserAndClubDTO> clubMemberList = readAllMembers(club);
     userAndClubRepository.deleteClubMembers(club);
+
   }
 
 }

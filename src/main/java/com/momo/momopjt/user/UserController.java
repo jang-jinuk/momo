@@ -5,6 +5,7 @@ package com.momo.momopjt.user;
 import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +32,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+private final ModelMapper modelMapper;
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
@@ -106,13 +108,13 @@ public class UserController {
             throw new IllegalArgumentException("User not found with userId: " + userId);
         }
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUserId());
-        userDTO.setUserEmail(user.getUserEmail());
-        userDTO.setUserNickname(user.getUserNickname());
-        userDTO.setUserCategory(user.getUserCategory());
-        userDTO.setUserAddress(user.getUserAddress());
-        userDTO.setUserMBTI(user.getUserMBTI());
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+//        userDTO.setUserId(user.getUserId());
+//        userDTO.setUserEmail(user.getUserEmail());
+//        userDTO.setUserNickname(user.getUserNickname());
+//        userDTO.setUserCategory(user.getUserCategory());
+//        userDTO.setUserAddress(user.getUserAddress());
+//        userDTO.setUserMBTI(user.getUserMBTI());
 
         model.addAttribute("userDTO", userDTO);
         return "user/update";

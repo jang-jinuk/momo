@@ -68,7 +68,7 @@ public class articleServiceTest {
     articleDTO.setArticleTitle("ㅎㅎ오늘너무즐거웠습니다");
     articleDTO.setArticleContent("아니 오늘 ~ 산을 다녀왔는데 날씨가 너무 좋은 거 있죠?");
     articleDTO.setArticleState('0');
-    articleDTO.setArticleScore(2);
+    articleDTO.setArticleScore(111);
     articleDTO.setClubNo(testClubId);
 
     // When
@@ -141,7 +141,7 @@ public class articleServiceTest {
   @Test
   public void 고등어글조회하기() {
     // 테스트할 articleNo
-    Long articleNo = 6L;
+    Long articleNo = 11L;
 
     // 서비스 메서드 호출
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
@@ -153,7 +153,7 @@ public class articleServiceTest {
   @Test
   void 고등어구이삭제하기() {
 
-    Long articleNo = 6L;
+    Long articleNo = 11L;
     articleService.deleteArticle(articleNo);
 
   }

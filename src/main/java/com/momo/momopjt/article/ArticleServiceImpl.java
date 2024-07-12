@@ -2,6 +2,7 @@ package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,13 @@ public class ArticleServiceImpl implements ArticleService {
   @Autowired
   private ClubRepository clubRepository;
 
+  @Autowired
+  private ModelMapper modelMapper;
+
   // 새로운 후기글을 생성하는 메서드
   @Override
   public ArticleDTO createArticle(ArticleDTO articleDTO) {
-    Article article = convertDTOToEntity(articleDTO);
+    Article article = modelMapper.map(articleDTO, Article.class);
     Article savedArticle = articleRepository.save(article);
     return convertEntityToDTO(savedArticle);
   }
@@ -66,7 +70,6 @@ public class ArticleServiceImpl implements ArticleService {
   public void deleteArticle(Long articleNo) {
     articleRepository.deleteById(articleNo);
   }
-
 
   // Article 엔티티를 후기글DTO로 변환하는 메서드
   private ArticleDTO convertEntityToDTO(Article article) {

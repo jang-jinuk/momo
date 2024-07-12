@@ -21,7 +21,7 @@ public class Article {
   @Column(name = "article_no", nullable = false)
   private Long articleNo;
 
-  @Column(name = "article_title", nullable = false, length = 5)
+  @Column(name = "article_title", nullable = false, length = 50)
   private String articleTitle;
 
   @Column(name = "article_content", nullable = false, length = 500)
