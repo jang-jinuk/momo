@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
@@ -33,6 +34,8 @@ public class ScheduleController {
   private UserService userService;
   @Autowired
   private UserAndScheduleService userAndScheduleService;
+  @Autowired
+  private HttpSession session;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
@@ -52,7 +55,7 @@ public class ScheduleController {
     log.info("------------ [현재 로그인 중인 정보] ------------");
 
     Long clubNo = (Long) session.getAttribute("clubNo");
-    Club club = new Club(); // 임시 모임 정보(수정예정)
+    Club club = new Club();
     club.setClubNo(clubNo);
     scheduleDTO.setClubNo(club);
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
@@ -69,7 +72,7 @@ public class ScheduleController {
 
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
-  public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
+  public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model, RedirectAttributes redirectAttributes) {
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
     model.addAttribute("scheduleDTO", scheduleDTO);
     Schedule schedule = new Schedule();
@@ -78,6 +81,24 @@ public class ScheduleController {
     List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
     log.info("------------ [완료] ------------");
     model.addAttribute("userDTOList", userDTOList);
+    session.setAttribute("scheduleNo", scheduleNo);
     return "/schedule/view";
   }
+
+  @GetMapping("/attend")
+  public String addParticipant(Model model, HttpSession session) {
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    log.info("------------ [07-12-10:11:17] ------------");
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+    log.info("------------ [현재 로그인 중인 정보] ------------");
+
+    scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+
+    return "redirect:/schedule/" + scheduleNo;
+  }
+
 }
