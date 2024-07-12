@@ -91,12 +91,28 @@ public class ScheduleController {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
-    log.info("------------ [07-12-10:11:17] ------------");
+    log.info("------------ [현재 로그인 중인 회원 정보 조회] ------------");
     UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
     userAndScheduleDTO.setUserNo(user);
-    log.info("------------ [현재 로그인 중인 정보] ------------");
+    log.info("------------ [회원 정보 전달] ------------");
 
     scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+
+    return "redirect:/schedule/" + scheduleNo;
+  }
+
+  @GetMapping("/absent")
+  public String absentSchedule(Model model, HttpSession session) {
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    log.info("------------ [현재 로그인 중인 회원 정보 조회] ------------");
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+    log.info("------------ [회원 정보 전달] ------------");
+
+    scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
 
     return "redirect:/schedule/" + scheduleNo;
   }
