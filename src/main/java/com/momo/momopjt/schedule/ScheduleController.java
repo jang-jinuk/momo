@@ -1,7 +1,6 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -67,12 +66,12 @@ public class ScheduleController {
     Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
     log.info("------------ [일정 등록 완료] ------------");
 
-    return "/schedule/" + scheduleNo;
+    return "redirect:/schedule/" + scheduleNo;
   }
 
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
-  public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model, RedirectAttributes redirectAttributes) {
+  public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
     //일정 조회
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
 
