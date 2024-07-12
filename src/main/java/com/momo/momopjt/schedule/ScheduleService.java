@@ -10,8 +10,8 @@ public interface ScheduleService {
    Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO);
    ScheduleDTO findSchedule(Long scheduleNo);
    Map<String, String> updateSchedule(ScheduleDTO scheduleDTO);
-   Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
-   Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
+   String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
+   String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules(Club clubNo);
    void deleteSchedule(Long scheduleNo);
 }

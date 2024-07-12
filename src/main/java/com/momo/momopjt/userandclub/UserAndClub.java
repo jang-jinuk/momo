@@ -2,15 +2,15 @@ package com.momo.momopjt.userandclub;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
-import javax.persistence.*;
-import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-
 @Table(name = "user_and_club")
 public class UserAndClub {
   @Id

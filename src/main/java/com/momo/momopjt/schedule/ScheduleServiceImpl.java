@@ -2,7 +2,9 @@ package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.userandschedule.UserAndSchedule;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
+import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -89,15 +91,17 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 참가인원이 마감되지 않았으면 불러온 일정에 현재 참가인원 수를 추가한다.
   // 참가인원 테이블에 참가자 정보와 일정 번호를 저장한다.
   @Override
-  public Integer joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+  public String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
 
+    log.info("------------ [참가 가능 여부 확인]------------");
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
 
-    log.info("------------ [참가 가능 여부 확인]------------");
-    if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
+    if (userAndScheduleService.isParticipanting(userAndScheduleDTO)) {
+      return "이미 참가한 일정입니다.";
+    } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);
       log.info("------------ [참가인원 정보 추가]------------");
 
@@ -107,10 +111,10 @@ public class ScheduleServiceImpl implements ScheduleService {
       log.info("------------ [참가인원 추가 완료]------------");
 
     } else {
-      log.info("인원이 마감되었습니다.");
+      return "인원이 마감되었습니다.";
     }
 
-    return schedule.getScheduleParticipants();
+    return "신청이 완료되었습니다.";
   }
 
 
@@ -119,11 +123,17 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 해당 일정 참가자 목록에서 해당 회원을 제외한다.
   // 일정 현재 참가인원을 한명 차감한다.
   @Override
-  public Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+  public String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
 
+    //참석하지 않은 일정인지 확인
+    userAndScheduleDTO.setScheduleNo(schedule);
+
+    if (!userAndScheduleService.isParticipanting(userAndScheduleDTO)) {
+      return "참석하지 않은 일정입니다.";
+    } else {
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
     userAndScheduleService.subtractParticipant(userAndScheduleDTO);
 
@@ -131,8 +141,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     schedule.setScheduleParticipants(participants - 1);
     scheduleRepository.save(schedule);
     log.info("------------ [참가 취소 완료] ------------");
-
-    return schedule.getScheduleParticipants();
+    }
+    return "참석이 취소되었습니다.";
   }
 
 
