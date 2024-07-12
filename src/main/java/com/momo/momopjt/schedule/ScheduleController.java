@@ -85,7 +85,7 @@ public class ScheduleController {
     return "/schedule/view";
   }
 
-  @GetMapping("/attend")
+  @GetMapping("/join")
   public String attendSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -101,7 +101,7 @@ public class ScheduleController {
     return "redirect:/schedule/" + scheduleNo;
   }
 
-  @GetMapping("/absent")
+  @GetMapping("/leave")
   public String absentSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
