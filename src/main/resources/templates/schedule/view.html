@@ -65,4 +65,18 @@
             <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" readonly></textarea>
         </div>
     </div>
+    <p th:text="${message}"></p>
 </th:block>
+<script layout:fragment="script" th:inline="javascript">
+    const joinBtn = document.querySelector('.join');
+    const leaveBtn = document.querySelector('.btn.btn-danger.leave');
+
+    joinBtn.addEventListener("click", function (e){
+        alert("참가 신청이 완료되었습니다.")
+    }, false)
+
+    leaveBtn.addEventListener("click", function (e){
+        alert("참가 취소되었습니다.")
+    }, false)
+
+</script>
