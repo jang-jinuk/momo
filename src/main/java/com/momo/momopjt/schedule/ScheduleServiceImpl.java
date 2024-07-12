@@ -126,11 +126,16 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 해당 일정 참가자 목록에서 해당 회원을 제외한다.
   // 일정 현재 참가인원을 한명 차감한다.
   @Override
-  public Integer leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+  public String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
 
+    UserAndSchedule participant = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
+        userAndScheduleDTO.getUserNo());
+    if (participant == null) {
+      return "참석하지 않은 일정입니다.";
+    } else {
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
     userAndScheduleService.subtractParticipant(userAndScheduleDTO);
 
@@ -138,8 +143,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     schedule.setScheduleParticipants(participants - 1);
     scheduleRepository.save(schedule);
     log.info("------------ [참가 취소 완료] ------------");
-
-    return schedule.getScheduleParticipants();
+    }
+    return "참석이 취소되었습니다.";
   }
 
 
