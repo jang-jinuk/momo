@@ -147,7 +147,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
   //마감되지 않은 일정 조회
-  // 마감 기준 : 정원마감, 일정마감
+  // 마감 기준 : 시간마감
   @Override
   public List<ScheduleDTO> getOngoingSchedules(Club clubNo) {
      List<Schedule> schedules = scheduleRepository.findOngoingSchedules(clubNo);
@@ -155,6 +155,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
         .collect(Collectors.toList());
      return scheduleDTOList;
+  }
+
+  //마감된 일정 조회
+  @Override
+  public List<ScheduleDTO> getEndSchedules(Club clubNo) {
+    List<Schedule> schedules = scheduleRepository.findEndSchedules(clubNo);
+    List<ScheduleDTO> scheduleDTOList = schedules.stream()
+        .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
+        .collect(Collectors.toList());
+    return scheduleDTOList;
   }
 
   //일정 삭제

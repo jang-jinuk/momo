@@ -13,5 +13,6 @@ public interface ScheduleService {
    String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules(Club clubNo);
+   List<ScheduleDTO> getEndSchedules(Club clubNo);
    void deleteSchedule(Long scheduleNo);
 }
