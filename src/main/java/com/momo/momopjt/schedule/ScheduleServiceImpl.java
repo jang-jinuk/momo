@@ -2,7 +2,9 @@ package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.userandschedule.UserAndSchedule;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
+import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ScheduleRepository scheduleRepository;
   private final ModelMapper modelMapper;
   private final UserAndScheduleService userAndScheduleService;
+  private final UserAndScheduleRepository userAndScheduleRepository;
 
   //일정 생성
   @Override
@@ -94,10 +97,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
 
-    userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
-
     log.info("------------ [참가 가능 여부 확인]------------");
-    if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
+    userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
+    UserAndSchedule participant = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
+        userAndScheduleDTO.getUserNo());
+
+    if (participant != null) {
+      return "이미 참가한 일정입니다.";
+    } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);
       log.info("------------ [참가인원 정보 추가]------------");
 
