@@ -2,9 +2,7 @@ package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.userandschedule.UserAndSchedule;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
-import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -177,5 +175,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [일정 참석 인원 처리 완료] ------------");
     scheduleRepository.deleteById(scheduleNo);
     log.info("------------ [일정 삭제 처리 완료] ------------");
+  }
+
+  //일정 인원 마감 확인
+  @Override
+  public Boolean isScheduleFull(Long scheduleNo) {
+    Optional<Schedule> result  = scheduleRepository.findById(scheduleNo);
+    Schedule schedule = result.orElseThrow();
+
+    if (schedule.getScheduleMax() == schedule.getScheduleParticipants()) {
+      return true;
+    }
+
+    return false;
   }
 }
