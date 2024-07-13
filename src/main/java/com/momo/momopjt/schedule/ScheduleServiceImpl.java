@@ -39,6 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [생성된 일정 번호 전달] ------------");
 
     //일정 참가자 목록에 주체자 추가(등록)
+    userAndScheduleDTO.setIsHost(true);
     userAndScheduleService.addParticipant(userAndScheduleDTO);
     log.info("------------ [주체자 등록 완료] ------------");
     return scheduleNo;
