@@ -17,6 +17,8 @@ public class UserAndScheduleDTO {
 
   private User userNo;
 
+  private Boolean isHost;
+
   private Schedule scheduleNo;
 
 }
