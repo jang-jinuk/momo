@@ -115,9 +115,11 @@
         <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
     </div>
 </th:block>
-<th:block layout:fragment="script">
-    <script>
+<script layout:fragment="script" th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ null;
+    if (message) {
+        alert(message)
+    }
 
-    </script>
-</th:block>
-</html>
+</script>
