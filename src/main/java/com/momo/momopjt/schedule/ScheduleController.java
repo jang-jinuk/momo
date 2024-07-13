@@ -181,8 +181,24 @@ public class ScheduleController {
       redirectAttributes.addFlashAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
       return "redirect:/schedule/update";
     }
-
+    redirectAttributes.addFlashAttribute("message", "일정 수정이 완료되었습니다.");
     return "redirect:/schedule/" + scheduleNo;
+  }
+
+  //일정 삭제
+  @GetMapping("/delete")
+  public String delete(RedirectAttributes redirectAttributes, HttpSession session) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+
+    //일정 삭제 후 세션에 저장된 일정번호 삭제
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    scheduleService.deleteSchedule(scheduleNo);
+    session.removeAttribute("scheduleNo");
+
+    //결과 메세지
+    redirectAttributes.addFlashAttribute("message","일정이 삭제되었습니다.");
+
+    return "redirect:/club/main/" + clubNo;
   }
 
 }
