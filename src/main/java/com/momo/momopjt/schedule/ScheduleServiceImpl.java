@@ -53,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 정보 수정
   @Override
-  public Map<String, String> updateSchedule(ScheduleDTO scheduleDTO)  {
+  public Boolean updateSchedule(ScheduleDTO scheduleDTO)  {
     Optional<Schedule> result = scheduleRepository.findById(scheduleDTO.getScheduleNo());
     Schedule schedule = result.orElseThrow();
     log.info("------------ [수정할 일정 조회 완료] ------------");
@@ -61,14 +61,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     Integer currentParticipants = schedule.getScheduleParticipants();
     Integer updateMax = scheduleDTO.getScheduleMax();
 
-    Map<String, String> resultMap = new HashMap<>();
-
     //수정할려는 정원수가 현재 정원수보다 크거나 같으면 수정 가능
     if (currentParticipants > updateMax) {
       log.info("------------ [현재 참자가 수보다 작게 설정할 수 없습니다.] ------------");
-      resultMap.put("result","현재 참자가 수보다 작게 설정할 수 없습니다.");
-
-      return resultMap;
+      return true;
     } else {
       schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
       schedule.setScheduleContent(scheduleDTO.getScheduleContent());
@@ -78,9 +74,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
       scheduleRepository.save(schedule);
     }
-    resultMap.put("result",schedule.getScheduleNo().toString());
 
-    return resultMap;
+    return false;
   }
 
 

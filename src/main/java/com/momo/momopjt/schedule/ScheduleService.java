@@ -9,7 +9,7 @@ import java.util.Map;
 public interface ScheduleService {
    Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO);
    ScheduleDTO findSchedule(Long scheduleNo);
-   Map<String, String> updateSchedule(ScheduleDTO scheduleDTO);
+   Boolean updateSchedule(ScheduleDTO scheduleDTO);
    String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
    List<ScheduleDTO> getOngoingSchedules(Club clubNo);
