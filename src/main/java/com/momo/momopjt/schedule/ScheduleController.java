@@ -88,7 +88,7 @@ public class ScheduleController {
     User user = userService.findByUserId(username);
     userAndScheduleDTO.setUserNo(user);
 
-    Boolean isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
+    int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
