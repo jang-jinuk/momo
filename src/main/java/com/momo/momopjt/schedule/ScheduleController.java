@@ -102,6 +102,7 @@ public class ScheduleController {
     return "/schedule/view";
   }
 
+  //일정 참가
   @GetMapping("/join")
   public String attendSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
@@ -121,6 +122,7 @@ public class ScheduleController {
     return "redirect:/schedule/" + scheduleNo;
   }
 
+  //일정 참가 취소
   @GetMapping("/leave")
   public String absentSchedule(Model model, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
@@ -138,5 +140,14 @@ public class ScheduleController {
     model.addAttribute("message", message);
 
     return "redirect:/schedule/" + scheduleNo;
+  }
+
+  //일정 수정
+  @GetMapping("/update")
+  public String updateSchedule(Model model, HttpSession session) {
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+    model.addAttribute("scheduleDTO", scheduleDTO);
+    return "/schedule/update";
   }
 }
