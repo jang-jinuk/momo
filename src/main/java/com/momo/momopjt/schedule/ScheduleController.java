@@ -145,8 +145,16 @@ public class ScheduleController {
   //일정 수정
   @GetMapping("/update")
   public String updateSchedule(Model model, HttpSession session) {
+    log.info("------------ [Get schedule update] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+
+    //날짜/시간 포매팅
+    Instant originStartDate = scheduleDTO.getScheduleStartDate();
+    ZonedDateTime zonedDate = originStartDate.atZone(ZoneId.systemDefault());
+    LocalDateTime formattedDate = zonedDate.toLocalDateTime();
+
+    model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
     return "/schedule/update";
   }
