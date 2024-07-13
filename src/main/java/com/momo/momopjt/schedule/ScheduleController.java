@@ -142,7 +142,7 @@ public class ScheduleController {
     return "redirect:/schedule/" + scheduleNo;
   }
 
-  //일정 수정
+  //일정 수정 페이지 이동
   @GetMapping("/update")
   public String updateSchedule(Model model, HttpSession session) {
     log.info("------------ [Get schedule update] ------------");
@@ -158,4 +158,29 @@ public class ScheduleController {
     model.addAttribute("scheduleDTO", scheduleDTO);
     return "/schedule/update";
   }
+
+  //일정 수정
+  @PostMapping("/update")
+  public String updateSchedule(ScheduleDTO scheduleDTO, HttpSession session, Model model, String dateTime) {
+    log.info("------------ [Post schedule update] ------------");
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    scheduleDTO.setScheduleNo(scheduleNo);
+
+    //날짜/시간 포매팅
+    LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
+    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+    Instant instant = zonedDateTime.toInstant();
+    scheduleDTO.setScheduleStartDate(instant);
+
+    Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
+
+    //일정 수정 실패
+    if(updateFail) {
+      model.addAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
+      return "redirect:/schedule/update";
+    }
+
+    return "redirect:/schedule/" + scheduleNo;
+  }
+
 }
