@@ -74,15 +74,10 @@
     </div>
 </th:block>
 <script layout:fragment="script" th:inline="javascript">
-    const joinBtn = document.querySelector('.join');
-    const leaveBtn = document.querySelector('.btn.btn-danger.leave');
-
-    joinBtn.addEventListener("click", function (e){
-        alert("참가 신청이 완료되었습니다.")
-    }, false)
-
-    leaveBtn.addEventListener("click", function (e){
-        alert("참가 취소되었습니다.")
-    }, false)
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ null;
+    if (message) {
+        alert(message)
+    }
 
 </script>

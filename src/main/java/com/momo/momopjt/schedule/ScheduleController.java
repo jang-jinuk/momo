@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -104,7 +106,7 @@ public class ScheduleController {
 
   //일정 참가
   @GetMapping("/join")
-  public String attendSchedule(Model model, HttpSession session) {
+  public String attendSchedule(RedirectAttributes redirectAttributes, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
 
     //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
@@ -117,14 +119,14 @@ public class ScheduleController {
     log.info("------------ [회원 정보 전달] ------------");
 
     String message = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
-    model.addAttribute("message", message);
+    redirectAttributes.addFlashAttribute("message", message);
 
     return "redirect:/schedule/" + scheduleNo;
   }
 
   //일정 참가 취소
   @GetMapping("/leave")
-  public String absentSchedule(Model model, HttpSession session) {
+  public String absentSchedule(RedirectAttributes redirectAttributes, HttpSession session) {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
 
     //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
@@ -137,7 +139,7 @@ public class ScheduleController {
     log.info("------------ [회원 정보 전달] ------------");
 
     String message = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
-    model.addAttribute("message", message);
+    redirectAttributes.addFlashAttribute("message", message);
 
     return "redirect:/schedule/" + scheduleNo;
   }
@@ -161,7 +163,7 @@ public class ScheduleController {
 
   //일정 수정
   @PostMapping("/update")
-  public String updateSchedule(ScheduleDTO scheduleDTO, HttpSession session, Model model, String dateTime) {
+  public String updateSchedule(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("------------ [Post schedule update] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     scheduleDTO.setScheduleNo(scheduleNo);
@@ -176,7 +178,7 @@ public class ScheduleController {
 
     //일정 수정 실패
     if(updateFail) {
-      model.addAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
+      redirectAttributes.addFlashAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
       return "redirect:/schedule/update";
     }
 
