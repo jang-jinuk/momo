@@ -69,6 +69,6 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
       return 1; //일정 주체자
     }
 
-    return 3; //일정에 참가한 회원
+    return 2; //일정에 참가한 회원
   }
 }
