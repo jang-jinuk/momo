@@ -73,6 +73,9 @@ public class ScheduleController {
     //일정 조회
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
 
+    //인원마감인지 확인
+    Boolean isScheduleFull = scheduleService.isScheduleFull(scheduleNo);
+
     //참가인원 조회
     Schedule schedule = new Schedule();
     schedule.setScheduleNo(scheduleNo);
@@ -91,6 +94,7 @@ public class ScheduleController {
     int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
+    model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
     model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
