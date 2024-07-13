@@ -18,7 +18,7 @@ public class UserAndSchedule {
   private Long id;
 
   @Column(name = "is_host")
-  private Boolean isHost = false;
+  private Boolean isHost;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)
