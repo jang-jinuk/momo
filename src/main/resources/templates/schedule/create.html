@@ -23,19 +23,19 @@
                   <div class="row g-3">
                       <div class="col-12">
                           <label for="title" class="form-label">일정 제목</label>
-                          <input name="scheduleTitle" type="text" class="form-control" id="title">
+                          <input name="scheduleTitle" type="text" class="form-control" id="title" th:required="true">
                       </div>
                       <div class="col-12">
                           <label for="address" class="form-label">장소</label>
-                          <input name="schedulePlace" type="text" class="form-control" id="address">
+                          <input name="schedulePlace" type="text" class="form-control" id="address" th:required="true">
                       </div>
                       <div class="col-12">
                           <label for="date" class="form-label">날짜/시간</label>
-                          <input name="dateTime" type="datetime-local" class="form-control" id="date" placeholder="">
+                          <input name="dateTime" type="datetime-local" class="form-control" id="date" th:required="true">
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
-                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" placeholder="">
+                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" th:required="true">
                       </div>
                   </div>
               </div>
