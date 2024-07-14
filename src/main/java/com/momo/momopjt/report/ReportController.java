@@ -23,6 +23,17 @@ public class ReportController {
     model.addAttribute("reportDTO", sandReport);
     return "/admin/manage-report";  // 뷰 반환
   }
+  @PostMapping("/justice")
+  public String justice(@RequestParam("reportNo") Long reportNo) {
+    log.info("...... [get manage/justice]..........KSW");
+    ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
+    reportDTO.setReportNo(reportNo); //담아주고
+    // reportService.updateReport() 메서드 호출
+    reportService.updateReport(reportDTO); //기능으로 넘겨준다
+    log.info("...... [정의구현]..........KSW");
+    return "redirect:/admin/manage-report";
+  }
+
   @PostMapping("/delete")
   public String delete(@RequestParam("reportNo") Long reportNo) {
     log.info("...... [post delete report]..........KSW");

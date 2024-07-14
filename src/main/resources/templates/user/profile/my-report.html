@@ -22,13 +22,21 @@
         <th scope="col">사유</th>
         <th scope="col">신고일</th>
         <th scope="col">처리결과</th>
+        <th scope="col">삭제?</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <tr th:each="report : ${reportDTO}">
         <td th:text="${report.reportNo}"></td>
-        <td>asd</td>
+        <td th:text="${report.reportedNo.getUserId()}"></td>
+        <td th:text="${report.reportCategory}"></td>
+        <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
+        <td th:text="${report.reportResult}"></td>
+        <form th:action="@{/user/profile/delete}" method="post">
+        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
+            <button type="submit" th:onclick="@{/user/profile/my-report}">삭제</button></td>
+        </form>
     </tr>
     </tbody>
 

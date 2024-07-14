@@ -28,15 +28,6 @@ public class ReportServiceImpl implements ReportService{
     reportRepository.save(report);
   }
   //자신 유저 아이디로 조회
-  /*@Override
-  public List<ReportDTO> readReport(ReportDTO reporterNo) {
-    Optional<Report> userport = reportRepository.findById(Report);
-    Report userports = userport.orElseThrow();
-    List<Report> listports = userports;
-    return listports.stream()
-        .map(report -> modelMapper.map(listports, ReportDTO.class))
-        .collect(Collectors.toList());
-  }*/
   @Override
   public List<ReportDTO> readReport(User reporterNo) {
     List<Report> reports = reportRepository.myReport(reporterNo);
@@ -54,16 +45,23 @@ public class ReportServiceImpl implements ReportService{
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
-  //수정
+  //유저 제제 (수정)
   @Override
   public void updateReport(ReportDTO reportDTO) {
-    if(reportRepository.findById(reportDTO.getReportNo()).isPresent()){
-      Report report = modelMapper.map(reportDTO, Report.class);
-      reportRepository.save(report);
+    Optional<Report> justice = reportRepository.findById(reportDTO.getReportNo());
+    if (justice.isPresent()) {
+      Report report = justice.get();
+      // reportResult 가 1일 경우 2로 변경하여 저장
+      if (report.getReportResult() == '1') {
+        report.setReportResult('2');
+        reportRepository.save(report);
+//        userRepository.findById()
+      }
     } else {
-      log.info("...... [업데이트 존재 x ]..........KSW");
+      if (reportDTO.getReportResult() != '1') {
+        log.info("..........[이미 싸늘해진 시체다]..........KSW");
+      }
     }
-//    userRepository.findById(userid).update()
   }
 // 삭제
 @Override

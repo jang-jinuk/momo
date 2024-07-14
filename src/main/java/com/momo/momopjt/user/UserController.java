@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,16 +22,22 @@ public class UserController {
   @Autowired
   private ReportService reportService;
   //나의 신고 페이지
-
   @GetMapping("/my-report")
   public String report(Model model) {
     log.info("...... [get profile/my-report]..........KSW");
-    // ID를 조회하여 모델에 추가
+    // ID를 조회하여 모델에 추가 (임시)
     User user = new User();
     user.setUserNo(4L);
     List<ReportDTO> sandIdReport = reportService.readReport(user);
     model.addAttribute("reportDTO", sandIdReport);
-    log.info("...... [aaaa]..........KSW");
+    log.info("...... []..........KSW");
     return "/user/profile/my-report";  // 뷰 반환
+  }
+  //내가 신고한 내역 삭제
+  @PostMapping("/delete")
+  public String delete(@RequestParam("reportNo") Long reportNo) {
+    log.info("...... [post delete report]..........KSW");
+    reportService.deleteReport(reportNo);
+    return "redirect:/user/profile/my-report";
   }
 }

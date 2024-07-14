@@ -9,6 +9,7 @@ import java.util.List;
 
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
+  //특정 ID 신고내역 조회
   @Query("select r from Report r where r.reporterNo =:reporterNo")
   List<Report> myReport(@Param("reporterNo")User reporterNo);
 }
