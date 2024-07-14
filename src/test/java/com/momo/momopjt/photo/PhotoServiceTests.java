@@ -13,14 +13,16 @@ import java.time.Instant;
 public class PhotoServiceTests {
 
     @Autowired
-    PhotoService photoService;
+    private PhotoService photoService;
+
+
     @Test
     public void savePhotoTest() {
         User user = new User();
         user.setUserNo(1L);
 
         PhotoDTO photoDTO = PhotoDTO.builder()
-                .photoUuid("00001test")
+                .photoUUID("00001test")
                 .userNo(user)
                 .photoSize(10)
                 .photoCreateDate(Instant.now())

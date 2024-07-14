@@ -24,24 +24,24 @@ public class PhotoServiceImpl implements PhotoService {
     Photo photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
     log.info(photo);
-    log.info(photo.getPhotoUuid());
+    log.info(photo.getPhotoUUID());
     log.info("------------------Photo saved--------------------");
     return photo;
   }
 
   @Override
-  public Photo getPhoto(String photoUuid) {
+  public Photo getPhoto(String photoUUID) {
 
     log.info("------------ getphoto [07-02-11:13:41]----------jinuk");
-    Optional<Photo> photoOptional = photoRepository.findById(photoUuid);
+    Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
 
     return photoOptional.orElseThrow();
 
   }
 
   @Override
-  public void deletePhoto(String photoUuid) {
-    photoRepository.deleteById(photoUuid);
+  public void deletePhoto(String photoUUID) {
+    photoRepository.deleteById(photoUUID);
   }
 
 }
