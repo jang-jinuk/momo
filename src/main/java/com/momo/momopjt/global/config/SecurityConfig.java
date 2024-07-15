@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Collections;
@@ -55,17 +56,18 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     log.info("------------configure----------------");
-
     http
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**",
+            "/public/**", "/user/**","/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
-        .formLogin()
-        .loginPage("/user/login")
+        .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/user/home")
+        .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
         .successHandler(authenticationSuccessHandler())
         .permitAll()
         .and()
@@ -79,17 +81,20 @@ public class SecurityConfig {
         .exceptionHandling()
         .accessDeniedPage("/403")
         .and()
-        .csrf().disable()
+        .csrf().disable();
 
-        .oauth2Login()
+    http.oauth2Login()
         .loginPage("/user/login")
-        .defaultSuccessUrl("/user/home", true)
+        .defaultSuccessUrl("/user/home", true) // 로그인 성공 시 리다이렉트 할 URL
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
         .userService(oAuth2UserService());
 
     return http.build();
   }
+
+
+
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {

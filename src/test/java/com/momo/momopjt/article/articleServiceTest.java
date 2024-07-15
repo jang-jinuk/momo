@@ -8,16 +8,13 @@ import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.time.Instant;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,14 +26,7 @@ public class articleServiceTest {
   private ArticleService articleService;
 
   @Autowired
-  private ArticleRepository articleRepository;
-
-  @Autowired
   private ClubService clubService;
-
-  @Autowired
-  private ClubRepository clubRepository;
-
   private Long testClubId;
 
 
@@ -78,7 +68,7 @@ public class articleServiceTest {
     articleDTO.setArticleTitle("ㅎㅎ오늘너무즐거웠습니다");
     articleDTO.setArticleContent("아니 오늘 ~ 산을 다녀왔는데 날씨가 너무 좋은 거 있죠?");
     articleDTO.setArticleState('0');
-    articleDTO.setArticleScore(2);
+    articleDTO.setArticleScore(111);
     articleDTO.setClubNo(testClubId);
 
     // When
@@ -151,7 +141,7 @@ public class articleServiceTest {
   @Test
   public void 고등어글조회하기() {
     // 테스트할 articleNo
-    Long articleNo = 6L;
+    Long articleNo = 11L;
 
     // 서비스 메서드 호출
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
@@ -163,7 +153,7 @@ public class articleServiceTest {
   @Test
   void 고등어구이삭제하기() {
 
-    Long articleNo = 6L;
+    Long articleNo = 11L;
     articleService.deleteArticle(articleNo);
 
   }

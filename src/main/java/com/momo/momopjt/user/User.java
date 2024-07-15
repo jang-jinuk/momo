@@ -51,20 +51,11 @@ public class User {
     // 비밀번호 변경 메서드
     public void changePassword(String userPw){this.userPw = userPw;
     }
-
     // 역할 추가 메서드
     public void addRole(UserRole userRole){
         this.roleSet.add(userRole);
     }
-    // 역할 초기화 메서드
-    public void clearRoles(){
-        this.roleSet.clear();
-    }
-    // 소셜 타입 변경 메서드
-    public void changeUserSocial(Character userSocial){
-        if(userSocial != 'K' && userSocial != 'N' && userSocial != 'G' && userSocial != 'M'){
-            throw new IllegalArgumentException("Invalid social type");
-        }
-        this.userSocial = userSocial;
-    }
+
+
+
 }

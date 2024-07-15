@@ -10,12 +10,12 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "alarm")
+@Table(name = "alarm",schema = "momodb")
 public class Alarm {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "alarm_no", nullable = false)
-  private Long id;
+  private Long AlarmNo;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)

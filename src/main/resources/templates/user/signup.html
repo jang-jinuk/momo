@@ -18,7 +18,6 @@
 
         function validateForm() {
             const userId = document.forms["registerForm"]["userId"].value;
-            const userNickname = document.forms["registerForm"]["userNickname"].value;
             const userPw = document.forms["registerForm"]["userPw"].value;
             const userEmail = document.forms["registerForm"]["userEmail"].value;
             const userGender = document.forms["registerForm"]["userGender"].value;
@@ -28,7 +27,7 @@
             const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
             const emailPattern = /^[a-zA-Z0-9]+@([\w-]+\.)+[\w-]{2,4}$/;
             const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
-            const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+
 
             if (!userIdPattern.test(userId)) {
                 alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
@@ -38,10 +37,7 @@
                 alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
                 return false;
             }
-            if (!NicknamePattern.test(userNickname)) {
-                alert("닉네임은 6글자 까지 필요합니다.");
-                return false;
-            }
+
             if (!emailPattern.test(userEmail)) {
                 alert("이메일 형식이 유효하지 않습니다.");
                 return false;
@@ -56,8 +52,7 @@
             }
             return true;
         }
-        // 추가 유효성 검사 (선택 사항)
-        // 예시: 카테고리, 주소, MBTI 등
+
     </script>
 </head>
 <body>
@@ -151,10 +146,3 @@
         </div><!--end col-->
     </div><!--end row-->
 </div>
-<!--&lt;!&ndash; 예외처리 확인용&ndash;&gt;-->
-<!--<h1>test</h1>-->
-<!--ID 에러 :<div th:text="${errorid}"></div>-->
-<!--email 에러 :<div th:text="${erroremail}"></div>-->
-<!--기타 에러 :<div th:text="${errorException}"></div>-->
-<!--</body>-->
-<!--</html>-->

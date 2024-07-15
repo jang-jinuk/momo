@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
 
-//        UserId 중복 검사
+        //UserId 중복 검사
         String userId = userDTO.getUserId();
         String userEmail = userDTO.getUserEmail();
         boolean existId = userRepository.existsByUserId(userId);
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         if(existEmail){
             throw new UserEmailException();
         }
+
 //      Email 중복 검사
         User user = modelMapper.map(userDTO, User.class);
 
@@ -187,10 +188,12 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
+
     @Override
     public User findByUserIdAndUserEmail(String userId, String userEmail) {
         return userRepository.findByUserIdAndUserEmail(userId, userEmail);
     }
+
     @Override
     public String generateTemporaryPassword() {
         SecureRandom random = new SecureRandom();
@@ -249,5 +252,25 @@ public class UserServiceImpl implements UserService {
             return true; // 성공적으로 비밀번호를 재설정한 경우
         }
         return false;
+    }
+
+
+    @Override
+    public void deleteAccount(String userId, String userPw) {
+        if (userId == null || userId.isEmpty() || userPw == null || userPw.isEmpty()) {
+            throw new IllegalArgumentException("User ID and password cannot be null or empty");
+        }
+
+        User user = userRepository.findByUserId(userId);
+        if (user != null) {
+            if (passwordEncoder.matches(userPw, user.getUserPw())) { // 비밀번호 검증
+                userRepository.delete(user);
+                log.info("User account has been deleted.");
+            } else {
+                throw new IllegalArgumentException("Incorrect password");
+            }
+        } else {
+            log.warn("User not found.");
+        }
     }
 }

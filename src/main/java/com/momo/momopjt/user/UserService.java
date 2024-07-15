@@ -2,7 +2,6 @@ package com.momo.momopjt.user;
 
 
 
-
 public interface UserService {
 
     void signup(UserDTO userDTO) throws UserIdException, UserEmailException;
@@ -29,5 +28,7 @@ public interface UserService {
     }
 
     User findByUserIdAndUserEmail(String userId, String userEmail);
+
+    void deleteAccount(String userId, String userPw);
 
 }
