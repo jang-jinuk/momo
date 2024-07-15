@@ -25,7 +25,7 @@ public class PhotoServiceImpl implements PhotoService {
     Photo photo = new Photo();
 
     //사진을 등록하지 않으면 "default"사진 자동 저장
-    if(photoDTO.getPhotoUUID() == "") {
+    if(photoDTO.getPhotoUUID().equals("")) {
       photo.setPhotoUUID("default.jpg"); //TODO 실제 디폴트 사진으로 변경필요
       return photo;
     }
