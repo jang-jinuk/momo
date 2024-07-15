@@ -1,15 +1,23 @@
 package com.momo.momopjt.club;
 
+import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
+import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandclub.UserAndClubDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
+import java.time.Instant;
 import java.util.List;
 
 
@@ -22,6 +30,8 @@ public class ClubController {
   private ClubService clubService;
   @Autowired
   private ScheduleService scheduleService;
+  @Autowired
+  private UserService userService;
   @Autowired
   private HttpSession session;
 
@@ -47,4 +57,21 @@ public class ClubController {
   }
   @GetMapping("/create")
   public String createClub() {return "club/create";}
+
+  @PostMapping("/create")
+  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
+
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    userAndClubDTO.setUserNo(user);
+
+    //TODO 파일 업로드 기능과 연결필요
+
+    Long clubNo = clubService.createClub(clubDTO,photoDTO,userAndClubDTO);
+
+    return "redirect:/club/main/" + clubNo;
+  }
 }
