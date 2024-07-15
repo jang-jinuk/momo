@@ -131,4 +131,32 @@ public class ClubController {
     redirectAttributes.addFlashAttribute("message","모임이 해산되었습니다.");
     return "redirect:/user/home";
   }
+
+  @GetMapping("/leavePage")
+  public String goLeavePage() {
+    return "/club/leave";
+  }
+
+  @GetMapping("/leave")
+  public String leaveClub(HttpSession session, RedirectAttributes redirectAttributes) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+
+    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
+    userAndClubDTO.setClubNo(club);
+    userAndClubDTO.setUserNo(user);
+    userAndClubService.leaveClub(userAndClubDTO);
+
+    session.removeAttribute("clubNo");
+
+    redirectAttributes.addFlashAttribute("message","모임에서 정상적으로 탈퇴되었습니다.");
+
+    return "redirect:/user/home";
+  }
 }
