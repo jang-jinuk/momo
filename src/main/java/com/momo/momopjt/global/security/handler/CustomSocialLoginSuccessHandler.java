@@ -43,7 +43,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
        */
       return ;
     } else {
-      response.sendRedirect("/user/home");
+      response.sendRedirect("/home");
     }
   }
 
