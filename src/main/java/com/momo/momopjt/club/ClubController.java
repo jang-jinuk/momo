@@ -6,6 +6,7 @@ import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,8 @@ public class ClubController {
   @Autowired
   private UserService userService;
   @Autowired
+  private UserAndClubService userAndClubService;
+  @Autowired
   private HttpSession session;
 
 
@@ -53,6 +56,10 @@ public class ClubController {
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
+
+    Boolean isLeader = userAndClubService.isLeader(clubNo); //모임장인지 확인
+    model.addAttribute("isLeader", isLeader);
+
     return "club/main";
   }
   @GetMapping("/create")
