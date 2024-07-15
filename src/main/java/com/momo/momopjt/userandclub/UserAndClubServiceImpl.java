@@ -92,4 +92,10 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return false; //모임원이면 false
   }
 
+  @Override
+  public int countMembers(Club clubNo) {
+    int count = userAndClubRepository.countMembers(clubNo);
+    return count;
+  }
+
 }
