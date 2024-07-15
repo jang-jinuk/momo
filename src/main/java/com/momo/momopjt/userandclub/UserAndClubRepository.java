@@ -36,4 +36,9 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   @Query("SELECT COUNT(*) FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.joinDate IS NOT NULL")
   int countMembers(@Param("clubNo") Club clubNo);
 
+  //특정 맴버 삭제
+  @Modifying
+  @Query("DELETE FROM UserAndClub WHERE clubNo = :clubNo AND userNo = :userNo")
+  void deleteClubMember(@Param("clubNo")Club clubNo, @Param("userNo")User userNo);
+
 }
