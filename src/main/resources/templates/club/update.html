@@ -12,7 +12,7 @@
         <div class="container row-8 col-2 my-5">
             <h1>모임 생성</h1>
         </div>
-        <form action="/club/create" method="post">
+        <form action="/club/update" method="post">
             <div class="container row-4">
                 <div class="row align-items-center mb-3">
                     <div class="col-2 ms-4">
@@ -29,7 +29,7 @@
                         <h4>지역</h4>
                     </div>
                     <div class="col">
-                        <input th:value="${clubDTO.clubArea}"type="text" class="form-control" placeholder="지역을 선택해주세요.">
+                        <input th:value="${clubDTO.clubArea}" name="clubArea" type="text" class="form-control" placeholder="지역을 선택해주세요.">
                         <button class="btn btn-dark" type="button">찾기</button>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                                             <h4>정원(1-100명)</h4>
                                             <div class="input-group mt-2">
                                                 <button class="btn btn-outline-secondary" type="submit" id="decrement">-</button>
-                                                <input th:value="${clubDTO.clubMax}" name="clubMax" type="number" class="form-control text-center" value="0" id="count" min="2" max="100">
+                                                <input th:value="${clubDTO.clubMax}" name="clubMax" type="number" class="form-control text-center" id="count" min="2" max="100">
                                                 <button class="btn btn-outline-secondary" type="submit" id="increment">+</button>
                                             </div>
                                         </div>
@@ -93,3 +93,13 @@
         </form>
     </div>
 </th:block>
+<script layout:fragment="script" th:inline="javascript">
+
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ null;
+    if (message) {
+        alert(message);
+    }
+    /*]]>*/
+
+</script>
