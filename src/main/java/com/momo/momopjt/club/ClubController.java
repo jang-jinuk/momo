@@ -84,6 +84,7 @@ public class ClubController {
     User user = userService.findByUserId(username);
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
+    userAndClubDTO.setJoinDate(Instant.now());
 
     //TODO 파일 업로드 기능과 연결필요
 
