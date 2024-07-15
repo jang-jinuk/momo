@@ -46,8 +46,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임 탈퇴
   @Override
-  public void leaveClub(Long id) {
-    userAndClubRepository.deleteById(id);
+  public void leaveClub(UserAndClubDTO userAndClubDTO) {
+    userAndClubRepository.deleteClubMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     log.info("-------------모임 탈퇴 완료-------------");
   }
 
@@ -98,4 +98,14 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return count;
   }
 
+//  public boolean isMember(UserAndClubDTO userAndClubDTO){
+//    if (userAndClubDTO.getIsLeader()==null){
+//      log.info("------------ [leader null] ------------");
+//      return false;
+//    } else {
+//      log.info("------------ [leader null] ------------");
+//      return true;
+//    }
+//
+//  }
 }
