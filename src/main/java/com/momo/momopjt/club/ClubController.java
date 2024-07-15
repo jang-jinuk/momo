@@ -70,13 +70,13 @@ public class ClubController {
     Boolean isLeader = userAndClubService.isLeader(userAndClubDTO); //모임장인지 확인
     model.addAttribute("isLeader", isLeader);
 
-    return "club/main";
+    return "/club/main";
   }
   @GetMapping("/create")
-  public String createClub() {return "club/create";}
+  public String createClub() {return "/club/create";}
 
   @PostMapping("/create")
-  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
+  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -90,7 +90,9 @@ public class ClubController {
 
     Long clubNo = clubService.createClub(clubDTO,photoDTO,userAndClubDTO);
 
-    return "redirect:/club/main/" + clubNo;
+    redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
+
+    return "redirect:/club/main" + clubNo;
   }
 
   @GetMapping("/update")
@@ -100,6 +102,7 @@ public class ClubController {
     model.addAttribute("clubDTO", clubDTO);
     return "/club/update";
   }
+
   @PostMapping("/update")
   public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -109,9 +112,23 @@ public class ClubController {
 
     if (isSuccess) {
       redirectAttributes.addFlashAttribute("message","모임 수정이 완료되었습니다.");
-      return "redirect:/club/main/" + clubDTO.getClubNo();
+      return "redirect:/club/main" + clubDTO.getClubNo();
     }
     redirectAttributes.addFlashAttribute("message","모임 구성원 수보다 적게 수정할 수 없습니다.");
     return "redirect:/club/update";
+  }
+
+  @GetMapping("/disbandPage")
+  public String goDisbandPage() {
+    return "/club/disband";
+  }
+
+  @GetMapping("/disband")
+  public String disbandClub(HttpSession session, RedirectAttributes redirectAttributes) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    clubService.disbandClub(clubNo);
+    session.removeAttribute("clubNo");
+    redirectAttributes.addFlashAttribute("message","모임이 해산되었습니다.");
+    return "redirect:/user/home";
   }
 }
