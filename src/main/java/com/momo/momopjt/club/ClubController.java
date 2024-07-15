@@ -67,8 +67,11 @@ public class ClubController {
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
 
-    Boolean isLeader = userAndClubService.isLeader(userAndClubDTO); //모임장인지 확인
-    model.addAttribute("isLeader", isLeader);
+    int isMember = userAndClubService.isMember(userAndClubDTO); //모임에 소속되었는지 확인
+    if (isMember == 0) {
+      return "redirect:/club/joinPage";
+    }
+    model.addAttribute("isMember", isMember);
 
     return "/club/main";
   }
