@@ -57,7 +57,15 @@ public class ClubController {
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
 
-    Boolean isLeader = userAndClubService.isLeader(clubNo); //모임장인지 확인
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
+    userAndClubDTO.setUserNo(user);
+    userAndClubDTO.setClubNo(club);
+
+    Boolean isLeader = userAndClubService.isLeader(userAndClubDTO); //모임장인지 확인
     model.addAttribute("isLeader", isLeader);
 
     return "club/main";
