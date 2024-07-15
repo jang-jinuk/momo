@@ -81,6 +81,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     userAndClubRepository.deleteClubMembers(club);
   }
 
+  //모임 맴버 확인
   @Override
   public int isMember(UserAndClubDTO userAndClubDTO) {
     UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(), userAndClubDTO.getUserNo());
@@ -94,20 +95,10 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return 2; //모임원일 경우
   }
 
+  //모임맴버 총 인원 확인
   @Override
   public int countMembers(Club clubNo) {
     int count = userAndClubRepository.countMembers(clubNo);
     return count;
   }
-
-//  public boolean isMember(UserAndClubDTO userAndClubDTO){
-//    if (userAndClubDTO.getIsLeader()==null){
-//      log.info("------------ [leader null] ------------");
-//      return false;
-//    } else {
-//      log.info("------------ [leader null] ------------");
-//      return true;
-//    }
-//
-//  }
 }
