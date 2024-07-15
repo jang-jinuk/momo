@@ -89,4 +89,14 @@ public class ClubController {
 
     return "redirect:/club/main/" + clubNo;
   }
+
+  @GetMapping("/update")
+  public String updateClub(Model model, HttpSession session) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    ClubDTO clubDTO = clubService.readOneClub(clubNo);
+    model.addAttribute("clubDTO", clubDTO);
+    return "/club/update";
+  }
+
+
 }
