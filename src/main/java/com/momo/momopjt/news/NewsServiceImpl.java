@@ -24,7 +24,10 @@ public class NewsServiceImpl implements NewsService {
   @Override
   public void createNews(NewsDTO newsDTO) {
     log.info("----------------- [createNews]-----------------");
+    newsDTO.setNewsNo(-1L); // 컨트롤러에서도 선언해 두었음. 자동 생성을 위해 번호 추가.
+    newsDTO.setNewsCreateDate(Instant.now());
     News news = modelMapper.map(newsDTO, News.class);
+
     newsRepository.save(news);
 
   }
@@ -51,18 +54,7 @@ public class NewsServiceImpl implements NewsService {
     log.info("----------------- [UpdateNews]-----------------");
     News news = newsRepository.findById(newsDTO.getNewsNo()).orElseThrow();
 
-    // mapper 사용으로 주석처리
-    /*
-    news.setNewsNo(news.getNewsNo());
-    news.setNewsContent(newsDTO.getNewsContent());
-    news.setNewsCreateDate(newsDTO.getNewsCreateDate());
-    news.setNewsModifyDate(Instant.now());
-    news.setNewsTag(newsDTO.getNewsTag());
-    news.setNewsTitle(newsDTO.getNewsTitle());
-    */
-
     News updateNews = modelMapper.map(newsDTO, News.class);
-
     updateNews.setNewsModifyDate(Instant.now());
 
     log.info("----------------- [updateNews]-----------------");
@@ -75,9 +67,11 @@ public class NewsServiceImpl implements NewsService {
   //공지 삭제
   @Override
   public void deleteNews(Long newsNo) {
+    //TODO 관리자 권한 설정
     log.info("----------------- [DeleteNews]-----------------");
 
     newsRepository.deleteById(newsNo);
+    log.info("------------------ [deleteNews no = {}]-----------------",newsNo);
 
 
   }

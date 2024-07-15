@@ -54,56 +54,43 @@
 <!--YY-->
 <!--<form id="newsForm" method="post"></form>-->
 
-<form id="newsForm" name="registerForm" action="/news/create" method="post">
+<form id="newsForm" name="newsForm" action="/news/update" method="post">
     <ul class="nav justify-content-center">
+        <input type="hidden" name="newsNo" th:value="${news.newsNo}">
         <li class="nav-item input-group">
             <span class="input-group-text">공지사항 태그</span>
-            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsTag}">
+            <input type="text" name="newsTag" class="form-control" th:value="${news.newsTag}">
         </li>
         <li class="nav-item input-group">
             <span class="input-group-text">공지사항 제목</span>
-            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsTitle}">
+            <input type="text" name="newsTitle" class="form-control" th:value="${news.newsTitle}">
         </li>
         <li class="nav-item input-group">
             <span class="input-group-text">공지사항 작성일</span>
-            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsCreateDate}">
+            <input type="date" class="form-control"
+                   th:placeholder="${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}"
+                   >
+            <input type="hidden"  value="${news.newsCreateDate}">
         </li>
         <li class="nav-item input-group mb-3">
             <span class="input-group-text">공지사항 수정일</span>
-            <input type="text" name="newsTag" class="form-control" th:placeholder="${news.newsModifyDate}">
-        </li>
-    </ul>
-<!--
-    기본 양식 <li class="nav-item">
-                <a class="nav-link" href="#"></a>
-            </li>
--->
-<!--
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <input type="text" class="nav-link disabled" th:placeholder="${news.newsTag}">
-        </li>
-        <li class="nav-item">
-            <div class="nav-link disabled" th:text="${news.newsTitle}"></div>
-            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>&ndash;&gt;
-        </li>
-        <li class="nav-item">
-            <div class="nav-link disabled"
-                 th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
-            </div>
-            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>&ndash;&gt;
-        </li>
+            <input type="text" name="newsModifyDate" class="form-control"
+                   th:placeholder="${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')}"
+                   readonly>
+            <input type="hidden"  value="${news.newsModifyDate}">
 
+        </li>
     </ul>
--->
+
     <div class="container">
         <div class="input-group mb-6">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"
+            <textarea class="form-control" id="newsContent" name="newsContent" rows="6"
                       th:text="${news.newsContent}"></textarea>
         </div>
         <!--YY-->
         <div class="d-grid gap-4 col-2 mx-auto">
-            <button class="btn btn-primary" type="button" onclick="submitNewsForm('/news/create')">등록/수정</button>
+            <button class="btn btn-primary" type="submit" >등록/수정</button>
+            <!--onclick="submitNewsForm('/news/create')"-->
             <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
             <button class="btn btn-primary" type="button" th:onclick="window.location.href='/news/main'">돌아가기</button>
 
@@ -131,8 +118,49 @@
         form.submit();
         console.log("js-------------submitNewsForm end")
     }
-
 </script>
+<!--<script>
+    // 오늘 날짜를 YYYY-MM-DD 형식으로 포맷팅하는 함수
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    // 현재 날짜를 포맷팅하여 placeholder에 설정
+    document.getElementById('newsCreateDate').placeholder = formatDate(new Date());
+</script>-->
+<!--
+    기본 양식 <li class="nav-item">
+                <a class="nav-link" href="#"></a>
+            </li>
+-->
+<!--
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <input type="text" class="nav-link disabled" th:placeholder="${news.newsTag}">
+        </li>
+        <li class="nav-item">
+            <div class="nav-link disabled" th:text="${news.newsTitle}"></div>
+            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">4월 28일 오후 서비스 공지</a>&ndash;&gt;
+        </li>
+        <li class="nav-item">
+            <div class="nav-link disabled"
+                 th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
+            </div>
+            &lt;!&ndash;        <a class="nav-link disabled" aria-disabled="true">작성일:2024-07-07</a>&ndash;&gt;
+        </li>
+
+    </ul>
+-->
 </body>
 </html>
 <!---->

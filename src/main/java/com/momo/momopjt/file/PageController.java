@@ -8,12 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Log4j2
 public class PageController {
 
-  @GetMapping("file/fileupload")
-  public String fileuploadPageGet() {
-    log.info("----------------- [Controller : fileuploadget]-----------------");
-    return "file/fileupload";
-
-  }
+//  -> PhotoContoller에서 구현
+//  @GetMapping("file/fileupload")
+//  public String fileuploadPageGet() {
+//    log.info("----------------- [Controller : fileuploadget]-----------------");
+//    return "file/fileupload";
+//
+//  }
 
 
 

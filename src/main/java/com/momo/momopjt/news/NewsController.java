@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Controller
@@ -38,40 +41,51 @@ public class NewsController {
     return "news/read";
   }
 
-  @GetMapping("/update/{newsNo}")
+/*  @GetMapping("/update/{newsNo}")
   public String NewsUpdateGet(@PathVariable("newsNo") Long newsNo, Model model) {
     log.info("--------------- [news/update getMapping]---------------");
-    return "news/update";
-  }
+    return "news/read;
+  }*/
 
+  //공지사항 신규 생성
   @GetMapping("/create")
   public String newsCreateGet(Model model) {
     log.info("--------------- [news/create getMapping]---------------");
     return "news/create";
   }
 
-
   @PostMapping("/create")
   public String newsCreatePost(NewsDTO newsDTO){
     log.info("----------------- [news/create PostMapping]-----------------");
-    newsService.createNews(newsDTO);
 
+    // -1로 설정하면 자동 생성 추가됨.
+    newsDTO.setNewsNo(-1L);
+
+    //에러 방지용 임시
+    newsDTO.setNewsCreateDate(Instant.now());
+
+    newsService.createNews(newsDTO);
 
     return "redirect:/news/main";
   }
 
   
-  @PostMapping("/update/{newsNo}")
+  @PostMapping("/update")
   public String newsUpdatePost(NewsDTO newsDTO){
     log.info("----------------- [news/update PostMapping]-----------------");
+    newsDTO.setNewsCreateDate(newsService.readNews(newsDTO.getNewsNo()).getNewsCreateDate());
+
+    log.info(newsDTO.toString()+"--------------");
     newsService.updateNews(newsDTO);
-    return "redirect:/news/update/" + newsDTO.getNewsNo();
+    return "redirect:/news/read/" + newsDTO.getNewsNo();
   }
 
-  @PostMapping("/delete/{newsNo}")
-  public String newsDeletePost(@PathVariable("newsNo") int newsNo){
+  @PostMapping("/delete/")
+  public String newsDeletePost(Long newsNo){
     log.info("----------------- [news/delete postMapping]-----------------");
-    return "redirect:news/main";
+    newsService.deleteNews(newsNo);
+    log.info(newsNo.toString()+"--------------deleted");
+    return "redirect:../main";
   }
 
 

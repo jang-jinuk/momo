@@ -59,7 +59,12 @@ last: 마지막 요소인지 여부 (true 또는 false)
         </td>
         <td th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
         <td>수정칸</td>
-        <td>삭제칸</td>
+        <td>
+            <form action="/news/delete/" method="post">
+                <input type="hidden" name="newsNo" th:value="${news.newsNo}">
+            <button type="submit" class="btn btn-danger">삭제하기</button>
+            </form>
+        </td>
     </tr>
 <!--YY-->
 <!--DY-->

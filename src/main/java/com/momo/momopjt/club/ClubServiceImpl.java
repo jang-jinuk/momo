@@ -33,8 +33,9 @@ public class ClubServiceImpl implements ClubService {
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
   public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
-    Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setClubPhoto(photo);
+    // TODO savephoto 처리
+//    Photo photo = photoService.savePhoto(photoDTO);
+//    clubDTO.setClubPhoto(photo);
     Club club = modelMapper.map(clubDTO, Club.class);
     Long clubNo = clubRepository.save(club).getClubNo();
     return clubNo;
@@ -66,8 +67,9 @@ public class ClubServiceImpl implements ClubService {
   //수정 가능 정보 : 사진, 카테고리, 소개글, 지역, 정원
   @Override
   public Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
-    Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setClubPhoto(photo);
+    // TODO savephoto 처리
+//    Photo photo = photoService.savePhoto(photoDTO);
+//    clubDTO.setClubPhoto(photo);
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
     log.info(clubDTO);
