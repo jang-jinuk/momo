@@ -4,13 +4,12 @@ package com.momo.momopjt.club;
 
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
-import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-
-import com.momo.momopjt.userandclub.UserAndClubServiceImpl;
+import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,17 +25,23 @@ public class ClubServiceImpl implements ClubService {
   private final ClubRepository clubRepository;
   private final PhotoService photoService;
   private final ModelMapper modelMapper;
-  private final PhotoRepository photoRepository;
-  private final UserAndClubServiceImpl userAndClubServiceImpl;
+  private final UserAndClubService userAndClubService;
 
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
-  public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
-    Photo photo = photoService.savePhoto(photoDTO);
+  public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) {
+    Photo photo = photoService.savePhoto(photoDTO); //TODO 파일 업로드 기능과 연결필요
+
     clubDTO.setPhotoUUID(photo);
     Club club = modelMapper.map(clubDTO, Club.class);
     Long clubNo = clubRepository.save(club).getClubNo();
+
+    userAndClubDTO.setClubNo(club);//생성된 모임 번호
+    userAndClubDTO.setIsLeader(true);//모임장 표시
+
+    userAndClubService.joinClub(userAndClubDTO);//모임장 등록
+
     return clubNo;
   }
 
@@ -83,7 +88,7 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public void disbandClub(Long clubNo) {
     //해당 모임 맴버 전체 삭제
-    userAndClubServiceImpl.deleteAllMembers(clubNo);
+    userAndClubService.deleteAllMembers(clubNo);
     log.info("------------ [07-03-15:12:55]----------jinuk");
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
