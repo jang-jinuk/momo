@@ -1,65 +1,70 @@
 package com.momo.momopjt.user;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "user")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(exclude = "roleSet")
+@DynamicInsert
+@Table(name = "user", schema = "momodb")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_no", nullable = false)
   private Long userNo;
-
-  @Column(name = "user_id", nullable = false, length = 30)
   private String userId;
-
-  @Column(name = "user_pw", nullable = false)
   private String userPw;
-
-  @Column(name = "user_email", nullable = false, length = 100)
   private String userEmail;
-
-  @Column(name = "user_nickname", nullable = false, length = 100)
   private String userNickname;
-
-  @Column(name = "user_gender", nullable = false)
   private Character userGender;
-
-  @Column(name = "user_birth", nullable = false)
+  private Integer userAge;
   private LocalDate userBirth;
-
-  @Column(name = "user_category")
-  private String userCategory;
-
-  @Column(name = "user_address")
+  private String  userCategory;
   private String userAddress;
-
-  @Column(name = "user_mbti", length = 4)
-  private String userMbti;
-
-  @Column(name = "user_state", nullable = false)
+  private String userMBTI;
   private Character userState;
-
-  @Column(name = "is_social", nullable = false)
-  private Character isSocial;
-
-  @Column(name = "user_photo", nullable = false)
+  private Character userSocial;
   private String userPhoto;
-
-  @Column(name = "user_like_number")
   private Integer userLikeNumber;
-
-  @Column(name = "user_create_date", nullable = false)
   private Instant userCreateDate;
-
-  @Column(name = "user_modify_date")
   private Instant userModifyDate;
 
+  @Enumerated(EnumType.ORDINAL)
+  private UserRole userRole = UserRole.USER; // 기본값 설정
+
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @Builder.Default
+  private Set<UserRole> roleSet = new HashSet<>();
+
+
+  // 비밀번호 변경 메서드
+  public void changePassword(String userPw){this.userPw = userPw;
+  }
+
+  // 역할 추가 메서드
+  public void addRole(UserRole userRole){
+    this.roleSet.add(userRole);
+  }
+  // 역할 초기화 메서드
+  public void clearRoles(){
+    this.roleSet.clear();
+  }
+  // 소셜 타입 변경 메서드
+  public void changeUserSocial(Character userSocial){
+    if(userSocial != 'K' && userSocial != 'N' && userSocial != 'G' && userSocial != 'M'){
+      throw new IllegalArgumentException("Invalid social type");
+    }
+    this.userSocial = userSocial;
+  }
 }
