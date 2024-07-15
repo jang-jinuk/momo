@@ -1,5 +1,6 @@
 package com.momo.momopjt.photo;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import com.momo.momopjt.club.ClubRepository;
@@ -21,6 +22,7 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public Photo savePhoto(PhotoDTO photoDTO) {
+    photoDTO.setPhotoCreateDate(Instant.now()); //등록일
     Photo photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
     log.info(photo);
