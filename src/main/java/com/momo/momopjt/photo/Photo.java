@@ -1,5 +1,6 @@
 package com.momo.momopjt.photo;
 
+import com.momo.momopjt.article.Article;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,9 +38,15 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
+  @Column(name= "photo_data")
+  private byte[] photoData;
+
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)
   private User userNo;
 
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name= "article_no", nullable = false)
+  private Article articleNo;
 }

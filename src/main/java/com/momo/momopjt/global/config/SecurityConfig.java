@@ -26,8 +26,10 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
 
@@ -60,7 +62,7 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**", "/article/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
         .formLogin().loginPage("/user/login")
@@ -78,7 +80,10 @@ public class SecurityConfig {
         .exceptionHandling()
         .accessDeniedPage("/403")
         .and()
-        .csrf().disable();
+        .sessionManagement()  // 세션 관리 설정 추가
+        .invalidSessionUrl("/user/login?expired=true")  // 세션이 무효화되었을 때 리다이렉트할 URL 추가
+        .maximumSessions(1)  // 동시 세션 최대 수 설정
+        .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
 
     http.oauth2Login()
         .loginPage("/user/login")
@@ -89,6 +94,16 @@ public class SecurityConfig {
 
     return http.build();
   }
+
+
+  @Bean
+  public LogoutSuccessHandler logoutSuccessHandler() {
+    return (request, response, authentication) -> {
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.sendRedirect("/user/home?logout=true");
+    };
+  }
+
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {

@@ -32,7 +32,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final EmailService emailService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/home")
     public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
@@ -43,17 +43,28 @@ private final ModelMapper modelMapper;
     }
 
     @GetMapping("/login")
-    public void loginGET(HttpServletRequest request) {
+    public void loginGET(HttpServletRequest request, Model model) {
         String errorCode = request.getParameter("errorCode");
         String logout = request.getParameter("logout");
+        String expired = request.getParameter("expired");  // 세션 만료 여부 확인
 
         log.info("login get........");
         log.info("logout: " + logout);
 
         if (logout != null) {
-
             log.info("user logout......");
+            model.addAttribute("message", "성공적으로 로그아웃되었습니다.");  // 로그아웃 메시지 추가
         }
+
+        if (expired != null) {
+            log.info("session expired......");
+            model.addAttribute("message", "세션이 만료되었습니다. 다시 로그인해 주세요.");  // 세션 만료 메시지 추가
+        }
+    }
+    
+    @GetMapping("/user/home")
+    public String home() {
+        return "home"; // 홈 페이지로 이동
     }
 
     @GetMapping("/signup")
@@ -109,13 +120,6 @@ private final ModelMapper modelMapper;
         }
 
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-//        userDTO.setUserId(user.getUserId());
-//        userDTO.setUserEmail(user.getUserEmail());
-//        userDTO.setUserNickname(user.getUserNickname());
-//        userDTO.setUserCategory(user.getUserCategory());
-//        userDTO.setUserAddress(user.getUserAddress());
-//        userDTO.setUserMBTI(user.getUserMBTI());
-
         model.addAttribute("userDTO", userDTO);
         return "user/update";
     }

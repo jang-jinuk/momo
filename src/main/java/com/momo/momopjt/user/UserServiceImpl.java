@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
 
-//        UserId 중복 검사
+        //UserId 중복 검사
         String userId = userDTO.getUserId();
         String userEmail = userDTO.getUserEmail();
         boolean existId = userRepository.existsByUserId(userId);
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
         if(existEmail){
             throw new UserEmailException();
         }
+
 //      Email 중복 검사
         User user = modelMapper.map(userDTO, User.class);
 

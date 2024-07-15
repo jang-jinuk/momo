@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,10 @@ public class Article {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "club_no")
   private Club clubNo;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_no")
+  private User userNo;
 
   // Article 업데이트 메서드
   public void update(ArticleDTO articleDTO, Club clubNo) {

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
+
   @Autowired
   private ArticleRepository articleRepository;
 
@@ -71,31 +72,22 @@ public class ArticleServiceImpl implements ArticleService {
     articleRepository.deleteById(articleNo);
   }
 
+
   // Article 엔티티를 후기글DTO로 변환하는 메서드
   private ArticleDTO convertEntityToDTO(Article article) {
-    return new ArticleDTO(
-        article.getArticleNo(),
-        article.getArticleTitle(),
-        article.getArticleContent(),
-        article.getArticleCreateDate(),
-        article.getArticleState(),
-        article.getArticleScore(),
-        article.getClubNo().getClubNo()
-    );
+    return modelMapper.map(article, ArticleDTO.class);
   }
 
-  // ArticleDTO를 후기글 엔티티로 변환하는 메서드
+
+  //  // ArticleDTO를 후기글 엔티티(Article)로 변환하는 메서드
   private Article convertDTOToEntity(ArticleDTO articleDTO) {
+    Article article = modelMapper.map(articleDTO, Article.class);
+
     Club club = clubRepository.findById(articleDTO.getClubNo())
         .orElseThrow(() -> new RuntimeException("Club not found"));
-    return new Article(
-        articleDTO.getArticleNo(),
-        articleDTO.getArticleTitle(),
-        articleDTO.getArticleContent(),
-        articleDTO.getArticleCreateDate(),
-        articleDTO.getArticleState(),
-        articleDTO.getArticleScore(),
-        club
-    );
+
+    article.setClubNo(club);
+
+    return article;
   }
 }

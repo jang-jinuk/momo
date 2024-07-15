@@ -19,4 +19,5 @@ public class ArticleDTO {
   private Character articleState;
   private Integer articleScore;
   private Long clubNo;
+  private Long userNo;
 }

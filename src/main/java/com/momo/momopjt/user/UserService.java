@@ -2,7 +2,6 @@ package com.momo.momopjt.user;
 
 
 
-
 public interface UserService {
 
     void signup(UserDTO userDTO) throws UserIdException, UserEmailException;
