@@ -101,7 +101,6 @@ public class ClubServiceImpl implements ClubService {
   public void disbandClub(Long clubNo) {
     //해당 모임 맴버 전체 삭제
     userAndClubService.deleteAllMembers(clubNo);
-    log.info("------------ [07-03-15:12:55]----------jinuk");
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     Club club = result.orElseThrow();
@@ -111,13 +110,10 @@ public class ClubServiceImpl implements ClubService {
     
     // 모임 해산
     clubRepository.deleteById(clubNo);
-    log.info("------------ [07-03-15:13:27]----------jinuk");
     
     //해당 모임 대표사진 삭제
-    photoService.deletePhoto(clubPhoto);
-    log.info("------------ [07-03-15:13:43]----------jinuk");
-
-
+    if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
+      photoService.deletePhoto(clubPhoto);
+    }
   }
-
 }
