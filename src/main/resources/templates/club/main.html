@@ -20,7 +20,7 @@
                     <p th:text="${club.clubContent}">Club Content</p>
                 </div>
             </div>
-                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband}'|" th:if="${isLeader}">해산하기</button>
+                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disbandPage}'|" th:if="${isLeader}">해산하기</button>
                 <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isLeader}">수정하기</button>
                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leave}'|" th:unless="${isLeader}">탈퇴하기</button>
         </div>
