@@ -1,6 +1,10 @@
 package com.momo.momopjt.global.security;
 
+import com.momo.momopjt.global.security.KakaoOAuth2UserInfo;
+import com.momo.momopjt.global.security.NaverOAuth2UserInfo;
 import com.momo.momopjt.user.UserRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,14 +18,17 @@ import java.util.*;
 import com.momo.momopjt.user.UserSecurityDTO;
 
 
-@Service
+
 @Log4j2
-@RequiredArgsConstructor
+@Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final UserSecurityService userSecurityService;
+
+    public CustomOAuth2UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -49,33 +56,86 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 id = oAuth2User.getAttribute("sub");
                 break;
             case "naver":
-                email = getNaverEmail(oAuth2User.getAttributes());
-                id = getNaverId(oAuth2User);
-                break;
-            default:
-                throw new OAuth2AuthenticationException("Unknown provider: " + provider);
+                try {
+                    email = getNaverEmail(oAuth2User.getAttributes());
+                    id = getNaverId(oAuth2User);
+                    if (email == null || id == null) {
+                        throw new OAuth2AuthenticationException("Email or ID not found from Naver provider");
+                    }
+                } catch (IllegalArgumentException e) {
+                    log.error("Failed to authenticate with Naver", e);
+                    throw new OAuth2AuthenticationException("Failed to authenticate with Naver: " + e.getMessage());
+                } catch (OAuth2AuthenticationException e) {
+                    log.error("OAuth2 authentication exception with Naver", e);
+                    throw e;
+                } catch (Exception e) {
+                    log.error("General exception occurred with Naver", e);
+                    throw new OAuth2AuthenticationException("Failed to authenticate with Naver");
+                }
         }
-
-        log.info("Provider: {}, Email: {}, ID: {}", provider, email, id);
-
         if (email == null || id == null) {
             throw new OAuth2AuthenticationException("Email or ID not found from provider: " + provider);
         }
-
-        UserSecurityDTO userSecurityDTO = userSecurityService.generateDTO(id, email, oAuth2User.getAttributes(), provider.charAt(0));
 
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.
 
         return new DefaultOAuth2User(
-            userSecurityDTO.getAuthorities(),
+            Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
             modifiedAttributes,
             "id" // 사용자 ID 속성의 이름
         );
     }
 
+    private String getNaverEmail(Map<String, Object> paramMap) {
+        log.info("Fetching Naver email...");
+
+        Object response = paramMap.get("response");
+        if (!(response instanceof Map)) {
+            log.warn("'response' is not a map: {}", response);
+            throw new IllegalStateException("'response' is not a map: " + response);
+        }
+
+        Map<String, Object> responseMap = (Map<String, Object>) response;
+        Object emailObj = responseMap.get("email");
+        if (!(emailObj instanceof String)) {
+            log.warn("Naver Email is not a string: {}", emailObj);
+            throw new IllegalStateException("Naver Email is not a string: " + emailObj);
+        }
+
+        String email = (String) emailObj;
+        log.info("Naver Email: {}", email);
+        return email;
+    }
+
+    private String getNaverId(OAuth2User oAuth2User) {
+        log.info("Fetching Naver ID...");
+
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+
+        // 'response' 속성에서 JSON 객체 추출
+        Object responseObject = attributes.get("response");
+        if (!(responseObject instanceof Map)) {
+            log.error("'response' attribute is not a valid JSON object");
+            throw new OAuth2AuthenticationException("Invalid 'response' attribute in OAuth2 user attributes");
+        }
+
+        // Map으로 캐스팅하여 'id' 값 가져오기
+        Map<String, Object> responseMap = (Map<String, Object>) responseObject;
+        Object idObj = responseMap.get("id");
+        if (idObj == null) {
+            log.error("'id' attribute not found in 'response' attribute");
+            throw new OAuth2AuthenticationException("Naver ID not found in OAuth2 user attributes");
+        }
+
+        String id = idObj.toString(); // Object를 String으로 변환
+        log.info("Naver ID: {}", id);
+        return id;
+    }
+
+
     private String getKakaoEmail(Map<String, Object> paramMap) {
-        log.info("KAKAO -------------------------");
+        log.info("Fetching Kakao email...");
 
         Object value = paramMap.get("kakao_account");
         log.info("Kakao Account: {}", value);
@@ -90,33 +150,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private String getKakaoId(OAuth2User oAuth2User) {
-        log.info("KAKAO ID -------------------------");
+        log.info("Fetching Kakao ID...");
 
-        String id = oAuth2User.getAttribute("id");
-        log.info("Kakao ID: {}", id);
-        return id;
-    }
-
-    private String getNaverEmail(Map<String, Object> paramMap) {
-        log.info("NAVER -------------------------");
-
-        Object response = paramMap.get("response");
-        log.info("Naver Response: {}", response);
-
-        if (response instanceof Map) {
-            Map<String, Object> responseMap = (Map<String, Object>) response;
-            String email = (String) responseMap.get("email");
-            log.info("Naver Email: {}", email);
-            return email;
+        Object idObject = oAuth2User.getAttribute("id");
+        if (idObject instanceof String) {
+            return (String) idObject;
+        } else if (idObject instanceof Long) {
+            return Long.toString((Long) idObject); // Long 타입인 경우 문자열로 변환
+        } else {
+            throw new IllegalStateException("Unexpected type for 'id' attribute: " + idObject.getClass().getName());
         }
-        return null;
     }
-
-    private String getNaverId(OAuth2User oAuth2User) {
-        log.info("NAVER ID -------------------------");
-
-        String id = oAuth2User.getAttribute("id");
-        log.info("Naver ID: {}", id);
-        return id;
     }
-}

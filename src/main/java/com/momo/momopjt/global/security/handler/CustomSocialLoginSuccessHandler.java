@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-@Component
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final PasswordEncoder passwordEncoder;
@@ -102,6 +101,8 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
             .build();
         userRepository.save(user);
         log.info("New user saved to database: {}", user);
+        response.sendRedirect(request.getContextPath() + "/user/update/" + id);
+        return;
       }
 
       SecurityContextHolder.getContext().setAuthentication(
@@ -113,15 +114,8 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
       encodedPw = userSecurityDTO.getUserPw();
     }
 
-    // 비밀번호 변경 로직
-    if (userSecurityDTO != null && userSecurityDTO.getUserSocial() == 'Y' && passwordEncoder.matches("1111", encodedPw)) {
-      log.info("Should Change Password");
-      log.info("Redirect to User update");
-      response.sendRedirect(request.getContextPath() + "/user/update");
-    } else {
-      // 일반 로그인 흐름
-      response.sendRedirect(request.getContextPath() + "/user/home");
-    }
+    // 일반 로그인 흐름
+    response.sendRedirect(request.getContextPath() + "/user/home");
   }
 
   private String getKakaoEmail(Map<String, Object> paramMap) {
