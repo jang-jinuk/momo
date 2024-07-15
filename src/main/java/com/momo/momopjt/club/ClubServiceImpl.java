@@ -33,7 +33,14 @@ public class ClubServiceImpl implements ClubService {
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
   public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) {
-    Photo photo = photoService.savePhoto(photoDTO); //TODO 파일 업로드 기능과 연결필요
+
+    //사진을 등록하지 않았다면 default 사진으로 등록
+    Photo photo = new Photo();
+    if(photoDTO.getPhotoUUID() != "") {
+      photo = photoService.savePhoto(photoDTO);
+    } else {
+      photo.setPhotoUUID("default.jpg"); //TODO 나중에 실제 default 사진 UUID로 변경
+    }
 
     clubDTO.setPhotoUUID(photo);
     Instant instant = Instant.now();
