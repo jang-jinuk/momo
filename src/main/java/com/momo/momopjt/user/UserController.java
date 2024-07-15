@@ -5,6 +5,7 @@ package com.momo.momopjt.user;
 import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -101,20 +102,15 @@ public class UserController {
 
     @GetMapping("/update/{userId}")
     public String updateGet(@PathVariable String userId, Model model) {
+        // userId에 해당하는 User 엔티티 조회
         User user = userRepository.findByUserId(userId);
         if (user == null) {
-            throw new IllegalArgumentException("User not found with userId: " + userId);
+            throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
         }
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getUserId());
-        userDTO.setUserEmail(user.getUserEmail());
-        userDTO.setUserNickname(user.getUserNickname());
-        userDTO.setUserCategory(user.getUserCategory());
-        userDTO.setUserAddress(user.getUserAddress());
-        userDTO.setUserMBTI(user.getUserMBTI());
-
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         model.addAttribute("userDTO", userDTO);
+
         return "user/update";
     }
 
@@ -129,6 +125,10 @@ public class UserController {
             log.error(bindingResult.getAllErrors().toString());
             return "redirect:/user/update/" + userId;
         }
+
+        ModelMapper modelMapper = new ModelMapper();
+        User user = modelMapper.map(userDTO, User.class);
+
         try {
             userService.updateUser(userDTO);
         } catch (Exception e) {
@@ -140,5 +140,7 @@ public class UserController {
         redirectAttributes.addFlashAttribute("result", "success");
         return "redirect:/user/home";
     }
+
+
 }
 

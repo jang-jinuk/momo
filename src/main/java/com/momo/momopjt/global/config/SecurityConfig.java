@@ -63,7 +63,8 @@ public class SecurityConfig {
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
-        .formLogin().loginPage("/user/login")
+        .formLogin()
+        .loginPage("/user/login")
         .defaultSuccessUrl("/user/home")
         .successHandler(authenticationSuccessHandler())
         .permitAll()
@@ -78,9 +79,9 @@ public class SecurityConfig {
         .exceptionHandling()
         .accessDeniedPage("/403")
         .and()
-        .csrf().disable();
+        .csrf().disable()
 
-    http.oauth2Login()
+        .oauth2Login()
         .loginPage("/user/login")
         .defaultSuccessUrl("/user/home", true)
         .successHandler(authenticationSuccessHandler())
