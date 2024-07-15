@@ -81,18 +81,26 @@ public class ClubServiceImpl implements ClubService {
   //모임 정보 수정
   //수정 가능 정보 : 사진, 카테고리, 소개글, 지역, 정원
   @Override
-  public Long updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
+  public Boolean updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
     clubDTO.setPhotoUUID(photo);
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
-    log.info(clubDTO);
+
+    //현재 모임의 인원수 확인
+    int membersCount = userAndClubService.countMembers(club);
+
+    //현재 모임 인원수보다 적게는 수정하지 못함
+    if(membersCount > clubDTO.getClubMax()) {
+      return false;
+    }
+
     club.change(clubDTO.getPhotoUUID(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
             clubDTO.getClubArea(), clubDTO.getClubMax()
     );
     clubRepository.save(club);
 
-    return club.getClubNo();
+    return true;
   }
 
   //모임 해산
