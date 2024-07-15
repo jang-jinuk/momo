@@ -82,10 +82,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   }
 
   @Override
-  public Boolean isLeader(Long clubNo) {
-    Club club = new Club();
-    club.setClubNo(clubNo);
-    UserAndClub userAndClub = userAndClubRepository.findMember(club);
+  public Boolean isLeader(UserAndClubDTO userAndClubDTO) {
+    UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(), userAndClubDTO.getUserNo());
 
     if (userAndClub.getIsLeader()) { //모임장이면 true
       return true;

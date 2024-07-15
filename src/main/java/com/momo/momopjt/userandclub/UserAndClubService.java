@@ -16,5 +16,5 @@ public interface UserAndClubService {
 
   void deleteAllMembers(Long clubNo);
 
-  Boolean isLeader(Long clubNo);
+  Boolean isLeader(UserAndClubDTO userAndClubDTO);
 }
