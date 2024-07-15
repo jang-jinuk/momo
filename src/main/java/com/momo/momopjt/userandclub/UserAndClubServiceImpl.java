@@ -81,4 +81,17 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     userAndClubRepository.deleteClubMembers(club);
   }
 
+  @Override
+  public Boolean isLeader(Long clubNo) {
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    UserAndClub userAndClub = userAndClubRepository.findMember(club);
+
+    if (userAndClub.getIsLeader()) { //모임장이면 true
+      return true;
+    }
+
+    return false; //모임원이면 false
+  }
+
 }

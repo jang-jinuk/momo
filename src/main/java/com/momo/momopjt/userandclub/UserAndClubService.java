@@ -15,4 +15,6 @@ public interface UserAndClubService {
   List<UserAndClubDTO> readAllJoinList(Club clubNo);
 
   void deleteAllMembers(Long clubNo);
+
+  Boolean isLeader(Long clubNo);
 }
