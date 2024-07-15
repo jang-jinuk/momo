@@ -5,10 +5,10 @@ package com.momo.momopjt.club;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
@@ -67,7 +67,9 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public List<ClubDTO> readAllClub() {
     List<Club> clubs = clubRepository.findAll();
-    List<ClubDTO> clubDTOS = modelMapper.map(clubs, List.class);
+    List<ClubDTO> clubDTOS = clubs.stream()
+        .map(club -> modelMapper.map(club, ClubDTO.class))
+        .collect(Collectors.toList());
     return clubDTOS;
   }
 
