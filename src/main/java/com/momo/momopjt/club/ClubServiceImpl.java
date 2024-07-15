@@ -34,14 +34,7 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) {
 
-    //사진을 등록하지 않았다면 default 사진으로 등록
-    Photo photo = new Photo();
-    if(photoDTO.getPhotoUUID() != "") {
-      photo = photoService.savePhoto(photoDTO);
-    } else {
-      photo.setPhotoUUID("default.jpg"); //TODO 나중에 실제 default 사진 UUID로 변경
-    }
-
+    Photo photo = photoService.savePhoto(photoDTO);
     clubDTO.setPhotoUUID(photo);
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
