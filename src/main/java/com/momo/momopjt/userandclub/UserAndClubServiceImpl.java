@@ -82,14 +82,16 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   }
 
   @Override
-  public Boolean isLeader(UserAndClubDTO userAndClubDTO) {
+  public int isMember(UserAndClubDTO userAndClubDTO) {
     UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(), userAndClubDTO.getUserNo());
 
-    if (userAndClub.getIsLeader()) { //모임장이면 true
-      return true;
+    if (userAndClub == null) {
+      return 0; //모임 미가입자
+    } else if (userAndClub.getIsLeader()) {
+      return 1; //모임장일 경우
     }
 
-    return false; //모임원이면 false
+    return 2; //모임원일 경우
   }
 
   @Override

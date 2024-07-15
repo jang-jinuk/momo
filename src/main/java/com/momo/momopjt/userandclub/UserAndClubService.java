@@ -16,7 +16,7 @@ public interface UserAndClubService {
 
   void deleteAllMembers(Long clubNo);
 
-  Boolean isLeader(UserAndClubDTO userAndClubDTO);
+  int isMember(UserAndClubDTO userAndClubDTO);
 
   int countMembers(Club clubNo);
 }
