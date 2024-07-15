@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.util.List;
@@ -97,6 +99,18 @@ public class ClubController {
     model.addAttribute("clubDTO", clubDTO);
     return "/club/update";
   }
+  @PostMapping("/update")
+  public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    clubDTO.setClubNo(clubNo);
 
+    Boolean isSuccess = clubService.updateClub(clubDTO, photoDTO);
 
+    if (isSuccess) {
+      redirectAttributes.addFlashAttribute("message","모임 수정이 완료되었습니다.");
+      return "redirect:/club/main/" + clubDTO.getClubNo();
+    }
+    redirectAttributes.addFlashAttribute("message","모임 구성원 수보다 적게 수정할 수 없습니다.");
+    return "redirect:/club/update";
+  }
 }
