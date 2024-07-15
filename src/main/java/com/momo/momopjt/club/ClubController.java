@@ -25,6 +25,7 @@ public class ClubController {
   @Autowired
   private HttpSession session;
 
+
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model) {
     log.info("------------ [club main] ------------");
@@ -44,5 +45,6 @@ public class ClubController {
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
     return "club/main";
   }
-
+  @GetMapping("/create")
+  public String createClub() {return "club/create";}
 }
