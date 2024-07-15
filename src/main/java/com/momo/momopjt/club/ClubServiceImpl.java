@@ -5,6 +5,8 @@ package com.momo.momopjt.club;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -34,6 +36,8 @@ public class ClubServiceImpl implements ClubService {
     Photo photo = photoService.savePhoto(photoDTO); //TODO 파일 업로드 기능과 연결필요
 
     clubDTO.setPhotoUUID(photo);
+    Instant instant = Instant.now();
+    clubDTO.setClubCreateDate(instant);//모임 생성일 추가
     Club club = modelMapper.map(clubDTO, Club.class);
     Long clubNo = clubRepository.save(club).getClubNo();
 
