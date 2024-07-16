@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final UserAndClubRepository userAndClubRepository;
   private final ModelMapper modelMapper;
+  private final ClubRepository clubRepository;
 
 
   //모임 가입 신청
@@ -34,13 +37,24 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모입 가입 승인
   @Override
-  public void approveJoin(UserAndClubDTO userAndClubDTO) {
+  public Boolean approveJoin(UserAndClubDTO userAndClubDTO) {
+    Optional<Club> result = clubRepository.findById(userAndClubDTO.getClubNo().getClubNo());
+    Club club = result.orElseThrow();
+
+     int countMembers = countMembers(userAndClubDTO.getClubNo());
+
+    if (club.getClubMax() == countMembers) { //모임 정원을 넘는지 확인
+      return false;
+    }
+
     UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
     userAndClub.setIsLeader(false); //모임원 등록
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
+
+    return true;
   }
 
   //모임 탈퇴
