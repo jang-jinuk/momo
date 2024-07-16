@@ -4,7 +4,6 @@ import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
-import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -12,8 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,8 +19,6 @@ public class HomeController {
 
   @Autowired
   private ClubService clubService;
-  @Autowired
-  private UserAndClubService userAndClubService;
   @Autowired
   private UserService userService;
 
