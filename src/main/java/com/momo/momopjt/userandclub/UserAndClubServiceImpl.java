@@ -88,11 +88,13 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
     if (userAndClub == null) {
       return 0; //모임 미가입자
+    } else if (userAndClub.getIsLeader() == null) {
+      return 1; //모임 가입 신청자
     } else if (userAndClub.getIsLeader()) {
-      return 1; //모임장일 경우
+      return 2; //모임장일 경우
     }
 
-    return 2; //모임원일 경우
+    return 3; //모임원일 경우
   }
 
   //모임맴버 총 인원 확인
