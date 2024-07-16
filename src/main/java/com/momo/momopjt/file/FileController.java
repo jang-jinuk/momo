@@ -31,17 +31,17 @@ public class FileController {
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //  public String uploadFile(FileDto fileDto){
   //605p
-  public List<UploadResultDto> uploadFile(FileDto fileDto){
+  public List<UploadResultDTO> uploadFile(FileDTO fileDTO){
     log.info("----------------- [filecontroller uploadFile]-----------------");
-    log.info(fileDto);
+    log.info(fileDTO);
 
     //600p add
-    if(fileDto.getFiles() != null){
+    if(fileDTO.getFiles() != null){
 
       //605p
-      final List<UploadResultDto> uploadResultDtoList = new ArrayList<>();
+      final List<UploadResultDTO> uploadResultDTOList = new ArrayList<>();
 
-      fileDto.getFiles().forEach(multipartFile -> {
+      fileDTO.getFiles().forEach(multipartFile -> {
 
 //        log.info(multipartFile.getOriginalFilename());
         //602p
@@ -72,7 +72,7 @@ public class FileController {
         }
 
         //606p
-        uploadResultDtoList.add(UploadResultDto.builder()
+        uploadResultDTOList.add(UploadResultDTO.builder()
                 .uuid(uuid)
                 .fileName(originalFileName)
                 .isImage(isImage)
@@ -80,7 +80,7 @@ public class FileController {
         );
 
       });// end each
-      return uploadResultDtoList;
+      return uploadResultDTOList;
     }// end if
     return null;
   }

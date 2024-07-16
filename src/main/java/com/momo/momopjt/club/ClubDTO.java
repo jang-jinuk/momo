@@ -15,7 +15,7 @@ public class ClubDTO {
 
   private Long clubNo;
 
-  private Photo clubPhoto;
+  private Photo photoUUID;
 
   private String clubName;
 

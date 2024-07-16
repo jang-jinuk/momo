@@ -17,6 +17,9 @@ public class UserAndScheduleDTO {
 
   private User userNo;
 
+  @Builder.Default
+  private Boolean isHost = false;
+
   private Schedule scheduleNo;
 
 }

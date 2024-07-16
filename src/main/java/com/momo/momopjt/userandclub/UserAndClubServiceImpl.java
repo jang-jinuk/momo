@@ -8,6 +8,7 @@ import com.momo.momopjt.club.Club;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -59,15 +60,19 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     Boolean isLeader = false; //모임원등급으로 표시
     List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
     log.info("--------------------쿼리실행 완료--------------------");
-    List<UserAndClubDTO> memberList = modelMapper.map(userAndClubs, List.class);
-    return memberList;
+    List<UserAndClubDTO> userAndClubDTOList = userAndClubs.stream()
+        .map(userAndClub -> modelMapper.map(userAndClub, UserAndClubDTO.class))
+        .collect(Collectors.toList());
+    return userAndClubDTOList;
   }
 
   //모임 가입 신청 내역 조회
   @Override
   public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
     List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
-    List<UserAndClubDTO> joinList = modelMapper.map(userAndClubs, List.class);
+    List<UserAndClubDTO> joinList = userAndClubs.stream()
+        .map(userAndClub -> modelMapper.map(userAndClub, UserAndClubDTO.class))
+        .collect(Collectors.toList());
     return joinList;
   }
 

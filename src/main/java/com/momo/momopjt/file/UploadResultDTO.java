@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UploadResultDto {
+public class UploadResultDTO {
   private String uuid;
   private String fileName;
   private boolean isImage; // 책에서 img
