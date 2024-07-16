@@ -78,6 +78,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserDTO userDTO) {
+        //TODO review 필요 0716 YY
+
         // 1. 사용자 찾기
         User user = userRepository.findByUserId(userDTO.getUserId());
         if (user == null) {

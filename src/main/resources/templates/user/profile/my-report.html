@@ -9,11 +9,13 @@
 <header>
     <h6 th:text="${logoText}">momo</h6>
 </header>
+
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">내가 신고한 내역</a>
     </div>
 </nav>
+
 <table class="container">
     <thead>
     <tr>
@@ -25,6 +27,7 @@
         <th scope="col">삭제?</th>
     </tr>
     </thead>
+
     <tbody>
     <tr>
     <tr th:each="report : ${reportDTO}">

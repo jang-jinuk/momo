@@ -6,8 +6,6 @@ import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +29,6 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final EmailService emailService;
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 private final ModelMapper modelMapper;
 
     @GetMapping("/home")

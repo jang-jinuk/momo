@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,11 +17,12 @@ import java.util.stream.Collectors;
 @Transactional
 @Log4j2
 public class ReportServiceImpl implements ReportService {
+  
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
 
-  //신고하기 (추가)
+  //신고 생성
   public void addReport(ReportDTO reportDTO) {
     Report report = modelMapper.map(reportDTO, Report.class);
     reportRepository.save(report);
@@ -36,7 +36,7 @@ public class ReportServiceImpl implements ReportService {
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
-  //모두 조회
+  //신고 모두 조회
   @Override
   public List<ReportDTO> readAllReport() {
     // 모든 리포트를 조회하여 리스트에 저장
@@ -53,8 +53,9 @@ public class ReportServiceImpl implements ReportService {
     log.info("...... [updateReport START]..........KSW");
 
     Optional<Report> justice = reportRepository.findById(reportDTO.getReportNo());
+    
     if (justice.isPresent()) {
-      log.info("...... [jusstice present]..........KSW");
+      log.info("...... [justice present]..........KSW");
       Report report = justice.get();
       // reportResult 가 1일 경우 2로 변경하여 저장
       if (report.getReportResult() == '1') {
@@ -75,7 +76,8 @@ public class ReportServiceImpl implements ReportService {
       }
     }
   }
-  //유저 제제 해제(수정) 제제랑 숫자만 다름
+  
+  //유저 제제 해제(수정) 제제랑 숫자만 다름 TODO 위 killreport랑 합칠 수 있음 
   @Override
   public void safeReport(ReportDTO reportDTO) {
     log.info("...... [updatReport START]..........KSW");
@@ -102,21 +104,26 @@ public class ReportServiceImpl implements ReportService {
       }
     }
   }
-
+  
   // 삭제
   @Override
   public void deleteReport(Long reportNo) {
+    log.info("----------------- [deleteReport]-----------------");
     Optional<Report> optionalReport = reportRepository.findById(reportNo);
+
     if (optionalReport.isPresent()) {
       Report report = optionalReport.get();
+
       if (report.getReportResult() == '1') {
         reportRepository.deleteById(reportNo);
+
       } else {
         System.out.println("회원 상태가 이상하여 삭제처리가 어렵습니다");
       }
     } else {
       System.out.println("회원을 찾을 수 없습니다!");
     }
+
   }
 }
 

@@ -45,7 +45,6 @@
         .btn-group {
             margin-bottom: 10px; /* 아래쪽 간격 추가 */
         }
-
     </style>
 </head>
 <body>
@@ -53,6 +52,7 @@
     <div class="container-fluid d-flex flex-column align-items-center">
         <h2>신고하기</h2>
     </div>
+    <!-- 신고 폼 -->
     <form th:action="@{/report/create}" method="post" class="form-container">
         <div class="form-check">
             <input class="form-check-input" type="radio" name="reportCategory" value="스팸/도배" id="spam">
