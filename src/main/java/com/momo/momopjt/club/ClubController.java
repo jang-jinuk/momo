@@ -91,7 +91,7 @@ public class ClubController {
 
     redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
 
-    return "redirect:/club/main" + clubNo;
+    return "redirect:/club/main/" + clubNo;
   }
 
   @GetMapping("/update")
