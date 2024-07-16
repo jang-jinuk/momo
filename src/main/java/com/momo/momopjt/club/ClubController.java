@@ -112,7 +112,7 @@ public class ClubController {
 
     if (isSuccess) {
       redirectAttributes.addFlashAttribute("message","모임 수정이 완료되었습니다.");
-      return "redirect:/club/main" + clubDTO.getClubNo();
+      return "redirect:/club/main/" + clubNo;
     }
     redirectAttributes.addFlashAttribute("message","모임 구성원 수보다 적게 수정할 수 없습니다.");
     return "redirect:/club/update";
@@ -262,7 +262,11 @@ public class ClubController {
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
 
-    userAndClubService.approveJoin(userAndClubDTO);
+    Boolean isSuccess = userAndClubService.approveJoin(userAndClubDTO);
+    if(!isSuccess) {
+      redirectAttributes.addFlashAttribute("message", "인원 초과입니다. 최대인원수를 수정해주세요");
+      return "redirect:/club/members";
+    }
 
     redirectAttributes.addFlashAttribute("message", "승인이 완료되었습니다.");
     return "redirect:/club/members";
