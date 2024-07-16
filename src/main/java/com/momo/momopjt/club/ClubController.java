@@ -204,7 +204,7 @@ public class ClubController {
 
   //모임 가입 신청
   @GetMapping("/join")
-  public String joinClub(HttpSession session, Model model) {
+  public String joinClub(HttpSession session) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
