@@ -64,7 +64,7 @@ public class ClubController {
 
     int isMember = userAndClubService.isMember(userAndClubDTO); //모임에 소속되었는지 확인
     if (isMember == 0 || isMember == 1) {
-      return "redirect:/club/joinPage";
+      return "redirect:/club/join-page";
     }
     model.addAttribute("isMember", isMember);
 
@@ -118,7 +118,7 @@ public class ClubController {
     return "redirect:/club/update";
   }
 
-  @GetMapping("/disbandPage")
+  @GetMapping("/disband-page")
   public String goDisbandPage() {
     return "/club/disband";
   }
@@ -173,7 +173,7 @@ public class ClubController {
     return "redirect:/user/home";
   }
 
-  @GetMapping("/joinPage")
+  @GetMapping("/join-page")
   public String goJoinPage(HttpSession session, Model model) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
@@ -248,7 +248,7 @@ public class ClubController {
   }
 
   //가입 신청 승인
-  @GetMapping("/approveJoin")
+  @GetMapping("/approve-join")
   public String approveJoin(@RequestParam("userNo")Long userNo, HttpSession session,
                             RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
