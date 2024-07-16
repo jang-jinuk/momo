@@ -6,7 +6,7 @@ import java.util.List;
 public interface UserAndClubService {
   void joinClub(UserAndClubDTO userAndClubDTO);
 
-  void approveJoin(Long id);
+  void approveJoin(UserAndClubDTO userAndClubDTO);
 
   void leaveClub(UserAndClubDTO userAndClubDTO);
 

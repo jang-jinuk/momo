@@ -34,12 +34,11 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모입 가입 승인
   @Override
-  public void approveJoin(Long id) {
-    Optional<UserAndClub> result = userAndClubRepository.findById(id);
-    UserAndClub userAndClub = result.orElseThrow();
+  public void approveJoin(UserAndClubDTO userAndClubDTO) {
+    UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
-    userAndClub.setIsLeader(false); //
+    userAndClub.setIsLeader(false); //모임원 등록
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
   }
