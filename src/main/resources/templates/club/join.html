@@ -32,17 +32,25 @@
             </div>
         </div>
         <br>
+        <h2>모임장</h2>
+        <div class="row">
+            <table>
+                <tr>
+                    <td>사진 자리</td>
+                    <td><h4 th:text="${isLeader.userNo.userNickname}">닉네임</h4></td>
+                    <td th:text="${isLeader.userNo.userMBTI}"></td>
+                </tr>
+            </table>
+        </div>
         <h2>맴버</h2>
         <div class="row">
-            <div class="col-12" th:each="userAndDTO : ${userAndClubDTOS}">
-                <div class="col-2">
-                    이미지 자리
-                </div>
-                 <div class="col-5">
-                    <h4 th:text="${userAndDTO.userNo.userNickname}">닉네임</h4>
-                    <p th:text="${userAndDTO.userNo.userMBTI}"></p>
-                 </div>
-            </div>
+            <table>
+                <tr th:each="userAndDTO : ${userAndClubDTOS}">
+                    <td>사진 자리</td>
+                    <td><h4 th:text="${userAndDTO.userNo.userNickname}">닉네임</h4></td>
+                    <td th:text="${userAndDTO.userNo.userMBTI}"></td>
+                </tr>
+            </table>
         </div>
         <div>
             <button th:onclick="|location.href='/club/join'|" th:if="${isMember == 0}">가입 신청</button>
