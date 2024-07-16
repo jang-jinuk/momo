@@ -68,9 +68,10 @@ public class SecurityConfig {
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
-        .formLogin().loginPage("/user/login")
-        .defaultSuccessUrl("/user/home")
-        .successHandler(authenticationSuccessHandler())
+        .formLogin()
+        .loginPage("/user/login")
+        .defaultSuccessUrl("/home")
+        .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
         .permitAll()
         .and()
         .logout()
@@ -93,7 +94,7 @@ public class SecurityConfig {
 
     http.oauth2Login()
         .loginPage("/user/login")
-        .defaultSuccessUrl("/user/home", true)
+        .defaultSuccessUrl("/home", true)
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
         .userService(customOAuth2UserService2());

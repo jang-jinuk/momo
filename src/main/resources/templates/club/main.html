@@ -13,14 +13,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <img src="/assets/게임동호회대표사진.png" style="max-height: 259px; max-width: 300px;">
+                    이미지 자리
                 </div>
                 <div class="col-9">
                     <h1 th:text="${club.clubName}"></h1>
                     <p th:text="${club.clubContent}">Club Content</p>
                 </div>
             </div>
-                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband}'|">탈퇴하기</button>
+                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disbandPage}'|" th:if="${isMember == 2}">해산하기</button>
+                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 1}">수정하기</button>
+                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leavePage}'|" th:unless="${isMember == 1}">탈퇴하기</button>
         </div>
 
         <br>

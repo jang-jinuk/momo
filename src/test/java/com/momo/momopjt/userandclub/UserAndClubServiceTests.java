@@ -16,7 +16,7 @@ import java.util.List;
 @Log4j2
 public class UserAndClubServiceTests {
   @Autowired
-  private UserAndClubService userAndClubService;
+  private com.momo.momopjt.userAndClub.UserAndClubService userAndClubService;
 
   //모임 가입 신청 기능 테스트
   @Test

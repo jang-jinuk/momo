@@ -55,65 +55,17 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
       String email = null;
       Character social = null;
 
-
-      //TODO IF-Else 문을 Switch - Case 문으로 수정 하면 될듯. 0716 YY
-      if ("google".equals(provider)) {
-        id = (String) oAuth2User.getAttribute("sub");
-        email = (String) oAuth2User.getAttribute("email");
-        social = 'G';
-      } else if ("kakao".equals(provider)) {
-        Object idObject = oAuth2User.getAttribute("id");
-        if (idObject instanceof String) {
-          id = (String) idObject;
-        } else if (idObject instanceof Long) {
-          id = Long.toString((Long) idObject); // Long 타입인 경우 문자열로 변환
-        } else {
-          throw new IllegalStateException("Unexpected type for 'id' attribute: " + idObject.getClass().getName());
-        }
-        email = getKakaoEmail(oAuth2User.getAttributes());
-        social = 'K';
-      } else if ("naver".equals(provider)) {
-        id = getNaverId(oAuth2User.getAttributes());
-        email = getNaverEmail(oAuth2User.getAttributes());
-        social = 'N';
-      }
-
-      if (id == null || email == null) {
-        throw new OAuth2AuthenticationException("ID or email not found from provider: " + provider);
-      }
-
-      String password = passwordEncoder.encode("defaultPassword"); // 적절한 기본 비밀번호 설정
-      boolean enabled = true; // 계정 활성화 여부
-      Collection<? extends GrantedAuthority> authorities = oAuth2User.getAuthorities();
-      userSecurityDTO = new UserSecurityDTO(id, password, email, enabled, social, authorities);
-      encodedPw = userSecurityDTO.getUserPw();
-
-      // 사용자 엔티티 생성 및 저장
-      User user = userRepository.findByUserId(id);
-      if (user == null) {
-        user = User.builder()
-            .userId(id)
-            .userEmail(email)
-            .userPw(encodedPw)
-            .userSocial(social)
-            .userRole(UserRole.USER) // 기본값 설정
-            .userCreateDate(Instant.now()) // 생성 날짜 설정
-            .userState('0')
-            .build();
-        userRepository.save(user);
-        log.info("New user saved to database: {}", user);
-        response.sendRedirect(request.getContextPath() + "/user/update/" + id);
-        return;
-      }
-
-      SecurityContextHolder.getContext().setAuthentication(
-          new UsernamePasswordAuthenticationToken(userSecurityDTO, null, oAuth2User.getAuthorities())
-      );
-      log.info("UserSecurityDTO created and set in SecurityContext: {}", userSecurityDTO);
-    } else if (principal instanceof UserSecurityDTO) {
-      userSecurityDTO = (UserSecurityDTO) principal;
-      encodedPw = userSecurityDTO.getUserPw();
+      log.info("Should Change Password");
+      log.info("Redirect to User update");
+      response.sendRedirect("/user/update");
+      /* 자동가입된  회원도 PasswordEncoder를 이용해서 1111을 인코딩한 상태이므로
+      matches()를 이용해서 검사하고 결과에 따라 /user/modify로 보내거나 /user/home으로 리다이렉트 시킨다.
+       */
+      return ;
+    } else {
+      response.sendRedirect("/home");
     }
+  }
 
     // 일반 로그인 흐름
     response.sendRedirect(request.getContextPath() + "/user/home");

@@ -15,16 +15,19 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                 <div class="container">
                     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-                        <a href="/user/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                        <a href="/home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                             <img src="/assets/favicon.ico">
                         </a>
                         <div class="col-md-3 text-end">
-                            <button type="button" class="btn btn-outline-secondary me-2">알림</button>
-                            <button type="button" class="btn btn-outline-secondary me-2">회원정보</button>
-                            <button type="button" class="btn btn-outline-primary me-2">Logout</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">알림</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">회원정보</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>
+                            <button th:if="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/login}'|">Login</button>
                         </div>
                     </header>
-                        <span th:text="${#authentication.name}"></span>님
+                        <span th:unless="${#authentication.name == 'anonymousUser'}" th:text="${#authentication.name}"></span>님
                 </div>
             </div>
         </nav>

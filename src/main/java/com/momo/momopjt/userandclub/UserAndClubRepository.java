@@ -3,6 +3,8 @@ package com.momo.momopjt.userandclub;
 import com.momo.momopjt.club.Club;
 
 import java.util.List;
+
+import com.momo.momopjt.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +13,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> {
-  //특정 모임의 맴버(모임원) 정보를 불러오는 쿼리문
+
+  //특정 모임의 맴버 정보를 불러오는 쿼리문
+  @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.userNo = :userNo")
+  UserAndClub findMember(@Param("clubNo")Club clubNo, @Param("userNo")User userNo);
+
+  //특정 모임의 모든 맴버(모임원) 정보를 불러오는 쿼리문
   @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.isLeader = :isLeader")
   List<UserAndClub> findMemberList(@Param("clubNo") Club clubNo, @Param("isLeader") Boolean isLeader);
 
@@ -24,4 +31,14 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   @Modifying
   @Query("DELETE FROM UserAndClub WHERE clubNo = :clubNo")
   void deleteClubMembers(@Param("clubNo") Club clubNo);
+
+  //특정 모임의 총인원 수
+  @Query("SELECT COUNT(*) FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.joinDate IS NOT NULL")
+  int countMembers(@Param("clubNo") Club clubNo);
+
+  //특정 맴버 삭제
+  @Modifying
+  @Query("DELETE FROM UserAndClub WHERE clubNo = :clubNo AND userNo = :userNo")
+  void deleteClubMember(@Param("clubNo")Club clubNo, @Param("userNo")User userNo);
+
 }

@@ -35,7 +35,7 @@ public class Club {
   @Column(name = "club_max", nullable = false)
   private Integer clubMax;
 
-  @Column(name = "club_gender", nullable = false)
+  @Column(name = "club_gender")
   private Character clubGender;
 
   @Column(name = "club_create_date", nullable = false)
