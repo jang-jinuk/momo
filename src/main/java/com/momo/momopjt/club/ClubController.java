@@ -5,7 +5,6 @@ import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
-import com.momo.momopjt.userandclub.UserAndClub;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
@@ -36,6 +35,7 @@ public class ClubController {
   @Autowired
   private UserAndClubService userAndClubService;
 
+  //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
     log.info("------------ [club main] ------------");
@@ -73,6 +73,7 @@ public class ClubController {
   @GetMapping("/create")
   public String createClub() {return "/club/create";}
 
+  //모임 생성
   @PostMapping("/create")
   public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
 
@@ -101,6 +102,7 @@ public class ClubController {
     return "/club/update";
   }
 
+  //모임 수정
   @PostMapping("/update")
   public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes, HttpSession session) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -121,6 +123,7 @@ public class ClubController {
     return "/club/disband";
   }
 
+  //모임 해산
   @GetMapping("/disband")
   public String disbandClub(HttpSession session, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -135,16 +138,21 @@ public class ClubController {
     return "/club/leave";
   }
 
+  //모임 탈퇴
   @GetMapping("/leave")
-  public String leaveClub(@RequestParam("userNo")User userNo, HttpSession session, RedirectAttributes redirectAttributes) {
+  public String leaveClub(@RequestParam("userNo")Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
+
+    User user = new User();
+    user.setUserNo(userNo);
+
     UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
     userAndClubDTO.setClubNo(club);
 
     if (userNo != null) { //모임장이 모임원을 탈퇴 시킬 때
-      userAndClubDTO.setUserNo(userNo);
+      userAndClubDTO.setUserNo(user);
       userAndClubService.leaveClub(userAndClubDTO);
       redirectAttributes.addFlashAttribute("message","모임원이 삭제 되었습니다.");
       return "redirect:/club/members";
@@ -153,7 +161,7 @@ public class ClubController {
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
-    User user = userService.findByUserId(username);
+    user = userService.findByUserId(username);
     userAndClubDTO.setUserNo(user);
 
     userAndClubService.leaveClub(userAndClubDTO);
@@ -192,6 +200,7 @@ public class ClubController {
     return "/club/join";
   }
 
+  //모임 가입 신청
   @GetMapping("/join")
   public String joinClub(HttpSession session, Model model) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -212,6 +221,7 @@ public class ClubController {
     return "redirect:/club/join-complete";
   }
 
+  //가입 신청 완료
   @GetMapping("/join-complete")
   public String joinClubComplete(HttpSession session, Model model) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -220,6 +230,7 @@ public class ClubController {
     return "/club/join-complete";
   }
 
+  //맴버 관리
   @GetMapping("/members")
   public String goMembers(Model model, HttpSession session) {
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -232,5 +243,26 @@ public class ClubController {
     model.addAttribute("joinList", joinList);
 
     return "/club/members";
+  }
+
+  //가입 신청 승인
+  @GetMapping("/approveJoin")
+  public String approveJoin(@RequestParam("userNo")Long userNo, HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo); //모임번호 지정
+
+    User user = new User();
+    user.setUserNo(userNo); //승인할 회원 지정
+
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    userAndClubDTO.setUserNo(user);
+    userAndClubDTO.setClubNo(club);
+
+    userAndClubService.approveJoin(userAndClubDTO);
+
+    redirectAttributes.addFlashAttribute("message", "승인이 완료되었습니다.");
+    return "redirect:/club/members";
   }
 }
