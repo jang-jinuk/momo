@@ -32,8 +32,8 @@
             </div>
         </div>
         <br>
-        <h2>모임장</h2>
         <div class="row">
+            <h2>모임장</h2>
             <table>
                 <tr>
                     <td>사진 자리</td>
@@ -42,14 +42,16 @@
                 </tr>
             </table>
         </div>
-        <h2>맴버</h2>
         <div class="row">
+            <h2>맴버</h2>
+            <p th:if="${#lists.isEmpty(userAndClubDTOS)}">등록된 모임원이 없습니다.</p>
             <table>
-                <tr th:each="userAndDTO : ${userAndClubDTOS}">
-                    <td>사진 자리</td>
-                    <td><h4 th:text="${userAndDTO.userNo.userNickname}">닉네임</h4></td>
-                    <td th:text="${userAndDTO.userNo.userMBTI}"></td>
+                <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
+                <tr th:each="member : ${userAndClubDTOS}">
+                    <td th:text="${member.userNo.userNickname}"></td>
+                    <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
                 </tr>
+                </tbody>
             </table>
         </div>
         <div>
