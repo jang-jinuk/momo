@@ -54,7 +54,7 @@ public class ClubController {
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -77,7 +77,7 @@ public class ClubController {
   @PostMapping("/create")
   public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -85,7 +85,7 @@ public class ClubController {
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
 
-    //TODO 파일 업로드 기능과 연결필요
+    //TODO 파일 업로드 기능과 연결필요 JW
 
     Long clubNo = clubService.createClub(clubDTO,photoDTO,userAndClubDTO);
 
@@ -158,7 +158,7 @@ public class ClubController {
       return "redirect:/club/members";
     }
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     user = userService.findByUserId(username);
@@ -179,7 +179,7 @@ public class ClubController {
     Club club = new Club();
     club.setClubNo(clubNo);
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -209,7 +209,7 @@ public class ClubController {
     Club club = new Club();
     club.setClubNo(clubNo);
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);

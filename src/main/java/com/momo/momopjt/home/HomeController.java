@@ -26,7 +26,7 @@ public class HomeController {
   public String home(Model model) {
 
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
