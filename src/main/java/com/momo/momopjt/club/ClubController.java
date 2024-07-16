@@ -69,7 +69,7 @@ public class ClubController {
     userAndClubDTO.setClubNo(club);
 
     int isMember = userAndClubService.isMember(userAndClubDTO); //모임에 소속되었는지 확인
-    if (isMember == 0) {
+    if (isMember == 0 || isMember == 1) {
       return "redirect:/club/joinPage";
     }
     model.addAttribute("isMember", isMember);
@@ -170,6 +170,16 @@ public class ClubController {
     Club club = new Club();
     club.setClubNo(clubNo);
 
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+
+    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
+    userAndClubDTO.setUserNo(user);
+    userAndClubDTO.setClubNo(club);
+    int isMember = userAndClubService.isMember(userAndClubDTO);
+
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     int countMembers = userAndClubService.countMembers(club);
@@ -177,7 +187,7 @@ public class ClubController {
     model.addAttribute("clubDTO", clubDTO); //모임 정보
     model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
     model.addAttribute("countMembers", countMembers);
-
+    model.addAttribute("isMember", isMember);
     return "/club/join";
   }
 
@@ -199,5 +209,13 @@ public class ClubController {
     userAndClubService.joinClub(userAndClubDTO);
 
     return "redirect:/club/join-complete";
+  }
+
+  @GetMapping("join-complete")
+  public String joinClubComplete(HttpSession session, Model model) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    ClubDTO clubDTO= clubService.readOneClub(clubNo);
+    model.addAttribute("clubDTO", clubDTO);
+    return "/club/join-complete";
   }
 }
