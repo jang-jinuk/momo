@@ -102,4 +102,12 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     int count = userAndClubRepository.countMembers(clubNo);
     return count;
   }
+
+  //모임장 조회
+  @Override
+  public UserAndClubDTO isLeader(Club clubNo) {
+    List<UserAndClub> userAndClub = userAndClubRepository.findMemberList(clubNo,true);
+    UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
+    return userAndClubDTO;
+  }
 }

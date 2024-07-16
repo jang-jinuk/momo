@@ -19,4 +19,6 @@ public interface UserAndClubService {
   int isMember(UserAndClubDTO userAndClubDTO);
 
   int countMembers(Club clubNo);
+
+  UserAndClubDTO isLeader(Club clubNo);
 }
