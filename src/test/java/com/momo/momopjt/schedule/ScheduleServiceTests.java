@@ -10,9 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.*;
 import java.util.List;
-import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -21,8 +19,6 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
-  @Autowired
-  private ScheduleRepository scheduleRepository;
 
   //모임 생성 테스트
   @Test
@@ -88,12 +84,7 @@ public class ScheduleServiceTests {
     //When
     Boolean result = scheduleService.updateSchedule(scheduleDTO);
     //Then
-//    assertEquals(scheduleDTO.getScheduleNo(),Long.parseLong(result.get("result")));
-    log.info(result);
-    //boolean타입 에러로 임시 수정 YY
-
-
-
+    assertEquals(true,result);
   }
 
   //일정 참가 테스트
@@ -108,14 +99,13 @@ public class ScheduleServiceTests {
 
     Long scheduleNo = 4L;
 
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
+    String successMessage = "신청이 완료되었습니다.";
 
     //When
-    String addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, addedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //참가 취소
@@ -130,14 +120,13 @@ public class ScheduleServiceTests {
 
     Long scheduleNo = 1L;
 
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() - 1;
+    String successMessage = "참석이 취소되었습니다.";
 
     //When
-    String subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //마감되지 않은 일정 조회 기능 테스트

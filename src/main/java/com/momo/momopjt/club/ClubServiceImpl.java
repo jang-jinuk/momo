@@ -6,11 +6,15 @@ import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubRepository;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class ClubServiceImpl implements ClubService {
 
   private final ClubRepository clubRepository;
+  private final UserAndClubRepository userAndClubRepository;
   private final PhotoService photoService;
   private final ModelMapper modelMapper;
   private final UserAndClubService userAndClubService;
@@ -117,5 +122,19 @@ public class ClubServiceImpl implements ClubService {
     if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
       photoService.deletePhoto(clubPhoto);
     }
+  }
+
+  // 나의 모임 조회
+  @Override
+  public List<ClubDTO> readMyClubs(User userNo) {
+    List<Club> clubs = userAndClubRepository.findMyClubs(userNo);
+
+    List<ClubDTO> clubDTOS = new ArrayList<>();
+
+    for (Club club : clubs) {
+      clubDTOS.add(readOneClub(club.getClubNo()));
+    }
+
+    return clubDTOS;
   }
 }

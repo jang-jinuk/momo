@@ -1,6 +1,7 @@
 package com.momo.momopjt.club;
 
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ClubService {
   Boolean updateClub(ClubDTO clubDTO, PhotoDTO photoDTO);
 
   void disbandClub(Long clubNo);
+
+  List<ClubDTO> readMyClubs(User userNo);
 }

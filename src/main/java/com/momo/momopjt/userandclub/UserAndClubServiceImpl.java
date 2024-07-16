@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.club.ClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,6 +28,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final UserAndClubRepository userAndClubRepository;
   private final ModelMapper modelMapper;
+  private final ClubRepository clubRepository;
 
 
   //모임 가입 신청
@@ -37,14 +40,24 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모입 가입 승인
   @Override
-  public void approveJoin(Long id) {
-    Optional<UserAndClub> result = userAndClubRepository.findById(id);
-    UserAndClub userAndClub = result.orElseThrow();
+  public Boolean approveJoin(UserAndClubDTO userAndClubDTO) {
+    Optional<Club> result = clubRepository.findById(userAndClubDTO.getClubNo().getClubNo());
+    Club club = result.orElseThrow();
+
+     int countMembers = countMembers(userAndClubDTO.getClubNo());
+
+    if (club.getClubMax() == countMembers) { //모임 정원을 넘는지 확인
+      return false;
+    }
+
+    UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
-    userAndClub.setIsLeader(false); //
+    userAndClub.setIsLeader(false); //모임원 등록
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
+
+    return true;
   }
 
   //모임 탈퇴
@@ -95,11 +108,13 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
     if (userAndClub == null) {
       return 0; //모임 미가입자
+    } else if (userAndClub.getIsLeader() == null) {
+      return 1; //모임 가입 신청자
     } else if (userAndClub.getIsLeader()) {
-      return 1; //모임장일 경우
+      return 2; //모임장일 경우
     }
 
-    return 2; //모임원일 경우
+    return 3; //모임원일 경우
   }
 
   //모임맴버 총 인원 확인
@@ -107,5 +122,13 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   public int countMembers(Club clubNo) {
     int count = userAndClubRepository.countMembers(clubNo);
     return count;
+  }
+
+  //모임장 조회
+  @Override
+  public UserAndClubDTO isLeader(Club clubNo) {
+    List<UserAndClub> userAndClub = userAndClubRepository.findMemberList(clubNo,true);
+    UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
+    return userAndClubDTO;
   }
 }

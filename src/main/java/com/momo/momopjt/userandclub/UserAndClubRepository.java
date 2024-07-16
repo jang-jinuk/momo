@@ -41,4 +41,8 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   @Query("DELETE FROM UserAndClub WHERE clubNo = :clubNo AND userNo = :userNo")
   void deleteClubMember(@Param("clubNo")Club clubNo, @Param("userNo")User userNo);
 
+  //내가 가입된 모입 조회
+  @Query("SELECT u.clubNo FROM UserAndClub u WHERE u.userNo = :userNo AND u.isLeader IS NOT NULL")
+  List<Club> findMyClubs(@Param("userNo")User userNo);
+
 }

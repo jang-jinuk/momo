@@ -20,9 +20,10 @@
                     <p th:text="${club.clubContent}">Club Content</p>
                 </div>
             </div>
-                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disbandPage}'|" th:if="${isMember == 2}">해산하기</button>
-                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 1}">수정하기</button>
-                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leavePage}'|" th:unless="${isMember == 1}">탈퇴하기</button>
+                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband-page}'|" th:if="${isMember == 2}">해산하기</button>
+                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 2}">수정하기</button>
+                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leavePage}'|" th:if="${isMember == 3}">탈퇴하기</button>
+                <button style="float: right;" class="btn btn-outline-primary" th:onclick="|location.href='@{/club/members}'|" th:if="${isMember == 2}">맴버관리</button>
         </div>
 
         <br>
@@ -45,7 +46,7 @@
                                 </a>
                                 <p class="card-text" th:text="${#dates.format(schedule.scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정 시작시간</p>
                                 <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
-                                <p class="card-text" th:text="${schedule.scheduleParticipants}">참가인원</p>
+                                <p class="card-text" th:text="|${schedule.scheduleParticipants} / ${schedule.scheduleMax}|">참가인원</p>
                             </div>
                         </div>
                     </div>

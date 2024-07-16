@@ -6,7 +6,7 @@ import java.util.List;
 public interface UserAndClubService {
   void joinClub(UserAndClubDTO userAndClubDTO);
 
-  void approveJoin(Long id);
+  Boolean approveJoin(UserAndClubDTO userAndClubDTO);
 
   void leaveClub(UserAndClubDTO userAndClubDTO);
 
@@ -19,4 +19,6 @@ public interface UserAndClubService {
   int isMember(UserAndClubDTO userAndClubDTO);
 
   int countMembers(Club clubNo);
+
+  UserAndClubDTO isLeader(Club clubNo);
 }
