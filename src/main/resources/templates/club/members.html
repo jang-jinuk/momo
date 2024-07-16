@@ -22,7 +22,7 @@
                 <tbody>
                 <tr th:each="join : ${joinList}">
                     <td th:text="${join.userNo.userNickname}"></td>
-                    <td><button th:onclick="|location.href='@{/club/approveJoin}'|">승인</button></td>
+                    <td><button th:onclick="|location.href='@{/club/approveJoin(userNo=${join.userNo.userNo})}'|">승인</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -39,7 +39,7 @@
                     <tbody>
                     <tr th:each="member : ${userAndClubDTOS}">
                         <td th:text="${member.userNo.userNickname}"></td>
-                        <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo})}'|">탈퇴</button></td>
+                        <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
                     </tr>
                     </tbody>
                 </table>
@@ -47,3 +47,13 @@
         </div>
     </div>
 </th:block>
+<script layout:fragment="script" th:inline="javascript">
+
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ null;
+    if (message) {
+        alert(message);
+    }
+    /*]]>*/
+
+</script>
