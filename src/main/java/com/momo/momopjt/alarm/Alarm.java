@@ -3,6 +3,7 @@ package com.momo.momopjt.alarm;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -31,4 +32,5 @@ public class Alarm {
 
   @Column(name = "alarm_create_date")
   private Instant alarmCreateDate;
+
 }

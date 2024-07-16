@@ -1,13 +1,17 @@
 package com.momo.momopjt.global.config;
 
+import com.momo.momopjt.global.security.CustomOAuth2UserService;
 import com.momo.momopjt.global.security.CustomUserDetailService;
 import com.momo.momopjt.global.security.NaverOAuth2UserInfo;
 import com.momo.momopjt.global.security.handler.CustomSocialLoginSuccessHandler;
+import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -74,14 +78,17 @@ public class SecurityConfig {
         .exceptionHandling()
         .accessDeniedPage("/403")
         .and()
-        .csrf().disable();
+        .sessionManagement()  // 세션 관리 설정 추가
+        .invalidSessionUrl("/user/login?expired=true")  // 세션이 무효화되었을 때 리다이렉트할 URL 추가
+        .maximumSessions(1)  // 동시 세션 최대 수 설정
+        .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
 
     http.oauth2Login()
         .loginPage("/user/login")
         .defaultSuccessUrl("/user/home", true)
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
-        .userService(oAuth2UserService());
+        .userService(customOAuth2UserService2());
 
     return http.build();
   }
@@ -97,33 +104,7 @@ public class SecurityConfig {
 //  }
 
   @Bean
-  public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
-    DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
-
-    return request -> {
-      OAuth2User oAuth2User = delegate.loadUser(request);
-
-      String registrationId = request.getClientRegistration().getRegistrationId();
-      String userNameAttributeName = request.getClientRegistration().getProviderDetails()
-          .getUserInfoEndpoint().getUserNameAttributeName();
-
-      Map<String, Object> attributes = oAuth2User.getAttributes();
-      Map<String, Object> additionalParameters = request.getAdditionalParameters();
-
-      // 사용자 정보를 파싱하는 로직을 추가합니다.
-      NaverOAuth2UserInfo userInfo = new NaverOAuth2UserInfo(attributes);
-
-      // 필요한 사용자 정보를 추출합니다.
-      String userId = userInfo.getId();
-      String userName = userInfo.getName();
-      String userEmail = userInfo.getEmail();
-
-      // 사용자 정보를 이용하여 데이터베이스에 사용자 정보를 저장하거나 갱신하는 로직을 추가할 수 있습니다.
-      return new DefaultOAuth2User(
-          Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-          attributes,
-          userNameAttributeName
-      );
-    };
+  public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService2() {
+    return new CustomOAuth2UserService(userRepository);
   }
 }

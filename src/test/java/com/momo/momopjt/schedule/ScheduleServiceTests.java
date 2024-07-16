@@ -12,6 +12,7 @@ import java.time.*;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -20,6 +21,8 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
+  @Autowired
+  private ScheduleRepository scheduleRepository;
 
   //모임 생성 테스트
   @Test

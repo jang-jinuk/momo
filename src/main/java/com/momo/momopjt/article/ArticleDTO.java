@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,5 @@ public class ArticleDTO {
   private Character articleState;
   private Integer articleScore;
   private Long clubNo;
+  private Long userNo;
 }

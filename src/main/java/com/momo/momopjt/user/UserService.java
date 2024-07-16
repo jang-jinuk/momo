@@ -30,4 +30,6 @@ public interface UserService {
 
     User findByUserIdAndUserEmail(String userId, String userEmail);
 
+    void deleteAccount(String userId, String userPw);
+
 }

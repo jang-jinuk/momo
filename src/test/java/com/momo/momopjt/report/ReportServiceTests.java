@@ -1,4 +1,4 @@
-package com.momo.momopjt.Report;
+package com.momo.momopjt.report;
 
 import com.momo.momopjt.report.Report;
 import com.momo.momopjt.report.ReportDTO;
