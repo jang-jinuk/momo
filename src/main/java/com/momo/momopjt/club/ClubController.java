@@ -5,6 +5,7 @@ import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandclub.UserAndClub;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
@@ -162,4 +163,22 @@ public class ClubController {
 
     return "redirect:/user/home";
   }
+
+  @GetMapping("/joinPage")
+  public String goJoinPage(HttpSession session, Model model) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+
+    ClubDTO clubDTO = clubService.readOneClub(clubNo);
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
+    int countMembers = userAndClubService.countMembers(club);
+
+    model.addAttribute("clubDTO", clubDTO); //모임 정보
+    model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
+    model.addAttribute("countMembers", countMembers);
+
+    return "/club/join";
+  }
+
 }
