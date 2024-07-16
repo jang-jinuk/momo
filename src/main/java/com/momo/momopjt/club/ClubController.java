@@ -38,12 +38,9 @@ public class ClubController {
   private UserService userService;
   @Autowired
   private UserAndClubService userAndClubService;
-  @Autowired
-  private HttpSession session;
-
 
   @GetMapping("/main/{clubNo}")
-  public String mainPage(@PathVariable("clubNo") Long clubNo, Model model) {
+  public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
     log.info("------------ [club main] ------------");
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
@@ -108,7 +105,7 @@ public class ClubController {
   }
 
   @PostMapping("/update")
-  public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
+  public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes, HttpSession session) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     clubDTO.setClubNo(clubNo);
 
@@ -211,11 +208,25 @@ public class ClubController {
     return "redirect:/club/join-complete";
   }
 
-  @GetMapping("join-complete")
+  @GetMapping("/join-complete")
   public String joinClubComplete(HttpSession session, Model model) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO= clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
     return "/club/join-complete";
+  }
+
+  @GetMapping("/members")
+  public String goMembers(Model model, HttpSession session) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
+    List<UserAndClubDTO> joinList = userAndClubService.readAllJoinList(club);
+
+    model.addAttribute("userAndClubDTOS", userAndClubDTOS);
+    model.addAttribute("joinList", joinList);
+
+    return "/club/members";
   }
 }
