@@ -28,7 +28,7 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+//@Service //불필요 ? 0716 YY
 @Log4j2
 @RequiredArgsConstructor
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -37,10 +37,9 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
   private final UserRepository userRepository;
 
   @Override
-  @Transactional
+//  @Transactional // 불필요 ? 0716 YY
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
-
     log.info("---------------------------------------");
     log.info("CustomLoginSuccessHandler onAuthenticationSuccess............");
     log.info(authentication.getPrincipal());
@@ -129,12 +128,15 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     if (account instanceof Map) {
       Map<String, Object> accountMap = (Map<String, Object>) account;
       Object emailObj = accountMap.get("email");
+
       if (emailObj instanceof String) {
         String email = (String) emailObj;
         log.info("Kakao Email: {}", email);
+
         return email;
       }
     }
+
     return null;
   }
 

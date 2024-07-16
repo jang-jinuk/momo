@@ -57,6 +57,11 @@ public class SecurityConfig {
     log.info("------------configure----------------");
 
     http
+
+        //TODO 나중에 복구 CSRF disable 0716 YY
+        .csrf()
+        .disable()
+
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
@@ -79,9 +84,12 @@ public class SecurityConfig {
         .accessDeniedPage("/403")
         .and()
         .sessionManagement()  // 세션 관리 설정 추가
+//        .disable() // 임시 세션 disable YY //TODO 다시 복구 필요 아래 3줄 포함
+
         .invalidSessionUrl("/user/login?expired=true")  // 세션이 무효화되었을 때 리다이렉트할 URL 추가
         .maximumSessions(1)  // 동시 세션 최대 수 설정
         .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
+
 
     http.oauth2Login()
         .loginPage("/user/login")

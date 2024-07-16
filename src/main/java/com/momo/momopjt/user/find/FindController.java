@@ -1,3 +1,6 @@
+/*
+ * slf4j Logger 가 사용된 부분은 Log4j2 log 로 수정함 0716 YY
+ */
 package com.momo.momopjt.user.find;
 
 import com.momo.momopjt.user.User;
@@ -37,10 +40,10 @@ public class FindController {
     String userId = userService.findUsernameByEmail(userEmail);
     if (userId != null) {
       model.addAttribute("userId", userId);
-//      logger.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
+      log.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
     } else {
       model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
-//      logger.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
+      log.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
     }
     return "user/find/id";
   }
@@ -56,6 +59,7 @@ public class FindController {
   @PostMapping("/find/password")
   public String findPassword(@ModelAttribute("findPasswordRequest") FindPasswordRequest findPasswordRequest,
                              RedirectAttributes redirectAttributes) {
+    log.info("----------------- [POST find password]-----------------");
     String userId = findPasswordRequest.getUserId();
     String userEmail = findPasswordRequest.getUserEmail();
 
@@ -64,19 +68,20 @@ public class FindController {
 
       if (user != null) {
         String temporaryPassword = userService.generateTemporaryPassword();
+        log.info("----------------- [0716 YY ]-----------------{}",temporaryPassword);
         userService.updateUserPassword(user, temporaryPassword);
         emailService.sendTemporaryPasswordEmail(userEmail, temporaryPassword);
         redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
-//        logger.info("Temporary password sent to email: {}", userEmail);
+        log.info("Temporary password sent to email: {}", userEmail);
 
         return "redirect:/user/home";
       } else {
         redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
-//        logger.warn("User not found for username: {} and email: {}", userId, userEmail);
+        log.warn("User not found for username: {} and email: {}", userId, userEmail);
       }
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
-//      logger.error("Error during password reset request processing", e);
+      log.error("Error during password reset request processing", e);
     }
     return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리디렉트
   }
@@ -125,7 +130,7 @@ public class FindController {
   @ExceptionHandler(Exception.class)
   public String handleException(Exception e, RedirectAttributes redirectAttributes) {
     redirectAttributes.addFlashAttribute("errorMessage", "예상치 못한 오류가 발생했습니다. 다시 시도해 주세요.");
-//    logger.error("Unhandled exception", e);
+    log.error("Unhandled exception", e);
     return "redirect:/find-pw";
   }
 }

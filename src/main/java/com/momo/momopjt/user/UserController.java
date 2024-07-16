@@ -32,7 +32,7 @@ public class UserController {
   private final UserService userService;
   private final UserRepository userRepository;
   private final EmailService emailService;
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+//  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
   private final ModelMapper modelMapper;
 
   @GetMapping("/home")
@@ -45,11 +45,12 @@ public class UserController {
 
   @GetMapping("/login")
     public void loginGET(HttpServletRequest request, Model model) {
+    log.info("----------------- [GET /login]-----------------");
     String errorCode = request.getParameter("errorCode");
     String logout = request.getParameter("logout");
         String expired = request.getParameter("expired");  // 세션 만료 여부 확인
 
-    log.info("login get........");
+//    log.info("login get........");
     log.info("logout: " + logout);
 
     if (logout != null) {

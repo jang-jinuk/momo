@@ -3,6 +3,7 @@ package com.momo.momopjt.user;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
+@Log4j2
 public class UserSecurityDTO implements UserDetails {
 
     private String userId;
@@ -25,6 +27,7 @@ public class UserSecurityDTO implements UserDetails {
     public UserSecurityDTO(String userId, String password, String email,
                            boolean enabled, Character social,
                            Collection<? extends GrantedAuthority> authorities) {
+        log.info("----------------- [userSecDTO contructor]-----------------");
         this.userId = userId;
         this.userPw = password;
         this.userEmail = email;

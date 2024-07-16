@@ -3,7 +3,6 @@ package com.momo.momopjt.global.security;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserRole;
-import groovy.util.logging.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private UserSecurityService userSecurityService;
+    //TODO 0716 error YY
 
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -83,6 +84,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         UserSecurityDTO userSecurityDTO = userSecurityService.generateDTO(id, email, oAuth2User.getAttributes(), provider.charAt(0));
+//TODO error YY import userSecurityService 추가함
 
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.

@@ -1,3 +1,8 @@
+/*
+ * 파일에 대한 설명을
+ * 써주면 좋을것 같은데
+ *
+ */
 package com.momo.momopjt.photo;
 
 import com.momo.momopjt.user.User;

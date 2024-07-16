@@ -4,6 +4,9 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 @SpringBootTest
 @Log4j2
 class MomoApplicationTests {
@@ -46,5 +49,12 @@ class MomoApplicationTests {
     log.info(result);
   }
 
+
+  @Test
+  void classcheck(){
+    log.info("--------------- [classcheck]---------------");
+    Collection<Character> socialTypes = Arrays.asList('K', 'N', 'G', 'M');
+    log.info(socialTypes.getClass().toString());
+  }
 
 }

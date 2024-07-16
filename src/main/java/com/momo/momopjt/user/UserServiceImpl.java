@@ -29,8 +29,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    @Transactional
+    //@Transactional
     public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
+        log.info("----------------- [signup()]-----------------YY");
 
         //UserId 중복 검사
         String userId = userDTO.getUserId();
@@ -205,7 +206,7 @@ public class UserServiceImpl implements UserService {
             int index = random.nextInt(CHARACTERS.length());
             password.append(CHARACTERS.charAt(index));
         }
-
+        log.info("----------------- [password generated]-----------------{}",password.toString());
         return password.toString();
     }
     @Override

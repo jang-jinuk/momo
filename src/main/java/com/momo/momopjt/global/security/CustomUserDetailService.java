@@ -25,13 +25,18 @@ public class CustomUserDetailService implements UserDetailsService {
     this.userRepository = userRepository;
   }
 
+  //TODO loadUserByUserName override : db 로그인 사용 UserDetailsService 을 Impl 0716 YY
   @Override
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
     log.info("loadUserByUsername: " + userId);
 
     // socialTypes 컬렉션 생성
-    Collection<Character> socialTypes = Arrays.asList('K', 'N', 'G', 'M');
+//    Collection<Character> socialTypes = Arrays.asList('K', 'N', 'G', 'M');
+    List<Character> socialTypes = List.of('K', 'N', 'G', 'M');
+    //TODO 위 class 확인해 보면 ArrayList 타입으로 생성되는데 정확하게 클래스 매칭해주는게 좋을듯 0716 YY +
+    // 추가로 JPQL에서도 List 문제없음 (UserRepository @Query
+
 
     // findByUserIdAndUserSocialIn 메서드 호출
     Optional<User> result = userRepository.findByUserIdAndUserSocialIn(userId, socialTypes);
