@@ -189,14 +189,16 @@ public class ClubController {
     userAndClubDTO.setClubNo(club);
     int isMember = userAndClubService.isMember(userAndClubDTO);
 
+    UserAndClubDTO isLeader = userAndClubService.isLeader(club);
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     int countMembers = userAndClubService.countMembers(club);
 
+    model.addAttribute("isLeader", isLeader); //모임장 정보
     model.addAttribute("clubDTO", clubDTO); //모임 정보
     model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
-    model.addAttribute("countMembers", countMembers);
-    model.addAttribute("isMember", isMember);
+    model.addAttribute("countMembers", countMembers);//모임 맴버 인원 수
+    model.addAttribute("isMember", isMember); //가입 신청 여부
     return "/club/join";
   }
 
