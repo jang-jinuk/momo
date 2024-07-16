@@ -109,12 +109,12 @@ public class UserTests {
 
         log.info(user.toString());
         log.info(user.getRoleSet().toString());
-    @Autowired
-    private UserService userService;
-  @Autowired
-  private ModelMapper modelMapper;
+//        @Autowired
+//        private UserService userService;
+//        @Autowired
+//        private ModelMapper modelMapper;
 
-    //    @Test
+        //    @Test
 //        //회원 추가 테스트
 //    void insertUserTests() {
 //        IntStream.rangeClosed(1, 100).forEach(i -> {
@@ -254,16 +254,16 @@ public class UserTests {
 //        log.info(checkresult);
 //    }
 //
-    //이메일 증복 확인
-    @Test
-    void TestEmail(){
-        log.info("...... [이메일 중복확인 테스트 시작]..........KSW");
-        String email1 = "asdf1234@naver.com"; // 이미 존재하는 이메일 입력
-        Optional<User> testuser = userRepository.findByUserEmail(email1);
-        log.info(testuser.orElseThrow().toString()); // 확인한 이메일을 가지는 User 정보 출력
-        log.info(testuser.orElseThrow().getUserEmail()); // 확인한 이메일 출력
-        log.info("...... [이메일 중복확인 테스트 끝]..........KSW");
-
+//        //이메일 증복 확인
+//        @Test
+//        void TestEmail () {
+//            log.info("...... [이메일 중복확인 테스트 시작]..........KSW");
+//            String email1 = "asdf1234@naver.com"; // 이미 존재하는 이메일 입력
+//            Optional<User> testuser = userRepository.findByUserEmail(email1);
+//            log.info(testuser.orElseThrow().toString()); // 확인한 이메일을 가지는 User 정보 출력
+//            log.info(testuser.orElseThrow().getUserEmail()); // 확인한 이메일 출력
+//            log.info("...... [이메일 중복확인 테스트 끝]..........KSW");
+//
+//        }
     }
-
 }
