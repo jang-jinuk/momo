@@ -17,7 +17,7 @@
                 <tbody>
                 <tr th:each="join : ${joinList}">
                     <td th:text="${join.userNo.userNickname}"></td>
-                    <td><button th:onclick="|location.href='@{/club/approveJoin(userNo=${join.userNo.userNo})}'|">승인</button></td>
+                    <td><button th:onclick="|location.href='@{/club/approve-join(userNo=${join.userNo.userNo})}'|">승인</button></td>
                 </tr>
                 </tbody>
             </table>
