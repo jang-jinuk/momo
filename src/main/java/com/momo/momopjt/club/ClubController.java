@@ -181,4 +181,23 @@ public class ClubController {
     return "/club/join";
   }
 
+  @GetMapping("/join")
+  public String joinClub(HttpSession session, Model model) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    userAndClubDTO.setClubNo(club);
+    userAndClubDTO.setUserNo(user);
+
+    userAndClubService.joinClub(userAndClubDTO);
+
+    return "redirect:/club/join-complete";
+  }
 }
