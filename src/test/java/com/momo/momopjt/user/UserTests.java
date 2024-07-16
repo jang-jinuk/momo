@@ -1,45 +1,107 @@
-//package com.momo.momopjt.user;
-//
-//import com.momo.momopjt.MomoApplication;
-//import com.momo.momopjt.global.security.CustomUserDetailService;
-//import lombok.extern.log4j.Log4j2;
-//import org.assertj.core.api.Assertions;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.modelmapper.ModelMapper;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.test.annotation.Commit;
-//import org.springframework.test.context.ContextConfiguration;
-//
-//import javax.transaction.Transactional;
-//import java.time.Instant;
-//import java.time.LocalDate;
-//import java.time.format.DateTimeFormatter;
-//import java.util.Arrays;
-//import java.util.Collection;
-//import java.util.NoSuchElementException;
-//import java.util.Optional;
-//import java.util.regex.Pattern;
-//import java.util.stream.IntStream;
-//
-//import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
-//
-//@SpringBootTest
-//@Log4j2
-//@ContextConfiguration(classes = MomoApplication.class)
-//public class UserTests {
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//    @Autowired
-//    //비밀번호 암호화
-//    private PasswordEncoder passwordEncoder;
-//    private CustomUserDetailService customUserDetailService;
-//
-//    @Test
+package com.momo.momopjt.user;
+
+import com.momo.momopjt.MomoApplication;
+import lombok.extern.log4j.Log4j2;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
+
+import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+
+@SpringBootTest
+@Log4j2
+@ContextConfiguration(classes = MomoApplication.class)
+public class UserTests {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    //비밀번호 암호화
+    private PasswordEncoder passwordEncoder;
+
+    @Test
+        //회원 추가 테스트
+    void insertUserTests() {
+
+        IntStream.rangeClosed(1, 100).forEach(i -> {
+
+            User user = User.builder()
+                .userId("user" + i)
+                .userPw(passwordEncoder.encode("1111"))
+                .userEmail("email" + i + "@aaa.bbb")
+                .build();
+
+            user.addRole(UserRole.USER);
+
+            if (i >= 90) {
+                user.addRole(UserRole.ADMIN);
+            }
+            userRepository.save(user);
+
+        });
+    }
+
+    @Test
+    void 회원가입() {
+        //시간 설정
+        Instant now = Instant.now();
+
+        //시간 설정 2
+
+        LocalDate date = LocalDate.parse("2016-10-31", DateTimeFormatter.ISO_DATE);
+        System.out.println(date);
+        log.info("-------- [06-28-11:17:45]-------you");
+
+        User user = User.builder()
+
+            .userNo(2L) //LONG타입
+            .userId("dbwjd1234")  //String 타입
+            .userPw("dbwjd")  //String 타입
+            .userNickname("momoguy1")  //String 타입
+            .userEmail("email1@momo.com") //String 타입
+            .userGender('m') //char타입
+            .userAge(30) //Integer타입
+            .userBirth(date)  //LocalDate 타입
+            .userCategory("game") //String 타입
+            .userAddress("Seoul") //String 타입
+            .userMBTI("INTP") //String 타입
+            .userState('O') //char타입
+            .userSocial('m') //char타입
+            .userPhoto("") //string타입
+            .userLikeNumber(0) //integer타입
+            .userCreateDate(now) //instant타입
+            .userModifyDate(now) //instant타입
+            .build();
+
+
+        userRepository.save(user);
+    }
+
+    @Test
+    @Transactional
+    public void 회원조회테스트() {
+        // socialTypes 컬렉션 생성
+        Collection<Character> socialTypes = Arrays.asList('k', 'n', 'g', 'm');
+
+        // findByUserIdAndUserSocialIn 메서드 호출
+        Optional<User> result = userRepository.findByUserIdAndUserSocialIn("dbwjd1234", socialTypes);
+        User user = result.orElseThrow();
+
+        log.info(user.toString());
+        log.info(user.getRoleSet().toString());
+        }
+
+    //    @Test
 //        //회원 추가 테스트
 //    void insertUserTests() {
 //
@@ -261,6 +323,6 @@
 //        log.info(testuser.orElseThrow().getUserEmail()); // 확인한 이메일 출력
 //        log.info("...... [이메일 중복확인 테스트 끝]..........KSW");
 //
-//    }
-//
-//}
+
+
+}

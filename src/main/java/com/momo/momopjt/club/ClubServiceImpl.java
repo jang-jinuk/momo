@@ -58,8 +58,8 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public List<ClubDTO> readAllClub() {
     List<Club> clubs = clubRepository.findAll();
-    List<ClubDTO> clubDTOS = modelMapper.map(clubs, List.class);
-    return clubDTOS;
+    List<ClubDTO> clubDTOs = modelMapper.map(clubs, List.class);
+    return clubDTOs;
   }
 
   //모임 정보 수정

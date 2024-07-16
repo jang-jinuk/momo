@@ -1,7 +1,5 @@
 package com.momo.momopjt.alarm;
 
-
-import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -9,10 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +35,6 @@ public class alarmServiceTest {
 
   @BeforeEach
   public void setUp() {
-
 
     alarmService = new AlarmServiceImpl(alarmRepository, notificationService);
 
@@ -119,7 +113,6 @@ public class alarmServiceTest {
 
   @Test
   public void 알람삭제기능() {
-
     Long alarmNo = 13L;
     alarmService.deleteAlarm(alarmNo);
   }
@@ -130,7 +123,6 @@ public class alarmServiceTest {
     for (Alarm alarm : alarmRepository.findAlarmByUserNo(user)) {
       log.info(alarm.getAlarmContent());
     }
-
   }
 
   @Test

@@ -5,11 +5,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Optional;
-
 
 @Service
 @Transactional
@@ -42,7 +42,6 @@ public class AlarmServiceImpl implements AlarmService {
     sendNotification(convertToDTO(savedAlarm));
   }
 
-
   //Alarm 엔티티의 식별자(alarmNo)를 사용하여 해당 알람을 데이터베이스에서 조회
   // 그 결과를 AlarmDTO로 변환하여 Optional로 감싸서 반환
   @Override
@@ -50,14 +49,16 @@ public class AlarmServiceImpl implements AlarmService {
     return alarmRepository.findById(alarmNo).map(this::convertToDTO);
   }
 
-  @Override            //모든 알람 보기
+  //모든 알람 보기
+  @Override
   public List<AlarmDTO> getAllAlarms() {
     return alarmRepository.findAll().stream()
         .map(this::convertToDTO)
         .collect(Collectors.toList());
   }
 
-  @Override        //알람 업데이트
+  //알람 업데이트
+  @Override
   public void updateAlarm(AlarmDTO alarmDTO) {
     Optional<Alarm> optionalAlarm = alarmRepository.findById(alarmDTO.getAlarmNo());
     if (optionalAlarm.isPresent()) {
@@ -70,18 +71,19 @@ public class AlarmServiceImpl implements AlarmService {
     }
   }
 
-  @Override       //알람 지우기
+  //알람 지우기
+  @Override
   public void deleteAlarm(Long alarmNo) {
     alarmRepository.deleteById(alarmNo);
   }
 
   @Override
-  public void isReadUpdate(User user,Long alarmNo) {
+  public void isReadUpdate(User user, Long alarmNo) {
     log.info("-------- [isreadupdate]-------you");
     List<Alarm> alarmList = alarmRepository.findAlarmByUserNo(user);
 
     for (Alarm alarm : alarmList) {
-      if (alarmNo.equals(alarm.getAlarmNo())){
+      if (alarmNo.equals(alarm.getAlarmNo())) {
         AlarmDTO alarmDTO = getAlarmById(alarmNo).orElseThrow();
         alarmDTO.setIsRead('1');
         updateAlarm(alarmDTO);

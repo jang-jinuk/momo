@@ -37,6 +37,9 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
+  @Column(name = "photo_data")
+  private byte[] photoData;
+
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)

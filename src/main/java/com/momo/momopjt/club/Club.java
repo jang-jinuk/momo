@@ -1,10 +1,7 @@
 package com.momo.momopjt.club;
 
-
-import com.momo.momopjt.article.Article;
 import com.momo.momopjt.photo.Photo;
 import java.time.Instant;
-import java.util.List;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

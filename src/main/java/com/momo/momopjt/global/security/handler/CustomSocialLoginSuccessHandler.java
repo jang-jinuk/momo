@@ -41,7 +41,6 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
   @Transactional
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
-
     log.info("---------------------------------------");
     log.info("CustomLoginSuccessHandler onAuthenticationSuccess............");
     log.info(authentication.getPrincipal());
@@ -57,6 +56,8 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
       String email = null;
       Character social = null;
 
+
+      //TODO IF-Else 문을 Switch - Case 문으로 수정 하면 될듯. 0716 YY
       if ("google".equals(provider)) {
         id = (String) oAuth2User.getAttribute("sub");
         email = (String) oAuth2User.getAttribute("email");

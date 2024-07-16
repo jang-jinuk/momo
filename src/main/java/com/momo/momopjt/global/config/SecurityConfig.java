@@ -1,17 +1,13 @@
 package com.momo.momopjt.global.config;
 
-import com.momo.momopjt.global.security.CustomOAuth2UserService;
 import com.momo.momopjt.global.security.CustomUserDetailService;
 import com.momo.momopjt.global.security.NaverOAuth2UserInfo;
 import com.momo.momopjt.global.security.handler.CustomSocialLoginSuccessHandler;
-import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -121,7 +117,6 @@ public class SecurityConfig {
       String userEmail = userInfo.getEmail();
 
       // 사용자 정보를 이용하여 데이터베이스에 사용자 정보를 저장하거나 갱신하는 로직을 추가할 수 있습니다.
-
       return new DefaultOAuth2User(
           Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
           attributes,

@@ -1,7 +1,5 @@
 package com.momo.momopjt.article;
 
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 public interface ArticleService {

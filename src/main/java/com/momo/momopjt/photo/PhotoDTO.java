@@ -25,4 +25,6 @@ public class PhotoDTO {
   private String photoSaveName;
 
   private String photoThumbnail;
+
+  private byte[] photoData;
 }

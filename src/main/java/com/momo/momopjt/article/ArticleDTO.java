@@ -1,7 +1,6 @@
 package com.momo.momopjt.article;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
