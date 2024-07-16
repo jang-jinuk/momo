@@ -86,13 +86,15 @@ public class SecurityConfig {
     return http.build();
   }
 
-  @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    log.info("------------web configure----------");
 
-    return (web) -> web.ignoring()
-        .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
-  }
+  //0716 불필요 코드 주석처리 YY
+//  @Bean
+//  public WebSecurityCustomizer webSecurityCustomizer() {
+//    log.info("------------web configure----------");
+//
+//    return (web) -> web.ignoring()
+//        .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+//  }
 
   @Bean
   public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
