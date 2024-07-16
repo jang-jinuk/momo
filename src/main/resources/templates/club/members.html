@@ -12,13 +12,8 @@
     <div class="container">
         <div class="row">
             <h2>가입 신청 내역</h2>
-            <table>
-                <thead>
-                <tr>
-                    <th>닉네임</th>
-                    <th></th>
-                </tr>
-                </thead>
+            <p th:if="${#lists.isEmpty(joinList)}">신청 내역이 없습니다.</p>
+            <table th:unless="${#lists.isEmpty(joinList)}">
                 <tbody>
                 <tr th:each="join : ${joinList}">
                     <td th:text="${join.userNo.userNickname}"></td>
@@ -29,18 +24,13 @@
 
             <div class="row">
                 <h2>맴버</h2>
+                <p th:if="${#lists.isEmpty(userAndClubDTOS)}">등록된 모임원이 없습니다.</p>
                 <table>
-                    <thead>
-                    <tr>
-                        <th>닉네임</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="member : ${userAndClubDTOS}">
-                        <td th:text="${member.userNo.userNickname}"></td>
-                        <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
-                    </tr>
+                    <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
+                        <tr th:each="member : ${userAndClubDTOS}">
+                            <td th:text="${member.userNo.userNickname}"></td>
+                            <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
