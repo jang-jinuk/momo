@@ -16,7 +16,7 @@
                       이미지 들어갈 자리
                   </div>
                   <div class="row-cols-2">
-                    <input id="file-upload" type="file" name="files" multiple="multiple"/>
+                    <input id="file-upload" type="file" name="files" multiple="multiple" enctype="multipart/form-data"/>
                   </div>
               </div>
               <div class="col-8">
@@ -35,14 +35,14 @@
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
-                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" th:required="true">
+                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" max="100" th:required="true">
                       </div>
                   </div>
               </div>
           </div>
           <div class="row">
               <label for="content" class="form-label">내용</label>
-              <textarea name="scheduleContent" style="width: 100%; height: 400px; resize: none" class="form-control" id="content"></textarea>
+              <textarea name="scheduleContent" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" maxlength="500"></textarea>
           </div>
               <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-primary">만들기</button>
       </form>

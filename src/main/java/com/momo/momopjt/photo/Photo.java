@@ -40,6 +40,9 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
+  @Column(name = "photo_data")
+  private byte[] photoData;
+
   @OneToMany(mappedBy = "clubPhoto")
   private Set<Club> clubs = new LinkedHashSet<>();
 

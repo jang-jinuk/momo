@@ -108,7 +108,7 @@ public class ScheduleServiceTests {
     Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
 
     //When
-    Integer addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    String addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
     assertEquals(expectedParticipantsNumber, addedParticipantsNumber);
@@ -130,7 +130,7 @@ public class ScheduleServiceTests {
     Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() - 1;
 
     //When
-    Integer subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    String subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
     assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);

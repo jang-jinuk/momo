@@ -1,6 +1,9 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.file.FileController;
+import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -35,7 +39,11 @@ public class ScheduleController {
   private UserAndScheduleService userAndScheduleService;
   @Autowired
   private HttpSession session;
+  @Autowired
+  private FileController fileController;
 
+  @Autowired
+  private PhotoService photoService;
   //일정 생성 페이지 이동
   @GetMapping("/create")
   public String scheduleCreate() {
@@ -45,6 +53,18 @@ public class ScheduleController {
   //일정 생성하기
   @PostMapping("/create")
   public String scheduleCreate(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
+
+    //이미지 파일 처리
+    //1. form 받은 multipart 파일을 rest controller에 전달
+    //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
+    //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
+    //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
+    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
+
+    //이미지 처리 후 UUID만 반환
+    String resultPhotoUUID = UUID.randomUUID().toString();
+    scheduleDTO.setSchedulePhoto(resultPhotoUUID);
+    //이미지를 일정 DTO에 전달 끝
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
