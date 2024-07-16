@@ -10,8 +10,13 @@
     <br>
     <div class="container">
         <div class="row">
-            <div class="col-3">
-                <div class="card" th:each="clubDTO : ${clubDTOList}">
+            <div>
+                <button th:unless="${#authentication.name == 'anonymousUser'}" th:onclick="|location.href='@{/club/create}'|">생성</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3" th:each="clubDTO : ${clubDTOList}">
+                <div class="card">
                     <img class="card-img-top" src="/assets/게시글사진1.jpg">
                     <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTO.clubNo})}" th:inline="text">
                         <h3 class="card-title" th:text="${clubDTO.clubName}"></h3>
