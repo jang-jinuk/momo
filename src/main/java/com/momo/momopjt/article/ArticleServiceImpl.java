@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
+
   @Autowired
   private ArticleRepository articleRepository;
 
@@ -69,6 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
   public void deleteArticle(Long articleNo) {
     articleRepository.deleteById(articleNo);
   }
+
 
   // Article 엔티티를 후기글DTO로 변환하는 메서드
   private ArticleDTO convertEntityToDTO(Article article) {

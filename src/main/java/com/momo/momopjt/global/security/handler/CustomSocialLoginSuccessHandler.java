@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-@Component
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private final PasswordEncoder passwordEncoder;

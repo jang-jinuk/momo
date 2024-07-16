@@ -38,7 +38,7 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
-  @Column(name = "photo_data")
+  @Column(name= "photo_data")
   private byte[] photoData;
 
   @NotNull

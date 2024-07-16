@@ -23,6 +23,9 @@
             <li th:unless="${#authentication.name == 'anonymousUser'}">
                 <a th:href="@{'/user/update/' + ${#authentication.name}}">회원정보 수정</a>
             </li>
+            <li th:unless="${#authentication.name == 'anonymousUser'}">
+                <a th:href="@{/user/deleteAccount}" class="delete-account-link">회원탈퇴</a>
+            </li>
         </ul>
     </nav>
 </header>
