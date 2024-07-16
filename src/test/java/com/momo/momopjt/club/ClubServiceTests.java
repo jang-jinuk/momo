@@ -2,6 +2,7 @@ package com.momo.momopjt.club;
 
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.userandclub.UserAndClubDTO;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ClubServiceTests {
     user.setUserNo(1L);
 
     PhotoDTO photoDTO = PhotoDTO.builder()
-        .photoUUID("00002test")
+        .photoUUID("test.jpg")
         .userNo(user)
         .photoSize(10)
         .photoCreateDate(Instant.now())
@@ -34,15 +35,16 @@ public class ClubServiceTests {
         .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
-        .clubArea("테스트 지역1")
-        .clubCategory("테스트 카테고리1")
-        .clubName("테스트 모임1")
-        .clubContent("테스트 모임 소개1")
-        .clubMax(5)
+        .clubArea("서울시 영등포구 신길동")
+        .clubCategory("운동")
+        .clubName("조축저축")
+        .clubContent("조기축구하면서 저축도 하자")
+        .clubMax(20)
         .clubGender('m')
         .clubCreateDate(Instant.now())
         .build();
-    clubService.createClub(clubDTO, photoDTO);
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    clubService.createClub(clubDTO, photoDTO,userAndClubDTO);
   }
 
   //특정 모임 조회 테스트

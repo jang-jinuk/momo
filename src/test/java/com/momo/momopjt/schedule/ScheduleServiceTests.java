@@ -87,9 +87,9 @@ public class ScheduleServiceTests {
         .build();
 
     //When
-    Map<String, String> result = scheduleService.updateSchedule(scheduleDTO);
+    Boolean result = scheduleService.updateSchedule(scheduleDTO);
     //Then
-    assertEquals(scheduleDTO.getScheduleNo(),Long.parseLong(result.get("result")));
+    assertEquals(true,result);
   }
 
   //일정 참가 테스트
@@ -105,13 +105,13 @@ public class ScheduleServiceTests {
     Long scheduleNo = 4L;
 
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
+    String successMessage = "신청이 완료되었습니다.";
 
     //When
-    Integer addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, addedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //참가 취소
@@ -127,13 +127,13 @@ public class ScheduleServiceTests {
     Long scheduleNo = 1L;
 
     ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() - 1;
+    String successMessage = "참석이 취소되었습니다.";
 
     //When
-    Integer subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //마감되지 않은 일정 조회 기능 테스트
