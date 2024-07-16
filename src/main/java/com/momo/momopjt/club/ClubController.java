@@ -14,10 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -139,19 +136,26 @@ public class ClubController {
   }
 
   @GetMapping("/leave")
-  public String leaveClub(HttpSession session, RedirectAttributes redirectAttributes) {
+  public String leaveClub(@RequestParam("userNo")User userNo, HttpSession session, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
+    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
+    userAndClubDTO.setClubNo(club);
+
+    if (userNo != null) { //모임장이 모임원을 탈퇴 시킬 때
+      userAndClubDTO.setUserNo(userNo);
+      userAndClubService.leaveClub(userAndClubDTO);
+      redirectAttributes.addFlashAttribute("message","모임원이 삭제 되었습니다.");
+      return "redirect:/club/members";
+    }
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
-
-    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
-    userAndClubDTO.setClubNo(club);
     userAndClubDTO.setUserNo(user);
+
     userAndClubService.leaveClub(userAndClubDTO);
 
     session.removeAttribute("clubNo");
