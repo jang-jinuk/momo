@@ -175,7 +175,8 @@ public class ScheduleServiceImpl implements ScheduleService {
   //해당 모임의 모든 일정 삭제
   @Override
   public void deleteScheduleByClub(Club clubNo) {
-    scheduleRepository.deleteAllSchedulesByClub(clubNo);
+    userAndScheduleService.deleteParticipantsByClub(clubNo);//모든 일정 참가자 삭제
+    scheduleRepository.deleteAllSchedulesByClub(clubNo); //모든 일정 삭제
   }
 
   //일정 인원 마감 확인
