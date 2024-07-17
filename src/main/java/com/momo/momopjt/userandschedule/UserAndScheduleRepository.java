@@ -22,11 +22,6 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
   @Query("DELETE FROM UserAndSchedule WHERE scheduleNo = :scheduleNo")
   void deleteAllParticipant(@Param("scheduleNo") Schedule scheduleNo);
 
-  //해당 모임에 모든 일정 참가자들을 삭제하는 쿼리문
-  @Modifying
-  @Query("DELETE  FROM UserAndClub WHERE clubNo = : clubNo")
-  void deleteParticipantByClub(@Param("clubNo") Club clubNo);
-
   //일정에 참석한 모든 참가자를 조회하는 쿼리문
   @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo")
   List<UserAndSchedule> findByAllParticipants(@Param("scheduleNo") Schedule scheduleNo);
