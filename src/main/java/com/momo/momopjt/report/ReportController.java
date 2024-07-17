@@ -19,30 +19,34 @@ public class ReportController {
   @Autowired
   private ReportService reportService;
 
-  //조회
+  //조회와 페이징 검색
   @GetMapping("/manage-report")
-  public String manageReport(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+  public String manageReport(Model model,
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             @RequestParam(value = "query", defaultValue = "") String query) {
     log.info("...... [ReportController/manage-report/running]..........KSW");
-    // 모든 리포트를 조회하여 모델에 추가
-    List<ReportDTO> sandReport = reportService.readAllReport();
-    int lastPage = (sandReport.size() + 9) / 10;
-    //10개씩 리스트로 만들기
-    if (page == 1 || page > lastPage) {
-      List<ReportDTO> pageList = sandReport.stream()
-          .limit(10)
-          .collect(Collectors.toList());
-      model.addAttribute("reportDTO", pageList);
-      model.addAttribute("page", page);
-      model.addAttribute("lastPage", lastPage);
+    // 검색어를 사용하여 리포트 조회
+    List<ReportDTO> sandReport;
+
+    if (query.isEmpty()) {
+      sandReport = reportService.readAllReport(); // 기존 모든 리포트 조회
     } else {
-      List<ReportDTO> pageList = sandReport.stream()
-          .skip(10L * (page-1)) // 처음 10개를 건너뜀
-          .limit(10) // 다음 10개를 선택
-          .collect(Collectors.toList());
-      model.addAttribute("reportDTO", pageList);
-      model.addAttribute("page", page);
-      model.addAttribute("lastPage", lastPage);
-      }
+      sandReport = reportService.searchReports(query); // 검색어에 따른 리포트 조회
+    }
+
+    int lastPage = (sandReport.size() + 9) / 10; // 페이지 갯수 설정 함수
+    // 10개씩 리스트로 만들기
+    if (page < 1 || page > lastPage) {
+      page = 1; // 페이지가 유효하지 않은 경우 1페이지로 설정
+    }
+    List<ReportDTO> pageList = sandReport.stream()
+        .skip(10L * (page - 1)) // 처음 (page-1) * 10개를 건너뜀
+        .limit(10) // 다음 10개를 선택
+        .collect(Collectors.toList());
+    model.addAttribute("reportDTO", pageList);
+    model.addAttribute("page", page);
+    model.addAttribute("lastPage", lastPage);
+    model.addAttribute("query", query); // 검색어를 모델에 추가
     return "/admin/manage-report";
   }
   //제제

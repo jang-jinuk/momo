@@ -1,7 +1,6 @@
 package com.momo.momopjt.report;
 
 import com.momo.momopjt.user.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +17,6 @@ public interface ReportService {
   void safeReport(ReportDTO reportDTO);
   //상태 수정후 삭제
   void deleteReport(Long reportNo);
+  //검색 페이징
+  List<ReportDTO> searchReports(String query);
 }

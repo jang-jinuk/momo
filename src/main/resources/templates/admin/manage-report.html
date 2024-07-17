@@ -19,8 +19,8 @@
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">신고된 회원 관리</a>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search">
+        <form class="d-flex" th:action="@{/admin/manage-report}" method="get">
+            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search" name="query" th:value="${query}">
             <button class="btn btn-outline-success" type="submit">검색</button>
         </form>
     </div>
@@ -80,25 +80,24 @@
     </tr>
     </tbody>
 </table>
-<div>
-    <a th:if="${page > 1}" th:href="@{/admin/manage-report(page=${page - 1})}">Previous</a>
-    <!-- 페이지 번호 버튼 생성 -->
-    <span th:each="i : ${#numbers.sequence(1, lastPage)}">
-        <a th:href="@{/admin/manage-report(page=${i})}"
-           th:text="${i}"
-           th:classappend="${i == page} ? 'current-page' : ''">i</a>
-    </span>
-    <a th:if="${page < lastPage}" th:href="@{/admin/manage-report(page=${page + 1})}">Next</a>
+<div class="d-flex justify-content-center" th:if="${lastPage > 1}">
+    <nav>
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/manage-report(page=${page - 1}, query=${query})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, lastPage)}" th:classappend="${i == page} ? 'active'">
+                <a class="page-link" th:href="@{/admin/manage-report(page=${i}, query=${query})}" th:text="${i}"></a>
+            </li>
+            <li class="page-item" th:classappend="${page == lastPage} ? 'disabled'">
+                <a class="page-link" th:href="@{/admin/manage-report(page=${page + 1}, query=${query})}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
-<ul id="pagination" class="pagination">
-    <c:forEach begin="1" end="${lastPage}" var="i">
-        <li>
-            <a href="?page=${i}&query=${query}" class="${i == page ? 'active' : ''}">${i}</a>
-        </li>
-    </c:forEach>
-</ul>
+</div>
 <style>
-    .current-page {
+    .active .page-link {
         font-weight: bold;
         text-decoration: underline;
     }

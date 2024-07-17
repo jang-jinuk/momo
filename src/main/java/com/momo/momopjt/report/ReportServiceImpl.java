@@ -5,10 +5,6 @@ import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +17,6 @@ import java.util.stream.Collectors;
 @Transactional
 @Log4j2
 public class ReportServiceImpl implements ReportService {
-  @Autowired
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
@@ -82,14 +77,14 @@ public class ReportServiceImpl implements ReportService {
   //유저 제제 해제(수정) 제제랑 숫자만 다름
   @Override
   public void safeReport(ReportDTO reportDTO) {
-    log.info("...... [updatReport START]..........KSW");
+    log.info("...... [update Report START]..........KSW");
     Optional<Report> sage = reportRepository.findById(reportDTO.getReportNo());
     if (sage.isPresent()) {
       log.info("...... [sage present]..........KSW");
       Report report = sage.get();
       // reportResult 가 2일 경우 1로 변경하여 저장
       if (report.getReportResult() == '2') {
-        log.info("...... [reporResult == 2]..........KSW");
+        log.info("...... [report Result == 2]..........KSW");
         report.setReportResult('1');
         // 사용자의 userState 값 변경
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
@@ -121,15 +116,20 @@ public class ReportServiceImpl implements ReportService {
       System.out.println("회원을 찾을 수 없습니다!");
     }
   }
-  //신고 관리 페이징
-  /* @Override
-  public Page<ReportDTO> getReportList(int page){
-    log.info("...... [serviceImpl/ReportList/running]..........KSW");
-    Pageable pageable = PageRequest.of(page, 10);
-    Page<Report> reportPage = reportRepository.findAll(pageable);
-
-    return reportPage.map(report -> modelMapper.map(reportPage, ReportDTO.class));
-  }*/
+  //페이징 검색
+  @Override
+  public List<ReportDTO> searchReports(String query) {
+    List<ReportDTO> allReports = readAllReport(); // 모든 리포트를 조회
+    if (query == null || query.isEmpty()) {
+      return allReports;
+    }
+    return allReports.stream()
+        .filter(report -> report.getReporterNo().getUserId().contains(query)
+            || report.getReportedNo().getUserId().contains(query)
+            || report.getReportedNo().getUserNickname().contains(query)
+            || report.getReportCategory().contains(query))
+        .collect(Collectors.toList());
+  }
 }
 
 
