@@ -5,10 +5,13 @@ import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Log4j2
 public class ReportServiceImpl implements ReportService {
+  @Autowired
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
@@ -27,7 +31,6 @@ public class ReportServiceImpl implements ReportService {
     Report report = modelMapper.map(reportDTO, Report.class);
     reportRepository.save(report);
   }
-
   //자신 유저 아이디로 조회
   @Override
   public List<ReportDTO> readReport(User reporterNo) {
@@ -46,21 +49,22 @@ public class ReportServiceImpl implements ReportService {
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
-
   //유저 제제 (수정)
   @Override
-  public void killReport(ReportDTO reportDTO) {
+  public void userBanReport(ReportDTO reportDTO) {
     log.info("...... [updateReport START]..........KSW");
 
-    Optional<Report> justice = reportRepository.findById(reportDTO.getReportNo());
-    if (justice.isPresent()) {
-      log.info("...... [jusstice present]..........KSW");
-      Report report = justice.get();
+    Optional<Report> ban = reportRepository.findById(reportDTO.getReportNo());
+    if (ban.isPresent()) {
+      log.info("...... [ban present]..........KSW");
+      Report report = ban.get();
       // reportResult 가 1일 경우 2로 변경하여 저장
+
       if (report.getReportResult() == '1') {
         log.info("...... [reportResult == 1]..........KSW");
         report.setReportResult('2');
         // 사용자의 userState 값 변경
+
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
         if (userOptional.isPresent()) {
           log.info("...... [userOptional is Present !!]..........KSW");
@@ -68,7 +72,7 @@ public class ReportServiceImpl implements ReportService {
           user.setUserState('2');
           userRepository.save(user);
         } else {
-          if (reportDTO.getReportResult() != '1') {
+          if (reportDTO.getReportResult() == '2') {
             log.info("..........[이미 싸늘해진 시체다]..........KSW");
           }
         }
@@ -95,14 +99,13 @@ public class ReportServiceImpl implements ReportService {
           user.setUserState('1');
           userRepository.save(user);
         } else {
-          if (reportDTO.getReportResult() != '2') {
+          if (reportDTO.getReportResult() == '1') {
             log.info("..........[살아남남]..........KSW");
           }
         }
       }
     }
   }
-
   // 삭제
   @Override
   public void deleteReport(Long reportNo) {
@@ -118,5 +121,15 @@ public class ReportServiceImpl implements ReportService {
       System.out.println("회원을 찾을 수 없습니다!");
     }
   }
+  //신고 관리 페이징
+  /* @Override
+  public Page<ReportDTO> getReportList(int page){
+    log.info("...... [serviceImpl/ReportList/running]..........KSW");
+    Pageable pageable = PageRequest.of(page, 10);
+    Page<Report> reportPage = reportRepository.findAll(pageable);
+
+    return reportPage.map(report -> modelMapper.map(reportPage, ReportDTO.class));
+  }*/
 }
+
 

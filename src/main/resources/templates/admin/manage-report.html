@@ -21,7 +21,7 @@
         <a class="navbar-brand">신고된 회원 관리</a>
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-success" type="submit">검색</button>
         </form>
     </div>
 </nav>
@@ -57,7 +57,7 @@
         </td>
         <td th:if="${report.reportResult}=='1'">
             <div>
-        <form th:action="@{/admin/justice}" method="post">
+        <form th:action="@{/admin/ban}" method="post">
             <input type="hidden" name="reportNo" th:value="${report.reportNo}">
             <button class="btn btn-danger" type="submit" th:onclick="@{/admin/manage-report}">정지</button>
         </form>
@@ -80,27 +80,28 @@
     </tr>
     </tbody>
 </table>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link">Previous</a>
+<div>
+    <a th:if="${page > 1}" th:href="@{/admin/manage-report(page=${page - 1})}">Previous</a>
+    <!-- 페이지 번호 버튼 생성 -->
+    <span th:each="i : ${#numbers.sequence(1, lastPage)}">
+        <a th:href="@{/admin/manage-report(page=${i})}"
+           th:text="${i}"
+           th:classappend="${i == page} ? 'current-page' : ''">i</a>
+    </span>
+    <a th:if="${page < lastPage}" th:href="@{/admin/manage-report(page=${page + 1})}">Next</a>
+</div>
+<ul id="pagination" class="pagination">
+    <c:forEach begin="1" end="${lastPage}" var="i">
+        <li>
+            <a href="?page=${i}&query=${query}" class="${i == page ? 'active' : ''}">${i}</a>
         </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">4</a></li>
-        <li class="page-item"><a class="page-link" href="#">5</a></li>
-        <li class="page-item"><a class="page-link" href="#">6</a></li>
-        <li class="page-item"><a class="page-link" href="#">7</a></li>
-        <li class="page-item"><a class="page-link" href="#">8</a></li>
-        <li class="page-item"><a class="page-link" href="#">9</a></li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
-    </ul>
-
-</nav>
+    </c:forEach>
+</ul>
+<style>
+    .current-page {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+</style>
 </body>
 </html>
