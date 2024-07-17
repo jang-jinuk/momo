@@ -1,5 +1,6 @@
 package com.momo.momopjt.userandschedule;
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
@@ -41,6 +42,11 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
   public void deleteParticipant(Schedule scheduleNo) {
     userAndScheduleRepository.deleteAllParticipant(scheduleNo);
     log.info("------------ [참가 인원 전원 삭제 완료] ------------");
+  }
+
+  @Override
+  public void deleteParticipantsByClub(Club clubNo) {
+    userAndScheduleRepository.deleteParticipantByClub(clubNo);
   }
 
   @Override
