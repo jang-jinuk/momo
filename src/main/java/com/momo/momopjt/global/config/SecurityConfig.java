@@ -2,34 +2,23 @@ package com.momo.momopjt.global.config;
 
 import com.momo.momopjt.global.security.CustomOAuth2UserService;
 import com.momo.momopjt.global.security.CustomUserDetailService;
-import com.momo.momopjt.global.security.NaverOAuth2UserInfo;
 import com.momo.momopjt.global.security.handler.CustomSocialLoginSuccessHandler;
-import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.Collections;
-import java.util.Map;
 
 
 @Log4j2
@@ -40,6 +29,7 @@ import java.util.Map;
 public class SecurityConfig {
 
   private final CustomUserDetailService customUserDetailService;
+  private final CustomOAuth2UserService customOAuth2UserService;
   private final UserRepository userRepository;
 
   @Bean
@@ -57,21 +47,16 @@ public class SecurityConfig {
     log.info("------------configure----------------");
 
     http
-
-        //TODO 나중에 복구 CSRF disable 0716 YY
-        .csrf()
-        .disable()
-
+        .csrf().disable()// CSRF 보호 활성화
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
-        .formLogin()
-        .loginPage("/user/login")
+        .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/home")
-        .successHandler(authenticationSuccessHandler()) // 사용자 정의 핸들러 추가
+        .successHandler(authenticationSuccessHandler())
         .permitAll()
         .and()
         .logout()
@@ -85,19 +70,18 @@ public class SecurityConfig {
         .accessDeniedPage("/403")
         .and()
         .sessionManagement()  // 세션 관리 설정 추가
-//        .disable() // 임시 세션 disable YY //TODO 다시 복구 필요 아래 3줄 포함
-
         .invalidSessionUrl("/user/login?expired=true")  // 세션이 무효화되었을 때 리다이렉트할 URL 추가
         .maximumSessions(1)  // 동시 세션 최대 수 설정
         .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
 
 
+    // 소셜 로그인 설정
     http.oauth2Login()
         .loginPage("/user/login")
         .defaultSuccessUrl("/home", true)
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
-        .userService(customOAuth2UserService2());
+        .userService(customOAuth2UserService);
 
     return http.build();
   }
@@ -112,8 +96,8 @@ public class SecurityConfig {
 //        .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
 //  }
 
-  @Bean
-  public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService2() {
-    return new CustomOAuth2UserService(userRepository);
-  }
+//  @Bean
+//  public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService2() {
+//    return new CustomOAuth2UserService(userRepository);
+//  }
 }

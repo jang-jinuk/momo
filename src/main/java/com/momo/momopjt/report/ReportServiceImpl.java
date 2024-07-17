@@ -24,6 +24,7 @@ public class ReportServiceImpl implements ReportService {
 
   //신고 생성
   public void addReport(ReportDTO reportDTO) {
+    log.info("----------------- [addReport]-----------------");
     Report report = modelMapper.map(reportDTO, Report.class);
     reportRepository.save(report);
   }
@@ -31,6 +32,7 @@ public class ReportServiceImpl implements ReportService {
   //자신 유저 아이디로 조회
   @Override
   public List<ReportDTO> readReport(User reporterNo) {
+    log.info("----------------- [readReport]-----------------");
     List<Report> reports = reportRepository.myReport(reporterNo);
     return reports.stream()
         .map(report -> modelMapper.map(report, ReportDTO.class))
@@ -58,17 +60,21 @@ public class ReportServiceImpl implements ReportService {
       log.info("...... [justice present]..........KSW");
       Report report = justice.get();
       // reportResult 가 1일 경우 2로 변경하여 저장
+
       if (report.getReportResult() == '1') {
         log.info("...... [reportResult == 1]..........KSW");
         report.setReportResult('2');
         // 사용자의 userState 값 변경
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
+
         if (userOptional.isPresent()) {
           log.info("...... [userOptional is Present !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('2');
           userRepository.save(user);
+
         } else {
+
           if (reportDTO.getReportResult() != '1') {
             log.info("..........[이미 싸늘해진 시체다]..........KSW");
           }
@@ -82,24 +88,31 @@ public class ReportServiceImpl implements ReportService {
   public void safeReport(ReportDTO reportDTO) {
     log.info("...... [updatReport START]..........KSW");
     Optional<Report> sage = reportRepository.findById(reportDTO.getReportNo());
+
     if (sage.isPresent()) {
       log.info("...... [sage present]..........KSW");
       Report report = sage.get();
       // reportResult 가 2일 경우 1로 변경하여 저장
+
       if (report.getReportResult() == '2') {
         log.info("...... [reporResult == 2]..........KSW");
         report.setReportResult('1');
         // 사용자의 userState 값 변경
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
+
         if (userOptional.isPresent()) {
           log.info("...... [userOptional is Present? !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('1');
           userRepository.save(user);
         } else {
+
           if (reportDTO.getReportResult() != '2') {
             log.info("..........[살아남남]..........KSW");
           }
+
+
+
         }
       }
     }

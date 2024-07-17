@@ -63,7 +63,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //수정할려는 정원수가 현재 정원수보다 크거나 같으면 수정 가능
     if (currentParticipants > updateMax) {
-      log.info("------------ [현재 참자가 수보다 작게 설정할 수 없습니다.] ------------");
+      log.info("------------ [현재 참가자 수보다 작게 설정할 수 없습니다.] ------------");
       return true;
     } else {
       schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());

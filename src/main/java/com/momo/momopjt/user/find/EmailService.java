@@ -1,12 +1,6 @@
-/*
-* slf4j Logger 가 사용된 부분은 Log4j2 log 로 수정함 0716 YY
-*/
 package com.momo.momopjt.user.find;
 
 import lombok.extern.log4j.Log4j2;
-//TODO check import
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,8 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Log4j2
 public class EmailService {
-
-//  private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
   private final JavaMailSender mailSender;
 

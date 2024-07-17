@@ -44,7 +44,7 @@ public class ClubServiceImpl implements ClubService {
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
     Club club = modelMapper.map(clubDTO, Club.class);
-    Long clubNo = clubRepository.save(club).getClubNo();
+    Long clubNo = clubRepository.save(club).getClubNo();//TODO club create error
 
     userAndClubDTO.setClubNo(club);//생성된 모임 번호
     userAndClubDTO.setIsLeader(true);//모임장 표시

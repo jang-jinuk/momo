@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+
   @Query("SELECT s FROM Schedule s WHERE s.clubNo = :clubNo " +
       "AND s.scheduleStartDate > current_timestamp")
   List<Schedule> findOngoingSchedules(@Param("clubNo") Club clubNo);

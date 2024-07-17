@@ -113,7 +113,6 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     } else if (userAndClub.getIsLeader()) {
       return 2; //모임장일 경우
     }
-
     return 3; //모임원일 경우
   }
 

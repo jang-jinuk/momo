@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private UserSecurityService userSecurityService;
     //TODO 0716 error YY
 
     public CustomOAuth2UserService(UserRepository userRepository) {
@@ -82,10 +81,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (email == null || id == null) {
             throw new OAuth2AuthenticationException("Email or ID not found from provider: " + provider);
         }
-
-        UserSecurityDTO userSecurityDTO = userSecurityService.generateDTO(id, email, oAuth2User.getAttributes(), provider.charAt(0));
-//TODO error YY import userSecurityService 추가함
-
+        
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.
 

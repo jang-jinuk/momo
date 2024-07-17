@@ -22,6 +22,7 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public Photo savePhoto(PhotoDTO photoDTO) {
+
     Photo photo = new Photo();
 
     //사진을 등록하지 않으면 "default"사진 자동 저장
@@ -30,6 +31,7 @@ public class PhotoServiceImpl implements PhotoService {
       return photo;
     }
     photoDTO.setPhotoCreateDate(Instant.now()); //등록일
+
     photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
     log.info(photo);

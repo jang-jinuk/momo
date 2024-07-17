@@ -1,6 +1,3 @@
-/*
- * slf4j Logger 가 사용된 부분은 Log4j2 log 로 수정함 0716 YY
- */
 package com.momo.momopjt.user.find;
 
 import com.momo.momopjt.user.User;
@@ -9,8 +6,6 @@ import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +20,6 @@ public class FindController {
   private final UserService userService;
   private final UserRepository userRepository;
   private final EmailService emailService;
-//  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @GetMapping("/find-id")
   public String showFindIdForm(Model model) {
@@ -68,13 +62,13 @@ public class FindController {
 
       if (user != null) {
         String temporaryPassword = userService.generateTemporaryPassword();
-        log.info("----------------- [0716 YY ]-----------------{}",temporaryPassword);
+        log.info("----------------- [0716 YY 임시비번 ]-----------------{}",temporaryPassword);
         userService.updateUserPassword(user, temporaryPassword);
         emailService.sendTemporaryPasswordEmail(userEmail, temporaryPassword);
         redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
         log.info("Temporary password sent to email: {}", userEmail);
 
-        return "redirect:/user/home";
+        return "redirect:/home";
       } else {
         redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
         log.warn("User not found for username: {} and email: {}", userId, userEmail);
@@ -120,7 +114,7 @@ public class FindController {
       }
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
-//      logger.error("Error during password reset", e);
+      log.error("Error during password reset", e);
       return "redirect:/reset";
     }
   }

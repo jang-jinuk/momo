@@ -87,7 +87,7 @@ public class ClubController {
 
     //TODO 파일 업로드 기능과 연결필요 JW
 
-    Long clubNo = clubService.createClub(clubDTO,photoDTO,userAndClubDTO);
+    Long clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO club create error
 
     redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
 

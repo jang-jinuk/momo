@@ -45,15 +45,18 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
 
   @Override
   public List<UserDTO> readAllParticipants(Schedule scheduleNo) {
+
     List<UserAndSchedule> userAndSchedules = userAndScheduleRepository.findByAllParticipants(scheduleNo);
     List<User> users = new ArrayList<>();
     List<UserDTO> userDTOs = new ArrayList<>();
+
     for (UserAndSchedule userAndSchedule : userAndSchedules) {
       Optional<User> result = userRepository.findById(userAndSchedule.getUserNo().getUserNo());
       result.orElseThrow();
       UserDTO userDTO = modelMapper.map(result, UserDTO.class);
       userDTOs.add(userDTO);
     }
+
     return userDTOs;
   }
 

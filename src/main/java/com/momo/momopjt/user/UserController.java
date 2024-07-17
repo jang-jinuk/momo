@@ -32,11 +32,11 @@ public class UserController {
   private final UserService userService;
   private final UserRepository userRepository;
   private final EmailService emailService;
-//  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
   private final ModelMapper modelMapper;
 
   @GetMapping("/home")
   public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
+    log.info("----------------- [Get /home]-----------------");
     if (userDTO != null) {
       model.addAttribute("nickname", userDTO.getUserNickname());
     }
@@ -50,7 +50,7 @@ public class UserController {
     String logout = request.getParameter("logout");
         String expired = request.getParameter("expired");  // 세션 만료 여부 확인
 
-//    log.info("login get........");
+    log.info("login get........");
     log.info("logout: " + logout);
 
     if (logout != null) {
@@ -67,20 +67,25 @@ public class UserController {
 
   @GetMapping("/signup")
   public void signupGet() {
-    log.info("Processing GET request for /signup");
+    log.info("----Processing GET request for /signup");
   }
 
   @PostMapping("/signup")
   public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    log.info("Processing POST request for /signup with data: {}", userDTO);
+    log.info("----Processing POST request for /signup with data: {}", userDTO);
 
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+
       return "redirect:/user/signup";
     }
+
     try {
+
       userService.signup(userDTO);
+
     } catch (UserService.UserIdException e) {
+
       redirectAttributes.addFlashAttribute("errorId", "userId");
       return "redirect:/user/signup";
 
@@ -92,13 +97,15 @@ public class UserController {
       redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
       return "redirect:/user/signup";
     }
+      redirectAttributes.addFlashAttribute("result", "success");
+      return "redirect:/home"; // 회원가입 후 홈으로
 
-    redirectAttributes.addFlashAttribute("result", "success");
-    return "redirect:/user/home"; // 회원가입 후 홈으로
   }
 
   @PostMapping("/logout")
   public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    log.info("----------------- [POST /logout]-----------------");
+    
     HttpSession session = request.getSession(false);
     if (session != null) {
       session.invalidate();
@@ -114,6 +121,7 @@ public class UserController {
   public String updateGet(@PathVariable String userId, Model model) {
         // userId에 해당하는 User 엔티티 조회
     User user = userRepository.findByUserId(userId);
+
     if (user == null) {
             throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
     }
@@ -127,7 +135,7 @@ public class UserController {
   @PostMapping("/update")
   public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-    log.info("Processing POST request for /update with data: {}", userDTO);
+    log.info("----Processing POST request for /update with data: {}", userDTO);
     String userId = userDTO.getUserId();
 
     if (bindingResult.hasErrors()) {
@@ -144,7 +152,7 @@ public class UserController {
     }
 
     redirectAttributes.addFlashAttribute("result", "success");
-    return "redirect:/user/home";
+    return "redirect:/home";
   }
 
     @GetMapping("/deleteAccount")

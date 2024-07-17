@@ -38,6 +38,7 @@ public class Photo {
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
+  @Lob
   @Column(name= "photo_data")
   private byte[] photoData;
 

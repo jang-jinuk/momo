@@ -18,6 +18,7 @@ import java.time.Instant;
 @Log4j2
 //신고 버튼 누를시 나오고 신고하는 컨트롤러
 public class GlobalReportController {
+
   @Autowired
   private ReportService reportService;
   @Autowired

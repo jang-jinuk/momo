@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         String userEmail = userDTO.getUserEmail();
         boolean existId = userRepository.existsByUserId(userId);
         boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
+
         if (existId) {
             throw new UserIdException();
         }
@@ -78,9 +79,9 @@ public class UserServiceImpl implements UserService {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
+    //TODO 리뷰 필요 YY JJ
     @Override
     public void updateUser(UserDTO userDTO) {
-        //TODO review 필요 0716 YY
 
         // 1. 사용자 찾기
         User user = userRepository.findByUserId(userDTO.getUserId());
@@ -136,6 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String findUsernameByEmail(String userEmail) {
+        log.info("----------------- [findUsernameByEmail()]-----------------");
         Optional<User> optionalUser = userRepository.findByUserEmail(userEmail);
 
         // Optional에 값이 있는지 확인하고 값 추출
@@ -181,55 +183,65 @@ public class UserServiceImpl implements UserService {
             // UserRepository를 통해 사용자 정보 업데이트
             userRepository.save(user);
 
-            return true; // 성공적으로 비밀번호를 재설정한 경우
+            return true;
+            // 성공적으로 비밀번호를 재설정한 경우
         } else {
+
             return false; // 사용자를 찾지 못한 경우
         }
     }
 
     @Override
     public User findByEmail(String userEmail) {
+        log.info("----------------- [findByEmail()]-----------------");
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
 
     @Override
     public User findByUserIdAndUserEmail(String userId, String userEmail) {
+        log.info("----------------- [findByUserIdAndUserEmail()]-----------------");
         return userRepository.findByUserIdAndUserEmail(userId, userEmail);
     }
 
     @Override
     public String generateTemporaryPassword() {
+        log.info("----------------- [generateTemporaryPassword()]-----------------");
         SecureRandom random = new SecureRandom();
-        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
+        StringBuilder stringBuilder = new StringBuilder(PASSWORD_LENGTH);
 
         for (int i = 0; i < PASSWORD_LENGTH; i++) {
             int index = random.nextInt(CHARACTERS.length());
-            password.append(CHARACTERS.charAt(index));
+            stringBuilder.append(CHARACTERS.charAt(index));
         }
-        log.info("----------------- [password generated]-----------------{}",password.toString());
-        return password.toString();
+        log.info("----------------- [password generated]-----------------{}",stringBuilder.toString());
+        return stringBuilder.toString();
     }
     @Override
     public void updateUserPassword(User user, String temporaryPassword) {
+        log.info("----------------- [updateUserPassword]-----------------");
         String encodedPW = passwordEncoder.encode(temporaryPassword);
         // 비밀번호 업데이트 로직
         user.setUserPw(encodedPW);
         // 데이터베이스에 저장하는 로직 추가
-        log.info("-------- [07-09-11:49:35]-------you"+encodedPW);
+        log.info("-------- [07-09-11:49:35]-------you-{}",encodedPW);
         userRepository.save(user);
     }
 
     @Override
     public User findByUserId(String userId) {
+        log.info("----------------- [findByUserId]-----------------");
         // userId로 사용자를 찾는 로직 구현
         return userRepository.findByUserId(userId); // UserRepository를 사용하여 실제 사용자 조회
     }
 
     @Override
     public boolean resetPasswordByUserId(String userId, String newPassword) {
+        log.info("----------------- [resetPasswordByUserId]-----------------");
         // userId로 사용자를 찾고, 비밀번호를 reset하는 로직을 구현
         User user = findByUserId(userId);
+
         if (user != null) {
+
             // 새 비밀번호가 null이거나 비어 있는지 확인
             if (newPassword == null || newPassword.isEmpty()) {
                 return false; // 새 비밀번호가 비어 있는 경우
@@ -260,11 +272,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(String userId, String userPw) {
+        log.info("----------------- [deleteAccount]-----------------");
+
         if (userId == null || userId.isEmpty() || userPw == null || userPw.isEmpty()) {
             throw new IllegalArgumentException("User ID and password cannot be null or empty");
         }
 
         User user = userRepository.findByUserId(userId);
+
         if (user != null) {
             if (passwordEncoder.matches(userPw, user.getUserPw())) { // 비밀번호 검증
                 userRepository.delete(user);
