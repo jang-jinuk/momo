@@ -172,6 +172,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [일정 삭제 처리 완료] ------------");
   }
 
+  //해당 모임의 모든 일정 삭제
+  @Override
+  public void deleteScheduleByClub(Club clubNo) {
+    scheduleRepository.deleteAllSchedulesByClub(clubNo);
+  }
+
   //일정 인원 마감 확인
   @Override
   public Boolean isScheduleFull(Long scheduleNo) {
