@@ -20,6 +20,7 @@ public class ScheduleServiceTests {
   @Autowired
   private ScheduleService scheduleService;
 
+
   //모임 생성 테스트
   @Test
   public void createScheduleTest() {
@@ -84,7 +85,7 @@ public class ScheduleServiceTests {
     //When
     Boolean result = scheduleService.updateSchedule(scheduleDTO);
     //Then
-    assertEquals(true,result);
+    assertEquals(true, result);
   }
 
   //일정 참가 테스트

@@ -2,6 +2,8 @@ package com.momo.momopjt.userandclub;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import java.util.List;
 @Log4j2
 public class UserAndClubServiceTests {
   @Autowired
-  private com.momo.momopjt.userandclub.UserAndClubService userAndClubService;
+  private UserAndClubService userAndClubService;
 
   //모임 가입 신청 기능 테스트
   @Test

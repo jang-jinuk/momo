@@ -7,6 +7,7 @@ import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.userandclub.UserAndClubDTO;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,8 @@ public class articleServiceTest {
         .clubCreateDate(Instant.now())
         .build();
 
-    testClubId = clubService.createClub(clubDTO, photoDTO); // 클럽 번호를 가져오도록 수정
+    //TODO 0716 YY
+    testClubId = clubService.createClub(clubDTO, photoDTO, UserAndClubDTO.builder().build()); // 클럽 번호를 가져오도록 수정
 
     assertNotNull(testClubId);
   }

@@ -44,7 +44,7 @@ public class ClubServiceTests {
         .clubCreateDate(Instant.now())
         .build();
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
-    clubService.createClub(clubDTO, photoDTO,userAndClubDTO);
+    clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO 0716 YY
   }
 
   //특정 모임 조회 테스트

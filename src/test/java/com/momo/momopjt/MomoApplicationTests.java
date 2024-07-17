@@ -57,4 +57,6 @@ class MomoApplicationTests {
     log.info(socialTypes.getClass().toString());
   }
 
+
+
 }

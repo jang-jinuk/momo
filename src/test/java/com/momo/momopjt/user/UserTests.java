@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(classes = MomoApplication.class)
 public class UserTests {
 
+
     @Autowired
     private UserRepository userRepository;
     @Autowired

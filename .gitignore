@@ -206,6 +206,9 @@ $RECYCLE.BIN/
 
 /.idea/
 /.gradle/
+/gradle/
+/build/
+/bin/
 /build/
 /gradle/
 /build/
