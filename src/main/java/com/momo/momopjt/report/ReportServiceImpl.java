@@ -123,7 +123,7 @@ public class ReportServiceImpl implements ReportService {
     if (query == null || query.isEmpty()) {
       return allReports;
     }
-    return allReports.stream()
+    return allReports.stream() //각 칼럼이 쿼리를 포함하면 리스트로 수집
         .filter(report -> report.getReporterNo().getUserId().contains(query)
             || report.getReportedNo().getUserId().contains(query)
             || report.getReportedNo().getUserNickname().contains(query)

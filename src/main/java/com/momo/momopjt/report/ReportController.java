@@ -29,7 +29,7 @@ public class ReportController {
     List<ReportDTO> sandReport;
 
     if (query.isEmpty()) {
-      sandReport = reportService.readAllReport(); // 기존 모든 리포트 조회
+      sandReport = reportService.readAllReport(); // 검색어가 비었으면 모든 리포트 조회
     } else {
       sandReport = reportService.searchReports(query); // 검색어에 따른 리포트 조회
     }
