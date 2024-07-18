@@ -112,8 +112,6 @@ public class ReportServiceImpl implements ReportService {
       } else {
         System.out.println("회원 상태가 이상하여 삭제처리가 어렵습니다");
       }
-    } else {
-      System.out.println("회원을 찾을 수 없습니다!");
     }
   }
   //페이징 검색
@@ -124,10 +122,11 @@ public class ReportServiceImpl implements ReportService {
       return allReports;
     }
     return allReports.stream() //각 칼럼이 쿼리를 포함하면 리스트로 수집
-        .filter(report -> report.getReporterNo().getUserId().contains(query)
-            || report.getReportedNo().getUserId().contains(query)
-            || report.getReportedNo().getUserNickname().contains(query)
-            || report.getReportCategory().contains(query))
+        .filter(report ->
+            report.getReporterNo().getUserId().contains(query) ||
+                report.getReportedNo().getUserId().contains(query) ||
+                report.getReportedNo().getUserNickname().contains(query) ||
+                report.getReportCategory().contains(query))
         .collect(Collectors.toList());
   }
 }

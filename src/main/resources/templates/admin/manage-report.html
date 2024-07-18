@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>신고페이지</title>
@@ -54,53 +54,81 @@
         <span th:case="'2'">정지</span>
         <span th:case="*">알 수 없음</span>
         </span>
-        </td>
-        <td th:if="${report.reportResult}=='1'">
+        <!-- 버튼 -->
+        <td th:if="${report.reportResult} =='1'">
             <div>
-        <form th:action="@{/admin/ban}" method="post">
-            <input type="hidden" name="reportNo" th:value="${report.reportNo}">
-            <button class="btn btn-danger" type="submit" th:onclick="@{/admin/manage-report}">정지</button>
-        </form>
+                <form th:action="@{/admin/ban}" method="post">
+                    <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+                    <input type="hidden" name="currentPage" th:value="${page}">
+                    <input type="hidden" name="query" th:value="${query}">
+                    <button class="btn btn-danger" type="submit" th:onclick="ban()">정지</button>
+                </form>
             </div>
         </td>
         <td th:if="${report.reportResult}=='2'">
             <div>
                 <form th:action="@{/admin/freedom}" method="post">
                     <input type="hidden" name="reportNo" th:value="${report.reportNo}">
-                    <button class="btn btn-danger" type="submit" th:onclick="@{/admin/manage-report}">정지해제</button>
+                    <input type="hidden" name="currentPage" th:value="${page}">
+                    <input type="hidden" name="query" th:value="${query}">
+                    <button class="btn btn-danger" type="submit"  th:onclick="free()">정지해제</button>
                 </form>
             </div>
         </td>
         <td>
-        <form th:action="@{/admin/delete}" method="post">
-        <input type="hidden" name="reportNo" th:value="${report.reportNo}">
-            <button class="btn btn-outline-warning" type="submit" th:onclick="@{/admin/manage-report}">삭제</button>
-        </form>
+            <form th:action="@{/admin/delete}" method="post">
+                <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+                <input type="hidden" name="currentPage" th:value="${page}">
+                <input type="hidden" name="query" th:value="${query}">
+                <div th:switch="${report.reportResult}">
+                    <button class="btn btn-danger" type="submit" th:case="'1'" th:onclick="deleting()">삭제</button>
+                    <button class="btn btn-secondary" type="button" th:case="'2'" th:onclick="noDeleting()">삭제 불가</button>
+                    <button class="btn btn-warning" type="button" th:case="*">상태 확인 필요</button>
+                </div>
+            </form>
         </td>
+        <!-- 버튼 끝 -->
     </tr>
     </tbody>
 </table>
+<!-- 페이지 -->
 <div class="d-flex justify-content-center" th:if="${lastPage > 1}">
     <nav>
         <ul class="pagination">
-            <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/admin/manage-report(page=${page - 1}, query=${query})}">Previous</a>
+            <li class="page-item" th:classappend="${startPage > 1} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/admin/manage-report(page=${startPage - 1}, query=${query})}">&laquo;</a>
             </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(1, lastPage)}" th:classappend="${i == page} ? 'active'">
+            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == page} ? 'active'">
                 <a class="page-link" th:href="@{/admin/manage-report(page=${i}, query=${query})}" th:text="${i}"></a>
             </li>
-            <li class="page-item" th:classappend="${page == lastPage} ? 'disabled'">
-                <a class="page-link" th:href="@{/admin/manage-report(page=${page + 1}, query=${query})}">Next</a>
+            <li class="page-item" th:classappend="${endPage < lastPage} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/admin/manage-report(page=${endPage + 1}, query=${query})}">&raquo;</a>
             </li>
         </ul>
     </nav>
 </div>
-</div>
+<!-- 페이지 끝-->
 <style>
     .active .page-link {
         font-weight: bold;
         text-decoration: underline;
     }
 </style>
+<script>
+    <!-- 버튼 알림 메세지 -->
+    function ban() {
+        alert('회원이 제제됐습니다.');
+    }
+    function free() {
+        alert('회원의 제제가 해제됐습니다.');
+    }
+    function deleting() {
+        alert('삭제 됐습니다.');
+    }
+    function noDeleting() {
+        alert('제제중인 항목은 삭제할 수 없습니다.');
+    }
+    <!-- 버튼 알림 메세지 끝 -->
+</script>
 </body>
 </html>

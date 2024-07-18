@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,56 +36,71 @@ public class ReportController {
       sandReport = reportService.searchReports(query); // 검색어에 따른 리포트 조회
     }
 
-    int lastPage = (sandReport.size() + 9) / 10; // 페이지 갯수 설정 함수
-    // 10개씩 리스트로 만들기
-    if (page < 1 || page > lastPage) {
-      page = 1; // 페이지가 유효하지 않은 경우 1페이지로 설정
-    }
-    List<ReportDTO> pageList = sandReport.stream()
-        .skip(10L * (page - 1)) // 처음 (page-1) * 10개를 건너뜀
-        .limit(10) // 다음 10개를 선택
-        .collect(Collectors.toList());
-    model.addAttribute("reportDTO", pageList);
+    //페이지 수 설정
+    int totalReports = sandReport.size(); // 총 데이터 수
+    int pageSize = 10; // 한 번에 표시할 페이지 수
+    int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
+
+    // 페이지에 맞게 데이터 나누기
+    int fromIndex = (page - 1) * pageSize;
+    int toIndex = Math.min(fromIndex + pageSize, totalReports);
+    List<ReportDTO> reports = sandReport.subList(fromIndex, toIndex);
+
+    // 페이지 그룹 계산
+    int pageGroupSize = 10; // 한 번에 표시할 페이지 번호 수
+    int currentGroup = (page - 1) / pageGroupSize;
+    int startPage = currentGroup * pageGroupSize + 1;
+    int endPage = Math.min(startPage + pageGroupSize - 1, lastPage);
+
+    model.addAttribute("reportDTO", reports);
     model.addAttribute("page", page);
     model.addAttribute("lastPage", lastPage);
     model.addAttribute("query", query); // 검색어를 모델에 추가
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
     return "/admin/manage-report";
   }
+
   //제제
   @PostMapping("/ban")
-  public String ban(@RequestParam("reportNo") Long reportNo) {
+  public String ban(@RequestParam("reportNo") Long reportNo,
+                    @RequestParam("currentPage") int currentPage,
+                    @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/justice]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     // reportService.updateReport() 메서드 호출
     reportService.userBanReport(reportDTO); //기능으로 넘겨준다
     log.info("...... [정의구현]..........KSW");
-    return "redirect:/admin/manage-report";
+    log.info("...... [{}]..........KSW",query);
+    String encodedQuery = URLEncoder.encode(query, "UTF-8"); //쿼리를 인코더에 담아준다
+
+    return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
+
   //제제해제
   @PostMapping("/freedom")
-  public String freedom(@RequestParam("reportNo") Long reportNo) {
+  public String freedom(@RequestParam("reportNo") Long reportNo,
+                        @RequestParam("currentPage") int currentPage,
+                        @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/freedom]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     // reportService.updateReport() 메서드 호출
     reportService.safeReport(reportDTO); //기능으로 넘겨준다
     log.info("...... [공소시효 만료]..........KSW");
-    return "redirect:/admin/manage-report";
+    String encodedQuery = URLEncoder.encode(query, "UTF-8");
+    return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
+
   //삭제
   @PostMapping("/delete")
-  public String delete(@RequestParam("reportNo") Long reportNo) {
+  public String delete(@RequestParam("reportNo") Long reportNo,
+                       @RequestParam("currentPage") int currentPage,
+                       @RequestParam("query") String query) throws UnsupportedEncodingException{
     log.info("...... [post delete report]..........KSW");
     reportService.deleteReport(reportNo);
-    return "redirect:/admin/manage-report";
+    String encodedQuery = URLEncoder.encode(query, "UTF-8");
+    return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
-  //신고관리 페이징
- /* @GetMapping("/list")
-  public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
-    log.info("...... [Reportcontroller/list/running]..........KSW");
-    Page<ReportDTO> paging = reportService.getReportList(page);
-    model.addAttribute("paging", paging);
-    return "redirect:/admin/manage-report";
-  }*/
 }
