@@ -30,8 +30,8 @@
                           <input name="schedulePlace" type="text" class="form-control" id="address" th:required="true">
                       </div>
                       <div class="col-12">
-                          <label for="date" class="form-label">날짜/시간</label>
-                          <input name="dateTime" type="datetime-local" class="form-control" id="date" th:required="true">
+                          <label for="datetime" class="form-label">날짜/시간</label>
+                          <input name="dateTime" type="datetime-local" class="form-control" id="datetime" th:required="true">
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
@@ -48,3 +48,18 @@
       </form>
   </div>
 </th:block>
+<script layout:fragment="script" th:inline="javascript">
+    function setMinDateTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const datetimeLocal = `${year}-${month}-${day}T${hours}:${minutes}`;
+        document.getElementById('datetime').setAttribute('min', datetimeLocal);
+    }
+
+    document.addEventListener('DOMContentLoaded', setMinDateTime);
+</script>
