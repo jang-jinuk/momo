@@ -1,10 +1,13 @@
 package com.momo.momopjt.user;
 
 
+import com.momo.momopjt.report.ReportDTO;
+import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -29,10 +33,12 @@ import javax.validation.Valid;
 @Transactional
 public class UserController {
 
+
   private final UserService userService;
   private final UserRepository userRepository;
   private final EmailService emailService;
   private final ModelMapper modelMapper;
+  private final ReportService reportService;
 
   @GetMapping("/home")
   public String home(@AuthenticationPrincipal UserDTO userDTO, Model model) {
@@ -105,7 +111,7 @@ public class UserController {
   @PostMapping("/logout")
   public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
     log.info("----------------- [POST /logout]-----------------");
-    
+
     HttpSession session = request.getSession(false);
     if (session != null) {
       session.invalidate();
@@ -181,5 +187,42 @@ public class UserController {
             return "user/deleteAccount"; // 에러 발생 시 다시 탈퇴 폼 페이지로
         }
     }
+
+
+  @GetMapping("/profile/my-report")
+  public String report(Model model){
+    //@RequestParam(value = "page", defaultValue = "1") int page) {
+    log.info("...... [get profile/my-report]..........KSW");
+    // ID를 조회하여 모델에 추가 (임시)
+    User user = new User();
+    //SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //로그인 정보 가져옴
+    user.setUserNo(4L);
+    //TODO 로그인된 사용자 정보 불러와서 아이디 넣어줘야 함 그 후 페이징 처리 SW
+    List<ReportDTO> sandIdReport = reportService.readReport(user);
+
+    // int totalReports = sandIdReport.size(); // 총 데이터 수
+    // int pageSize = 10; // 한 번에 표시할 페이지 수
+    // int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
+
+    // 페이지에 맞게 데이터 나누기
+//    int fromIndex = (page - 1) * pageSize;
+//    int toIndex = Math.min(fromIndex + pageSize, totalReports);
+//    List<ReportDTO> reports = sandIdReport.subList(fromIndex, toIndex);
+
+    // 페이지 그룹 계산
+//    int pageGroupSize = 10; // 한 번에 표시할 페이지 번호 수
+//    int currentGroup = (page - 1) / pageGroupSize;
+//    int startPage = currentGroup * pageGroupSize + 1;
+//    int endPage = Math.min(startPage + pageGroupSize - 1, lastPage);
+    model.addAttribute("reportDTO", sandIdReport);
+//    model.addAttribute("page", page);
+//    model.addAttribute("lastPage", lastPage);
+//    model.addAttribute("startPage", startPage);
+//    model.addAttribute("endPage", endPage);
+
+    log.info("...... [userIdReport]..........KSW");
+    return "/user/profile/my-report";  // 뷰 반환
+  }
+
 }
 

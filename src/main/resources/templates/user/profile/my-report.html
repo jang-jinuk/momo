@@ -19,12 +19,12 @@
 <table class="container">
     <thead>
     <tr>
-        <th scope="col">신고한놈</th>
+        <th scope="col">신고번호</th>
+        <th scope="col">신고한놈 아이디</th>
         <th scope="col">신고한놈의 이름</th>
         <th scope="col">사유</th>
         <th scope="col">신고일</th>
-        <th scope="col">처리결과</th>
-        <th scope="col">삭제?</th>
+        <th scope="col">처리상태</th>
     </tr>
     </thead>
 
@@ -33,18 +33,17 @@
     <tr th:each="report : ${reportDTO}">
         <td th:text="${report.reportNo}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
+        <td th:text="${report.reportedNo.getUserNickname()}"></td>
         <td th:text="${report.reportCategory}"></td>
         <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
-        <td><span th:switch="${report.reportResult}">
-        <span th:case="'1'">정상</span>
-        <span th:case="'2'">정지</span>
-        <span th:case="*">알 수 없음</span>
-        </span>
+        <td>
+        <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+            <div th:switch="${report.reportedNo.getUserState}">
+                <button class="btn btn-danger" type="submit" th:case="'0'" th:onclick="deleting()">처리중</button>
+                <button class="btn btn-secondary" type="button" th:case="'1'" th:onclick="noDeleting()">처리완료</button>
+                <button class="btn btn-warning" type="button" th:case="*">존재하지 않는 유저</button>
+            </div>
         </td>
-        <form th:action="@{/user/profile/delete}" method="post">
-        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
-            <button type="submit" th:onclick="@{/user/profile/my-report}">삭제</button></td>
-        </form>
     </tr>
     </tbody>
 
@@ -69,7 +68,16 @@
             <a class="page-link" href="#">Next</a>
         </li>
     </ul>
-
 </nav>
+<script>
+    // 버튼 알림 메세지
+    function deleting() {
+        alert('아직 처리중입니다.');
+    }
+    function noDeleting() {
+        alert('해당 유저는 정지되었습니다.');
+    }
+    <!-- 버튼 알림 메세지 끝 -->
+</script>
 </body>
 </html>

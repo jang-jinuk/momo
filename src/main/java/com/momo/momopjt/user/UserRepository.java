@@ -2,14 +2,9 @@ package com.momo.momopjt.user;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.Collection;
 import java.util.Optional;
@@ -19,8 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @EntityGraph(attributePaths = "roleSet")
   @Query("select u from User u where u.userId = :userId and u.userSocial in :userSocials")
-  Optional<User> findByUserIdAndUserSocialIn(@Param("userId") String userId, @Param("userSocials") Collection<Character> userSocials);
-
+  Optional<User> findByUserIdAndUserSocialIn(@Param("userId") String userId,
+                                             @Param("userSocials") Collection<Character> userSocials);
 
   User findByUserId(String userId);
   User findByUserIdAndUserEmail(String userId, String userEmail);
