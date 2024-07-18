@@ -180,9 +180,16 @@ public class ScheduleServiceImpl implements ScheduleService {
   //해당 모임의 모든 일정 삭제
   @Override
   public void deleteScheduleByClub(Club clubNo) {
-
     userAndScheduleService.deleteParticipantsByClub(clubNo);//모든 일정 참가자 삭제
     scheduleRepository.deleteAllSchedulesByClub(clubNo); //모든 일정 삭제
+
+    List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(clubNo);
+
+    for (Schedule schedule : scheduleList) {
+      if(!schedule.getSchedulePhoto().equals("default.jpg")){ //TODO 실제 디폴트 사진 UUID로 변경 필요 JW
+        photoService.deletePhoto(schedule.getSchedulePhoto()); //모든 일정의 사진 삭제
+      }
+    }
   }
 
   //일정 인원 마감 확인
