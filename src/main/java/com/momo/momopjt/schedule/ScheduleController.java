@@ -59,7 +59,7 @@ public class ScheduleController {
     //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
     //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
     //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
-//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
+//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID());
 
     //이미지 처리 후 UUID만 반환
     String resultPhotoUUID = UUID.randomUUID().toString();
@@ -115,6 +115,9 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
+
+    model.addAttribute("clubNo",clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
