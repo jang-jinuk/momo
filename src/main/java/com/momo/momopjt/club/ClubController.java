@@ -46,9 +46,10 @@ public class ClubController {
 
     Club club = new Club();
     club.setClubNo(clubNo);
-
-    List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
-    model.addAttribute("schedules", scheduleDTOList);
+    List<ScheduleDTO> endSchedules = scheduleService.getEndSchedules(club); //마감된 일정
+    model.addAttribute("endSchedules", endSchedules);
+    List<ScheduleDTO> getOngoingSchedules= scheduleService.getOngoingSchedules(club);//마감되지 않은 일정
+    model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
