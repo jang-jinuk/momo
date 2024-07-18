@@ -21,8 +21,8 @@ public class ScheduleDTO {
 
   private String scheduleContent;
 
-  @Builder.Default
-  private String schedulePhoto = "default";
+//  @Builder.Default
+  private String schedulePhoto;
 
   private Integer scheduleMax;
 

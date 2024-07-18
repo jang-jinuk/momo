@@ -3,14 +3,10 @@ package com.momo.momopjt.user;
 import com.momo.momopjt.MomoApplication;
 import com.momo.momopjt.global.security.CustomUserDetailService;
 import lombok.extern.log4j.Log4j2;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.transaction.Transactional;
@@ -21,11 +17,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Log4j2
@@ -205,7 +199,9 @@ public class UserTests {
 //        Assertions.assertThat(deleteResult).isEmpty(); // AssertJ를 사용하여 Optional이 비어있는지 확인
 //
 //        // 삭제된 사용자를 다시 찾을 때 예외가 발생하는지 확인 (선택 사항)
-//        assertThrows(NoSuchElementException.class, () -> userRepository.findById(user.getUserNo()).orElseThrow(() -> new NoSuchElementException("삭제된 사용자를 찾을 수 없습니다.")));
+        assertThrows(NoSuchElementException.class, () ->
+            userRepository.findById( user.getUserNo() ).orElseThrow( () ->
+                    new NoSuchElementException( "삭제된 사용자를 찾을 수 없습니다.")));
 //    }
 //
 //    @Commit

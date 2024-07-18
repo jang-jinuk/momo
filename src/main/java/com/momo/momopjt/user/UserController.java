@@ -174,7 +174,7 @@ public class UserController {
             }
 
             model.addAttribute("message", "Your account has been deleted successfully.");
-            return "redirect:/user/home"; // 탈퇴 처리 후 홈 페이지로 리다이렉트
+            return "redirect:/home"; // 탈퇴 처리 후 홈 페이지로 리다이렉트
 
         } catch (Exception e) {
             model.addAttribute("message", "Error deleting account: " + e.getMessage());

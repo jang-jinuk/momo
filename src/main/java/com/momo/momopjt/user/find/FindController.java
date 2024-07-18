@@ -1,7 +1,6 @@
 package com.momo.momopjt.user.find;
 
 import com.momo.momopjt.user.User;
-import com.momo.momopjt.user.UserController;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -107,7 +106,7 @@ public class FindController {
 
       if (resetSuccess) {
         redirectAttributes.addFlashAttribute("resetSuccessMessage", "비밀번호가 성공적으로 재설정되었습니다!");
-        return "redirect:/user/home"; // 여기서 경로 변경
+        return "redirect:/home"; // 여기서 경로 변경
       } else {
         redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
         return "redirect:/reset";

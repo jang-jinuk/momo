@@ -1,7 +1,6 @@
 package com.momo.momopjt.alarm;
 
 
-import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -9,18 +8,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Log4j2
-public class alarmServiceTest {
+public class AlarmServiceTests {
 
   @Autowired
   private AlarmRepository alarmRepository;
@@ -31,11 +28,13 @@ public class alarmServiceTest {
   @Autowired
   private AlarmServiceImpl alarmService;
 
+  @Autowired
+  private UserRepository userRepository;
+
+
   private Alarm alarm;
   private AlarmDTO alarmDTO;
 
-  @Autowired
-  private UserRepository userRepository;
 
 
   @BeforeEach
