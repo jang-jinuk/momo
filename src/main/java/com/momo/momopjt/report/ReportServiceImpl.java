@@ -55,65 +55,42 @@ public class ReportServiceImpl implements ReportService {
       Report report = ban.get();
       // reportResult 가 1일 경우 2로 변경하여 저장
 
-      if (report.getReportResult() == '1') {
-        log.info("...... [reportResult == 1]..........KSW");
-        report.setReportResult('2');
-        // 사용자의 userState 값 변경
-
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
         if (userOptional.isPresent()) {
           log.info("...... [userOptional is Present !!]..........KSW");
           User user = userOptional.get();
-          user.setUserState('2');
+          user.setUserState('1');
           userRepository.save(user);
-        } else {
-          if (reportDTO.getReportResult() == '2') {
-            log.info("..........[이미 싸늘해진 시체다]..........KSW");
-          }
         }
-      }
     }
   }
   //유저 제제 해제(수정) 제제랑 숫자만 다름
   @Override
   public void safeReport(ReportDTO reportDTO) {
     log.info("...... [update Report START]..........KSW");
+
     Optional<Report> sage = reportRepository.findById(reportDTO.getReportNo());
     if (sage.isPresent()) {
       log.info("...... [sage present]..........KSW");
       Report report = sage.get();
       // reportResult 가 2일 경우 1로 변경하여 저장
-      if (report.getReportResult() == '2') {
-        log.info("...... [report Result == 2]..........KSW");
-        report.setReportResult('1');
-        // 사용자의 userState 값 변경
         Optional<User> userOptional = userRepository.findById(report.getReportedNo().getUserNo());
         if (userOptional.isPresent()) {
           log.info("...... [userOptional is Present? !!]..........KSW");
           User user = userOptional.get();
-          user.setUserState('1');
+          user.setUserState('0');
           userRepository.save(user);
-        } else {
-          if (reportDTO.getReportResult() == '1') {
-            log.info("..........[살아남남]..........KSW");
-          }
         }
-      }
     }
   }
   // 삭제
   @Override
   public void deleteReport(Long reportNo) {
-    Optional<Report> optionalReport = reportRepository.findById(reportNo);
-    if (optionalReport.isPresent()) {
-      Report report = optionalReport.get();
-      if (report.getReportResult() == '1') {
+//    Optional<Report> optionalReport = reportRepository.findById(reportNo);
+//    if (optionalReport.isPresent()) {
+//      Report report = optionalReport.get();
         reportRepository.deleteById(reportNo);
-      } else {
-        System.out.println("회원 상태가 이상하여 삭제처리가 어렵습니다");
-      }
     }
-  }
   //페이징 검색
   @Override
   public List<ReportDTO> searchReports(String query) {

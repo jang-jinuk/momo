@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>신고페이지</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .active .page-link {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <header class="bg-light py-2">
@@ -20,7 +27,8 @@
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">신고된 회원 관리</a>
         <form class="d-flex" th:action="@{/admin/manage-report}" method="get">
-            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search" name="query" th:value="${query}">
+            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search" name="query"
+                   th:value="${query}">
             <button class="btn btn-outline-success" type="submit">검색</button>
         </form>
     </div>
@@ -49,43 +57,43 @@
         <td th:text="${report.reportCategory}"></td>
         <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
         <td>
-        <span th:switch="${report.reportResult}">
-        <span th:case="'1'">정상</span>
-        <span th:case="'2'">정지</span>
-        <span th:case="*">알 수 없음</span>
+        <span th:switch="${report.reportedNo.getUserState()}">
+        <span th:case="'0'">정상</span>
+        <span th:case="'1'">정지</span>
         </span>
+        </td>
         <!-- 버튼 -->
-        <td th:if="${report.reportResult} =='1'">
+        <td th:if="${report.reportedNo.getUserState} == '0'">
             <div>
                 <form th:action="@{/admin/ban}" method="post">
                     <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                     <input type="hidden" name="currentPage" th:value="${page}">
                     <input type="hidden" name="query" th:value="${query}">
-                    <button class="btn btn-danger" type="submit" th:onclick="ban()">정지</button>
+                    <button class="btn btn-danger" type="submit" th:onclick="ban()">유저정지</button>
                 </form>
             </div>
         </td>
-        <td th:if="${report.reportResult}=='2'">
+        <td th:if="${report.reportedNo.getUserState} == '1'">
             <div>
                 <form th:action="@{/admin/freedom}" method="post">
                     <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                     <input type="hidden" name="currentPage" th:value="${page}">
                     <input type="hidden" name="query" th:value="${query}">
-                    <button class="btn btn-danger" type="submit"  th:onclick="free()">정지해제</button>
+                    <button class="btn btn-danger" type="submit" th:onclick="free()">정지해제</button>
                 </form>
             </div>
         </td>
         <td>
+            <div>
             <form th:action="@{/admin/delete}" method="post">
                 <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                 <input type="hidden" name="currentPage" th:value="${page}">
                 <input type="hidden" name="query" th:value="${query}">
-                <div th:switch="${report.reportResult}">
-                    <button class="btn btn-danger" type="submit" th:case="'1'" th:onclick="deleting()">삭제</button>
-                    <button class="btn btn-secondary" type="button" th:case="'2'" th:onclick="noDeleting()">삭제 불가</button>
-                    <button class="btn btn-warning" type="button" th:case="*">상태 확인 필요</button>
+                <div th:switch="${report.reportedNo.getUserState}">
+                    <button class="btn btn-danger" type="submit" th:onclick ="deleting()">삭제</button>
                 </div>
             </form>
+            </div>
         </td>
         <!-- 버튼 끝 -->
     </tr>
@@ -96,9 +104,11 @@
     <nav>
         <ul class="pagination">
             <li class="page-item" th:classappend="${startPage > 1} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{/admin/manage-report(page=${startPage - 1}, query=${query})}">&laquo;</a>
+                <a class="page-link"
+                   th:href="@{/admin/manage-report(page=${startPage - 1}, query=${query})}">&laquo;</a>
             </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:classappend="${i == page} ? 'active'">
+            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                th:classappend="${i == page} ? 'active'">
                 <a class="page-link" th:href="@{/admin/manage-report(page=${i}, query=${query})}" th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${endPage < lastPage} ? '' : 'disabled'">
@@ -108,25 +118,19 @@
     </nav>
 </div>
 <!-- 페이지 끝-->
-<style>
-    .active .page-link {
-        font-weight: bold;
-        text-decoration: underline;
-    }
-</style>
+
 <script>
-    <!-- 버튼 알림 메세지 -->
+    // <!-- 버튼 메세지 -->
     function ban() {
         alert('회원이 제제됐습니다.');
     }
+
     function free() {
         alert('회원의 제제가 해제됐습니다.');
     }
+
     function deleting() {
         alert('삭제 됐습니다.');
-    }
-    function noDeleting() {
-        alert('제제중인 항목은 삭제할 수 없습니다.');
     }
     <!-- 버튼 알림 메세지 끝 -->
 </script>

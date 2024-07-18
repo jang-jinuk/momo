@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -73,8 +73,7 @@ public class ReportController {
     reportService.userBanReport(reportDTO); //기능으로 넘겨준다
     log.info("...... [정의구현]..........KSW");
     log.info("...... [{}]..........KSW",query);
-    String encodedQuery = URLEncoder.encode(query, "UTF-8"); //쿼리를 인코더에 담아준다
-
+    String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8); //쿼리를 인코더에 담아준다
     return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
 
@@ -100,7 +99,7 @@ public class ReportController {
                        @RequestParam("query") String query) throws UnsupportedEncodingException{
     log.info("...... [post delete report]..........KSW");
     reportService.deleteReport(reportNo);
-    String encodedQuery = URLEncoder.encode(query, "UTF-8");
+    String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
 }

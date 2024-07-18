@@ -37,11 +37,11 @@ public class GlobalReportController {
     log.info("...... [report post ]..........KSW");
     // 서비스로 데이터 전달
     reportDTO.setReportNo(-1L);
-    reportDTO.setReportResult('1');
+    reportDTO.setReportResult('0');
     reportDTO.setReportDate(Instant.now());
     //User 객체 만들어줌
-    User user1 = userRepository.findById(5L).orElseThrow();
-    User user2 = userRepository.findById(6L).orElseThrow();
+    User user1 = userRepository.findById(4L).orElseThrow();
+    User user2 = userRepository.findById(1L).orElseThrow();
 
     reportDTO.setReporterNo(user1); // 로그인 한 유저 정보가 들어와야함
     reportDTO.setReportedNo(user2); // 신고하기 눌러서 들어올때 값 전달받아서 와야함.
