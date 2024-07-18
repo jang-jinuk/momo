@@ -2,8 +2,6 @@ package com.momo.momopjt.userandclub;
 
 //모임 맴버 관리 기능
 
-import com.momo.momopjt.alarm.AlarmRepository;
-import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
 import java.util.List;
@@ -12,10 +10,14 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.schedule.Schedule;
+import com.momo.momopjt.schedule.ScheduleService;
+import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
+import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
+import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -27,8 +29,11 @@ import org.springframework.stereotype.Service;
 public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final UserAndClubRepository userAndClubRepository;
+  private final ScheduleService scheduleService;
   private final ModelMapper modelMapper;
   private final ClubRepository clubRepository;
+  private final UserAndScheduleRepository userAndScheduleRepository;
+  private final UserAndScheduleService userAndScheduleService;
 
 
   //모임 가입 신청
@@ -61,8 +66,28 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   }
 
   //모임 탈퇴
+  //등록한 일정, 게시글, 사진과 참석한 일정에서 삭제
   @Override
   public void leaveClub(UserAndClubDTO userAndClubDTO) {
+
+    //참가했던 일정 목록에서 제거
+    List<Schedule> participatedScheduleList = userAndScheduleRepository.findSchedulesParticipatedByUser(userAndClubDTO.getUserNo());
+
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(userAndClubDTO.getUserNo());
+
+    for (Schedule schedule : participatedScheduleList) {
+      userAndScheduleDTO.setScheduleNo(schedule);
+      userAndScheduleService.subtractParticipant(userAndScheduleDTO);
+    }
+
+    //회원이 주체한 일정 삭제
+    List<Schedule> hostedScheduleList = userAndScheduleRepository.findSchedulesHostedByUser(userAndClubDTO.getUserNo());
+
+    for (Schedule schedule : hostedScheduleList) {
+      scheduleService.deleteSchedule(schedule.getScheduleNo());
+    }
+
     userAndClubRepository.deleteClubMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     log.info("-------------모임 탈퇴 완료-------------");
   }
@@ -89,16 +114,12 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return joinList;
   }
 
-  @Autowired
-  private AlarmService alarmService;
   // 해당 모임 맴버 전체 삭제
   @Override
   public void deleteAllMembers(Long clubNo) {
     Club club = new Club();
     club.setClubNo(clubNo);
-    List<UserAndClubDTO> clubMemberList = readAllMembers(club);
     userAndClubRepository.deleteClubMembers(club);
-
   }
 
   //모임 맴버 확인
