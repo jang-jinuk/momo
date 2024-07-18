@@ -19,13 +19,13 @@ public class QNews extends EntityPathBase<News> {
 
     public static final QNews news = new QNews("news");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath newsContent = createString("newsContent");
 
     public final DateTimePath<java.time.Instant> newsCreateDate = createDateTime("newsCreateDate", java.time.Instant.class);
 
     public final DateTimePath<java.time.Instant> newsModifyDate = createDateTime("newsModifyDate", java.time.Instant.class);
+
+    public final NumberPath<Long> newsNo = createNumber("newsNo", Long.class);
 
     public final StringPath newsTag = createString("newsTag");
 

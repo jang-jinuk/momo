@@ -3,13 +3,18 @@ package com.momo.momopjt.club;
 import com.momo.momopjt.photo.Photo;
 import java.time.Instant;
 import javax.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
+import org.springframework.stereotype.Repository;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "club")
+
 public class Club {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

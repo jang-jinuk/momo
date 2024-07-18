@@ -58,7 +58,7 @@ public class QReply extends EntityPathBase<Reply> {
 
     public QReply(Class<? extends Reply> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.articleNo = inits.isInitialized("articleNo") ? new com.momo.momopjt.article.QArticle(forProperty("articleNo")) : null;
+        this.articleNo = inits.isInitialized("articleNo") ? new com.momo.momopjt.article.QArticle(forProperty("articleNo"), inits.get("articleNo")) : null;
         this.scheduleNo = inits.isInitialized("scheduleNo") ? new com.momo.momopjt.schedule.QSchedule(forProperty("scheduleNo"), inits.get("scheduleNo")) : null;
         this.userNo = inits.isInitialized("userNo") ? new com.momo.momopjt.user.QUser(forProperty("userNo")) : null;
     }

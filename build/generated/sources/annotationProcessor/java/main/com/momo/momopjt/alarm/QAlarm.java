@@ -26,9 +26,9 @@ public class QAlarm extends EntityPathBase<Alarm> {
 
     public final DateTimePath<java.time.Instant> alarmCreateDate = createDateTime("alarmCreateDate", java.time.Instant.class);
 
-    public final StringPath alarmType = createString("alarmType");
+    public final NumberPath<Long> AlarmNo = createNumber("AlarmNo", Long.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    public final StringPath alarmType = createString("alarmType");
 
     public final ComparablePath<Character> isRead = createComparable("isRead", Character.class);
 

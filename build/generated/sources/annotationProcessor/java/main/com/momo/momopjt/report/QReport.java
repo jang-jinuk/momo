@@ -22,8 +22,6 @@ public class QReport extends EntityPathBase<Report> {
 
     public static final QReport report = new QReport("report");
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
-
     public final StringPath reportCategory = createString("reportCategory");
 
     public final DateTimePath<java.time.Instant> reportDate = createDateTime("reportDate", java.time.Instant.class);
@@ -31,6 +29,8 @@ public class QReport extends EntityPathBase<Report> {
     public final com.momo.momopjt.user.QUser reportedNo;
 
     public final com.momo.momopjt.user.QUser reporterNo;
+
+    public final NumberPath<Long> reportNo = createNumber("reportNo", Long.class);
 
     public final ComparablePath<Character> reportResult = createComparable("reportResult", Character.class);
 
