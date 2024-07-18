@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +31,15 @@ public class ArticleServiceImpl implements ArticleService {
     return convertEntityToDTO(savedArticle);
   }
 
-  // 모든 후기글을 가져오는 메서드
+ //모든 후기글 가져오는 메서드
   @Override
   public List<ArticleDTO> getAllArticles() {
-    return articleRepository.findAll().stream()
-        .map(this::convertEntityToDTO)
-        .collect(Collectors.toList());
+    List<Article> articles = articleRepository.findAll();
+    List<ArticleDTO> articleDTOs = new ArrayList<>();
+    for (Article article : articles) {
+      articleDTOs.add(convertEntityToDTO(article));
+    }
+    return articleDTOs;
   }
 
   // 특정 ID의 후기글을 가져오는 메서드
