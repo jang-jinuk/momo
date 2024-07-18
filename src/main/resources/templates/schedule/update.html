@@ -35,7 +35,7 @@
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
-                          <input th:value="${scheduleDTO.scheduleMax}" name="scheduleMax" type="number" class="form-control" id="max" min="1" th:required="true">
+                          <input th:value="${scheduleDTO.scheduleMax}" name="scheduleMax" type="number" class="form-control" id="max" min="1" th:max="${countMembers}" th:required="true">
                       </div>
                   </div>
               </div>
