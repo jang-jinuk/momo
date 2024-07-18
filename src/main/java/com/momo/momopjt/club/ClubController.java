@@ -140,7 +140,7 @@ public class ClubController {
 
   //모임 탈퇴
   @GetMapping("/leave")
-  public String leaveClub(@RequestParam("userNo")Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
+  public String leaveClub(@RequestParam(value = "userNo", required = false)Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
