@@ -2,11 +2,11 @@ package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.file.FileController;
-import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.extern.log4j.Log4j2;
@@ -40,13 +40,16 @@ public class ScheduleController {
   @Autowired
   private HttpSession session;
   @Autowired
-  private FileController fileController;
+  private UserAndClubService userAndClubService;
 
-  @Autowired
-  private PhotoService photoService;
   //일정 생성 페이지 이동
   @GetMapping("/create")
-  public String scheduleCreate() {
+  public String scheduleCreate(Model model) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    int countMembers = userAndClubService.countMembers(club);
+    model.addAttribute("countMembers", countMembers);
     return "/schedule/create";
   }
 
