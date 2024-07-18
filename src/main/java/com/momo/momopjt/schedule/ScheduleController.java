@@ -48,7 +48,7 @@ public class ScheduleController {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
-    int countMembers = userAndClubService.countMembers(club);
+    int countMembers = userAndClubService.countMembers(club); //일정 생성 시 최대 참가 인원은 모임 전체 인원과 같음
     model.addAttribute("countMembers", countMembers);
     return "/schedule/create";
   }
@@ -182,6 +182,11 @@ public class ScheduleController {
     ZonedDateTime zonedDate = originStartDate.atZone(ZoneId.systemDefault());
     LocalDateTime formattedDate = zonedDate.toLocalDateTime();
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    int countMembers = userAndClubService.countMembers(club); //일정 수정 시 최대 참가 인원은 모임 전체 인원과 같음
+    model.addAttribute("countMembers", countMembers);
     model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
     return "/schedule/update";
