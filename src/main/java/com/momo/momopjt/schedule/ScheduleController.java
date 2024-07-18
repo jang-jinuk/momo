@@ -1,9 +1,6 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.file.FileController;
-import com.momo.momopjt.photo.PhotoDTO;
-import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -39,11 +36,7 @@ public class ScheduleController {
   private UserAndScheduleService userAndScheduleService;
   @Autowired
   private HttpSession session;
-  @Autowired
-  private FileController fileController;
 
-  @Autowired
-  private PhotoService photoService;
   //일정 생성 페이지 이동
   @GetMapping("/create")
   public String scheduleCreate() {
