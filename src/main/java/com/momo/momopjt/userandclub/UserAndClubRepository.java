@@ -18,8 +18,7 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   UserAndClub findByUserNoAndClubNo(User userNo, Club clubNo);
 
   //특정 모임의 모든 맴버(모임원) 정보를 불러오는 쿼리문
-  @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.isLeader = :isLeader")
-  List<UserAndClub> findMemberList(@Param("clubNo") Club clubNo, @Param("isLeader") Boolean isLeader);
+  List<UserAndClub> findMemberByClubNoAndIsLeader(Club clubNo, Boolean isLeader);
 
   //특정 모임의 가입 신청 내역을 불러오는 쿼리문
   //joinDate가 null이면 가입 신청 상태, 값이 null이지 않으면 가입 승인 상태

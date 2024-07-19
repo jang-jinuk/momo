@@ -98,7 +98,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   @Override
   public List<UserAndClubDTO> readAllMembers(Club clubNo) {
     Boolean isLeader = false; //모임원등급으로 표시
-    List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
+    List<UserAndClub> userAndClubs = userAndClubRepository.findMemberByClubNoAndIsLeader(clubNo, isLeader);
     log.info("--------------------쿼리실행 완료--------------------");
     List<UserAndClubDTO> userAndClubDTOList = userAndClubs.stream()
         .sorted(Comparator.comparing(UserAndClub::getJoinDate).reversed()) //최신 가입 순으로 정렬
@@ -150,7 +150,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임장 조회
   @Override
   public UserAndClubDTO isLeader(Club clubNo) {
-    List<UserAndClub> userAndClub = userAndClubRepository.findMemberList(clubNo,true);
+    List<UserAndClub> userAndClub = userAndClubRepository.findMemberByClubNoAndIsLeader(clubNo,true);
     UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
     return userAndClubDTO;
   }
