@@ -14,9 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> {
 
-  //특정 모임의 맴버 정보를 불러오는 쿼리문
-  @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.userNo = :userNo")
-  UserAndClub findMember(@Param("clubNo")Club clubNo, @Param("userNo")User userNo);
+  //특정 모임의 맴버 정보를 조회
+  UserAndClub findByUserNoAndClubNo(User userNo, Club clubNo);
 
   //특정 모임의 모든 맴버(모임원) 정보를 불러오는 쿼리문
   @Query("SELECT u FROM UserAndClub u WHERE u.clubNo = :clubNo AND u.isLeader = :isLeader")
