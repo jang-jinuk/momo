@@ -39,7 +39,13 @@ public class ClubServiceImpl implements ClubService {
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
-  public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) {
+  public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) throws ClubNameException {
+
+    Boolean existClubName = clubRepository.existsByClubName(clubDTO.getClubName());
+
+    if (existClubName) {
+      throw new ClubNameException();
+    }
 
     Photo photo = photoService.savePhoto(photoDTO);
     clubDTO.setPhotoUUID(photo);
