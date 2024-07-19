@@ -251,6 +251,7 @@ public class ClubController {
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     List<UserAndClubDTO> joinList = userAndClubService.readAllJoinList(club);
 
+    model.addAttribute("clubNo", clubNo);
     model.addAttribute("userAndClubDTOS", userAndClubDTOS);
     model.addAttribute("joinList", joinList);
 
