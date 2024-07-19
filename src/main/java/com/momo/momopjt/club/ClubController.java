@@ -76,7 +76,9 @@ public class ClubController {
 
   //모임 생성
   @PostMapping("/create")
-  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
+  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
+
+
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -85,10 +87,17 @@ public class ClubController {
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
-
+    Long clubNo;
     //TODO 파일 업로드 기능과 연결필요 JW
 
-    Long clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO club create error
+    try {
+
+      clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+
+    } catch (ClubService.ClubNameException e) {
+      redirectAttributes.addFlashAttribute("error", "clubName");
+      return "redirect:/club/create";
+    }
 
     redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
 
