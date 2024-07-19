@@ -44,7 +44,8 @@
               <label for="content" class="form-label">내용</label>
               <textarea th:text="${scheduleDTO.scheduleContent}" name="scheduleContent" style="width: 100%; height: 400px; resize: none" class="form-control" id="content"></textarea>
           </div>
-              <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-success update">수정</button>
+            <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-success update">수정</button>
+            <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
       </form>
   </div>
 </th:block>
