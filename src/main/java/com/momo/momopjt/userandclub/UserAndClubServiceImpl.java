@@ -4,6 +4,7 @@ package com.momo.momopjt.userandclub;
 
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,7 +56,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
       return false;
     }
 
-    UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
+    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
+
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
     userAndClub.setIsLeader(false); //모임원 등록
@@ -99,6 +101,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     List<UserAndClub> userAndClubs = userAndClubRepository.findMemberList(clubNo, isLeader);
     log.info("--------------------쿼리실행 완료--------------------");
     List<UserAndClubDTO> userAndClubDTOList = userAndClubs.stream()
+        .sorted(Comparator.comparing(UserAndClub::getJoinDate).reversed()) //최신 가입 순으로 정렬
         .map(userAndClub -> modelMapper.map(userAndClub, UserAndClubDTO.class))
         .collect(Collectors.toList());
     return userAndClubDTOList;
@@ -125,7 +128,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 맴버 확인
   @Override
   public int isMember(UserAndClubDTO userAndClubDTO) {
-    UserAndClub userAndClub = userAndClubRepository.findMember(userAndClubDTO.getClubNo(), userAndClubDTO.getUserNo());
+    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo( userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
 
     if (userAndClub == null) {
       return 0; //모임 미가입자
