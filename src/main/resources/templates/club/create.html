@@ -12,7 +12,7 @@
         <div class="container row-8 col-2 my-5">
             <h1>모임 생성</h1>
         </div>
-        <form action="/club/create" method="post">
+        <form action="/club/create" method="post" onsubmit="return validateForm()">
             <div class="container row-4">
                 <div class="row align-items-center mb-3">
                     <div class="col-2 ms-4">
@@ -21,9 +21,11 @@
                     </div>
                     <div class="col">
                         <input name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요">
+                        <div th:if="${error == 'clubName'}" class="alert alert-danger" role="alert">
+                            모임명이 중복되었습니다. 다른 모임명을 사용해주세요.
+                        </div>
                     </div>
                 </div>
-
                 <div class="row align-items-center">
                     <div class="col-2 ms-4">
                         <h4>지역</h4>
@@ -53,7 +55,7 @@
                                 <h4>모임 소개</h4>
                             </div>
                             <div class="mb-3 col-2">
-                                <textarea name="clubContent" id="limitedTextarea" class="form-control custom-text" rows="3" maxlength="1000" placeholder="최대 1000자까지 입력 가능합니다."></textarea>
+                                <textarea name="clubContent" id="limitedTextarea" class="form-control custom-text" rows="3" minlength="10" maxlength="1000" placeholder="10~1000자까지 입력 가능합니다."></textarea>
                                 <div id="charCount" class="form-text">0 / 1000 글자</div>
                             </div>
                             <div class="container mt-4">
@@ -69,11 +71,9 @@
                                 <div class="container mt-5">
                                     <div class="row">
                                         <div class="col-2">
-                                            <h4>정원(1-100명)</h4>
+                                            <h4>정원(3-100명)</h4>
                                             <div class="input-group mt-2">
-                                                <button class="btn btn-outline-secondary" type="submit" id="decrement">-</button>
-                                                <input name="clubMax" type="number" class="form-control text-center" value="0" id="count" min="2" max="100">
-                                                <button class="btn btn-outline-secondary" type="submit" id="increment">+</button>
+                                                <input name="clubMax" type="number" class="form-control text-center" value="3" id="count" min="3" max="300">
                                             </div>
                                         </div>
                                     </div>
