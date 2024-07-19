@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+
+<body>
+<h1>편집</h1>
+<form th:action="@{/article/{articleNo}/update(articleNo=${articleDTO.articleNo})}" th:object="${articleDTO}" method="post">
+    <label for="articleTitle">제목:</label>
+    <input type="text" id="articleTitle" th:field="*{articleTitle}" required><br>
+    <label for="articleContent">내용:</label>
+    <textarea id="articleContent" th:field="*{articleContent}" required></textarea><br>
+    <button type="submit">수정하기</button>
+</form>
+<a th:href="@{/article}">Back to List</a>
+</body>
+</html>

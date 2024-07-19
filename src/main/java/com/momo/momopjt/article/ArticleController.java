@@ -34,7 +34,7 @@ public class ArticleController {
   @PostMapping
   public String createArticle(@ModelAttribute ArticleDTO articleDTO) {
     articleService.createArticle(articleDTO);
-    return "redirect:/articles"; // 생성 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article"; // 생성 후 후기글 목록 페이지로 리디렉션
   }
 
   // 모든 후기글 목록을 보여주는 페이지
@@ -50,7 +50,7 @@ public class ArticleController {
   public String getArticleById(@PathVariable Long articleNo, Model model) {
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("article", article);
-    return "articles/detail"; // "articles/detail.html" 뷰를 반환
+    return "article/detail"; // "articles/detail.html" 뷰를 반환
   }
 
 
@@ -59,23 +59,16 @@ public class ArticleController {
   public String showEditForm(@PathVariable Long articleNo, Model model) {
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
-    return "articles/edit"; // "articles/edit.html" 뷰를 반환
+    return "article/edit"; // "articles/edit.html" 뷰를 반환
   }
 
-  // 기존 후기글 수정 폼을 보여주는 페이지
-  @GetMapping("/{articleNo}/update")
-  public String updateArticle(@PathVariable Long articleNo, Model model) {
-    ArticleDTO article = articleService.getArticleById(articleNo);
-    model.addAttribute("articleDTO", article);
-    return "articles/edit"; // "articles/edit.html" 뷰를 반환
-  }
 
 
   // 기존 후기글을 업데이트하는 메서드
   @PostMapping("/{articleNo}/update")
   public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
     articleService.updateArticle(articleNo, articleDTO);
-    return "redirect:/articles/" + articleNo; // 업데이트 후 해당 후기글 상세 페이지로 리디렉션
+     return "redirect:/article";
   }
 
 
@@ -83,9 +76,7 @@ public class ArticleController {
   @PostMapping("/{articleNo}/delete")
   public String deleteArticle(@PathVariable Long articleNo) {
     articleService.deleteArticle(articleNo);
-    return "redirect:/articles"; // 삭제 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article"; // 삭제 후 후기글 목록 페이지로 리디렉션
   }
 
 }
-
-

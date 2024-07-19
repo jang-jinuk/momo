@@ -68,21 +68,33 @@ public class ArticleServiceImpl implements ArticleService {
   public ArticleDTO updateArticle(Long articleNo, ArticleDTO articleDTO) {
     Optional<Article> optionalArticle = articleRepository.findById(articleNo);
     if (optionalArticle.isEmpty()) {
-      return null; // 혹은 예외를 던질 수도 있음
+      return null; // Article이 없는 경우, null을 반환합니다.
     }
 
     Article article = optionalArticle.get();
 
-    Club club = clubRepository.findById(articleDTO.getClubNo().getClubNo())
-        .orElseThrow(() -> new RuntimeException("해당 클럽을 찾을 수 없습니다"));
+    // 클럽 정보가 있는 경우에만 클럽을 업데이트합니다.
+    if (articleDTO.getClubNo() != null && articleDTO.getClubNo().getClubNo() != null) {
+      Optional<Club> optionalClub = clubRepository.findById(articleDTO.getClubNo().getClubNo());
+      if (optionalClub.isPresent()) {
+        // 클럽 정보가 있는 경우, 클럽 관련 처리
+        Club club = optionalClub.get();
+        // 클럽과 관련된 추가 처리를 여기에 추가할 수 있습니다.
+      }
+      // 클럽 정보가 없는 경우, 클럽 관련 업데이트를 하지 않거나 기본 처리를 할 수 있습니다.
+    }
 
+    // 업데이트할 필드 설정
     article.setArticleTitle(articleDTO.getArticleTitle());
     article.setArticleContent(articleDTO.getArticleContent());
+    // 필요한 경우 다른 필드를 업데이트할 수 있습니다.
 
+    // 변경된 데이터를 데이터베이스에 저장
     Article updatedArticle = articleRepository.save(article);
+
+    // DTO로 변환하여 반환
     return modelMapper.map(updatedArticle, ArticleDTO.class);
   }
-
 
   // 특정 ID의 후기글을 삭제하는 메서드
   @Override

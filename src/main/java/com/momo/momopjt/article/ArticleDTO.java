@@ -20,7 +20,7 @@ public class ArticleDTO {
   private String articleTitle;
   private String articleContent;
   private Instant articleCreateDate = Instant.now(); // 기본 값 설정
-  private Character articleState;
+  private Character articleState=0;
   private Integer articleScore;
   private Club clubNo;
   private User userNo;
