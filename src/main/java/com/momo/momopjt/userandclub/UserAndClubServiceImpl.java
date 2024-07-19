@@ -90,7 +90,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
       scheduleService.deleteSchedule(schedule.getScheduleNo());
     }
 
-    userAndClubRepository.deleteClubMember(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
+    userAndClubRepository.deleteByClubNoAndUserNo(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     log.info("-------------모임 탈퇴 완료-------------");
   }
 
@@ -110,7 +110,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 가입 신청 내역 조회
   @Override
   public List<UserAndClubDTO> readAllJoinList(Club clubNo) {
-    List<UserAndClub> userAndClubs = userAndClubRepository.findJoinList(clubNo);
+    List<UserAndClub> userAndClubs = userAndClubRepository.findByClubNoAndJoinDateIsNull(clubNo);
     List<UserAndClubDTO> joinList = userAndClubs.stream()
         .map(userAndClub -> modelMapper.map(userAndClub, UserAndClubDTO.class))
         .collect(Collectors.toList());
@@ -122,7 +122,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   public void deleteAllMembers(Long clubNo) {
     Club club = new Club();
     club.setClubNo(clubNo);
-    userAndClubRepository.deleteClubMembers(club);
+    userAndClubRepository.deleteByClubNo(club);
   }
 
   //모임 맴버 확인
@@ -143,7 +143,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임맴버 총 인원 확인
   @Override
   public int countMembers(Club clubNo) {
-    int count = userAndClubRepository.countMembers(clubNo);
+    int count = userAndClubRepository.countByClubNoAndJoinDateIsNotNull(clubNo);
     return count;
   }
 
