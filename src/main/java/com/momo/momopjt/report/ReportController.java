@@ -52,26 +52,32 @@ public class ReportController {
     reportService.addReport(reportDTO);
     return "redirect:" + request.getHeader("Referer"); // 이전 페이지 리디렉션 (현재 신고 생성 창으로 가짐)
   }
+//
+//  @PostMapping("/create")
+//  public ResponseEntity<?> reportUser(@RequestParam String reportCategory, @RequestParam Long reportedNo) {
+//    log.info("...... [report /create POST ]..........KSW");
+//
+//    // ReportDTO 객체 생성 및 설정
+//    ReportDTO reportDTO = new ReportDTO();
+//    reportDTO.setReportNo(-1L); // 기본 값
+//    reportDTO.setReportResult('0'); // 기본 값
+//    reportDTO.setReportDate(Instant.now()); // 현재 시간 설정
 
-//  // 신고 정보 설정
-//    reportDTO.setReportNo(-1L);
-//    reportDTO.setReportResult('0');
-//    reportDTO.setReportDate(Instant.now());
-//
-//  // 로그인 사용자 정보를 가져오기 (예: SecurityContextHolder에서 가져오기)
-//  User reporter = userRepository.findById(1L).orElseThrow(); // 실제 로그인된 사용자 ID로 대체 필요
-//
-//  // 신고 대상 사용자 정보를 가져오기
-//  Long reportedNo = Long.valueOf(request.getParameter("reportedNo"));
-//  User reported = userRepository.findById(reportedNo).orElseThrow();
-//
+//    // 신고자와 신고 대상 사용자 정보 설정
+//    User reporter = userRepository.findById(1L).orElseThrow(); // 로그인 한 사용자
+//    User reported = userRepository.findById(reportedNo).orElseThrow(); // 신고 대상 사용자
+
 //    reportDTO.setReporterNo(reporter);
 //    reportDTO.setReportedNo(reported);
-//
+//    reportDTO.setReportCategory(reportCategory); // 신고 카테고리 설정
+
 //    log.info("...... [{}]..........KSW", reportDTO.getReportCategory());
+//
+//    신고 정보를 서비스로 전달
 //    reportService.addReport(reportDTO);
 //
-//    return ResponseEntity.ok().body("Report successfully submitted."); // 이전 페이지로 리디렉션
-//}
+//    성공 응답 반환
+//    return ResponseEntity.ok().body("신고가 완료되었습니다");
+//  }
 }
 

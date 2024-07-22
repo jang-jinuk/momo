@@ -1,5 +1,6 @@
 package com.momo.momopjt.article;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/article")
+@Log4j2
 public class ArticleController {
 
 
@@ -25,6 +27,7 @@ public class ArticleController {
   // 새로운 후기글 작성 폼을 보여주는 페이지
   @GetMapping("/create")
   public String showCreateForm(Model model) {
+    log.info("...... [create/article]..........KSW");
     model.addAttribute("articleDTO", new ArticleDTO());
     return "article/create";
   }
@@ -32,6 +35,7 @@ public class ArticleController {
   // 새로운 후기글을 생성하는 메서드
   @PostMapping("/create")
   public String createArticle(@ModelAttribute ArticleDTO articleDTO) {
+    log.info("...... [create/articleaaasda]..........KSW");
     articleService.createArticle(articleDTO);
     return "redirect:/article"; // 생성 후 후기글 목록 페이지로 리디렉션
   }

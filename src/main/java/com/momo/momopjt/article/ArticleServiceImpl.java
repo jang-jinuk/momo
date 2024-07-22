@@ -32,7 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
   //새로운 후기글을 생성하는 메서드
   @Override
   public Article createArticle(ArticleDTO articleDTO) {
-    articleDTO.setArticleNo(1L);
+    articleDTO.setArticleNo(-1L);
     articleDTO.setArticleCreateDate(Instant.now());
     Article article = modelMapper.map(articleDTO, Article.class);
     return articleRepository.save(article);

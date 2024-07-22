@@ -30,6 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) {
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
+    schedule.setSchedulePhoto("437d27cd-8818-48ab-8cdf-639d0ce94705");
     Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
     log.info("------------ [일정 생성 완료] ------------");
 

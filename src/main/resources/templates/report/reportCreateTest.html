@@ -60,34 +60,32 @@
         </div>
     </div>
 </div>
-<div id="message" class="alert alert-success d-none" role="alert">
-    신고가 완료되었습니다.
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-    // 신고할 대상의 ID 가져오기
+    // 신고할 대상의 ID를 모달의 hidden input에 설정합니다
     document.querySelectorAll('.report-target button').forEach(button => {
         button.addEventListener('click', function() {
-            // 클릭한 버튼의 data-id 속성에서 신고할 대상의 ID를 가져옵니다.
             const reportedNo = this.getAttribute('data-id');
-            // 가져온 ID를 hidden input에 설정합니다.
             document.getElementById('reportedNo').value = reportedNo;
         });
     });
+    // 폼 제출 시 비동기 요청을 처리합니다
     document.getElementById('reportForm').addEventListener('submit', function(event) {
         event.preventDefault(); // 기본 폼 제출 방지
+        // 폼 데이터 생성
         const formData = new FormData(this);
+        // 서버에 POST 요청을 보냅니다
         fetch('/report/create', {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
+            .then(response => response.json()) // JSON 형식으로 응답 받기
             .then(data => {
                 // 모달 닫기
                 const reportModal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
                 reportModal.hide();
-                // 완료 메시지 표시
+                // 완료 메시지 표시 (alert 사용)
                 alert('신고가 완료되었습니다.');
             })
             .catch(error => {
