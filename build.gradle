@@ -26,80 +26,62 @@ repositories {
 }
 
 dependencies {
-//    기본 Spring Boot Starter 설정
+// 스프링부트 스타터 기본 설정
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
-    // OAuth2 인증 관련
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // 메일 관련 처리
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework:spring-context-support:5.3.9'
 
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-//    추가 설정
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-//    thymeleaf Layout 사용
+// Thymeleaf 설정
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
-    // 책 설정 시작 --------------------
+// ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
-    // Swagger 설정
+// Swagger 설정
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
-
-    //796p JWT 설정
+// JWT 설정
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    //852p QueryDSL
+// QueryDSL 설정
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jpa'
     annotationProcessor 'javax.persistence:javax.persistence-api'
     annotationProcessor 'javax.annotation:javax.annotation-api'
-    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jpa'
 
-
-    //788p JSON GSON 설정 (나중에 필요없으면 제거)
+// JSON 처리 Gson
     implementation 'com.google.code.gson:gson:2.8.9'
 
-    // 책 설정 끝 ---------------
-
-    //image Thumbnail
+// 이미지 썸네일
     implementation 'net.coobird:thumbnailator:0.4.20'
 
-    //validation 추가
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+// Lombok 설정
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-    //need check
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    //smtp 사용하여 이메일 발송
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
+// MariaDB 드라이버
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
+// Email 설정
     implementation 'javax.mail:mail:1.4.7'
-    // Spring Context Support
-    implementation 'org.springframework:spring-context-support:5.3.9'
-//    implementation 'org.slf4j:slf4j-api:1.7.32'
-//    implementation 'org.slf4j:slf4j-simple'
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-logging'
 
-    //유정 추가부분
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+// Test 관련
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 
 }
