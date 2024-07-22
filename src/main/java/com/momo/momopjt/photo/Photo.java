@@ -47,7 +47,7 @@ public class Photo {
   @JoinColumn(name = "user_no", nullable = false)
   private User userNo;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name= "article_no", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name= "article_no")
   private Article articleNo;
 }
