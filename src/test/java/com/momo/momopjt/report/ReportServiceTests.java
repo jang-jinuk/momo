@@ -1,9 +1,5 @@
-package com.momo.momopjt.Report;
+package com.momo.momopjt.report;
 
-import com.momo.momopjt.report.Report;
-import com.momo.momopjt.report.ReportDTO;
-import com.momo.momopjt.report.ReportRepository;
-import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.Data;
@@ -14,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @SpringBootTest

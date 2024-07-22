@@ -37,7 +37,7 @@
         <td>
         <input type="hidden" name="reportNo" th:value="${report.reportNo}">
             <div th:switch="${report.reportedNo.getUserState}">
-                <button class="btn btn-danger" type="submit" th:case="'0'" th:onclick="deleting()">취소하기</button>
+                <button class="btn btn-danger" type="submit" th:case="'0'" th:onclick="deleting()">처리중</button>
                 <button class="btn btn-secondary" type="button" th:case="'1'" th:onclick="noDeleting()">처리완료</button>
                 <button class="btn btn-warning" type="button" th:case="*">존재하지 않는 유저</button>
             </div>
