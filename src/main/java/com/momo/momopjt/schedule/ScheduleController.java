@@ -50,7 +50,7 @@ public class ScheduleController {
     club.setClubNo(clubNo);
     int countMembers = userAndClubService.countMembers(club); //일정 생성 시 최대 참가 인원은 모임 전체 인원과 같음
     model.addAttribute("countMembers", countMembers);
-    return "/schedule/create";
+    return "schedule/create";
   }
 
   //일정 생성하기
@@ -128,7 +128,7 @@ public class ScheduleController {
     model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
 
-    return "/schedule/view";
+    return "schedule/view";
   }
 
   //일정 참가
@@ -190,7 +190,7 @@ public class ScheduleController {
     model.addAttribute("countMembers", countMembers);
     model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
-    return "/schedule/update";
+    return "schedule/update";
   }
 
   //일정 수정
