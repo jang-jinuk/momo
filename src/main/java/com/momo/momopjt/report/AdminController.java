@@ -25,9 +25,9 @@ public class AdminController {
   //조회와 페이징 검색
   @GetMapping("/manage-report")
   public String manageReportGet(Model model,
-                             @RequestParam(value = "page", defaultValue = "1") int page,
-                             @RequestParam(value = "query", defaultValue = "") String query) {
-    log.info("...... [ReportController/manage-report/running]..........KSW");
+                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                @RequestParam(value = "query", defaultValue = "") String query) {
+    log.info(".......... [GET /manage-report]..........KSW");
     // 검색어를 사용하여 리포트 조회
     List<ReportDTO> findReports;
 
@@ -65,9 +65,9 @@ public class AdminController {
   //제제
   @PostMapping("/deactivate-user")
   public String deactivateUserPost(@RequestParam("reportNo") Long reportNo,
-                    @RequestParam("currentPage") int currentPage,
-                    @RequestParam("query") String query) throws UnsupportedEncodingException {
-    log.info("...... [get manage/justice]..........KSW");
+                                   @RequestParam("currentPage") int currentPage,
+                                   @RequestParam("query") String query) throws UnsupportedEncodingException {
+    log.info("...... [POST /deactivate-user]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     // reportService.updateReport() 메서드 호출
@@ -81,9 +81,9 @@ public class AdminController {
   //제제해제
   @PostMapping("/reactivate-user")
   public String reactivateUserPost(@RequestParam("reportNo") Long reportNo,
-                        @RequestParam("currentPage") int currentPage,
-                        @RequestParam("query") String query) throws UnsupportedEncodingException {
-    log.info("...... [get manage/freedom]..........KSW");
+                                   @RequestParam("currentPage") int currentPage,
+                                   @RequestParam("query") String query) throws UnsupportedEncodingException {
+    log.info("...... [GET /reactivate-user]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     reportService.reactivateUser(reportDTO); //기능으로 넘겨준다
@@ -95,9 +95,9 @@ public class AdminController {
   //삭제
   @PostMapping("/delete-report")
   public String deleteReportPost(@RequestParam("reportNo") Long reportNo,
-                       @RequestParam("currentPage") int currentPage,
-                       @RequestParam("query") String query) throws UnsupportedEncodingException{
-    log.info("...... [post delete report]..........KSW");
+                                 @RequestParam("currentPage") int currentPage,
+                                 @RequestParam("query") String query) throws UnsupportedEncodingException{
+    log.info("...... [POST /delete-report]..........KSW");
     reportService.deleteReport(reportNo);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
