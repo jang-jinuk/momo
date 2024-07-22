@@ -43,7 +43,7 @@ public class ReportController {
     reportDTO.setReportResult('0');
     reportDTO.setReportDate(Instant.now());
     //User 객체 만들어줌
-    User user1 = userRepository.findById(4L).orElseThrow();
+    User user1 = userRepository.findById(1L).orElseThrow();
     User user2 = userRepository.findById(1L).orElseThrow();
 
     reportDTO.setReporterNo(user1); // 로그인 한 유저 정보가 들어와야함

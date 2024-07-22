@@ -86,7 +86,7 @@
         </td>
         <td>
             <div>
-            <form th:action="@{/admin/removeReportHistory}" method="post">
+            <form th:action="@{/admin/deleteReport}" method="post">
                 <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                 <input type="hidden" name="currentPage" th:value="${page}">
                 <input type="hidden" name="query" th:value="${query}">

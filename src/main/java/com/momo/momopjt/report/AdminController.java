@@ -26,7 +26,7 @@ public class AdminController {
   public String manageReportPage(Model model,
                              @RequestParam(value = "page", defaultValue = "1") int page,
                              @RequestParam(value = "query", defaultValue = "") String query) {
-    log.info("...... [ReportController/manage-report/running]..........KSW");
+    log.info("...... [AdminController/manage-report/running]..........KSW");
     // 검색어를 사용하여 리포트 조회
     List<ReportDTO> findReports;
 
@@ -58,12 +58,13 @@ public class AdminController {
     model.addAttribute("query", query); // 검색어를 모델에 추가
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
+    log.info("...... [AdminController/manage-report/end]..........KSW");
     return "admin/manage-report";
   }
 
   //제제
   @PostMapping("/suspend-user")
-  public String userPenalty(@RequestParam("reportNo") Long reportNo,
+  public String suspendUser(@RequestParam("reportNo") Long reportNo,
                     @RequestParam("currentPage") int currentPage,
                     @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/justice]..........KSW");
@@ -79,7 +80,7 @@ public class AdminController {
 
   //제제해제
   @PostMapping("/reactivate-user")
-  public String freedom(@RequestParam("reportNo") Long reportNo,
+  public String reactivateUser(@RequestParam("reportNo") Long reportNo,
                         @RequestParam("currentPage") int currentPage,
                         @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/freedom]..........KSW");
@@ -93,7 +94,7 @@ public class AdminController {
 
   //삭제
   @PostMapping("/delete-report")
-  public String delete(@RequestParam("reportNo") Long reportNo,
+  public String deleteReport(@RequestParam("reportNo") Long reportNo,
                        @RequestParam("currentPage") int currentPage,
                        @RequestParam("query") String query) throws UnsupportedEncodingException{
     log.info("...... [post delete report]..........KSW");
