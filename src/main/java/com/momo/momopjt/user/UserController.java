@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -180,13 +181,19 @@ public class UserController {
 
 
   @GetMapping("/profile/my-report")
-  public String report(Model model,
+  public String myReportGet(Model model,
     @RequestParam(value = "page", defaultValue = "1") int page) {
     log.info("...... [get profile/my-report]..........KSW");
-    // ID를 조회하여 모델에 추가 (임시)
-    User user = new User();
-    SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //로그인 정보 가져옴
-    user.setUserNo(1L);
+    // 로그인된 사용자 정보 가져오기
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName(); // 사용자 이름 가져오기
+    // 사용자 정보 조회 (username을 통해 User 객체를 가져오는 로직 필요)
+    User user = userService.findByUserId(username); // 사용자 서비스에서 사용자 정보 조회
+//    if (user == null) {
+//      // 사용자 정보를 찾을 수 없는 경우 처리
+//      model.addAttribute("error", "사용자를 찾을 수 없습니다.");
+//      return "error"; // 에러 페이지로 리턴
+//    }
     //TODO 로그인된 사용자 정보 불러와서 아이디 넣어줘야 함 그 후 페이징 처리 SW
     List<ReportDTO> reportDTOS = reportService.readReport(user);
 
