@@ -24,9 +24,6 @@ public class ArticleServiceTests {
 
   @Autowired
   private ArticleService articleService;
-  @Autowired
-  private ArticleRepository articleRepository;
-
 
   //후기글 작성
   @Test
@@ -55,6 +52,14 @@ public class ArticleServiceTests {
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
   }
 
+  //후기글 모두 조회
+  @Test
+  void getAllArticles() {
+    List<ArticleDTO> articles = articleService.getAllArticles();
+    log.info(articles);
+  }
+
+
   @Test
   void 후기글수정() {
     Club clubNo = Club.builder().clubNo(1L).build();
@@ -75,13 +80,6 @@ public class ArticleServiceTests {
   }
 
 
-  //후기글 모두 조회
-  @Test
-  void getAllArticles() {
-    List<ArticleDTO> articles = articleService.getAllArticles();
-    log.info(articles);
-  }
-
   //후기글 삭제
   @Test
   void deleteArticle() {
@@ -89,6 +87,7 @@ public class ArticleServiceTests {
     Long articleNo = 2L;
     articleService.deleteArticle(articleNo);
   }
+
 }
 
 

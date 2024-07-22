@@ -15,6 +15,7 @@ import java.util.List;
 @SpringBootTest
 @Log4j2
 public class UserAndClubServiceTests {
+
   @Autowired
   private UserAndClubService userAndClubService;
 
@@ -84,4 +85,5 @@ public class UserAndClubServiceTests {
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllJoinList(club);
     log.info(userAndClubDTOS);
   }
+
 }

@@ -23,13 +23,13 @@ public class AlarmServiceTests {
   private AlarmRepository alarmRepository;
 
   @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
   private NotificationService notificationService;
 
   @Autowired
   private AlarmServiceImpl alarmService;
-
-  @Autowired
-  private UserRepository userRepository;
 
   private Alarm alarm;
   private AlarmDTO alarmDTO;
@@ -74,7 +74,6 @@ public class AlarmServiceTests {
     //assertEquals("어서오세요", createdAlarm.getAlarmContent());
   }
 
-
   @Test
   public void 특정알람조회() {
     Long alarmNo = 13L;
@@ -109,7 +108,6 @@ public class AlarmServiceTests {
     Optional<Alarm> updatedAlarmOptional = alarmRepository.findById(alarmDTO.getAlarmNo());
     assertTrue(updatedAlarmOptional.isPresent(), "Updated Alarm should be present");
 
-
     }
 
   @Test
@@ -120,18 +118,18 @@ public class AlarmServiceTests {
   }
 
   @Test
-  void findbyusernotest(){
+  void findByUserNoTest(){
     User user = User.builder().userNo(3L).build();
     for (Alarm alarm : alarmRepository.findAlarmByUserNo(user)) {
       log.info(alarm.getAlarmContent());
     }
-
   }
 
   @Test
   void isReadTest(){
     alarmService.isReadUpdate(userRepository.findById(3L).orElseThrow(), 16L);
   }
+
 }
 
 

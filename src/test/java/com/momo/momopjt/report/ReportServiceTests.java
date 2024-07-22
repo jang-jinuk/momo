@@ -22,15 +22,16 @@ import java.util.List;
 public class ReportServiceTests {
 
   @Autowired
-  private ReportService reportService;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired
-  private ModelMapper modelMapper;
-  @Autowired
   private ReportRepository reportRepository;
+
+  @Autowired
+  private ReportService reportService;
+
+  @Autowired
+  private ModelMapper modelMapper;
 
   //    신고했을때 DB에 추가
   @Test
@@ -104,8 +105,8 @@ public class ReportServiceTests {
 //    }
 //      @Test
 //      public void allreadTest(){
-//        List<ReportDTO> repotr = reportService.readAllReport();
-//        log.info(repotr);
+//        List<ReportDTO> report = reportService.readAllReport();
+//        log.info(report);
 //  }
 
 }
