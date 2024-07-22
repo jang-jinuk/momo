@@ -43,7 +43,7 @@ public class ReportController {
     reportDTO.setReportResult('0');
     reportDTO.setReportDate(Instant.now());
     //User 객체 만들어줌
-    User user1 = userRepository.findById(3L).orElseThrow();
+    User user1 = userRepository.findById(1L).orElseThrow();
     User user2 = userRepository.findById(2L).orElseThrow();
 
     reportDTO.setReporterNo(user1); // 로그인 한 유저 정보가 들어와야함
@@ -52,5 +52,26 @@ public class ReportController {
     reportService.addReport(reportDTO);
     return "redirect:" + request.getHeader("Referer"); // 이전 페이지 리디렉션 (현재 신고 생성 창으로 가짐)
   }
+
+//  // 신고 정보 설정
+//    reportDTO.setReportNo(-1L);
+//    reportDTO.setReportResult('0');
+//    reportDTO.setReportDate(Instant.now());
+//
+//  // 로그인 사용자 정보를 가져오기 (예: SecurityContextHolder에서 가져오기)
+//  User reporter = userRepository.findById(1L).orElseThrow(); // 실제 로그인된 사용자 ID로 대체 필요
+//
+//  // 신고 대상 사용자 정보를 가져오기
+//  Long reportedNo = Long.valueOf(request.getParameter("reportedNo"));
+//  User reported = userRepository.findById(reportedNo).orElseThrow();
+//
+//    reportDTO.setReporterNo(reporter);
+//    reportDTO.setReportedNo(reported);
+//
+//    log.info("...... [{}]..........KSW", reportDTO.getReportCategory());
+//    reportService.addReport(reportDTO);
+//
+//    return ResponseEntity.ok().body("Report successfully submitted."); // 이전 페이지로 리디렉션
+//}
 }
 

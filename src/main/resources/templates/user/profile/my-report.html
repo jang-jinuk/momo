@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>나의 신고 페이지</title>
@@ -16,7 +16,7 @@
         <a class="navbar-brand">내가 신고한 내역</a>
     </div>
 </nav>
-
+<!-- 테이블 양식 -->
 <table class="container">
     <thead>
     <tr>
@@ -28,7 +28,8 @@
         <th scope="col">처리상태</th>
     </tr>
     </thead>
-
+    <!-- 테이블 양식 끝-->
+<!-- DB 에서 가져온 사용자 신고내역 -->
     <tbody>
     <tr th:each="report : ${reportDTOS}">
         <td th:text="${report.reportNo}"></td>
@@ -45,11 +46,14 @@
             </div>
         </td>
     </tr>
+    <tr th:if="${#lists.isEmpty(reportDTOS)}">
+        <td colspan="6" class="text-center">신고하신 내역이 존재하지 않습니다.</td>
+    </tr>
     </tbody>
-
+    <!-- DB 에서 가져온 사용자 신고내역 끝 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </table>
-<!-- 페이지 -->
+<!-- 페이지 처리 -->
 <div class="d-flex justify-content-center" th:if="${lastPage > 1}">
     <nav>
         <ul class="pagination">
@@ -67,16 +71,16 @@
         </ul>
     </nav>
 </div>
-<!-- 페이지 끝-->
+<!-- 페이지 처리 끝-->
 <script>
-    //작동안함 버튼 알림 메세지
+    // 버튼 알림 메세지
     function deleting() {
         alert('아직 처리중입니다.');
     }
     function noDeleting() {
         alert('해당 유저는 정지되었습니다.');
     }
-    <!-- 버튼 알림 메세지 끝 -->
+    // 버튼 알림 메세지 끝
 </script>
 </body>
 </html>

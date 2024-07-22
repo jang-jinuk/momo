@@ -194,7 +194,6 @@ public class UserController {
 //      model.addAttribute("error", "사용자를 찾을 수 없습니다.");
 //      return "error"; // 에러 페이지로 리턴
 //    }
-    //TODO 로그인된 사용자 정보 불러와서 아이디 넣어줘야 함 그 후 페이징 처리 SW
     List<ReportDTO> reportDTOS = reportService.readReport(user);
 
      int totalReports = reportDTOS.size(); // 총 데이터 수
