@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubRepository;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class ClubServiceImpl implements ClubService {
 
   private final ClubRepository clubRepository;
+  private final ScheduleService scheduleService;
   private final UserAndClubRepository userAndClubRepository;
   private final PhotoService photoService;
   private final ModelMapper modelMapper;
@@ -104,20 +106,28 @@ public class ClubServiceImpl implements ClubService {
   }
 
   //모임 해산
+  //일정, 게시글, 사진, 인원 삭제 필요
   @Override
   public void disbandClub(Long clubNo) {
+    //TODO 해당 모임에 전체 게시글을 삭제하는 기능 추가 필요 JW
+
+    //해당 모임의 모든 일정 삭제
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    scheduleService.deleteScheduleByClub(club);
+
     //해당 모임 맴버 전체 삭제
     userAndClubService.deleteAllMembers(clubNo);
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
-    Club club = result.orElseThrow();
+    club = result.orElseThrow();
     Photo photo = club.getClubPhoto();
     String clubPhoto = photo.getPhotoUUID();
     log.info(clubPhoto);
-    
-    // 모임 해산
+
+    // 모임 삭제
     clubRepository.deleteById(clubNo);
-    
+
     //해당 모임 대표사진 삭제
     if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
       photoService.deletePhoto(clubPhoto);

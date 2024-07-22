@@ -17,24 +17,28 @@ import java.util.stream.Collectors;
 @Transactional
 @Log4j2
 public class ReportServiceImpl implements ReportService {
+
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
 
-  //신고하기 (추가)
+  //신고 생성
   public void addReport(ReportDTO reportDTO) {
+    log.info("----------------- [addReport]-----------------");
     Report report = modelMapper.map(reportDTO, Report.class);
     reportRepository.save(report);
   }
+
   //자신 유저 아이디로 조회
   @Override
   public List<ReportDTO> readReport(User reporterNo) {
+    log.info("----------------- [readReport]-----------------");
     List<Report> reports = reportRepository.myReport(reporterNo);
     return reports.stream()
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
-  //모두 조회
+  //신고 모두 조회
   @Override
   public List<ReportDTO> readAllReport() {
     // 모든 리포트를 조회하여 리스트에 저장
@@ -44,6 +48,7 @@ public class ReportServiceImpl implements ReportService {
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
+
   //유저 제제 (수정)
   @Override
   public void userBanReport(ReportDTO reportDTO) {

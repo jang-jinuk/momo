@@ -223,6 +223,12 @@ public class UserController {
     log.info("...... [userIdReport]..........KSW");
     return "/user/profile/my-report";  // 뷰 반환
   }
-
+  //내가 신고한 내역 삭제
+  @PostMapping("/delete")
+  public String delete(@RequestParam("reportNo") Long reportNo) {
+    log.info("...... [post delete report]..........KSW");
+    reportService.deleteReport(reportNo);
+    return "redirect:/user/profile/my-report";
+  }
 }
 

@@ -19,7 +19,8 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
-
+  @Autowired
+  private ScheduleRepository scheduleRepository;
 
   //모임 생성 테스트
   @Test

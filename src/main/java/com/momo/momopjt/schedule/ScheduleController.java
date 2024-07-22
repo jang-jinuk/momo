@@ -13,15 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,7 +27,6 @@ import java.util.UUID;
 @Controller
 @Log4j2
 @RequestMapping("/schedule")
-@Transactional
 public class ScheduleController {
 
   @Autowired
@@ -43,18 +37,16 @@ public class ScheduleController {
   private UserAndScheduleService userAndScheduleService;
   @Autowired
   private HttpSession session;
-  @Autowired
-  private PhotoService photoService;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
-  public void scheduleCreate() {
-//    return "/schedule/create";
+  public String scheduleCreate() {
+    return "/schedule/create";
   }
 
   //일정 생성하기
   @PostMapping("/create")
-  public void scheduleCreate(ScheduleDTO dto, String dateTime, HttpSession session) throws IOException {
+  public String scheduleCreate(ScheduleDTO dto, String dateTime, HttpSession session) throws IOException {
 
     log.info("----------------- [+++ POST schedule CREATE +++]-----------------");
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -159,6 +151,7 @@ public class ScheduleController {
 //    return "redirect:/schedule";
 
 
+    return "redirect:/schedule/" + scheduleNo;
   }
 
 
@@ -188,6 +181,9 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
+
+    model.addAttribute("clubNo",clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보

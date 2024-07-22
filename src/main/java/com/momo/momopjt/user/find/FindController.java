@@ -1,6 +1,7 @@
 package com.momo.momopjt.user.find;
 
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserController;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;

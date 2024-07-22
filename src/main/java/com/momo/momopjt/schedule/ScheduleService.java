@@ -15,5 +15,6 @@ public interface ScheduleService {
    List<ScheduleDTO> getOngoingSchedules(Club clubNo);
    List<ScheduleDTO> getEndSchedules(Club clubNo);
    void deleteSchedule(Long scheduleNo);
+   void deleteScheduleByClub(Club clubNo);
    Boolean isScheduleFull(Long scheduleNo);
 }

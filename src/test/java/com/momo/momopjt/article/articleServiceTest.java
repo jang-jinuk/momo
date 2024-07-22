@@ -1,9 +1,11 @@
 package com.momo.momopjt.article;
 
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubDTO;
-import com.momo.momopjt.club.ClubService;
+import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import lombok.extern.log4j.Log4j2;
@@ -12,10 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2

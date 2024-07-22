@@ -3,10 +3,14 @@ package com.momo.momopjt.user;
 import com.momo.momopjt.MomoApplication;
 import com.momo.momopjt.global.security.CustomUserDetailService;
 import lombok.extern.log4j.Log4j2;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.transaction.Transactional;
@@ -17,9 +21,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Log4j2

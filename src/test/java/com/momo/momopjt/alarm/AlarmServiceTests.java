@@ -13,11 +13,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
-public class AlarmServiceTests {
+public class alarmServiceTest {
 
   @Autowired
   private AlarmRepository alarmRepository;
@@ -35,6 +35,8 @@ public class AlarmServiceTests {
   private Alarm alarm;
   private AlarmDTO alarmDTO;
 
+  @Autowired
+  private UserRepository userRepository;
 
 
   @BeforeEach

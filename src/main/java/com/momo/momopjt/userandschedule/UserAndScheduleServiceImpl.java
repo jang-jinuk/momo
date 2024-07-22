@@ -1,6 +1,8 @@
 package com.momo.momopjt.userandschedule;
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
+import com.momo.momopjt.schedule.ScheduleRepository;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserRepository;
@@ -23,6 +25,8 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
   private final UserAndScheduleRepository userAndScheduleRepository;
   private final UserRepository userRepository;
   private final ModelMapper modelMapper;
+  private final ScheduleRepository scheduleRepository;
+
 
   //참가 인원 추가
   @Override
@@ -37,12 +41,26 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
     log.info("------------ [참가 인원 제거 완료] ------------");
   }
 
+  //해당 일정 모든 인원 삭제
   @Override
   public void deleteParticipant(Schedule scheduleNo) {
     userAndScheduleRepository.deleteAllParticipant(scheduleNo);
     log.info("------------ [참가 인원 전원 삭제 완료] ------------");
   }
 
+  //해당 모임의 모든 일정 삭제
+  @Override
+  public void deleteParticipantsByClub(Club clubNo) {
+    //해당 모임의 모든 일정 조회
+    List<Schedule> scheduleNoList = scheduleRepository.findSchedulesByClub(clubNo);
+
+    //모든 일정 인원 삭제
+    for (Schedule scheduleNo : scheduleNoList) {
+      userAndScheduleRepository.deleteAllParticipant(scheduleNo);
+    }
+  }
+
+  //해당 일정의 모든 인원 조회
   @Override
   public List<UserDTO> readAllParticipants(Schedule scheduleNo) {
 

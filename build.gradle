@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 //    아래 줄은 문제 생기면 활성화
-//    sourceCompatibility = '11'
+    sourceCompatibility = '11'
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
