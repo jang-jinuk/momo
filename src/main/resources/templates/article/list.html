@@ -12,10 +12,8 @@
         <td th:text="${article.articleTitle}">Title</td>
         <td>
             <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}">자세히보기</a>
-            <a th:href="@{/article/{articleNo}/edit(articleNo=${article.articleNo})}">수정하기</a>
-            <form th:action="@{/article/{articleNo}/delete(articleNo=${article.articleNo})}" method="post" style="display:inline;">
-                <button type="submit">삭제하기</button>
-            </form>
+            <a th:href="@{/article/update/{articleNo}(articleNo=${article.articleNo})}">수정하기</a>
+
         </td>
     </tr>
     </tbody>

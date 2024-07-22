@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8">
+  <title>글 작성</title>
+  <script th:inline="javascript">
+    /* Thymeleaf의 JavaScript 인라인 사용 */
+    function limitTitleLength() {
+      var maxLength = 50;
+      var title = document.getElementById("articleTitle").value;
+      if (title.length > maxLength) {
+        document.getElementById("articleTitle").value = title.substring(0, maxLength);
+      }
+    }
 
+
+    function limitTextarea() {
+      var maxLength = 500;
+      var text = document.getElementById("articleContent").value;
+      if (text.length > maxLength) {
+        document.getElementById("articleContent").value = text.substring(0, maxLength);
+      }
+    }
+  </script>
+</head>
 <body>
-
-<form th:action="@{/article}" th:object="${articleDTO}" method="post">
+<form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
   <label for="articleTitle">제목:</label>
-  <input type="text" id="articleTitle" th:field="*{articleTitle}" required><br>
-  <label for="articleContent"> 내용 :</label>
-  <textarea id="articleContent" th:field="*{articleContent}" required></textarea><br>
-  <button type="submit">Submit</button>
+  <input type="text" id="articleTitle" th:field="*{articleTitle}" required
+         oninput="limitTitleLength()"><br>
+  <label for="articleContent">내용:</label>
+  <textarea id="articleContent" th:field="*{articleContent}" required
+            oninput="limitTextarea()"></textarea><br>
+  <button type="submit">제출하기</button>
 </form>
 </body>
 </html>
+
