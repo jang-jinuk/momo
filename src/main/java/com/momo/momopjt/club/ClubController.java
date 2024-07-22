@@ -54,10 +54,11 @@ private PhotoService photoService;
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
-    //scheduleDTOList에 담긴 사진 확인 로그
-    for(ScheduleDTO s : scheduleDTOList) {
-      log.trace(s.getSchedulePhoto());
-    }
+    //0722 YY 
+//    //scheduleDTOList에 담긴 사진 확인 로그
+//    for(ScheduleDTO s : scheduleDTOList) {
+//      log.trace(s.getSchedulePhoto());
+//    }
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
