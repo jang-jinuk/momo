@@ -44,7 +44,7 @@
         <th>날짜</th>
         <th>상태</th>
         <th>제제</th>
-        <th>면죄</th>
+        <th>지우기</th>
     </tr>
     </thead>
     <tbody id="reportTableBody">
@@ -65,7 +65,7 @@
         <!-- 버튼 -->
         <td th:if="${report.reportedNo.getUserState} == '0'">
             <div>
-                <form th:action="@{/admin/ban}" method="post">
+                <form th:action="@{/admin/suspendUser}" method="post">
                     <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                     <input type="hidden" name="currentPage" th:value="${page}">
                     <input type="hidden" name="query" th:value="${query}">
@@ -75,7 +75,7 @@
         </td>
         <td th:if="${report.reportedNo.getUserState} == '1'">
             <div>
-                <form th:action="@{/admin/freedom}" method="post">
+                <form th:action="@{/admin/reactivateUser}" method="post">
                     <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                     <input type="hidden" name="currentPage" th:value="${page}">
                     <input type="hidden" name="query" th:value="${query}">
@@ -85,7 +85,7 @@
         </td>
         <td>
             <div>
-            <form th:action="@{/admin/delete}" method="post">
+            <form th:action="@{/admin/removeReportHistory}" method="post">
                 <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                 <input type="hidden" name="currentPage" th:value="${page}">
                 <input type="hidden" name="query" th:value="${query}">
