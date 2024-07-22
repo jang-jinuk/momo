@@ -1,6 +1,8 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.file.FileController;
+import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
@@ -37,7 +39,11 @@ public class ScheduleController {
   private UserAndScheduleService userAndScheduleService;
   @Autowired
   private HttpSession session;
+  @Autowired
+  private FileController fileController;
 
+  @Autowired
+  private PhotoService photoService;
   //일정 생성 페이지 이동
   @GetMapping("/create")
   public String scheduleCreate() {
@@ -46,41 +52,17 @@ public class ScheduleController {
 
   //일정 생성하기
   @PostMapping("/create")
-  public String scheduleCreate(ScheduleDTO dto, String dateTime, HttpSession session) throws IOException {
-
+  public String scheduleCreate(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
     log.info("----------------- [+++ POST schedule CREATE +++]-----------------");
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
 
-//    byte[] photoBytes = dto.getSchedulePhotoFile().getBytes();
+    //이미지 파일 처리
+    //1. form 받은 multipart 파일을 rest controller에 전달
+    //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
+    //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
+    //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
+//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
 
-    log.info("----------------- [07-18 13:45:59]-----------------");
-//
-//    String resultPhotoUUID;
-//    resultPhotoUUID = photoService.savePhoto(
-//        PhotoDTO.builder()
-//            .photoData(photoBytes)
-//            .photoSize(dto.getSchedulePhotoFile().getSize())
-//            .photoOriginalName(dto.getSchedulePhotoFile().getOriginalFilename())
-//            .userNo(user)
-//            .build())
-//        .getPhotoUUID();
-
-
-    //이미지 처리 후 UUID만 반환
-    String resultPhotoUUID = UUID.randomUUID().toString();
-    dto.setSchedulePhoto(resultPhotoUUID);
-    //이미지를 일정 DTO에 전달 끝
-
-
-    log.info("----------------- [07-18 13:49:04]-----------------");
-
-
-    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
-    userAndScheduleDTO.setUserNo(user);
-
-    /* 주석처리
+     /* 주석처리
 
     //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -133,27 +115,35 @@ public class ScheduleController {
 
 */
 
+
+
+    //이미지 처리 후 UUID만 반환
+    String resultPhotoUUID = UUID.randomUUID().toString();
+    scheduleDTO.setSchedulePhoto(resultPhotoUUID);
+    //이미지를 일정 DTO에 전달 끝
+
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+    log.info("------------ [현재 로그인 중인 정보] ------------");
+
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
-    dto.setClubNo(club);
+    scheduleDTO.setClubNo(club);
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
     Instant instant = zonedDateTime.toInstant();
-    dto.setScheduleStartDate(instant);
+    scheduleDTO.setScheduleStartDate(instant);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
-    Long scheduleNo;
-    if (resultPhotoUUID != null) {
-      scheduleNo = scheduleService.createSchedule(dto, userAndScheduleDTO);
-//      return "redirect:/schedule/" + scheduleNo;
-    }
-    log.info("------------ [일정 등록 완료] ------------");
-//    return "redirect:/schedule";
 
+    Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
+    log.info("------------ [일정 등록 완료] ------------");
 
     return "redirect:/schedule/" + scheduleNo;
   }
-
 
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
@@ -181,9 +171,6 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
-    Long clubNo = (Long) session.getAttribute("clubNo");
-
-    model.addAttribute("clubNo",clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
