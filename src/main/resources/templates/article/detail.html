@@ -2,15 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Article Detail</title>
+    <script type="text/javascript">
+        function confirmDelete() {
+            return confirm("정말 삭제하시겠습니까?");
+        }
+    </script>
 </head>
 <body>
-<h1>Article Detail</h1>
-<h2 th:text="${article.articleTitle}">Title</h2>
-<p th:text="${article.articleContent}">Content</p>
-<a th:href="@{/article}">Back to List</a>
-<a th:href="@{/article/update/{articleNo}(articleNo=${article.articleNo})}">update</a>
-<form th:action="@{/article/detail/{articleNo}(articleNo=${article.articleNo})}" method="post" style="display:inline;">
-    <button type="submit">Delete</button>
+<h2 th:text="${article.articleTitle}">제목</h2>
+<p th:text="${article.articleContent}">내용</p>
+<a th:href="@{/article}">목록으로</a>
+<form th:action="@{/article/delete/{articleNo}(articleNo=${article.articleNo})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+    <input type="hidden" name="_method" value="delete" />
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <button type="submit">삭제</button>
 </form>
+
+
 </body>
 </html>

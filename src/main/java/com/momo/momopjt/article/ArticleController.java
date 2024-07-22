@@ -76,8 +76,9 @@ public class ArticleController {
   // 기존 후기글을 삭제하는 메서드
   @PostMapping("/delete/{articleNo}")
   public String deleteArticle(@PathVariable Long articleNo) {
-    log.info("-------- [article delete]-------you");
+    log.info("-------- [article delete] -------");
     articleService.deleteArticle(articleNo);
-    return "redirect:/article/list"; // 삭제 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article/list"; // 삭제 후 글 목록 페이지로 리디렉션
   }
+
 }
