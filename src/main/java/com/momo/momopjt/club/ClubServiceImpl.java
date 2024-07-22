@@ -114,7 +114,7 @@ public class ClubServiceImpl implements ClubService {
   //모임 해산
   //일정, 게시글, 사진, 인원 삭제 필요
   @Override
-  public void disbandClub(Long clubNo) {
+  public void deleteClub(Long clubNo) {
     //TODO 해당 모임에 전체 게시글을 삭제하는 기능 추가 필요 JW
 
     //해당 모임의 모든 일정 삭제

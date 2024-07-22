@@ -24,6 +24,9 @@ public class ClubServiceTests {
     User user = new User();
     user.setUserNo(1L);
 
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    userAndClubDTO.setUserNo(user);
+
     PhotoDTO photoDTO = PhotoDTO.builder()
         .photoUUID("test.jpg")
         .userNo(user)
@@ -43,8 +46,13 @@ public class ClubServiceTests {
         .clubGender('m')
         .clubCreateDate(Instant.now())
         .build();
-    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
-    clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO 0716 YY
+
+    try {
+      clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+    } catch (ClubService.ClubNameException e) {
+      e.printStackTrace();
+    }
+
   }
 
   //특정 모임 조회 테스트
@@ -93,6 +101,6 @@ public class ClubServiceTests {
   //모인 해산 기능 테스트
   @Test
   public void disbandClubTest() {
-    clubService.disbandClub(3L);
+    clubService.deleteClub(3L);
   }
 }

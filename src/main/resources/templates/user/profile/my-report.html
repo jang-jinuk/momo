@@ -45,10 +45,6 @@
                 <button class="btn btn-warning" type="button" th:case="*">존재하지 않는 유저</button>
             </div>
         </td>
-        <form th:action="@{/user/profile/delete}" method="post">
-        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
-            <button type="submit" th:onclick="@{/user/profile/my-report}">삭제</button></td>
-        </form>
     </tr>
     </tbody>
 

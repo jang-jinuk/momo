@@ -128,7 +128,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 맴버 확인
   @Override
   public int isMember(UserAndClubDTO userAndClubDTO) {
-    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo( userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
+    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(
+        userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
 
     if (userAndClub == null) {
       return 0; //모임 미가입자
@@ -149,7 +150,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임장 조회
   @Override
-  public UserAndClubDTO isLeader(Club clubNo) {
+  public UserAndClubDTO findLeader(Club clubNo) {
     List<UserAndClub> userAndClub = userAndClubRepository.findMemberByClubNoAndIsLeader(clubNo,true);
     UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
     return userAndClubDTO;

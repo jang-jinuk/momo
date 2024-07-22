@@ -20,5 +20,5 @@ public interface UserAndClubService {
 
   int countMembers(Club clubNo);
 
-  UserAndClubDTO isLeader(Club clubNo);
+  UserAndClubDTO findLeader(Club clubNo);
 }
