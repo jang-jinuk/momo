@@ -45,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //특정 일정 조회
   @Override
-  public ScheduleDTO findSchedule(Long scheduleNo) {
+  public ScheduleDTO readOneSchedule(Long scheduleNo) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     return modelMapper.map(schedule, ScheduleDTO.class);
@@ -93,7 +93,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [참가 가능 여부 확인]------------");
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
 
-    if (userAndScheduleService.isParticipanting(userAndScheduleDTO) == 2) {
+    if (userAndScheduleService.isParticipate(userAndScheduleDTO) == 2) {
       return "이미 참가한 일정입니다.";
     } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);
@@ -125,7 +125,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     //참석하지 않은 일정인지 확인
     userAndScheduleDTO.setScheduleNo(schedule);
 
-    if (userAndScheduleService.isParticipanting(userAndScheduleDTO) != 2) {
+    if (userAndScheduleService.isParticipate(userAndScheduleDTO) != 2) {
       return "참석하지 않은 일정입니다.";
     } else {
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
@@ -143,7 +143,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   //마감되지 않은 일정 조회
   // 마감 기준 : 시간마감
   @Override
-  public List<ScheduleDTO> getOngoingSchedules(Club clubNo) {
+  public List<ScheduleDTO> readOngoingSchedules(Club clubNo) {
      List<Schedule> schedules = scheduleRepository.findOngoingSchedules(clubNo);
     List<ScheduleDTO> scheduleDTOList = schedules.stream()
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
@@ -153,7 +153,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //마감된 일정 조회
   @Override
-  public List<ScheduleDTO> getEndSchedules(Club clubNo) {
+  public List<ScheduleDTO> readEndSchedules(Club clubNo) {
     List<Schedule> schedules = scheduleRepository.findEndSchedules(clubNo);
     List<ScheduleDTO> scheduleDTOList = schedules.stream()
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))

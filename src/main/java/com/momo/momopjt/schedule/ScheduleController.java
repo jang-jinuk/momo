@@ -25,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -45,7 +44,8 @@ public class ScheduleController {
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
-  public String scheduleCreate(Model model) {
+  public String createScheduleGet(Model model) {
+    log.info("------------ [Get schedule create] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -56,7 +56,8 @@ public class ScheduleController {
 
   //일정 생성하기
   @PostMapping("/create")
-  public String scheduleCreate(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
+  public String scheduleCreatePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
+    log.info("------------ [Post schedule create] ------------");
 
     //이미지 파일 처리
     //1. form 받은 multipart 파일을 rest controller에 전달
@@ -142,9 +143,10 @@ public class ScheduleController {
 
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
-  public String scheduleView(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
+  public String readScheduleGet(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
+    log.info("------------ [Get schedule no: {}] ------------",scheduleNo);
     //일정 조회
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+    ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     //인원마감인지 확인
     Boolean isScheduleFull = scheduleService.isScheduleFull(scheduleNo);
@@ -164,7 +166,7 @@ public class ScheduleController {
     User user = userService.findByUserId(username);
     userAndScheduleDTO.setUserNo(user);
 
-    int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
+    int isParticipant = userAndScheduleService.isParticipate(userAndScheduleDTO);
 
     Long clubNo = (Long) session.getAttribute("clubNo");
 
@@ -181,7 +183,8 @@ public class ScheduleController {
 
   //일정 참가
   @GetMapping("/join")
-  public String attendSchedule(RedirectAttributes redirectAttributes, HttpSession session) {
+  public String joinScheduleGet(RedirectAttributes redirectAttributes, HttpSession session) {
+    log.info("------------ [Get schedule join] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
 
     //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
@@ -201,7 +204,8 @@ public class ScheduleController {
 
   //일정 참가 취소
   @GetMapping("/leave")
-  public String absentSchedule(RedirectAttributes redirectAttributes, HttpSession session) {
+  public String leaveScheduleGet(RedirectAttributes redirectAttributes, HttpSession session) {
+    log.info("------------ [Get schedule leave] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
 
     //현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기
@@ -221,10 +225,10 @@ public class ScheduleController {
 
   //일정 수정 페이지 이동
   @GetMapping("/update")
-  public String updateSchedule(Model model, HttpSession session) {
+  public String updateScheduleGet(Model model, HttpSession session) {
     log.info("------------ [Get schedule update] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
+    ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     //날짜/시간 포매팅
     Instant originStartDate = scheduleDTO.getScheduleStartDate();
@@ -243,7 +247,7 @@ public class ScheduleController {
 
   //일정 수정
   @PostMapping("/update")
-  public String updateSchedule(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
+  public String updateSchedulePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("------------ [Post schedule update] ------------");
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     scheduleDTO.setScheduleNo(scheduleNo);
@@ -267,7 +271,8 @@ public class ScheduleController {
 
   //일정 삭제
   @GetMapping("/delete")
-  public String delete(RedirectAttributes redirectAttributes, HttpSession session) {
+  public String deleteScheduleGet(RedirectAttributes redirectAttributes, HttpSession session) {
+    log.info("------------ [Get schedule delete] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
 
     //일정 삭제 후 세션에 저장된 일정번호 삭제
