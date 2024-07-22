@@ -13,6 +13,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleDTO {
+
   private Long scheduleNo;
 
   private Club clubNo;

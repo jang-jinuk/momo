@@ -25,4 +25,5 @@ public class ReportDTO {
   private Instant reportDate;
 
   private Character reportResult;
+
 }

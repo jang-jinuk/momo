@@ -26,4 +26,5 @@ public class UserAndClubDTO {
   private User userNo;
 
   private Club clubNo;
+
 }

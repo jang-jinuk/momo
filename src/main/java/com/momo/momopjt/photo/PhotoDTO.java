@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhotoDTO {
+
   private String photoUUID;
 
   private Long photoSize;

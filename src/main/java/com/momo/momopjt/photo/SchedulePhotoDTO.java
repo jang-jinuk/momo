@@ -19,13 +19,21 @@ import java.time.Instant;
 public class SchedulePhotoDTO extends ScheduleDTO {
 
   private final Long scheduleNo;
+
   private final Club clubNo;
+
   private final String scheduleTitle;
+
   private final String scheduleContent;
+
   private final String schedulePhoto;
+
   private final Integer scheduleMax;
+
   private final Integer scheduleParticipants;
+
   private final String schedulePlace;
+
   private final Instant scheduleStartDate;
 
 

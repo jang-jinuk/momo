@@ -30,4 +30,5 @@ public class ClubDTO {
   private Character clubGender;
 
   private Instant clubCreateDate;
+
 }

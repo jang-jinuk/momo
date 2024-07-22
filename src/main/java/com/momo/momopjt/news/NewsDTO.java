@@ -12,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsDTO {
+
   private Long newsNo;
 
   private String newsTag;
@@ -23,4 +24,5 @@ public class NewsDTO {
   private Instant newsCreateDate;
 
   private Instant newsModifyDate;
+
 }

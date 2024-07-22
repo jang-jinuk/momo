@@ -15,12 +15,21 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class ArticleDTO {
+
   private Long articleNo;
+
   private String articleTitle;
+
   private String articleContent;
+
   private Instant articleCreateDate = Instant.now(); // 기본 값 설정
+
   private Character articleState=0;
+
   private Integer articleScore;
+
   private Club clubNo;
+
   private User userNo;
+
 }
