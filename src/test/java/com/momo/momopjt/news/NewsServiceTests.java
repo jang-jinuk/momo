@@ -14,8 +14,6 @@ class NewsServiceTests {
 
   @Autowired
   private NewsService newsService;
-  @Autowired
-  private NewsRepository newsRepository;
 
   //Test 순서대로 Create, Read, ReadAll, Update, Delete
   @Test
@@ -31,18 +29,21 @@ class NewsServiceTests {
     newsService.createNews(tempNews);
 
   }
+
   @Test
   void newsReadTest(){
     log.info("----------------- [news read test]-----------------");
     News newsfortest = newsService.readNews(1L); // 찾을 공지 번호 입력
     log.info("readed news : "+newsfortest);
   }
+
   @Test
   void newsReadAllTest(){
     log.info("----------------- [news read all test]-----------------");
     List<News> newsList = newsService.readAllNews();
     log.info("newsList : "+newsList);
   }
+
   @Test
   void newsUpdateTest(){
     log.info("----------------- [news update test]-----------------");
@@ -60,9 +61,8 @@ class NewsServiceTests {
     News newsCheckUpdated = newsService.readNews(2L);
     log.info("newsCheckUpdated modifyDate (2L) : "+newsCheckUpdated.getNewsModifyDate());
 
-
-
   }
+
   @Test
   void newsDeleteTest(){
     log.info("---------------- [news delete test]---------------");

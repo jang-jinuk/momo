@@ -4,9 +4,6 @@ public interface PhotoService {
 
   Photo savePhoto(PhotoDTO photoDTO);
 
-  //photo 객체는 update가 필요 없을듯?
-  //필요시 삭제 후 재등록으로 구현?
-
   Photo getPhoto(String photoUUID);
 
   void deletePhoto(String photoUUID);

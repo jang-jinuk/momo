@@ -26,11 +26,10 @@
 <body>
 <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
   <label for="articleTitle">제목:</label>
-  <input type="text" id="articleTitle" th:field="*{articleTitle}" required
+  <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
          oninput="limitTitleLength()"><br>
   <label for="articleContent">내용:</label>
-  <textarea id="articleContent" th:field="*{articleContent}" required
-            oninput="limitTextarea()"></textarea><br>
+  <textarea name="articleContent" id="articleContent" requiredoninput="limitTextarea()"></textarea><br>
   <button type="submit">제출하기</button>
 </form>
 </body>

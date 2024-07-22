@@ -21,7 +21,6 @@ public class PhotoServiceTests {
     @Autowired
     private PhotoService photoService;
 
-
     //CRUD 중 Create test
     @Test
     public void savePhotoTest() {
@@ -64,11 +63,13 @@ public class PhotoServiceTests {
       }
     }
 
+    //Base64 String타입 변환, 리턴 테스트
     @Test
     public void getPhoto64Test() {
-        String photoUUID = "5b2b26dc-17c3-4ae6-b528-943ef6fa2b44";
+        String photoUUID = "5b2b26dc-17c3-4ae6-b528-943ef6fa2b44"; // DB에 있는 것 설정 필요
 
         String photo64 = photoService.getPhoto64(photoUUID);
+
         log.info("will get 64 of PhotoUUID : {}",photoUUID);
         log.info("photo64 : {}",photo64.substring(0,100)); // 너무길어서 자름
     }

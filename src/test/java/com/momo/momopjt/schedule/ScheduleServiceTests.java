@@ -86,6 +86,27 @@ public class ScheduleServiceTests {
     assertEquals(true, result);
   }
 
+  //마감되지 않은 일정 조회 기능 테스트
+  @Test
+  public void getOngoingSchedulesTest() {
+    //Given
+    Club club = new Club();
+    club.setClubNo(1L);
+    //When
+    List<ScheduleDTO> scheduleDTOS = scheduleService.readOngoingSchedules(club);
+    //Then
+    scheduleDTOS.forEach(schedule -> log.info(
+        "no : {}, title : {}, content : {}, photo : {}, place : {}, max : {}, participants : {}, start_date : {}",
+        schedule.getScheduleNo(),
+        schedule.getScheduleTitle(),
+        schedule.getScheduleContent(),
+        schedule.getSchedulePhoto(),
+        schedule.getSchedulePlace(),
+        schedule.getScheduleMax(),
+        schedule.getScheduleParticipants(),
+        schedule.getScheduleStartDate()));
+  }
+
   //일정 참가 테스트
   @Test
   public void joinScheduleTest() {
@@ -126,27 +147,6 @@ public class ScheduleServiceTests {
 
     //Then
     assertEquals(successMessage, resultMessage);
-  }
-
-  //마감되지 않은 일정 조회 기능 테스트
-  @Test
-  public void getOngoingSchedulesTest() {
-    //Given
-    Club club = new Club();
-    club.setClubNo(1L);
-    //When
-    List<ScheduleDTO> scheduleDTOS = scheduleService.readOngoingSchedules(club);
-    //Then
-    scheduleDTOS.forEach(schedule -> log.info(
-        "no : {}, title : {}, content : {}, photo : {}, place : {}, max : {}, participants : {}, start_date : {}",
-        schedule.getScheduleNo(),
-        schedule.getScheduleTitle(),
-        schedule.getScheduleContent(),
-        schedule.getSchedulePhoto(),
-        schedule.getSchedulePlace(),
-        schedule.getScheduleMax(),
-        schedule.getScheduleParticipants(),
-        schedule.getScheduleStartDate()));
   }
 
   //일정 삭제 테스트

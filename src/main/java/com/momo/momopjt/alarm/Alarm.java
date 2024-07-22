@@ -15,7 +15,7 @@ public class Alarm {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "alarm_no", nullable = false)
-  private Long AlarmNo;
+  private Long alarmNo;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)

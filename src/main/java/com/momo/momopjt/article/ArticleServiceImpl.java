@@ -1,20 +1,22 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
-
 import com.momo.momopjt.club.ClubRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
+@Log4j2
 public class ArticleServiceImpl implements ArticleService {
 
 
@@ -22,17 +24,10 @@ public class ArticleServiceImpl implements ArticleService {
   private final ClubRepository clubRepository;
   private final ModelMapper modelMapper;
 
-  @Autowired
-  public ArticleServiceImpl(ArticleRepository articleRepository, ClubRepository clubRepository, ModelMapper modelMapper) {
-    this.articleRepository = articleRepository;
-    this.clubRepository = clubRepository;
-    this.modelMapper = modelMapper;
-  }
-
   //새로운 후기글을 생성하는 메서드
   @Override
   public Article createArticle(ArticleDTO articleDTO) {
-    articleDTO.setArticleNo(1L);
+    articleDTO.setArticleNo(-1L);
     articleDTO.setArticleCreateDate(Instant.now());
     Article article = modelMapper.map(articleDTO, Article.class);
     return articleRepository.save(article);
@@ -41,8 +36,8 @@ public class ArticleServiceImpl implements ArticleService {
 
  //모든 후기글 가져오는 메서드
  @Override
- public List<ArticleDTO> getAllArticles() {
-   List<Article> articles = articleRepository.findAll();
+ public List<ArticleDTO> getAllArticles(Club clubNo) {
+   List<Article> articles = articleRepository.findByClubNo(clubNo);
    List<ArticleDTO> articleDTOS = articles.stream()
        .map(article -> modelMapper.map(article, ArticleDTO.class))
        .collect(Collectors.toList());

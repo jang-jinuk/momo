@@ -7,6 +7,7 @@ import com.momo.momopjt.user.UserDTO;
 import java.util.List;
 
 public interface UserAndScheduleService {
+
   void addParticipant(UserAndScheduleDTO userAndScheduleDTO);
 
   void subtractParticipant(UserAndScheduleDTO userAndScheduleDTO);
@@ -18,4 +19,5 @@ public interface UserAndScheduleService {
   List<UserDTO> readAllParticipants(Schedule scheduleNo);
 
   int isParticipate(UserAndScheduleDTO userAndScheduleDTO);
+
 }

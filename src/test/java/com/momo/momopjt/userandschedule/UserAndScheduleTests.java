@@ -28,4 +28,5 @@ public class UserAndScheduleTests {
       log.info(userDTO.getUserNickname());
     }
   }
+
 }

@@ -4,6 +4,7 @@ import com.momo.momopjt.club.Club;
 import java.util.List;
 
 public interface UserAndClubService {
+
   void joinClub(UserAndClubDTO userAndClubDTO);
 
   Boolean approveJoin(UserAndClubDTO userAndClubDTO);
@@ -21,4 +22,5 @@ public interface UserAndClubService {
   int countMembers(Club clubNo);
 
   UserAndClubDTO findLeader(Club clubNo);
+
 }

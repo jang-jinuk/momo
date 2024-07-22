@@ -21,8 +21,8 @@ public class Club {
   @Column(name = "club_no", nullable = false)
   private Long clubNo;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "club_photo", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "club_photo")
   private Photo clubPhoto;
 
   @Column(name = "club_name", nullable = false, length = 50)

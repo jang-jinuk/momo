@@ -15,6 +15,7 @@ import java.util.List;
 @SpringBootTest
 @Log4j2
 public class ClubServiceTests {
+
   @Autowired
   private ClubService clubService;
 
@@ -103,4 +104,5 @@ public class ClubServiceTests {
   public void disbandClubTest() {
     clubService.deleteClub(3L);
   }
+
 }

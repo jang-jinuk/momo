@@ -182,7 +182,7 @@ public class UserController {
   @GetMapping("/profile/my-report")
   public String myReportGet(Model model){
     //@RequestParam(value = "page", defaultValue = "1") int page) {
-    log.info("...... [get profile/my-report]..........KSW");
+    log.info("...... [GET profile/my-report]..........KSW");
     // ID를 조회하여 모델에 추가 (임시)
     User user = new User();
     //SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //로그인 정보 가져옴

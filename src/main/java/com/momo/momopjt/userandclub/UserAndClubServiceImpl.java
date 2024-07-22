@@ -29,12 +29,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAndClubServiceImpl implements UserAndClubService {
 
-  private final UserAndClubRepository userAndClubRepository;
-  private final ScheduleService scheduleService;
-  private final ModelMapper modelMapper;
   private final ClubRepository clubRepository;
+  private final UserAndClubRepository userAndClubRepository;
   private final UserAndScheduleRepository userAndScheduleRepository;
+
+  private final ScheduleService scheduleService;
   private final UserAndScheduleService userAndScheduleService;
+
+  private final ModelMapper modelMapper;
 
 
   //모임 가입 신청
@@ -56,7 +58,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
       return false;
     }
 
-    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
+    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(
+        userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
 
     //가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
@@ -73,7 +76,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   public void leaveClub(UserAndClubDTO userAndClubDTO) {
 
     //참가했던 일정 목록에서 제거
-    List<Schedule> participatedScheduleList = userAndScheduleRepository.findSchedulesParticipatedByUser(userAndClubDTO.getUserNo());
+    List<Schedule> participatedScheduleList = userAndScheduleRepository.findSchedulesParticipatedByUser(
+        userAndClubDTO.getUserNo());
 
     UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
     userAndScheduleDTO.setUserNo(userAndClubDTO.getUserNo());

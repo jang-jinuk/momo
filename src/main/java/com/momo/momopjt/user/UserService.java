@@ -21,14 +21,14 @@ public interface UserService {
     void updateUserPassword(User user, String temporaryPassword);
 
     boolean resetPasswordByUserId(String userId, String newPassword);
-    static class UserIdException extends Exception {
-        // 추가적인 예외 처리가 필요한 경우에만 사용
-    }
-    class UserEmailException extends Exception{
-    }
 
     User findByUserIdAndUserEmail(String userId, String userEmail);
 
     void deleteAccount(String userId, String userPw);
+
+    // 추가적인 예외 처리가 필요한 경우에만 사용
+    class UserEmailException extends Exception {}
+
+    class UserIdException extends Exception {}
 
 }

@@ -17,10 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
-public class alarmServiceTest {
+public class AlarmServiceTests {
 
   @Autowired
   private AlarmRepository alarmRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @Autowired
   private NotificationService notificationService;
@@ -28,16 +31,8 @@ public class alarmServiceTest {
   @Autowired
   private AlarmServiceImpl alarmService;
 
-  @Autowired
-  private UserRepository userRepository;
-
-
   private Alarm alarm;
   private AlarmDTO alarmDTO;
-
-  @Autowired
-  private UserRepository userRepository;
-
 
   @BeforeEach
   public void setUp() {
@@ -79,7 +74,6 @@ public class alarmServiceTest {
     //assertEquals("어서오세요", createdAlarm.getAlarmContent());
   }
 
-
   @Test
   public void 특정알람조회() {
     Long alarmNo = 13L;
@@ -114,7 +108,6 @@ public class alarmServiceTest {
     Optional<Alarm> updatedAlarmOptional = alarmRepository.findById(alarmDTO.getAlarmNo());
     assertTrue(updatedAlarmOptional.isPresent(), "Updated Alarm should be present");
 
-
     }
 
   @Test
@@ -125,18 +118,18 @@ public class alarmServiceTest {
   }
 
   @Test
-  void findbyusernotest(){
+  void findByUserNoTest(){
     User user = User.builder().userNo(3L).build();
     for (Alarm alarm : alarmRepository.findAlarmByUserNo(user)) {
       log.info(alarm.getAlarmContent());
     }
-
   }
 
   @Test
   void isReadTest(){
     alarmService.isReadUpdate(userRepository.findById(3L).orElseThrow(), 16L);
   }
+
 }
 
 
