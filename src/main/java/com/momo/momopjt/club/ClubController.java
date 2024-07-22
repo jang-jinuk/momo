@@ -39,18 +39,16 @@ public class ClubController {
 private PhotoService photoService;
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
-  public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
-    log.info("------------ [club main] ------------");
+  public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
+    log.info("------------ [Get club main no: {}] ------------",clubNo);
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
-    log.info("------------clubNo {}------------",clubDTO.getClubNo());
-
     Club club = new Club();
     club.setClubNo(clubNo);
-    List<ScheduleDTO> endSchedules = scheduleService.getEndSchedules(club); //마감된 일정
+    List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정
     model.addAttribute("endSchedules", endSchedules);
-    List<ScheduleDTO> getOngoingSchedules= scheduleService.getOngoingSchedules(club);//마감되지 않은 일정
+    List<ScheduleDTO> getOngoingSchedules= scheduleService.readOngoingSchedules(club);//마감되지 않은 일정
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
@@ -104,13 +102,15 @@ private PhotoService photoService;
     return "club/main";
   }
   @GetMapping("/create")
-  public String createClub() {return "club/create";}
+  public String createClubGet() {
+    log.info("------------ [Get club create] ------------");
+    return "club/create";
+  }
 
   //모임 생성
   @PostMapping("/create")
-  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
-
-
+  public String createClubPost(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
+    log.info("------------ [Post club create] ------------");
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -137,7 +137,8 @@ private PhotoService photoService;
   }
 
   @GetMapping("/update")
-  public String updateClub(Model model, HttpSession session) {
+  public String updateClubGet(Model model, HttpSession session) {
+    log.info("------------ [Get club update] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
@@ -146,7 +147,8 @@ private PhotoService photoService;
 
   //모임 수정
   @PostMapping("/update")
-  public String updateClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes, HttpSession session) {
+  public String updateClubPost(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes, HttpSession session) {
+    log.info("------------ [Post club update] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     clubDTO.setClubNo(clubNo);
 
@@ -161,28 +163,32 @@ private PhotoService photoService;
   }
 
   @GetMapping("/disband-page")
-  public String goDisbandPage() {
+  public String goDisbandPageGet() {
+    log.info("------------ [Get club disband-page] ------------");
     return "club/disband";
   }
 
   //모임 해산
   @GetMapping("/disband")
-  public String disbandClub(HttpSession session, RedirectAttributes redirectAttributes) {
+  public String disbandClubGet(HttpSession session, RedirectAttributes redirectAttributes) {
+    log.info("------------ [Get club disband] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
-    clubService.disbandClub(clubNo);
+    clubService.deleteClub(clubNo);
     session.removeAttribute("clubNo");
     redirectAttributes.addFlashAttribute("message","모임이 해산되었습니다.");
     return "redirect:/home";
   }
 
   @GetMapping("/leave-page")
-  public String goLeavePage() {
+  public String goLeavePageGet() {
+    log.info("------------ [Get club leave-page] ------------");
     return "club/leave";
   }
 
   //모임 탈퇴
   @GetMapping("/leave")
-  public String leaveClub(@RequestParam(value = "userNo", required = false)Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
+  public String leaveClubGet(@RequestParam(value = "userNo", required = false)Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
+    log.info("------------ [Get club leave] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -216,7 +222,8 @@ private PhotoService photoService;
   }
 
   @GetMapping("/join-page")
-  public String goJoinPage(HttpSession session, Model model) {
+  public String goJoinPageGet(HttpSession session, Model model) {
+    log.info("------------ [Get club join-page] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -231,7 +238,7 @@ private PhotoService photoService;
     userAndClubDTO.setClubNo(club);
     int isMember = userAndClubService.isMember(userAndClubDTO);
 
-    UserAndClubDTO isLeader = userAndClubService.isLeader(club);
+    UserAndClubDTO isLeader = userAndClubService.findLeader(club);
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     int countMembers = userAndClubService.countMembers(club);
@@ -246,7 +253,8 @@ private PhotoService photoService;
 
   //모임 가입 신청
   @GetMapping("/join")
-  public String joinClub(HttpSession session) {
+  public String joinClubGet(HttpSession session) {
+    log.info("------------ [Get club join] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -267,7 +275,8 @@ private PhotoService photoService;
 
   //가입 신청 완료
   @GetMapping("/join-complete")
-  public String joinClubComplete(HttpSession session, Model model) {
+  public String joinClubCompleteGet(HttpSession session, Model model) {
+    log.info("------------ [Get club Join complete] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO= clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
@@ -276,7 +285,8 @@ private PhotoService photoService;
 
   //맴버 관리
   @GetMapping("/members")
-  public String goMembers(Model model, HttpSession session) {
+  public String goMembersGet(Model model, HttpSession session) {
+    log.info("------------ [Get club members] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -292,8 +302,9 @@ private PhotoService photoService;
 
   //가입 신청 승인
   @GetMapping("/approve-join")
-  public String approveJoin(@RequestParam("userNo")Long userNo, HttpSession session,
+  public String approveJoinGet(@RequestParam("userNo")Long userNo, HttpSession session,
                             RedirectAttributes redirectAttributes) {
+    log.info("------------ [Get club approve join] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo); //모임번호 지정

@@ -15,7 +15,7 @@ public interface ClubService {
 
   Boolean updateClub(ClubDTO clubDTO, PhotoDTO photoDTO);
 
-  void disbandClub(Long clubNo);
+  void deleteClub(Long clubNo);
 
   List<ClubDTO> readMyClubs(User userNo);
 

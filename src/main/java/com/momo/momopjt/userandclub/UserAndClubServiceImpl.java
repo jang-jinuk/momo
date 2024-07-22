@@ -128,7 +128,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 맴버 확인
   @Override
   public int isMember(UserAndClubDTO userAndClubDTO) {
-    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo( userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
+    UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(
+        userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
 
     if (userAndClub == null) {
       return 0; //모임 미가입자
