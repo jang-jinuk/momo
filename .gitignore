@@ -203,3 +203,6 @@ $RECYCLE.BIN/
 /build/generated/
 /build/
 /.gradle/
+/.idea/
+/gradle/
+/bin/

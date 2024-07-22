@@ -2,16 +2,17 @@ package com.momo.momopjt;
 
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
 @Log4j2
 class MomoApplicationTests {
-
-
 
 
   @BeforeEach
@@ -29,27 +30,34 @@ class MomoApplicationTests {
     log.info("----------------- [전체 테스트 종료]-----------------");
 
 
-
   }
 
-    @Test
-    @DisplayName("테스트의 이름 지정")
-    void testTRRemplate() {
-      int result=1;
+  @Test
+  @DisplayName("테스트의 이름 지정")
+  void testTRRemplate() {
+    int result = 1;
 
 
-      try {
-        log.info("----------------- [try test]-----------------");
+    try {
+      log.info("----------------- [try test]-----------------");
 
-        result+=1;
+      result += 1;
 
-      } catch (Exception e) {
-        log.info("----------------- [error catch]-----------------");
-        e.printStackTrace(); }
-
-      System.out.println(result);
-      log.info(result);
+    } catch (Exception e) {
+      log.info("----------------- [error catch]-----------------");
+      e.printStackTrace();
     }
 
+    System.out.println(result);
+    log.info(result);
+  }
+
+
+  @Test
+  void classcheck(){
+    log.info("--------------- [classcheck]---------------");
+    Collection<Character> socialTypes = Arrays.asList('K', 'N', 'G', 'M');
+    log.info(socialTypes.getClass().toString());
+  }
 
 }

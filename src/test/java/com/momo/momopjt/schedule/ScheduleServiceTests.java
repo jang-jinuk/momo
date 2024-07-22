@@ -10,10 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -35,10 +32,9 @@ public class ScheduleServiceTests {
     User user = new User();
     user.setUserNo(4L);
 
+    //시간 설정
     LocalDateTime localDateTime = LocalDateTime.of(2024, 9, 5, 12, 40);
-
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-
     Instant instant = zonedDateTime.toInstant();
 
     //일정 정보
@@ -87,9 +83,9 @@ public class ScheduleServiceTests {
         .build();
 
     //When
-    Map<String, String> result = scheduleService.updateSchedule(scheduleDTO);
+    Boolean result = scheduleService.updateSchedule(scheduleDTO);
     //Then
-    assertEquals(scheduleDTO.getScheduleNo(),Long.parseLong(result.get("result")));
+    assertEquals(true, result);
   }
 
   //일정 참가 테스트
@@ -104,14 +100,13 @@ public class ScheduleServiceTests {
 
     Long scheduleNo = 4L;
 
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() + 1;
+    String successMessage = "신청이 완료되었습니다.";
 
     //When
-    Integer addedParticipantsNumber = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.joinSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, addedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //참가 취소
@@ -126,14 +121,13 @@ public class ScheduleServiceTests {
 
     Long scheduleNo = 1L;
 
-    ScheduleDTO scheduleDTO = scheduleService.findSchedule(scheduleNo);
-    Integer expectedParticipantsNumber = scheduleDTO.getScheduleParticipants() - 1;
+    String successMessage = "참석이 취소되었습니다.";
 
     //When
-    Integer subtractedParticipantsNumber = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
+    String resultMessage = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
 
     //Then
-    assertEquals(expectedParticipantsNumber, subtractedParticipantsNumber);
+    assertEquals(successMessage, resultMessage);
   }
 
   //마감되지 않은 일정 조회 기능 테스트

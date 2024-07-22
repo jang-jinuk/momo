@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <br>
+    <div class="container">
+        <div class="row" th:unless="${#authentication.name == 'anonymousUser'}">
+            <h2>나의 모임</h2>
+            <div class="col-6" th:each="myClubDTO : ${myClubDTOList}">
+                <div class="card mb-3" style="max-width: 415px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            이미지 자리
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTO.clubNo})}" th:inline="text">
+                                    <h3 class="card-title" th:text="${myClubDTO.clubName}"></h3>
+                                </a>
+                                <p class="card-text" th:text="${myClubDTO.clubContent}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div>
+                <button th:unless="${#authentication.name == 'anonymousUser'}" th:onclick="|location.href='@{/club/create}'|">생성</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3" th:each="clubDTO : ${clubDTOList}">
+                <div class="card">
+                    <img class="card-img-top" src="/assets/게시글사진1.jpg">
+                    <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTO.clubNo})}" th:inline="text">
+                        <h3 class="card-title" th:text="${clubDTO.clubName}"></h3>
+                    </a>
+                    <p th:text="${clubDTO.clubContent}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

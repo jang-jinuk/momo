@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 탈퇴</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>회원 탈퇴</h2>
+    <form th:action="@{/user/deleteAccount}" method="post">
+        <div class="form-group">
+            <label for="userId">사용자 ID</label>
+            <input type="text" id="userId" name="userId" required>
+        </div>
+        <div class="form-group">
+            <label for="userPw">비밀번호</label>
+            <input type="password" id="userPw" name="userPw" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm">탈퇴 확인</label>
+            <input type="checkbox" id="confirm" name="confirm" required>
+            <span>회원 탈퇴를 확인합니다.</span>
+        </div>
+        <button type="submit">탈퇴</button>
+    </form>
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+</div>
+</body>
+</html>

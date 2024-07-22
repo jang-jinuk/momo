@@ -22,7 +22,7 @@ public class UserAndClubServiceTests {
   @Test
   public void joinClubTest() {
     User user = new User();
-    user.setUserNo(5L);
+    user.setUserNo(4L);
 
     Club club = new Club();
     club.setClubNo(3L);
@@ -38,17 +38,32 @@ public class UserAndClubServiceTests {
   //가입 신청 승인 기능 테스트
   @Test
   public void approveJoinTest() {
-    Long id = 8L;
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    User user = new User();
+    user.setUserNo(5L);
+    userAndClubDTO.setUserNo(user);
+
+    Club club = new Club();
+    club.setClubNo(3L);
+    userAndClubDTO.setClubNo(club);
+
     log.info("-------------승인 요청-------------");
-    userAndClubService.approveJoin(id);
+    userAndClubService.approveJoin(userAndClubDTO);
   }
 
   //맴버 탈퇴 기능 테스트
   @Test
   public void disbandTest() {
-    Long id = 3L;
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
+    User user = new User();
+    user.setUserNo(5L);
+    userAndClubDTO.setUserNo(user);
+
+    Club club = new Club();
+    club.setClubNo(3L);
+    userAndClubDTO.setClubNo(club);
     log.info("-------------탈퇴 요청-------------");
-    userAndClubService.leaveClub(id);
+    userAndClubService.leaveClub(userAndClubDTO);
   }
 
   //특정 모임 맴버 조회 기능 테스트

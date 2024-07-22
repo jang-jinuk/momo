@@ -10,11 +10,13 @@
     <h6 th:text="${logoText}">momo</h6>
     <span th:text="${#authentication.name}"></span>
 </header>
+
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">내가 신고한 내역</a>
     </div>
 </nav>
+
 <table class="container">
     <thead>
     <tr>
@@ -26,6 +28,7 @@
         <th scope="col">처리상태</th>
     </tr>
     </thead>
+
     <tbody>
     <tr th:each="report : ${reportDTO}">
         <td th:text="${report.reportNo}"></td>
@@ -41,8 +44,13 @@
                 <button class="btn btn-warning" type="button" th:case="*">존재하지 않는 유저</button>
             </div>
         </td>
+        <form th:action="@{/user/profile/delete}" method="post">
+        <td><input type="hidden" name="reportNo" th:value="${report.reportNo}">
+            <button type="submit" th:onclick="@{/user/profile/my-report}">삭제</button></td>
+        </form>
     </tr>
     </tbody>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </table>
 <!-- 페이지 -->

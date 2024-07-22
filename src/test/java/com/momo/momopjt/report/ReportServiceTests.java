@@ -15,6 +15,7 @@ import java.time.Instant;
 @SpringBootTest
 @Log4j2
 public class ReportServiceTests {
+
   @Autowired
   private ReportService reportService;
 
@@ -34,7 +35,7 @@ public class ReportServiceTests {
 // User 객체 생성 및 데이터베이스에 저장
 
     for(int i=0; i<50; i++) {
-      log.info("----------------- [news create test]-----------------");
+      log.info("----------------- [report create test]-----------------");
       Report report = new Report();
       report.setReportNo(1L);
       report.setReportCategory("bug"+i);
@@ -45,6 +46,8 @@ public class ReportServiceTests {
       reportRepository.save(report);
     }
     log.info("...... [complate]..........KSW");
+
+  }// reportCreateTest()
 
 //    Report report = modelMapper.map(reportDTO, Report.class);
 //    reportService.addReport(report); // ReportService 를 사용하여 Report 추가
@@ -99,11 +102,5 @@ public class ReportServiceTests {
 //        List<ReportDTO> repotr = reportService.readAllReport();
 //        log.info(repotr);
 //  }
-  }// reportCreateTest()
 
-  //신고한사람이 자기가 신고한 내역만 조회되게 TEST
-  @Test
-  void reportOnlyMy(){
-
-  }
 }

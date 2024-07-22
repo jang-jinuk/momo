@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no,
+          initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>MoMo Login</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <!-- Core theme CSS (includes Bootstrap) -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="align-middle">
+<div class="container-fluid d-flex justify-content-center" style="height:100vh">
+
+    <div class="card align-self-center">
+        <div class="card-header">
+            LOGIN Page
+        </div>
+        <div class="card-body">
+            <form id="loginForm" action="/user/login" method="post">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">아이디</span>
+                    <input type="text" name="username" class="form-control" placeholder="USER ID">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">패스워드</span>
+                    <input type="password" name="password" class="form-control" placeholder="PASSWORD">
+                </div>
+                <div class="my-4">
+                    <div class="float-end">
+                        <button type="submit" class="btn btn-primary submitBtn">LOGIN</button>
+                        <a href="/oauth2/authorization/kakao" class="btn btn-warning ms-2">KAKAO</a>
+                        <a href="/oauth2/authorization/google" class="btn btn-warning ms-2">Google</a>
+                        <a href="/oauth2/authorization/naver" class="btn btn-warning ms-2">Naver</a>
+                        <a href="/user/signup" class="btn btn-primary ms-2">회원가입</a>
+                        <a href="/user/find-id" class="btn btn-link ms-2">아이디 찾기</a>
+                        <a href="/user/find-pw" class="btn btn-link ms-2">비밀번호 찾기</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

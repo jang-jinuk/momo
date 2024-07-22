@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Log4j2
 public class ReportServiceImpl implements ReportService {
+
   private final ReportRepository reportRepository;
   private final ModelMapper modelMapper;
   private final UserRepository userRepository;
@@ -26,6 +27,7 @@ public class ReportServiceImpl implements ReportService {
     Report report = modelMapper.map(reportDTO, Report.class);
     reportRepository.save(report);
   }
+
   //자신 유저 아이디로 조회
   @Override
   public List<ReportDTO> readReport(User reporterNo) {
@@ -51,6 +53,7 @@ public class ReportServiceImpl implements ReportService {
         .map(report -> modelMapper.map(report, ReportDTO.class))
         .collect(Collectors.toList());
   }
+
   //유저 제제 (수정)
   @Override
   public void suspendUser(ReportDTO reportDTO) {
@@ -92,7 +95,7 @@ public class ReportServiceImpl implements ReportService {
   }
   // 삭제
   @Override
-  public void removeReportHistory(Long reportNo) {
+  public void deleteReport(Long reportNo) {
         reportRepository.deleteById(reportNo);
     }
   //페이징 검색

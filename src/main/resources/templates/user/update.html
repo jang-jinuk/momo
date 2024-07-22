@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+</head>
+<body>
+<h1>회원정보 수정</h1>
+
+<form id="updateForm" th:action="@{/user/update}" method="post">
+    <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
+    <div>
+        <label for="userNickname">닉네임</label>
+        <input type="text" id="userNickname" name="userNickname" th:value="${userDTO.userNickname}" required>
+    </div>
+
+    <div>
+        <label for="userEmail">이메일</label>
+        <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" required>
+    </div>
+
+    <div>
+        <label for="userCategory">관심사</label>
+        <input type="text" id="userCategory" name="userCategory" th:value="${userDTO.userCategory}" required>
+    </div>
+
+    <div>
+        <label for="userAddress">주소</label>
+        <input type="text" id="userAddress" name="userAddress" th:value="${userDTO.userAddress}" required>
+    </div>
+
+    <div>
+        <label for="userMBTI">MBTI</label>
+        <input type="text" id="userMBTI" name="userMBTI" th:value="${userDTO.userMBTI}" required>
+    </div>
+
+    <div class="mt-4">
+        <div class="float-end">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <button type="reset" class="btn btn-secondary" onclick="resetForm()">지우기</button>
+            <a href="/user/reset/userPw" class="btn btn-return">비밀번호 바꾸기</a>
+            <a href="/home" class="btn btn-return">돌아가기</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    function resetForm() {
+        document.getElementById('updateForm').reset();
+    }
+</script>
+
+</body>
+</html>
