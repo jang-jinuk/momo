@@ -1,5 +1,6 @@
 package com.momo.momopjt.article;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequestMapping("/article")
+@Log4j2
 public class ArticleController {
 
 
@@ -27,6 +29,7 @@ public class ArticleController {
   @GetMapping("/create")
   public String showCreateForm(Model model) {
     model.addAttribute("articleDTO", new ArticleDTO());
+    log.info("-------- [Article Create]-------you");
     return "article/create";
   }
 
@@ -41,6 +44,7 @@ public class ArticleController {
   @GetMapping
   public String getAllArticles(Model model) {
     List<ArticleDTO> articles = articleService.getAllArticles();
+    log.info("-------- [ getAllArticles]-------you");
     model.addAttribute("article", articles);
     return "article/list";
   }
@@ -48,6 +52,7 @@ public class ArticleController {
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
   public String getArticleById(@PathVariable Long articleNo, Model model) {
+    log.info("-------- [get ArticleById]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("article", article);
     return "article/detail"; // "articles/detail.html" 뷰를 반환
@@ -57,6 +62,7 @@ public class ArticleController {
   // 기존 후기글 수정 폼을 보여주는 페이지
   @GetMapping("/{articleNo}/edit")
   public String showEditForm(@PathVariable Long articleNo, Model model) {
+    log.info("-------- [get article edit]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
     return "article/edit"; // "articles/edit.html" 뷰를 반환
@@ -67,6 +73,7 @@ public class ArticleController {
   // 기존 후기글을 업데이트하는 메서드
   @PostMapping("/{articleNo}/update")
   public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
+    log.info("-------- [article update]-------you");
     articleService.updateArticle(articleNo, articleDTO);
      return "redirect:/article";
   }
@@ -75,6 +82,7 @@ public class ArticleController {
   // 기존 후기글을 삭제하는 메서드
   @PostMapping("/{articleNo}/delete")
   public String deleteArticle(@PathVariable Long articleNo) {
+    log.info("-------- [article delete]-------you");
     articleService.deleteArticle(articleNo);
     return "redirect:/article"; // 삭제 후 후기글 목록 페이지로 리디렉션
   }
