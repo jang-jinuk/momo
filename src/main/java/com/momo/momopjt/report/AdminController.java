@@ -18,12 +18,13 @@ import java.util.List;
 @RequestMapping("/admin")
 @Log4j2
 public class AdminController {
+
   @Autowired
   private ReportService reportService;
 
   //조회와 페이징 검색
   @GetMapping("/manage-report")
-  public String manageReportPage(Model model,
+  public String manageReportGet(Model model,
                              @RequestParam(value = "page", defaultValue = "1") int page,
                              @RequestParam(value = "query", defaultValue = "") String query) {
     log.info("...... [ReportController/manage-report/running]..........KSW");
@@ -62,8 +63,8 @@ public class AdminController {
   }
 
   //제제
-  @PostMapping("/suspend-user")
-  public String userPenalty(@RequestParam("reportNo") Long reportNo,
+  @PostMapping("/deactivate-user")
+  public String deactivateUserPost(@RequestParam("reportNo") Long reportNo,
                     @RequestParam("currentPage") int currentPage,
                     @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/justice]..........KSW");
@@ -79,7 +80,7 @@ public class AdminController {
 
   //제제해제
   @PostMapping("/reactivate-user")
-  public String freedom(@RequestParam("reportNo") Long reportNo,
+  public String reactivateUserPost(@RequestParam("reportNo") Long reportNo,
                         @RequestParam("currentPage") int currentPage,
                         @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/freedom]..........KSW");
@@ -93,7 +94,7 @@ public class AdminController {
 
   //삭제
   @PostMapping("/delete-report")
-  public String delete(@RequestParam("reportNo") Long reportNo,
+  public String deleteReportPost(@RequestParam("reportNo") Long reportNo,
                        @RequestParam("currentPage") int currentPage,
                        @RequestParam("query") String query) throws UnsupportedEncodingException{
     log.info("...... [post delete report]..........KSW");
