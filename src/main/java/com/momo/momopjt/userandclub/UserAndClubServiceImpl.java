@@ -150,7 +150,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   //모임장 조회
   @Override
-  public UserAndClubDTO isLeader(Club clubNo) {
+  public UserAndClubDTO findLeader(Club clubNo) {
     List<UserAndClub> userAndClub = userAndClubRepository.findMemberByClubNoAndIsLeader(clubNo,true);
     UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
     return userAndClubDTO;
