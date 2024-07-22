@@ -1,8 +1,5 @@
 package com.momo.momopjt.article;
 
-import com.momo.momopjt.club.ClubDTO;
-import com.momo.momopjt.userandclub.UserAndClubDTO;
-
 import java.util.List;
 
 public interface ArticleService {
