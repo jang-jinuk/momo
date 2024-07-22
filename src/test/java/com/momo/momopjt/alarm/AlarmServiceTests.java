@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
-public class alarmServiceTest {
+public class AlarmServiceTests {
 
   @Autowired
   private AlarmRepository alarmRepository;
@@ -31,13 +31,8 @@ public class alarmServiceTest {
   @Autowired
   private UserRepository userRepository;
 
-
   private Alarm alarm;
   private AlarmDTO alarmDTO;
-
-  @Autowired
-  private UserRepository userRepository;
-
 
   @BeforeEach
   public void setUp() {
