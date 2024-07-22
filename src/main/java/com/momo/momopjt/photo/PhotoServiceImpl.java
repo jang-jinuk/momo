@@ -30,6 +30,7 @@ public class PhotoServiceImpl implements PhotoService {
     //사진을 등록하지 않으면 "default"사진 자동 저장
     if(photoDTO.getPhotoUUID().equals("")) {
       photo.setPhotoUUID("default.jpg"); //TODO 실제 디폴트 사진으로 변경 필요 JW
+
       return photo;
     }
 
@@ -39,24 +40,16 @@ public class PhotoServiceImpl implements PhotoService {
     photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
 
-    log.info(photo);
-    log.info(photo.getPhotoUUID());
+    log.info("photo : {}",photo);
+    log.info("photo : {}",photo.getPhotoUUID());
     log.info("------------------Photo saved--------------------");
     return photo;
   }
 
-  /* 일단은 필요없어서 주석처리
-  public Photo updatePhoto(PhotoDTO photoDTO) {
-    String photoUUID = photoDTO.getPhotoUUID();
-    deletePhoto(photoUUID);
-    return savePhoto(photoDTO);
-  }
-   */
 
   @Override
   public Photo getPhoto(String photoUUID) {
-
-    log.info("------------ getphoto [07-02-11:13:41]----------jinuk");
+    log.info("------------ getPhoto() ----------jinuk");
     Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
 
     return photoOptional.orElseThrow();

@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
   private final ScheduleRepository scheduleRepository;
-  private final ModelMapper modelMapper;
+
   private final UserAndScheduleService userAndScheduleService;
   private final PhotoService photoService;
+
+  private final ModelMapper modelMapper;
 
   //일정 생성
   @Override
@@ -95,6 +97,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     if (userAndScheduleService.isParticipate(userAndScheduleDTO) == 2) {
       return "이미 참가한 일정입니다.";
+
     } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);
       log.info("------------ [참가인원 정보 추가]------------");
@@ -110,7 +113,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     return "신청이 완료되었습니다.";
   }
-
 
   //일정 참가 취소
   // 회원 번호와 일정 번호를 받아온다.
@@ -144,10 +146,11 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 마감 기준 : 시간마감
   @Override
   public List<ScheduleDTO> readOngoingSchedules(Club clubNo) {
-     List<Schedule> schedules = scheduleRepository.findOngoingSchedules(clubNo);
+    List<Schedule> schedules = scheduleRepository.findOngoingSchedules(clubNo);
     List<ScheduleDTO> scheduleDTOList = schedules.stream()
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
         .collect(Collectors.toList());
+
      return scheduleDTOList;
   }
 
@@ -158,6 +161,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     List<ScheduleDTO> scheduleDTOList = schedules.stream()
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
         .collect(Collectors.toList());
+
     return scheduleDTOList;
   }
 

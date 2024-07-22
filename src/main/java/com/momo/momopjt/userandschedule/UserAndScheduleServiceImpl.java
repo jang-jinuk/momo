@@ -22,10 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserAndScheduleServiceImpl implements UserAndScheduleService {
 
-  private final UserAndScheduleRepository userAndScheduleRepository;
   private final UserRepository userRepository;
-  private final ModelMapper modelMapper;
   private final ScheduleRepository scheduleRepository;
+  private final UserAndScheduleRepository userAndScheduleRepository;
+
+  private final ModelMapper modelMapper;
 
 
   //참가 인원 추가

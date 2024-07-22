@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
 
   private final ReportRepository reportRepository;
-  private final ModelMapper modelMapper;
+
   private final UserRepository userRepository;
+
+  private final ModelMapper modelMapper;
 
   //신고하기 (추가)
   public void addReport(ReportDTO reportDTO) {
@@ -70,6 +72,7 @@ public class ReportServiceImpl implements ReportService {
           log.info("...... [userOptional is Present !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('1');
+
           userRepository.save(user);
         }
     }
@@ -89,6 +92,7 @@ public class ReportServiceImpl implements ReportService {
           log.info("...... [userOptional is Present? !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('0');
+
           userRepository.save(user);
         }
     }

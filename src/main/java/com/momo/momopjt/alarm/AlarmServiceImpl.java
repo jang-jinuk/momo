@@ -17,6 +17,7 @@ import java.util.Optional;
 public class AlarmServiceImpl implements AlarmService {
 
   private final AlarmRepository alarmRepository;
+
   private final NotificationService notificationService; // (쏘켓예정)
 
   @Autowired
@@ -83,6 +84,7 @@ public class AlarmServiceImpl implements AlarmService {
     List<Alarm> alarmList = alarmRepository.findAlarmByUserNo(user);
 
     for (Alarm alarm : alarmList) {
+
       if (alarmNo.equals(alarm.getAlarmNo())) {
         AlarmDTO alarmDTO = getAlarmById(alarmNo).orElseThrow();
         alarmDTO.setIsRead('1');

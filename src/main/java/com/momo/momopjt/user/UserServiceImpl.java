@@ -21,12 +21,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final ModelMapper modelMapper;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int PASSWORD_LENGTH = 10;
 
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
+
+    private static final int PASSWORD_LENGTH = 10;
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     @Override
     //@Transactional
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
         if (existId) {
             throw new UserIdException();
         }
+
         if(existEmail){
             throw new UserEmailException();
         }
@@ -143,8 +146,10 @@ public class UserServiceImpl implements UserService {
         // Optional에 값이 있는지 확인하고 값 추출
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return user.getUserId(); // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
+            return user.getUserId();
+            // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
         } else {
+
             return null; // 값이 없을 경우 null 반환
         }
     }

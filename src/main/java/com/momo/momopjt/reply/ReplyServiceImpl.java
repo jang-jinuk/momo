@@ -12,8 +12,9 @@ import java.util.List;
 @Log4j2
 public class ReplyServiceImpl implements ReplyService {
 
-  private final ModelMapper modelMapper;
   private final ReplyRepository replyRepository;
+
+  private final ModelMapper modelMapper;
 
   @Override
   public void createReply(ReplyDTO replyDTO) {
@@ -62,6 +63,7 @@ public class ReplyServiceImpl implements ReplyService {
     log.info("----------------- [deleteReply]-----------------");
 
     boolean checkBeforeDelete = replyRepository.existsById(replyNo);
+
     if(checkBeforeDelete){
       replyRepository.deleteById(replyNo);}
     else{

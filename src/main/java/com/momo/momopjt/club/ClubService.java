@@ -7,6 +7,7 @@ import com.momo.momopjt.userandclub.UserAndClubDTO;
 import java.util.List;
 
 public interface ClubService {
+
   Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndDTO) throws ClubNameException;
 
   ClubDTO readOneClub(Long clubNo);
@@ -20,4 +21,5 @@ public interface ClubService {
   List<ClubDTO> readMyClubs(User userNo);
 
   class ClubNameException extends Exception {}
+
 }

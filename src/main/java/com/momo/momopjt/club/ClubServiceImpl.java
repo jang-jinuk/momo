@@ -29,12 +29,17 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class ClubServiceImpl implements ClubService {
 
-  private final ClubRepository clubRepository;
-  private final ScheduleService scheduleService;
-  private final UserAndClubRepository userAndClubRepository;
-  private final PhotoService photoService;
-  private final ModelMapper modelMapper;
-  private final UserAndClubService userAndClubService;
+
+private final ClubRepository clubRepository;
+private final UserAndClubRepository userAndClubRepository;
+
+private final PhotoService photoService;
+private final ScheduleService scheduleService;
+private final UserAndClubService userAndClubService;
+
+private final ModelMapper modelMapper;
+
+
 
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환

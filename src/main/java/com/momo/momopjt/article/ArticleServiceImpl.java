@@ -19,7 +19,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 
   private final ArticleRepository articleRepository;
+
   private final ClubRepository clubRepository;
+
   private final ModelMapper modelMapper;
 
   @Autowired
