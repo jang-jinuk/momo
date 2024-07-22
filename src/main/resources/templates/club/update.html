@@ -10,7 +10,7 @@
     <br>
     <div class="container">
         <div class="container row-8 col-2 my-5">
-            <h1>모임 생성</h1>
+            <h1>모임 수정</h1>
         </div>
         <form action="/club/update" method="post">
             <div class="container row-4">
@@ -83,6 +83,7 @@
                                 <div class="d-grid my-4 d-md-flex justify-content-md-end">
                                     <div class="me-10">
                                         <button type="submit" class="btn btn-success">수정하기</button>
+                                        <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
                                     </div>
                                 </div>
                             </div>

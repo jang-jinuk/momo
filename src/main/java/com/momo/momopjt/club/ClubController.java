@@ -48,9 +48,10 @@ private PhotoService photoService;
 
     Club club = new Club();
     club.setClubNo(clubNo);
-
-    List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
-    model.addAttribute("schedules", scheduleDTOList);
+    List<ScheduleDTO> endSchedules = scheduleService.getEndSchedules(club); //마감된 일정
+    model.addAttribute("endSchedules", endSchedules);
+    List<ScheduleDTO> getOngoingSchedules= scheduleService.getOngoingSchedules(club);//마감되지 않은 일정
+    model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
     //scheduleDTOList에 담긴 사진 확인 로그
@@ -106,7 +107,9 @@ private PhotoService photoService;
 
   //모임 생성
   @PostMapping("/create")
-  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
+  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
+
+
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -115,10 +118,17 @@ private PhotoService photoService;
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
-
+    Long clubNo;
     //TODO 파일 업로드 기능과 연결필요 JW
 
-    Long clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO club create error
+    try {
+
+      clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+
+    } catch (ClubService.ClubNameException e) {
+      redirectAttributes.addFlashAttribute("error", "clubName");
+      return "redirect:/club/create";
+    }
 
     redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
 
@@ -272,6 +282,7 @@ private PhotoService photoService;
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     List<UserAndClubDTO> joinList = userAndClubService.readAllJoinList(club);
 
+    model.addAttribute("clubNo", clubNo);
     model.addAttribute("userAndClubDTOS", userAndClubDTOS);
     model.addAttribute("joinList", joinList);
 

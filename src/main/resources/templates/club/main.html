@@ -29,12 +29,39 @@
 
         <br>
         <hr>
-        <h2>일정</h2>
+        <h2>진행 중인 일정</h2>
         <span>
             <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
         </span>
         <div class="row">
-            <div class="col-4" th:each="schedule : ${schedules}">
+            <div class="col-4" th:each="schedule : ${getOngoingSchedules}">
+                <div class="card mb-3" style="max-width: 415px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="/assets/game.jpg" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
+                                    <h3 class="card-title" th:text="${schedule.scheduleTitle}"></h3>
+                                </a>
+                                <p class="card-text" th:text="${#dates.format(schedule.scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정 시작시간</p>
+                                <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
+                                <p class="card-text" th:text="|${schedule.scheduleParticipants} / ${schedule.scheduleMax}|">참가인원</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
+        <hr>
+        <h2>마감된 일정</h2>
+        <span>
+            <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
+        </span>
+        <div class="row">
+            <div class="col-4" th:each="schedule : ${endSchedules}">
                 <div class="card mb-3" style="max-width: 415px;">
                     <div class="row g-0">
                         <div class="col-md-4">

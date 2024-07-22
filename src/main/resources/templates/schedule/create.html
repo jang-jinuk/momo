@@ -36,7 +36,7 @@
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
-                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" max="100" th:required="true">
+                          <input name="scheduleMax" type="number" class="form-control" id="max" min="1" th:max="${countMembers}" th:required="true">
                       </div>
                   </div>
               </div>
@@ -45,7 +45,10 @@
               <label for="content" class="form-label">내용</label>
               <textarea name="scheduleContent" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" maxlength="500"></textarea>
           </div>
-              <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-primary">만들기</button>
+          <div class="row">
+                  <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-primary">만들기</button>
+                  <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
+          </div>
       </form>
   </div>
 </th:block>

@@ -11,6 +11,12 @@
 
     <div class="container">
         <div class="row">
+            <div class="col-10"></div>
+            <div class="col-2">
+                <button type="button" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${clubNo})}'|">모임 홈</button>
+            </div>
+        </div>
+        <div class="row">
             <h2>가입 신청 내역</h2>
             <p th:if="${#lists.isEmpty(joinList)}">신청 내역이 없습니다.</p>
             <table th:unless="${#lists.isEmpty(joinList)}">

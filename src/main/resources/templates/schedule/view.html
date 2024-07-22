@@ -59,7 +59,7 @@
                 </tr>
             </table>
         </div>
-        <div class="row">
+        <div class="row" th:unless="${currentTime} > ${scheduleDTO.scheduleStartDate}">
             <div th:if="${isScheduleFull} and ${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
                 <button class="btn btn-dark">마감</button>
             </div>
@@ -68,6 +68,11 @@
             </div>
             <div th:if="${isParticipant == 2}">
                 <button class="btn btn-danger leave" th:onclick="|location.href='@{/schedule/leave}'|">취소</button>
+            </div>
+        </div>
+        <div class="row" th:if="${currentTime} > ${scheduleDTO.scheduleStartDate}">
+            <div th:if="${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
+                <button class="btn btn-dark">마감</button>
             </div>
         </div>
         <div class="row">
