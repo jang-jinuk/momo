@@ -1,5 +1,7 @@
 package com.momo.momopjt.article;
 
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +13,14 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ArticleDTO {
   private Long articleNo;
   private String articleTitle;
   private String articleContent;
   private Instant articleCreateDate = Instant.now(); // 기본 값 설정
-  private Character articleState;
+  private Character articleState=0;
   private Integer articleScore;
-  private Long clubNo;
-  private Long userNo;
+  private Club clubNo;
+  private User userNo;
 }

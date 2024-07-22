@@ -32,7 +32,7 @@ public class Photo {
 
   @NotNull
   @Column(name = "photo_size", nullable = false)
-  private Integer photoSize;
+  private Long photoSize;
 
   @Size(max = 255)
   @Column(name = "photo_thumbnail")
@@ -47,7 +47,7 @@ public class Photo {
   @JoinColumn(name = "user_no", nullable = false)
   private User userNo;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name= "article_no", nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name= "article_no")
   private Article articleNo;
 }

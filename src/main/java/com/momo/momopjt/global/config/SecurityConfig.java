@@ -13,9 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -51,7 +48,7 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
         .formLogin().loginPage("/user/login")
@@ -61,7 +58,7 @@ public class SecurityConfig {
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-        .logoutSuccessUrl("/user/home")
+        .logoutSuccessUrl("/home")
         .invalidateHttpSession(true)
         .deleteCookies("JSESSIONID")
         .permitAll()

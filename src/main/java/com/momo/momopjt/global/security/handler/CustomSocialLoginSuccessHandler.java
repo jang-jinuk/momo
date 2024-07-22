@@ -3,30 +3,27 @@ package com.momo.momopjt.global.security.handler;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
-import com.momo.momopjt.user.UserSecurityDTO;
 import com.momo.momopjt.user.UserRole;
+import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import org.springframework.security.core.GrantedAuthority;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
-import java.time.Instant;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 //@Service //불필요 ? 0716 YY
 @Log4j2
@@ -114,7 +111,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     }
 
     // 일반 로그인 흐름
-    response.sendRedirect(request.getContextPath() + "/user/home");
+    response.sendRedirect(request.getContextPath() + "/home");
   }
 
   private String getKakaoEmail(Map<String, Object> paramMap) {

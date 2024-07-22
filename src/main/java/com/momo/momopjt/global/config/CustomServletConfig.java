@@ -20,14 +20,15 @@ public class CustomServletConfig implements WebMvcConfigurer {
 
   }
 
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping("/**")
-        .allowedOrigins("http://localhost:8090")
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        .allowedHeaders("*")
-        .allowCredentials(true);
-  }
+  // TODO need check  0722 YY
+//  @Override
+//  public void addCorsMappings(CorsRegistry registry) {
+//    registry.addMapping("/**")
+//        .allowedOrigins("http://localhost:8090")
+//        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//        .allowedHeaders("*")
+//        .allowCredentials(true);
+//  }
 
 
 

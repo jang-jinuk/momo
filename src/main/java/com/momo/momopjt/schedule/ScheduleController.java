@@ -1,8 +1,6 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.file.FileController;
-import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -15,7 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -62,13 +63,60 @@ public class ScheduleController {
     //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
     //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
     //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
-//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID());
+//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
+
+     /* 주석처리
+
+    //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+
+
+//    photoService.savePhoto();
+//    이미지 파일 처리 YY
+//    String resultPhotoUUID;
+//    byte[] photoBytes = file.getBytes();
+//    resultPhotoUUID = photoService.savePhoto(
+//        PhotoDTO.builder()
+//            .photoData(photoBytes)
+//            .photoSize(file.getSize())
+//            .photoOriginalName(file.getOriginalFilename())
+//            .userNo(user)
+//            .build())
+//        .getPhotoUUID();
+
 
     //이미지 처리 후 UUID만 반환
     String resultPhotoUUID = UUID.randomUUID().toString();
     scheduleDTO.setSchedulePhoto(resultPhotoUUID);
     //이미지를 일정 DTO에 전달 끝
 
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+
+    log.info("------------ [현재 로그인 중인 정보] ------------");
+
+
+
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    scheduleDTO.setClubNo(club);
+    LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
+    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+    Instant instant = zonedDateTime.toInstant();
+    scheduleDTO.setScheduleStartDate(instant);
+    log.info("------------ [날짜/시간 포매팅 완료] ------------");
+    Long scheduleNo;
+    if (resultPhotoUUID != null) {
+      scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+      return "redirect:/schedule/" + scheduleNo;
+    }
+    log.info("------------ [일정 등록 완료] ------------");
+    return "redirect:/schedule";
+
+*/
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -209,7 +257,7 @@ public class ScheduleController {
     Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
 
     //일정 수정 실패
-    if(updateFail) {
+    if (updateFail) {
       redirectAttributes.addFlashAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
       return "redirect:/schedule/update";
     }
@@ -228,7 +276,7 @@ public class ScheduleController {
     session.removeAttribute("scheduleNo");
 
     //결과 메세지
-    redirectAttributes.addFlashAttribute("message","일정이 삭제되었습니다.");
+    redirectAttributes.addFlashAttribute("message", "일정이 삭제되었습니다.");
 
     return "redirect:/club/main/" + clubNo;
   }

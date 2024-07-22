@@ -6,6 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @SpringBootTest
 @Log4j2
@@ -56,7 +59,5 @@ class MomoApplicationTests {
     Collection<Character> socialTypes = Arrays.asList('K', 'N', 'G', 'M');
     log.info(socialTypes.getClass().toString());
   }
-
-
 
 }

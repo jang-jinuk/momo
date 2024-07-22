@@ -1,6 +1,7 @@
 package com.momo.momopjt.club;
 
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
@@ -34,7 +35,8 @@ public class ClubController {
   private UserService userService;
   @Autowired
   private UserAndClubService userAndClubService;
-
+@Autowired
+private PhotoService photoService;
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
@@ -52,6 +54,12 @@ public class ClubController {
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
+    //0722 YY 
+//    //scheduleDTOList에 담긴 사진 확인 로그
+//    for(ScheduleDTO s : scheduleDTOList) {
+//      log.trace(s.getSchedulePhoto());
+//    }
+
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
 
@@ -68,6 +76,30 @@ public class ClubController {
       return "redirect:/club/join-page";
     }
     model.addAttribute("isMember", isMember);
+
+    //YY
+    //일정 사진 표시 기능
+//    for (ScheduleDTO scheduleDTO : scheduleDTOList) {
+//      String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
+//      String[] list = new String[0];
+//      Arrays.stream(list).map(schedulePhoto64);
+//      model.addAttribute("schdule64List", schedule64List);
+//    }
+//List<String> schedule64List = new ArrayList<>();
+//
+//for (ScheduleDTO scheduleDTO : scheduleDTOList) {
+//    String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
+//    schedule64List.add(schedulePhoto64);
+//    log.trace(schedulePhoto64.substring(1,100)+"---------------------------------------------------------");
+//}
+//model.addAttribute("schedule64List", schedule64List);
+//    log.info("----------------- [07-18 11:43:22]-----------------");
+//log.info(schedule64List.get(0).substring(1,100));
+//log.info(schedule64List.get(1).substring(1,100));
+
+    //YY
+
+
 
     return "club/main";
   }
@@ -143,7 +175,7 @@ public class ClubController {
     return "redirect:/home";
   }
 
-  @GetMapping("/leavePage")
+  @GetMapping("/leave-page")
   public String goLeavePage() {
     return "club/leave";
   }

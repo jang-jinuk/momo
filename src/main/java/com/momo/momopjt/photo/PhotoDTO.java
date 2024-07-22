@@ -1,5 +1,6 @@
 package com.momo.momopjt.photo;
 
+import com.momo.momopjt.article.Article;
 import com.momo.momopjt.user.User;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,7 @@ import lombok.NoArgsConstructor;
 public class PhotoDTO {
   private String photoUUID;
 
-  private User userNo;
-
-  private Integer photoSize;
+  private Long photoSize;
 
   private Instant photoCreateDate;
 
@@ -27,4 +26,9 @@ public class PhotoDTO {
   private String photoThumbnail;
 
   private byte[] photoData;
+
+  private Article articleNo;
+
+  private User userNo;
+
 }

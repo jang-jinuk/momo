@@ -40,7 +40,7 @@ public class articleServiceTest {
     PhotoDTO photoDTO = PhotoDTO.builder()
         .photoUUID("00002test")
         .userNo(user)
-        .photoSize(10)
+        .photoSize(10L)
         .photoCreateDate(Instant.now())
         .photoOriginalName("test img")
         .photoSaveName("test save img")

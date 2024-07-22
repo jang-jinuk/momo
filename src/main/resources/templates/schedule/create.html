@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
@@ -30,8 +31,8 @@
                           <input name="schedulePlace" type="text" class="form-control" id="address" th:required="true">
                       </div>
                       <div class="col-12">
-                          <label for="datetime" class="form-label">날짜/시간</label>
-                          <input name="dateTime" type="datetime-local" class="form-control" id="datetime" th:required="true">
+                          <label for="date" class="form-label">날짜/시간</label>
+                          <input name="dateTime" type="datetime-local" class="form-control" id="date" th:required="true">
                       </div>
                       <div class="col-12">
                           <label for="max" class="form-label">정원</label>
@@ -65,4 +66,155 @@
     }
 
     document.addEventListener('DOMContentLoaded', setMinDateTime);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    const form1 = document.getElementById("schedulePhotoForm");
+    const form2 = document.getElementById("scheduleForm");
+    const submitBtn = document.getElementById("createScheduleBtn");
+
+    submitBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+
+
+        console.log("----------------------try form submit start------------------");
+        try {
+            await Promise.all([submitForm(form1), submitForm(form2)]);
+
+        } catch (error) {
+            console.error('Error submitting forms:', error);
+        }
+        console.log("----------------------form submit end------------------");
+
+    });
+
+    function submitForm(form) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData(form);
+
+            axios({
+                method: form.method,
+                url: form.action,
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(response => {
+                    if (response.status >= 200 && response.status < 300) {
+                        resolve(); // Resolve the Promise if the submission is successful
+                    } else {
+                        reject(new Error(`HTTP error ${response.status}`)); // Reject the Promise if there's an error
+                    }
+                })
+                .catch(error => {
+                    reject(error); // Reject the Promise if there's an error
+                });
+        });
+    }
+
+
+    // const form1 = document.getElementById("schedulePhotoForm");
+    // const form2 = document.getElementById("scheduleForm");
+    // const submitBtn = document.getElementById("createScheduleBtn");
+    //
+    // submitBtn.addEventListener('click', async function (e) {
+    //     e.preventDefault();
+    //
+    //     console.log("----------------------form1 submit start------------------");
+    //
+    //     try {
+    //         await Promise.all([submitForm(form1), submitForm(form2)]);
+    //         console.log("------------form2 submit end----------");
+    //     } catch (error) {
+    //         console.error('Error submitting forms:', error);
+    //     }
+    // });
+    //
+    // function submitForm(form) {
+    //     return new Promise((resolve, reject) => {
+    //         form.addEventListener('submit', function submitHandler(event) {
+    //             event.preventDefault(); // Prevent the default form submission
+    //
+    //             const formData = new FormData(form);
+    //
+    //             // Send the form data using fetch or XMLHttpRequest
+    //             fetch(form.action, {
+    //                 method: form.method,
+    //                 body: formData
+    //             })
+    //             .then(response => {
+    //                 if (response.ok) {
+    //                     resolve(); // Resolve the Promise if the submission is successful
+    //                 } else {
+    //                     reject(new Error(`HTTP error ${response.status}`)); // Reject the Promise if there's an error
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 reject(error); // Reject the Promise if there's an error
+    //             });
+    //
+    //             form.removeEventListener('submit', submitHandler); // Remove the event listener after submission
+    //         });
+    //
+    //         form.submit(); // Trigger the form submission
+    //     });
+    // }
+
+
+    // const form1 = document.getElementById("schedulePhotoForm");
+    // const form2 = document.getElementById("scheduleForm");
+    //
+    // const submitBtn = document.getElementById("createScheduleBtn");
+    //
+    //     submitBtn.addEventListener('click', async function (e) {
+    //
+    //         e.preventDefault()
+    //
+    //         //     const formData1 = new FormData(form1);
+    //
+    //         //     const formData2 = new FormData(form2);
+    //         //
+    //         //     // Send both form data
+    //         //     sendFormData(formData1, formData2);
+    //
+    //         // submits
+    //         console.log("----------------------form1 submit start------------------");
+    //
+    //         // form2.submit()
+    //
+    //         await Promise.all(form1.submit(), form2.submit());
+    //
+    //
+    //         console.log("------------form2 submit end----------");
+    //
+    //
+    //     });
+    //
+    //
+    //     function sendFormData(formData1) {
+    //         fetch('/photo/photo', {
+    //             method: 'POST',
+    //             body: formData1
+    //         }).catch(error => {
+    //             console.error('Error1', error);
+    //         });
+    //     }
+    //
+    //     function sendFormData2(formData2) {
+    //         fetch('/schedule/create', {
+    //             method: 'POST',
+    //             body: formData2
+    //         }).catch(error => {
+    //             console.error('Error2', error);
+    //         });
+    //     }
+
+
+    // async function submitForms() {
+    //
+    //     document.getElementById("schedulePhotoForm").submit();
+    //     document.getElementById("scheduleForm").submit();
+    // }
 </script>
