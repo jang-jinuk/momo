@@ -19,15 +19,14 @@
     <thead>
     <tr>
         <th scope="col">신고번호</th>
-        <th scope="col">신고한놈 아이디</th>
-        <th scope="col">신고한놈의 이름</th>
+        <th scope="col">피신고자 아이디</th>
+        <th scope="col">피신고자 닉네임</th>
         <th scope="col">사유</th>
         <th scope="col">신고일</th>
         <th scope="col">처리상태</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
     <tr th:each="report : ${reportDTO}">
         <td th:text="${report.reportNo}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
