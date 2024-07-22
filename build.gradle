@@ -3,13 +3,12 @@ plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.1.5'
 }
-
 group = 'com.momo'
 version = '0.0.1-SNAPSHOT'
 
 java {
 //    아래 줄은 문제 생기면 활성화
-//    sourceCompatibility = '11'
+    sourceCompatibility = '11'
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
     }
@@ -83,10 +82,7 @@ dependencies {
     //validation 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
-
 }
-
 tasks.named('test') {
     useJUnitPlatform()
 }
