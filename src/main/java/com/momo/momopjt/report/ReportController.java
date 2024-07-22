@@ -23,28 +23,28 @@ public class ReportController {
 
   //조회와 페이징 검색
   @GetMapping("/manage-report")
-  public String manageReport(Model model,
+  public String manageReportPage(Model model,
                              @RequestParam(value = "page", defaultValue = "1") int page,
                              @RequestParam(value = "query", defaultValue = "") String query) {
     log.info("...... [ReportController/manage-report/running]..........KSW");
     // 검색어를 사용하여 리포트 조회
-    List<ReportDTO> sandReport;
+    List<ReportDTO> findReports;
 
     if (query.isEmpty()) {
-      sandReport = reportService.readAllReport(); // 검색어가 비었으면 모든 리포트 조회
+      findReports = reportService.readAllReport(); // 검색어가 비었으면 모든 리포트 조회
     } else {
-      sandReport = reportService.searchReports(query); // 검색어에 따른 리포트 조회
+      findReports = reportService.searchReports(query); // 검색어에 따른 리포트 조회
     }
 
     //페이지 수 설정
-    int totalReports = sandReport.size(); // 총 데이터 수
+    int totalReports = findReports.size(); // 총 데이터 수
     int pageSize = 10; // 한 번에 표시할 페이지 수
     int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
 
     // 페이지에 맞게 데이터 나누기
     int fromIndex = (page - 1) * pageSize;
     int toIndex = Math.min(fromIndex + pageSize, totalReports);
-    List<ReportDTO> reports = sandReport.subList(fromIndex, toIndex);
+    List<ReportDTO> reports = findReports.subList(fromIndex, toIndex);
 
     // 페이지 그룹 계산
     int pageGroupSize = 10; // 한 번에 표시할 페이지 번호 수
@@ -62,15 +62,15 @@ public class ReportController {
   }
 
   //제제
-  @PostMapping("/ban")
-  public String ban(@RequestParam("reportNo") Long reportNo,
+  @PostMapping("/suspendUser")
+  public String userPenalty(@RequestParam("reportNo") Long reportNo,
                     @RequestParam("currentPage") int currentPage,
                     @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/justice]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     // reportService.updateReport() 메서드 호출
-    reportService.userBanReport(reportDTO); //기능으로 넘겨준다
+    reportService.suspendUser(reportDTO); //기능으로 넘겨준다
     log.info("...... [정의구현]..........KSW");
     log.info("...... [{}]..........KSW",query);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8); //쿼리를 인코더에 담아준다
@@ -78,27 +78,26 @@ public class ReportController {
   }
 
   //제제해제
-  @PostMapping("/freedom")
+  @PostMapping("/reactivateUser")
   public String freedom(@RequestParam("reportNo") Long reportNo,
                         @RequestParam("currentPage") int currentPage,
                         @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/freedom]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
-    // reportService.updateReport() 메서드 호출
-    reportService.safeReport(reportDTO); //기능으로 넘겨준다
+    reportService.reactivateUser(reportDTO); //기능으로 넘겨준다
     log.info("...... [공소시효 만료]..........KSW");
     String encodedQuery = URLEncoder.encode(query, "UTF-8");
     return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
 
   //삭제
-  @PostMapping("/delete")
+  @PostMapping("/removeReportHistory")
   public String delete(@RequestParam("reportNo") Long reportNo,
                        @RequestParam("currentPage") int currentPage,
                        @RequestParam("query") String query) throws UnsupportedEncodingException{
     log.info("...... [post delete report]..........KSW");
-    reportService.deleteReport(reportNo);
+    reportService.removeReportHistory(reportNo);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
     return "redirect:/admin/manage-report?page=" + currentPage + "&query=" + encodedQuery;
   }
