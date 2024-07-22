@@ -87,7 +87,7 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
     if (userAndSchedule == null) {
       return 0; //일정에 참가하지 않은 회원
     } else if (userAndSchedule.getIsHost() ==  true) {
-      return 1; //일정 주체자
+      return 1; //일정 주최자
     }
 
     return 2; //일정에 참가한 회원
