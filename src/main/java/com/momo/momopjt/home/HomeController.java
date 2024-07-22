@@ -36,6 +36,6 @@ public class HomeController {
 
     model.addAttribute("myClubDTOList", myClubDTOList);
     model.addAttribute("clubDTOList", clubDTOList);
-    return "/home";
+    return "home";
   }
 }
