@@ -38,7 +38,7 @@ public class PhotoController {
   @GetMapping("/photo/photo")
   public String photoGet() {
     log.info("----------------- [GET Photo]-----------------");
-    return "/photo/photo";
+    return "photo/photo";
   }
 
   @PostMapping("/photo/photo")
@@ -94,7 +94,7 @@ public class PhotoController {
     byte[] data = photo.getPhotoData();
     String base64data = Base64.getEncoder().encodeToString(data);
     model.addAttribute("base64data", base64data);
-    return "/photo/photo";
+    return "photo/photo";
   }
 
 

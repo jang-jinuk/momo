@@ -101,10 +101,10 @@ private PhotoService photoService;
 
 
 
-    return "/club/main";
+    return "club/main";
   }
   @GetMapping("/create")
-  public String createClub() {return "/club/create";}
+  public String createClub() {return "club/create";}
 
   //모임 생성
   @PostMapping("/create")
@@ -141,7 +141,7 @@ private PhotoService photoService;
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
-    return "/club/update";
+    return "club/update";
   }
 
   //모임 수정
@@ -162,7 +162,7 @@ private PhotoService photoService;
 
   @GetMapping("/disband-page")
   public String goDisbandPage() {
-    return "/club/disband";
+    return "club/disband";
   }
 
   //모임 해산
@@ -175,9 +175,9 @@ private PhotoService photoService;
     return "redirect:/home";
   }
 
-  @GetMapping("/leavePage")
+  @GetMapping("/leave-page")
   public String goLeavePage() {
-    return "/club/leave";
+    return "club/leave";
   }
 
   //모임 탈퇴
@@ -241,7 +241,7 @@ private PhotoService photoService;
     model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
     model.addAttribute("countMembers", countMembers);//모임 맴버 인원 수
     model.addAttribute("isMember", isMember); //가입 신청 여부
-    return "/club/join";
+    return "club/join";
   }
 
   //모임 가입 신청
@@ -271,7 +271,7 @@ private PhotoService photoService;
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO= clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
-    return "/club/join-complete";
+    return "club/join-complete";
   }
 
   //맴버 관리
@@ -287,7 +287,7 @@ private PhotoService photoService;
     model.addAttribute("userAndClubDTOS", userAndClubDTOS);
     model.addAttribute("joinList", joinList);
 
-    return "/club/members";
+    return "club/members";
   }
 
   //가입 신청 승인

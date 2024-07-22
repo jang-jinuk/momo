@@ -16,7 +16,7 @@ public interface ReportService {
   //유저 제제해제(수정)
   void reactivateUser(ReportDTO reportDTO);
   //상태 수정후 삭제
-  void removeReportHistory(Long reportNo);
+  void deleteReport(Long reportNo);
   //검색 페이징
   List<ReportDTO> searchReports(String query);
 }

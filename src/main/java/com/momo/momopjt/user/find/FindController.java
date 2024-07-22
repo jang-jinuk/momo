@@ -1,7 +1,6 @@
 package com.momo.momopjt.user.find;
 
 import com.momo.momopjt.user.User;
-import com.momo.momopjt.user.UserController;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/user/find")
 @RequiredArgsConstructor
 @Log4j2
 public class FindController {
@@ -21,14 +20,14 @@ public class FindController {
   private final UserRepository userRepository;
   private final EmailService emailService;
 
-  @GetMapping("/find-id")
+  @GetMapping("/id")
   public String showFindIdForm(Model model) {
     model.addAttribute("findUserIdRequest", new FindUserIdRequest());
     return "user/find/id";
   }
 
   // 아이디 찾기
-  @PostMapping("/userid")
+  @PostMapping("/id")
   public String findUserId(@ModelAttribute("findUserIdRequest") FindUserIdRequest findUserIdRequest, Model model) {
     String userEmail = findUserIdRequest.getFindUserEmail();
     String userId = userService.findUsernameByEmail(userEmail);
@@ -43,14 +42,14 @@ public class FindController {
   }
 
   // 비밀번호 찾기 폼 렌더링
-  @GetMapping("/find-pw")
+  @GetMapping("/pw")
   public String showFindPasswordForm(Model model) {
     model.addAttribute("findPasswordRequest", new FindPasswordRequest());
     return "user/find/pw";
   }
 
   // 비밀번호 찾기 처리
-  @PostMapping("/find/password")
+  @PostMapping("/pw")
   public String findPassword(@ModelAttribute("findPasswordRequest") FindPasswordRequest findPasswordRequest,
                              RedirectAttributes redirectAttributes) {
     log.info("----------------- [POST find password]-----------------");
@@ -77,18 +76,18 @@ public class FindController {
       redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
       log.error("Error during password reset request processing", e);
     }
-    return "redirect:/find-pw"; // 오류 발생 시 올바른 경로로 리디렉트
+    return "redirect:/pw"; // 오류 발생 시 올바른 경로로 리디렉트
   }
 
   // 비밀번호 재설정 처리 (토큰 없이)
-  @GetMapping("/reset/userPw")
+  @GetMapping("/reset-pw")
   public String showResetPasswordForm(Model model) {
     model.addAttribute("resetPasswordRequest", new ResetPasswordRequest());
-    return "user/find/resetPassword";
+    return "user/find/reset-pw";
   }
 
   // 비밀번호 재설정 처리 (토큰 없이)
-  @PostMapping("/reset/userPw")
+  @PostMapping("/reset-pw")
   public String resetPassword(@ModelAttribute("resetPasswordRequest") ResetPasswordRequest resetPasswordRequest,
                               RedirectAttributes redirectAttributes,
                               Model model) {
@@ -99,7 +98,7 @@ public class FindController {
     if (!newPassword.equals(resetPasswordRequest.getConfirmPassword())) {
       model.addAttribute("passwordMismatchError", "비밀번호가 일치하지 않습니다.");
       model.addAttribute("resetPasswordRequest", resetPasswordRequest);
-      return "user/find/resetPassword";
+      return "user/find/reset-pw";
     }
 
     try {
@@ -110,12 +109,12 @@ public class FindController {
         return "redirect:/home"; // 여기서 경로 변경
       } else {
         redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
-        return "redirect:/reset";
+        return "redirect:/reset-pw";
       }
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
       log.error("Error during password reset", e);
-      return "redirect:/reset";
+      return "redirect:/reset-pw";
     }
   }
 
@@ -125,6 +124,6 @@ public class FindController {
   public String handleException(Exception e, RedirectAttributes redirectAttributes) {
     redirectAttributes.addFlashAttribute("errorMessage", "예상치 못한 오류가 발생했습니다. 다시 시도해 주세요.");
     log.error("Unhandled exception", e);
-    return "redirect:/find-pw";
+    return "redirect:/pw";
   }
 }

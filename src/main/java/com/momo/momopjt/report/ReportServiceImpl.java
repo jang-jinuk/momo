@@ -95,7 +95,7 @@ public class ReportServiceImpl implements ReportService {
   }
   // 삭제
   @Override
-  public void removeReportHistory(Long reportNo) {
+  public void deleteReport(Long reportNo) {
         reportRepository.deleteById(reportNo);
     }
   //페이징 검색
