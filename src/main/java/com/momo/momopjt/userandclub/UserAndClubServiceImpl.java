@@ -83,7 +83,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
       userAndScheduleService.subtractParticipant(userAndScheduleDTO);
     }
 
-    //회원이 주체한 일정 삭제
+    //회원이 주최한 일정 삭제
     List<Schedule> hostedScheduleList = userAndScheduleRepository.findSchedulesHostedByUser(userAndClubDTO.getUserNo());
 
     for (Schedule schedule : hostedScheduleList) {

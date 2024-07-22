@@ -17,5 +17,5 @@ public interface UserAndScheduleService {
 
   List<UserDTO> readAllParticipants(Schedule scheduleNo);
 
-  int isParticipanting(UserAndScheduleDTO userAndScheduleDTO);
+  int isParticipate(UserAndScheduleDTO userAndScheduleDTO);
 }

@@ -46,7 +46,7 @@ public class ScheduleServiceTests {
         .schedulePlace("서울시 강남구")
         .scheduleStartDate(instant)
         .build();
-    //일정 주체자 정보
+    //일정 주최자 정보
     UserAndScheduleDTO userAndScheduleDTO = UserAndScheduleDTO.builder()
         .userNo(user)
         .build();
@@ -55,7 +55,7 @@ public class ScheduleServiceTests {
      Long createScheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
 
     //Then
-    Long expectedScheduleNo = scheduleService.findSchedule(createScheduleNo).getScheduleNo();
+    Long expectedScheduleNo = scheduleService.readOneSchedule(createScheduleNo).getScheduleNo();
     assertEquals(createScheduleNo, expectedScheduleNo);
   }
 
@@ -137,7 +137,7 @@ public class ScheduleServiceTests {
     Club club = new Club();
     club.setClubNo(1L);
     //When
-    List<ScheduleDTO> scheduleDTOS = scheduleService.getOngoingSchedules(club);
+    List<ScheduleDTO> scheduleDTOS = scheduleService.readOngoingSchedules(club);
     //Then
     scheduleDTOS.forEach(schedule -> log.info(
         "no : {}, title : {}, content : {}, photo : {}, place : {}, max : {}, participants : {}, start_date : {}",

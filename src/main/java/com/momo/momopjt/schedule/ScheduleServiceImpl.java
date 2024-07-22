@@ -36,16 +36,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     userAndScheduleDTO.setScheduleNo(schedule);
     log.info("------------ [생성된 일정 번호 전달] ------------");
 
-    //일정 참가자 목록에 주체자 추가(등록)
+    //일정 참가자 목록에 주최자 추가(등록)
     userAndScheduleDTO.setIsHost(true);
     userAndScheduleService.addParticipant(userAndScheduleDTO);
-    log.info("------------ [주체자 등록 완료] ------------");
+    log.info("------------ [주최자 등록 완료] ------------");
     return scheduleNo;
   }
 
   //특정 일정 조회
   @Override
-  public ScheduleDTO findSchedule(Long scheduleNo) {
+  public ScheduleDTO readOneSchedule(Long scheduleNo) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     return modelMapper.map(schedule, ScheduleDTO.class);
@@ -93,7 +93,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [참가 가능 여부 확인]------------");
     userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
 
-    if (userAndScheduleService.isParticipanting(userAndScheduleDTO) == 2) {
+    if (userAndScheduleService.isParticipate(userAndScheduleDTO) == 2) {
       return "이미 참가한 일정입니다.";
     } else if (schedule.getScheduleMax() > schedule.getScheduleParticipants()) {
       userAndScheduleService.addParticipant(userAndScheduleDTO);

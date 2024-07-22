@@ -30,7 +30,7 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
   @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo AND us.userNo = :userNo")
   UserAndSchedule findByParticipant(@Param("scheduleNo") Schedule scheduleNo, @Param("userNo") User userNo);
 
-  //특정 회원이 주체한 모든 일정 조회
+  //특정 회원이 주최한 모든 일정 조회
   @Query("SELECT  us.scheduleNo FROM UserAndSchedule us WHERE us.userNo = :userNo AND us.isHost = true")
   List<Schedule> findSchedulesHostedByUser(@Param("userNo")User userNo);
 
