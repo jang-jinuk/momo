@@ -10,7 +10,7 @@ public class PageController {
 
   @GetMapping("file/fileupload")
   public String fileuploadPageGet() {
-    log.info("----------------- [Controller : fileuploadget]-----------------");
+    log.info("----------------- [GET /file/fileupload]-----------------");
     return "file/fileupload";
 
   }

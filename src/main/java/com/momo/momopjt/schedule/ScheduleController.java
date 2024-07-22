@@ -1,12 +1,10 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.file.FileController;
-import com.momo.momopjt.photo.PhotoDTO;
-import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.extern.log4j.Log4j2;
@@ -15,7 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -40,14 +41,17 @@ public class ScheduleController {
   @Autowired
   private HttpSession session;
   @Autowired
-  private FileController fileController;
+  private UserAndClubService userAndClubService;
 
-  @Autowired
-  private PhotoService photoService;
   //일정 생성 페이지 이동
   @GetMapping("/create")
-  public String scheduleCreate() {
-    return "/schedule/create";
+  public String scheduleCreate(Model model) {
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    int countMembers = userAndClubService.countMembers(club); //일정 생성 시 최대 참가 인원은 모임 전체 인원과 같음
+    model.addAttribute("countMembers", countMembers);
+    return "schedule/create";
   }
 
   //일정 생성하기
@@ -61,11 +65,58 @@ public class ScheduleController {
     //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
 //    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
 
+     /* 주석처리
+
+    //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+
+
+//    photoService.savePhoto();
+//    이미지 파일 처리 YY
+//    String resultPhotoUUID;
+//    byte[] photoBytes = file.getBytes();
+//    resultPhotoUUID = photoService.savePhoto(
+//        PhotoDTO.builder()
+//            .photoData(photoBytes)
+//            .photoSize(file.getSize())
+//            .photoOriginalName(file.getOriginalFilename())
+//            .userNo(user)
+//            .build())
+//        .getPhotoUUID();
+
+
     //이미지 처리 후 UUID만 반환
     String resultPhotoUUID = UUID.randomUUID().toString();
     scheduleDTO.setSchedulePhoto(resultPhotoUUID);
     //이미지를 일정 DTO에 전달 끝
 
+    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+    userAndScheduleDTO.setUserNo(user);
+
+    log.info("------------ [현재 로그인 중인 정보] ------------");
+
+
+
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    scheduleDTO.setClubNo(club);
+    LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
+    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+    Instant instant = zonedDateTime.toInstant();
+    scheduleDTO.setScheduleStartDate(instant);
+    log.info("------------ [날짜/시간 포매팅 완료] ------------");
+    Long scheduleNo;
+    if (resultPhotoUUID != null) {
+      scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+      return "redirect:/schedule/" + scheduleNo;
+    }
+    log.info("------------ [일정 등록 완료] ------------");
+    return "redirect:/schedule";
+
+*/
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
@@ -115,13 +166,17 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipanting(userAndScheduleDTO);
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
+
+    model.addAttribute("currentTime", Instant.now());
+    model.addAttribute("clubNo",clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
     model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
 
-    return "/schedule/view";
+    return "schedule/view";
   }
 
   //일정 참가
@@ -176,9 +231,14 @@ public class ScheduleController {
     ZonedDateTime zonedDate = originStartDate.atZone(ZoneId.systemDefault());
     LocalDateTime formattedDate = zonedDate.toLocalDateTime();
 
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    int countMembers = userAndClubService.countMembers(club); //일정 수정 시 최대 참가 인원은 모임 전체 인원과 같음
+    model.addAttribute("countMembers", countMembers);
     model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
-    return "/schedule/update";
+    return "schedule/update";
   }
 
   //일정 수정
@@ -197,7 +257,7 @@ public class ScheduleController {
     Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
 
     //일정 수정 실패
-    if(updateFail) {
+    if (updateFail) {
       redirectAttributes.addFlashAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
       return "redirect:/schedule/update";
     }
@@ -216,7 +276,7 @@ public class ScheduleController {
     session.removeAttribute("scheduleNo");
 
     //결과 메세지
-    redirectAttributes.addFlashAttribute("message","일정이 삭제되었습니다.");
+    redirectAttributes.addFlashAttribute("message", "일정이 삭제되었습니다.");
 
     return "redirect:/club/main/" + clubNo;
   }

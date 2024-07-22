@@ -1,6 +1,7 @@
 package com.momo.momopjt.photo;
 
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Optional;
 
 import com.momo.momopjt.club.ClubRepository;
@@ -8,6 +9,7 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,15 +32,26 @@ public class PhotoServiceImpl implements PhotoService {
       photo.setPhotoUUID("default.jpg"); //TODO 실제 디폴트 사진으로 변경 필요 JW
       return photo;
     }
-    photoDTO.setPhotoCreateDate(Instant.now()); //등록일
+
+
+    photoDTO.setPhotoCreateDate(Instant.now()); //생성(등록)일 자동으로 넣기
 
     photo = modelMapper.map(photoDTO, Photo.class);
     photoRepository.save(photo);
+
     log.info(photo);
     log.info(photo.getPhotoUUID());
     log.info("------------------Photo saved--------------------");
     return photo;
   }
+
+  /* 일단은 필요없어서 주석처리
+  public Photo updatePhoto(PhotoDTO photoDTO) {
+    String photoUUID = photoDTO.getPhotoUUID();
+    deletePhoto(photoUUID);
+    return savePhoto(photoDTO);
+  }
+   */
 
   @Override
   public Photo getPhoto(String photoUUID) {
@@ -53,6 +66,16 @@ public class PhotoServiceImpl implements PhotoService {
   @Override
   public void deletePhoto(String photoUUID) {
     photoRepository.deleteById(photoUUID);
+  }
+
+
+  @Override
+  public String getPhoto64(String photoUUID) {
+
+    Photo Photo = photoRepository.findById(photoUUID).orElseThrow();
+    String base64str = Base64.getEncoder().encodeToString(Photo.getPhotoData());
+
+    return base64str;
   }
 
 }

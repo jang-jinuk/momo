@@ -32,7 +32,7 @@ public class Photo {
 
   @NotNull
   @Column(name = "photo_size", nullable = false)
-  private Integer photoSize;
+  private Long photoSize;
 
   @Size(max = 255)
   @Column(name = "photo_thumbnail")

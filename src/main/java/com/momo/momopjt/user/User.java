@@ -48,14 +48,24 @@ public class User {
     private Set<UserRole> roleSet = new HashSet<>();
 
 
-    // 비밀번호 변경 메서드
-    public void changePassword(String userPw){this.userPw = userPw;
+  // 비밀번호 변경 메서드
+  public void changePassword(String userPw){this.userPw = userPw;
+  }
+
+  // 역할 추가 메서드
+  public void addRole(UserRole userRole){
+    this.roleSet.add(userRole);
+  }
+  // 역할 초기화 메서드
+  public void clearRoles(){
+    this.roleSet.clear();
+  }
+  //TODO need check 0722 YY
+  // 소셜 타입 변경 메서드
+  public void changeUserSocial(Character userSocial){
+    if(userSocial != 'K' && userSocial != 'N' && userSocial != 'G' && userSocial != 'M'){
+      throw new IllegalArgumentException("Invalid social type");
     }
-    // 역할 추가 메서드
-    public void addRole(UserRole userRole){
-        this.roleSet.add(userRole);
-    }
-
-
-
+    this.userSocial = userSocial;
+  }
 }

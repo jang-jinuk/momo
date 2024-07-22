@@ -2,6 +2,7 @@ package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,6 +23,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ScheduleRepository scheduleRepository;
   private final ModelMapper modelMapper;
   private final UserAndScheduleService userAndScheduleService;
+  private final PhotoService photoService;
 
   //일정 생성
   @Override
@@ -164,12 +164,32 @@ public class ScheduleServiceImpl implements ScheduleService {
   //일정 삭제
   @Override
   public void deleteSchedule(Long scheduleNo) {
-    Schedule schedule = new Schedule();
+    Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
+    Schedule schedule = result.orElseThrow();
+    if(!schedule.getSchedulePhoto().equals("default.jpg")){ //TODO 실제 디폴트 사진 UUID로 변경 필요 JW
+      photoService.deletePhoto(schedule.getSchedulePhoto());
+    }
+    log.info("------------ [일정 사진 삭제 처리 완료] ------------");
     schedule.setScheduleNo(scheduleNo);
     userAndScheduleService.deleteParticipant(schedule);
     log.info("------------ [일정 참석 인원 처리 완료] ------------");
     scheduleRepository.deleteById(scheduleNo);
     log.info("------------ [일정 삭제 처리 완료] ------------");
+  }
+
+  //해당 모임의 모든 일정 삭제
+  @Override
+  public void deleteScheduleByClub(Club clubNo) {
+    userAndScheduleService.deleteParticipantsByClub(clubNo);//모든 일정 참가자 삭제
+    scheduleRepository.deleteAllSchedulesByClub(clubNo); //모든 일정 삭제
+
+    List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(clubNo);
+
+    for (Schedule schedule : scheduleList) {
+      if(!schedule.getSchedulePhoto().equals("default.jpg")){ //TODO 실제 디폴트 사진 UUID로 변경 필요 JW
+        photoService.deletePhoto(schedule.getSchedulePhoto()); //모든 일정의 사진 삭제
+      }
+    }
   }
 
   //일정 인원 마감 확인

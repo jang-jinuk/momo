@@ -34,11 +34,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
     // OAuth2 인증 관련
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.security:spring-security-oauth2-client'
-    implementation 'org.springframework.security:spring-security-oauth2-jose'
-    implementation 'org.springframework.security:spring-security-oauth2-resource-server'
 
     // 메일 관련 처리
     implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -107,6 +103,7 @@ dependencies {
 
 
 }
+
 tasks.named('test') {
     useJUnitPlatform()
 }

@@ -2,7 +2,6 @@ package com.momo.momopjt.article;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +33,14 @@ public class ArticleController {
   }
 
   // 새로운 후기글을 생성하는 메서드
-  @PostMapping
+  @PostMapping("/create")
   public String createArticle(@ModelAttribute ArticleDTO articleDTO) {
     articleService.createArticle(articleDTO);
     return "redirect:/article"; // 생성 후 후기글 목록 페이지로 리디렉션
   }
 
   // 모든 후기글 목록을 보여주는 페이지
-  @GetMapping
+  @GetMapping("/list")
   public String getAllArticles(Model model) {
     List<ArticleDTO> articles = articleService.getAllArticles();
     log.info("-------- [ getAllArticles]-------you");
@@ -60,18 +59,18 @@ public class ArticleController {
 
 
   // 기존 후기글 수정 폼을 보여주는 페이지
-  @GetMapping("/{articleNo}/edit")
+  @GetMapping("/update/{articleNo}")
   public String showEditForm(@PathVariable Long articleNo, Model model) {
     log.info("-------- [get article edit]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
-    return "article/edit"; // "articles/edit.html" 뷰를 반환
+    return "article/update"; // "article/update.html" 뷰를 반환
   }
 
 
 
   // 기존 후기글을 업데이트하는 메서드
-  @PostMapping("/{articleNo}/update")
+  @PostMapping("/update/{articleNo}")
   public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
     log.info("-------- [article update]-------you");
     articleService.updateArticle(articleNo, articleDTO);
@@ -80,7 +79,7 @@ public class ArticleController {
 
 
   // 기존 후기글을 삭제하는 메서드
-  @PostMapping("/{articleNo}/delete")
+  @PostMapping("delete/{articleNo}")
   public String deleteArticle(@PathVariable Long articleNo) {
     log.info("-------- [article delete]-------you");
     articleService.deleteArticle(articleNo);

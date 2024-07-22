@@ -205,7 +205,9 @@ public class UserTests {
 //        Assertions.assertThat(deleteResult).isEmpty(); // AssertJ를 사용하여 Optional이 비어있는지 확인
 //
 //        // 삭제된 사용자를 다시 찾을 때 예외가 발생하는지 확인 (선택 사항)
-//        assertThrows(NoSuchElementException.class, () -> userRepository.findById(user.getUserNo()).orElseThrow(() -> new NoSuchElementException("삭제된 사용자를 찾을 수 없습니다.")));
+        assertThrows(NoSuchElementException.class, () ->
+            userRepository.findById( user.getUserNo() ).orElseThrow( () ->
+                    new NoSuchElementException( "삭제된 사용자를 찾을 수 없습니다.")));
 //    }
 //
 //    @Commit

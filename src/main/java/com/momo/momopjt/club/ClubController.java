@@ -1,6 +1,7 @@
 package com.momo.momopjt.club;
 
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
@@ -34,7 +35,8 @@ public class ClubController {
   private UserService userService;
   @Autowired
   private UserAndClubService userAndClubService;
-
+@Autowired
+private PhotoService photoService;
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
@@ -46,10 +48,17 @@ public class ClubController {
 
     Club club = new Club();
     club.setClubNo(clubNo);
-
-    List<ScheduleDTO> scheduleDTOList = scheduleService.getOngoingSchedules(club);
-    model.addAttribute("schedules", scheduleDTOList);
+    List<ScheduleDTO> endSchedules = scheduleService.getEndSchedules(club); //마감된 일정
+    model.addAttribute("endSchedules", endSchedules);
+    List<ScheduleDTO> getOngoingSchedules= scheduleService.getOngoingSchedules(club);//마감되지 않은 일정
+    model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
+
+    //0722 YY 
+//    //scheduleDTOList에 담긴 사진 확인 로그
+//    for(ScheduleDTO s : scheduleDTOList) {
+//      log.trace(s.getSchedulePhoto());
+//    }
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
@@ -68,14 +77,40 @@ public class ClubController {
     }
     model.addAttribute("isMember", isMember);
 
-    return "/club/main";
+    //YY
+    //일정 사진 표시 기능
+//    for (ScheduleDTO scheduleDTO : scheduleDTOList) {
+//      String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
+//      String[] list = new String[0];
+//      Arrays.stream(list).map(schedulePhoto64);
+//      model.addAttribute("schdule64List", schedule64List);
+//    }
+//List<String> schedule64List = new ArrayList<>();
+//
+//for (ScheduleDTO scheduleDTO : scheduleDTOList) {
+//    String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
+//    schedule64List.add(schedulePhoto64);
+//    log.trace(schedulePhoto64.substring(1,100)+"---------------------------------------------------------");
+//}
+//model.addAttribute("schedule64List", schedule64List);
+//    log.info("----------------- [07-18 11:43:22]-----------------");
+//log.info(schedule64List.get(0).substring(1,100));
+//log.info(schedule64List.get(1).substring(1,100));
+
+    //YY
+
+
+
+    return "club/main";
   }
   @GetMapping("/create")
-  public String createClub() {return "/club/create";}
+  public String createClub() {return "club/create";}
 
   //모임 생성
   @PostMapping("/create")
-  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes) {
+  public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
+
+
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -84,10 +119,17 @@ public class ClubController {
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
-
+    Long clubNo;
     //TODO 파일 업로드 기능과 연결필요 JW
 
-    Long clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO); //TODO club create error
+    try {
+
+      clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+
+    } catch (ClubService.ClubNameException e) {
+      redirectAttributes.addFlashAttribute("error", "clubName");
+      return "redirect:/club/create";
+    }
 
     redirectAttributes.addFlashAttribute("message", "축하합니다! 모임이 생성되었습니다!");
 
@@ -99,7 +141,7 @@ public class ClubController {
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
-    return "/club/update";
+    return "club/update";
   }
 
   //모임 수정
@@ -120,7 +162,7 @@ public class ClubController {
 
   @GetMapping("/disband-page")
   public String goDisbandPage() {
-    return "/club/disband";
+    return "club/disband";
   }
 
   //모임 해산
@@ -130,17 +172,17 @@ public class ClubController {
     clubService.disbandClub(clubNo);
     session.removeAttribute("clubNo");
     redirectAttributes.addFlashAttribute("message","모임이 해산되었습니다.");
-    return "redirect:/user/home";
+    return "redirect:/home";
   }
 
-  @GetMapping("/leavePage")
+  @GetMapping("/leave-page")
   public String goLeavePage() {
-    return "/club/leave";
+    return "club/leave";
   }
 
   //모임 탈퇴
   @GetMapping("/leave")
-  public String leaveClub(@RequestParam("userNo")Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
+  public String leaveClub(@RequestParam(value = "userNo", required = false)Long userNo, HttpSession session, RedirectAttributes redirectAttributes) {
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -170,7 +212,7 @@ public class ClubController {
 
     redirectAttributes.addFlashAttribute("message","모임에서 정상적으로 탈퇴되었습니다.");
 
-    return "redirect:/user/home";
+    return "redirect:/home";
   }
 
   @GetMapping("/join-page")
@@ -199,7 +241,7 @@ public class ClubController {
     model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
     model.addAttribute("countMembers", countMembers);//모임 맴버 인원 수
     model.addAttribute("isMember", isMember); //가입 신청 여부
-    return "/club/join";
+    return "club/join";
   }
 
   //모임 가입 신청
@@ -229,7 +271,7 @@ public class ClubController {
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO= clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
-    return "/club/join-complete";
+    return "club/join-complete";
   }
 
   //맴버 관리
@@ -241,10 +283,11 @@ public class ClubController {
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     List<UserAndClubDTO> joinList = userAndClubService.readAllJoinList(club);
 
+    model.addAttribute("clubNo", clubNo);
     model.addAttribute("userAndClubDTOS", userAndClubDTOS);
     model.addAttribute("joinList", joinList);
 
-    return "/club/members";
+    return "club/members";
   }
 
   //가입 신청 승인

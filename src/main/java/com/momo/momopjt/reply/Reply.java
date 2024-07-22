@@ -17,7 +17,7 @@ public class Reply {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "reply_no", nullable = false)
-  private Long id;
+  private Long replyNo;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)

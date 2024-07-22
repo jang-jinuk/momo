@@ -19,7 +19,8 @@ public class ScheduleServiceTests {
 
   @Autowired
   private ScheduleService scheduleService;
-
+  @Autowired
+  private ScheduleRepository scheduleRepository;
 
   //모임 생성 테스트
   @Test
@@ -31,10 +32,9 @@ public class ScheduleServiceTests {
     User user = new User();
     user.setUserNo(4L);
 
+    //시간 설정
     LocalDateTime localDateTime = LocalDateTime.of(2024, 9, 5, 12, 40);
-
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-
     Instant instant = zonedDateTime.toInstant();
 
     //일정 정보

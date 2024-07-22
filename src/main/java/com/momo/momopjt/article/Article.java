@@ -32,16 +32,16 @@ public class Article {
   private Instant articleCreateDate = Instant.now(); // 기본값 설정
 
   @Column(name = "article_state", nullable = false)
-  private Character articleState = '0'; // 기본값 설정
+  private Character articleState; // 기본값 설정
 
   @Column(name = "article_score")
-  private Integer articleScore = 0; // 기본값 설정
+  private Integer articleScore; // 기본값 설정
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "club_no")
   private Club clubNo;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_no")
   private User userNo;
 
