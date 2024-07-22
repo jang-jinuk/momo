@@ -37,11 +37,11 @@ public class Article {
   @Column(name = "article_score")
   private Integer articleScore; // 기본값 설정
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "club_no")
   private Club clubNo;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_no")
   private User userNo;
 
