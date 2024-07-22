@@ -24,7 +24,7 @@
   </script>
 </head>
 <body>
-<form th:action="@{/article}" th:object="${articleDTO}" method="post">
+<form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
   <label for="articleTitle">제목:</label>
   <input type="text" id="articleTitle" th:field="*{articleTitle}" required
          oninput="limitTitleLength()"><br>

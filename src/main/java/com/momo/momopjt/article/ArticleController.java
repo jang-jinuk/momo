@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Log4j2
 public class ArticleController {
 
-
   private final ArticleService articleService;
 
   @Autowired
@@ -36,7 +35,7 @@ public class ArticleController {
   @PostMapping("/create")
   public String createArticle(@ModelAttribute ArticleDTO articleDTO) {
     articleService.createArticle(articleDTO);
-    return "redirect:/article"; // 생성 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article/list"; // 생성 후 후기글 목록 페이지로 리디렉션
   }
 
   // 모든 후기글 목록을 보여주는 페이지
@@ -57,7 +56,6 @@ public class ArticleController {
     return "article/detail"; // "articles/detail.html" 뷰를 반환
   }
 
-
   // 기존 후기글 수정 폼을 보여주는 페이지
   @GetMapping("/update/{articleNo}")
   public String showEditForm(@PathVariable Long articleNo, Model model) {
@@ -67,23 +65,19 @@ public class ArticleController {
     return "article/update"; // "article/update.html" 뷰를 반환
   }
 
-
-
   // 기존 후기글을 업데이트하는 메서드
   @PostMapping("/update/{articleNo}")
   public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
     log.info("-------- [article update]-------you");
     articleService.updateArticle(articleNo, articleDTO);
-     return "redirect:/article";
+    return "redirect:/article/list"; // 수정 후 후기글 목록 페이지로 리디렉션
   }
 
-
   // 기존 후기글을 삭제하는 메서드
-  @PostMapping("delete/{articleNo}")
+  @PostMapping("/delete/{articleNo}")
   public String deleteArticle(@PathVariable Long articleNo) {
     log.info("-------- [article delete]-------you");
     articleService.deleteArticle(articleNo);
-    return "redirect:/article"; // 삭제 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article/list"; // 삭제 후 후기글 목록 페이지로 리디렉션
   }
-
 }

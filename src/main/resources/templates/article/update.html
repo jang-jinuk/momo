@@ -35,7 +35,7 @@
 <body>
 
 <h1>편집</h1>
-<form th:action="@{/article/{articleNo}/update(articleNo=${articleDTO.articleNo})}" th:object="${articleDTO}" method="post">
+<form th:action="@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}" th:object="${articleDTO}" method="post">
     <label for="articleTitle">제목:</label>
     <input type="text" id="articleTitle" th:field="*{articleTitle}" required><br>
     <label for="articleContent">내용:</label>

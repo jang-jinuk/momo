@@ -30,7 +30,7 @@ public class QPhoto extends EntityPathBase<Photo> {
 
     public final StringPath photoOriginalName = createString("photoOriginalName");
 
-    public final NumberPath<Integer> photoSize = createNumber("photoSize", Integer.class);
+    public final NumberPath<Long> photoSize = createNumber("photoSize", Long.class);
 
     public final StringPath photoThumbnail = createString("photoThumbnail");
 

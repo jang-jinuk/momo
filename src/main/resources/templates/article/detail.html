@@ -8,8 +8,8 @@
 <h2 th:text="${article.articleTitle}">Title</h2>
 <p th:text="${article.articleContent}">Content</p>
 <a th:href="@{/article}">Back to List</a>
-<a th:href="@{/article/{articleNo}/edit(articleNo=${article.articleNo})}">Edit</a>
-<form th:action="@{/article/{articleNo}/delete(articleNo=${article.articleNo})}" method="post" style="display:inline;">
+<a th:href="@{/article/update/{articleNo}(articleNo=${article.articleNo})}">update</a>
+<form th:action="@{/article/detail/{articleNo}(articleNo=${article.articleNo})}" method="post" style="display:inline;">
     <button type="submit">Delete</button>
 </form>
 </body>
