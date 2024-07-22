@@ -180,7 +180,7 @@ public class UserController {
 
 
   @GetMapping("/profile/my-report")
-  public String report(Model model){
+  public String myReportGet(Model model){
     //@RequestParam(value = "page", defaultValue = "1") int page) {
     log.info("...... [get profile/my-report]..........KSW");
     // ID를 조회하여 모델에 추가 (임시)
@@ -213,12 +213,6 @@ public class UserController {
     log.info("...... [userIdReport]..........KSW");
     return "user/profile/my-report";  // 뷰 반환
   }
-//  //내가 신고한 내역 삭제
-//  @PostMapping("/delete")
-//  public String delete(@RequestParam("reportNo") Long reportNo) {
-//    log.info("...... [post delete report]..........KSW");
-//    reportService.deleteReport(reportNo);
-//    return "redirect:/user/profile/my-report";
-//  }
+
 }
 
