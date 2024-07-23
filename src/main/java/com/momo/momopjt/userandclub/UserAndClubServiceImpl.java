@@ -14,6 +14,7 @@ import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
@@ -41,7 +42,9 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   private final UserAndScheduleRepository userAndScheduleRepository;
   private final UserAndScheduleService userAndScheduleService;
   private final AlarmService alarmService; // 알림 서비스
-  private final UserService userService;
+  private final UserRepository userRepository;
+
+
   //모임 가입 신청
   @Override
   public void joinClub(UserAndClubDTO userAndClubDTO) {
@@ -69,12 +72,11 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     log.info("-------------가입 승인 완료-------------");
 
     // User 객체와 Club 객체가 null이 아닌지 확인
-    User user = userAndClub.getUserNo();  // 이 부분에서 문제가 발생할 수 있습니다.
+    User user = userAndClub.getUserNo();
     if (user == null || club == null) {
-      log.info("-------- [이벤트1]-------you");
       throw new IllegalArgumentException("User or Club cannot be null");
     }
-    log.info("-------- [이벤트2]-------you");
+    log.info("----------------모임 가입 신청 알림 이벤트 --------------");
     alarmService.createJoinApprovalAlarm(user, club);
 
     return true;
@@ -104,6 +106,18 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
     userAndClubRepository.deleteByClubNoAndUserNo(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     log.info("-------------모임 탈퇴 완료-------------");
+
+    // User 객체와 Club 객체를 가져옴
+    Optional<User> userOptional = userRepository.findById(userAndClubDTO.getUserNo().getUserNo());
+    Optional<Club> clubOptional = clubRepository.findById(userAndClubDTO.getClubNo().getClubNo());
+
+    User user = userOptional.orElseThrow(() -> new IllegalArgumentException("User not found"));
+    Club club = clubOptional.orElseThrow(() -> new IllegalArgumentException("Club not found"));
+
+    // 모임 탈퇴 알림 이벤트 생성
+    log.info("----------------모임 탈퇴 알림 이벤트 --------------");
+    alarmService.createLeaveAlarm(user, club);
+
   }
 
   //모임 맴버 조회

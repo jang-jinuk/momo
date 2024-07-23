@@ -36,6 +36,7 @@ public class AlarmController {
     this.userRepository = userRepository;
   }
 
+  //알람 목록
   @GetMapping("/list")
   public String getUserAlarms(Model model) {
     User currentUser = getCurrentUser(); // 사용자 정보를 가져오는 메서드
@@ -60,6 +61,7 @@ public class AlarmController {
     return null;
   }
 
+  //알람 삭제
   @DeleteMapping("/delete/{alarmNo}")
   public ResponseEntity<Void> deleteAlarm(@PathVariable Long alarmNo) {
     alarmService.deleteAlarm(alarmNo);

@@ -10,5 +10,6 @@ public interface AlarmService {
 
   List<Alarm> getAlarmsByUserId(User user);
   void createJoinApprovalAlarm(User user, Club club);
+  void createLeaveAlarm(User user, Club club);
   void deleteAlarm(Long alarmNo);
 }

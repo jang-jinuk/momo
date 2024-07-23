@@ -28,6 +28,7 @@ public class AlarmServiceImpl implements AlarmService {
     return alarmRepository.findByUserNo(user);
   }
 
+  // 모임 가입시 뜨는 알람
   @Override
   public void createJoinApprovalAlarm(User user, Club club) {
     Alarm alarm = new Alarm();
@@ -38,6 +39,21 @@ public class AlarmServiceImpl implements AlarmService {
     alarm.setIsRead('0');
     alarmRepository.save(alarm);
   }
+
+  //모임 탈퇴시 뜨는 알람
+  @Override
+  public void createLeaveAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.LEAVE); // 알람 타입을 탈퇴로 설정
+    alarm.setAlarmContent(club.getClubName() + "에서 탈퇴하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+
+  //알람 삭제 기능
   @Override
   public void deleteAlarm(Long alarmNo) {
     alarmRepository.deleteById(alarmNo);
