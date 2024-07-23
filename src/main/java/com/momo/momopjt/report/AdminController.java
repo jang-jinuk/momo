@@ -63,15 +63,15 @@ public class AdminController {
   }
 
   //제제
-  @PostMapping("/suspend-user")
-  public String suspendUser(@RequestParam("reportNo") Long reportNo,
+  @PostMapping("/activate-user")
+  public String activateUser(@RequestParam("reportNo") Long reportNo,
                     @RequestParam("currentPage") int currentPage,
                     @RequestParam("query") String query) throws UnsupportedEncodingException {
     log.info("...... [get manage/justice]..........KSW");
     ReportDTO reportDTO = new ReportDTO(); // 타입에 맞게 객체를 생성하여
     reportDTO.setReportNo(reportNo); //담아주고
     // reportService.updateReport() 메서드 호출
-    reportService.suspendUser(reportDTO); //기능으로 넘겨준다
+    reportService.activateUser(reportDTO); //기능으로 넘겨준다
     log.info("...... [정의구현]..........KSW");
     log.info("...... [{}]..........KSW",query);
     String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8); //쿼리를 인코더에 담아준다
