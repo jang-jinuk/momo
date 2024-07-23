@@ -66,7 +66,6 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
   public List<UserDTO> readAllParticipants(Schedule scheduleNo) {
 
     List<UserAndSchedule> userAndSchedules = userAndScheduleRepository.findByAllParticipants(scheduleNo);
-    List<User> users = new ArrayList<>();
     List<UserDTO> userDTOs = new ArrayList<>();
 
     for (UserAndSchedule userAndSchedule : userAndSchedules) {
@@ -87,8 +86,8 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
 
     if (userAndSchedule == null) {
       return 0; //일정에 참가하지 않은 회원
-    } else if (userAndSchedule.getIsHost() ==  true) {
-      return 1; //일정 주최자
+    } else if (userAndSchedule.getIsHost()) {
+      return 1; //일정 주체자
     }
 
     return 2; //일정에 참가한 회원
