@@ -65,6 +65,17 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
+  @Override
+  public void createCancelParticipateAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.CANCEL_PARTICIPATE); // 새로운 알람 타입을 사용합니다.
+    alarm.setAlarmContent(schedule.getScheduleTitle() + " 일정 참가를 취소하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
   //알람 삭제 기능
   @Override
   public void deleteAlarm(Long alarmNo) {
