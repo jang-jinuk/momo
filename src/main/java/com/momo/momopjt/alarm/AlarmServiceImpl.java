@@ -2,6 +2,7 @@ package com.momo.momopjt.alarm;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
@@ -45,13 +46,24 @@ public class AlarmServiceImpl implements AlarmService {
   public void createLeaveAlarm(User user, Club club) {
     Alarm alarm = new Alarm();
     alarm.setUserNo(user);
-    alarm.setAlarmType(AlarmType.LEAVE); // 알람 타입을 탈퇴로 설정
+    alarm.setAlarmType(AlarmType.LEAVE);
     alarm.setAlarmContent(club.getClubName() + "에서 탈퇴하셨습니다.");
     alarm.setAlarmCreateDate(Instant.now());
     alarm.setIsRead('0');
     alarmRepository.save(alarm);
   }
 
+  //일정 참가시 뜨는 알람
+  @Override
+  public void createParticipateAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.PARTICIPATE);
+    alarm.setAlarmContent(schedule.getScheduleTitle() + "에 참가하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
 
   //알람 삭제 기능
   @Override
