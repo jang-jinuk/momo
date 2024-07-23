@@ -1,6 +1,9 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyService;
+import com.momo.momopjt.reply.ReplyServiceImpl;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -41,6 +44,8 @@ public class ScheduleController {
   private HttpSession session;
   @Autowired
   private UserAndClubService userAndClubService;
+  @Autowired
+  private ReplyService replyService;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
@@ -146,6 +151,10 @@ public class ScheduleController {
   public String readScheduleGet(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
     log.info("------------ [Get schedule no: {}] ------------",scheduleNo);
     //일정 조회
+
+    //출력할 댓글 조회 YY
+    List<Reply> replyList = replyService.readReplyAllBySchedule(scheduleNo);
+
     ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     //인원마감인지 확인
@@ -178,6 +187,8 @@ public class ScheduleController {
     model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
 
+    //출력할 댓글 추가
+    model.addAttribute("replyList",replyList);
     return "schedule/view";
   }
 

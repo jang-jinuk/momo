@@ -1,8 +1,11 @@
 package com.momo.momopjt.reply;
 
+import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ReplyServiceImpl implements ReplyService {
 
+  private final UserService userService;
   private final ReplyRepository replyRepository;
 
   private final ModelMapper modelMapper;
@@ -81,12 +85,22 @@ public class ReplyServiceImpl implements ReplyService {
   public void deleteReply(Long replyNo) {
     log.info("----------------- [deleteReply]-----------------");
 
-    boolean checkBeforeDelete = replyRepository.existsById(replyNo);
-
-    if(checkBeforeDelete){
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String name = auth.getName();
+    if(checkReplyExist(replyNo) && userService.findByUserId(name)==readReply(replyNo).getUserNo()){
       replyRepository.deleteById(replyNo);}
     else{
-      log.info("no exist reply");
+      log.warn("no exist reply or no Auth to delete");
     }
+  }
+
+  @Override
+  public boolean checkReplyExist(Long replyNo) {
+    if(replyRepository.existsById(replyNo)){
+      log.info("-------- [reply exist]-------");
+      return true;
+    }
+    log.warn("---------[reply not exist]--------");
+    return false;
   }
 }

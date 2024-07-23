@@ -26,7 +26,7 @@
                         <p th:text="${#dates.format(scheduleDTO.scheduleStartDate, 'yyyy년 MM월 dd일 HH:mm')}"></p>
                     </div>
                     <div class="col-12">
-                        <div id="map" style="width:300px;height:300px;margin-top:10px;"></div>
+                        <div id="map" style="width:500px;height:400px;margin-top:10px;"></div>
                         <p  type="text" id="copyTxt" th:text="${scheduleDTO.schedulePlace}"></p>
                         <button onclick="copyText()">복사하기</button>
                     </div>
@@ -77,7 +77,8 @@
             </div>
         </div>
         <div class="row">
-            <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none" class="form-control" id="content" readonly></textarea>
+            <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none"
+                      class="form-control" id="content" readonly></textarea>
         </div>
         <div class="row" th:if="${isParticipant == 1}"> <!--일정 주최자일 때-->
             <div class="col-10">
@@ -85,6 +86,40 @@
             <div class="col-2">
                 <button class="btn btn-success modify" th:onclick="|location.href='@{/schedule/update}'|">수정</button>
                 <button class="btn btn-danger delete" th:onclick="|location.href='@{/schedule/delete}'|">삭제</button>
+            </div>
+        </div>
+    </div>
+
+    <!--    reply 댓글 작성 폼 부분-->
+    <div class="container">
+        <div class="row">
+            <form id="scheduleReplyForm" action="/reply/create" method="post">
+                <div>
+                    <label for="replyContent">Reply Content:</label>
+                    <textarea id="replyContent" name="replyContent" required></textarea>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+                </div>
+                <input type="hidden" name="scheduleNo.scheduleNo" th:value="${scheduleDTO.scheduleNo}">
+
+
+            </form>
+        </div>
+    </div>
+    <div class="container"> <!-- 댓글 출력 부분 YY -->
+        <div class="row">
+            <div class="reply" th:each="reply : ${replyList}">
+                <hr>
+                <span th:text="${reply.getReplyContent()}"></span>
+                <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
+                <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
+                <span>작성자필요<!--TODO--></span>
+                <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
+                <form id="replyDeleteForm" action="/reply/delete" method="post">
+                    <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
+                    <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
+                </form>
             </div>
         </div>
     </div>

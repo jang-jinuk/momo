@@ -17,4 +17,5 @@ public interface ReplyService {
 
   void deleteReply(Long replyNo);
 
+  boolean checkReplyExist(Long replyNo);
 }
