@@ -1,50 +1,60 @@
 package com.momo.momopjt.article;
 
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.schedule.ScheduleDTO;
+import com.momo.momopjt.schedule.ScheduleService;
+import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/article")
 @Log4j2
+@RequestMapping("/article")
 public class ArticleController {
 
-  private final ArticleService articleService;
-
   @Autowired
-  public ArticleController(ArticleService articleService) {
-    this.articleService = articleService;
-  }
+  private ArticleService articleService;
+  @Autowired
+  private ScheduleService scheduleService;
+  @Autowired
+  private UserService userService;
+
 
   // 새로운 후기글 작성 폼을 보여주는 페이지
   @GetMapping("/create")
-  public String showCreateForm(Model model) {
-    model.addAttribute("articleDTO", new ArticleDTO());
+  public String showCreateForm(@RequestParam(value = "scheduleNo", required = false)Long scheduleNo, Model model) {
+    if (scheduleNo != null) {
+      ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
+      model.addAttribute("scheduleDTO", scheduleDTO);
+    }
     log.info("-------- [Article Create]-------you");
     return "article/create";
   }
 
   // 새로운 후기글을 생성하는 메서드
   @PostMapping("/create")
-  public String createArticle(@ModelAttribute ArticleDTO articleDTO) {
+  public String createArticle(@ModelAttribute ArticleDTO articleDTO, HttpSession session) {
+    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUserId(username);
+    articleDTO.setUserNo(user);
+
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    Club club = new Club();
+    club.setClubNo(clubNo);
+    articleDTO.setClubNo(club);
+
     articleService.createArticle(articleDTO);
     return "redirect:/article/list"; // 생성 후 후기글 목록 페이지로 리디렉션
-  }
-
-  // 모든 후기글 목록을 보여주는 페이지
-  @GetMapping("/list")
-  public String getAllArticles(Model model) {
-    List<ArticleDTO> articles = articleService.getAllArticles();
-    log.info("-------- [ getAllArticles]-------you");
-    model.addAttribute("article", articles);
-    return "article/list";
   }
 
   // 특정 아이디의 후기글을 보여주는 페이지

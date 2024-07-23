@@ -10,4 +10,3 @@ public class FileDTO {
   // 598p
   private List<MultipartFile> files;
 }
-

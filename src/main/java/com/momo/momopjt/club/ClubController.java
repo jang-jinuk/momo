@@ -1,5 +1,7 @@
 package com.momo.momopjt.club;
 
+import com.momo.momopjt.article.ArticleDTO;
+import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
@@ -35,8 +37,11 @@ public class ClubController {
   private UserService userService;
   @Autowired
   private UserAndClubService userAndClubService;
-@Autowired
-private PhotoService photoService;
+  @Autowired
+  private PhotoService photoService;
+  @Autowired
+  private ArticleService articleService;
+
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
@@ -52,7 +57,10 @@ private PhotoService photoService;
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
-    //0722 YY 
+     List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
+     model.addAttribute("articles", articles);
+
+    //0722 YY
 //    //scheduleDTOList에 담긴 사진 확인 로그
 //    for(ScheduleDTO s : scheduleDTOList) {
 //      log.trace(s.getSchedulePhoto());
