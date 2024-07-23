@@ -32,6 +32,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
         .alert-item:last-child {
             border-bottom: none;
@@ -44,13 +45,23 @@
             flex-grow: 1;
             margin-left: 10px;
         }
+        .alert-date {
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.9em;
+        }
         .delete-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             background-color: #ff4d4d;
             color: #fff;
             border: none;
-            padding: 8px 12px;
+            padding: 4px 8px;
             cursor: pointer;
             border-radius: 5px;
+            font-size: 0.8em;
         }
         .delete-button:hover {
             background-color: #ff1a1a;
@@ -92,8 +103,11 @@
     <h1>내 알림 목록</h1>
     <ul class="alert-list" th:each="alarm : ${alarms}">
         <li class="alert-item">
-            <span class="alert-type" th:text="${alarm.alarmType.message}"></span>
-            <div class="alert-content" th:text="${alarm.alarmContent}"></div>
+            <div class="alert-content">
+                <span class="alert-type" th:text="${alarm.alarmType.message}"></span>
+                <div th:text="${alarm.alarmContent}"></div>
+                <div class="alert-date" th:text="${#dates.format(alarm.alarmCreateDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+            </div>
             <button class="delete-button" th:onclick="'deleteAlarm(' + ${alarm.alarmNo} + ')'">삭제</button>
         </li>
     </ul>
