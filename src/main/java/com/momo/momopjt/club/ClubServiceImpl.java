@@ -54,7 +54,8 @@ public class ClubServiceImpl implements ClubService {
       throw new ClubNameException();
     }
 
-    Photo photo = photoService.savePhoto(photoDTO);
+//    Photo photo = photoService.savePhoto(photoDTO);
+    Photo photo = photoService.getPhoto("a0ac077b-3e10-468e-8502-4c9f8d7bb81b");
     clubDTO.setPhotoUUID(photo);
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
@@ -159,6 +160,12 @@ public class ClubServiceImpl implements ClubService {
 
     // 모임 삭제
     clubRepository.deleteById(clubNo);
+
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = getCurrentUser(); // 현재 사용자 정보를 반환하는 메서드
+    //모임 삭제 이벤트
+    alarmService.createClubDeletedAlarm(user,club);
+    log.info("-------- [모임 삭제시 모임장에게 알람 이벤트 전송]-------you");
 
     //해당 모임 대표사진 삭제
     if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경

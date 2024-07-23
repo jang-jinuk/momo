@@ -29,12 +29,25 @@ public class AlarmServiceImpl implements AlarmService {
     return alarmRepository.findByUserNo(user);
   }
 
+  //모임 생성시 모임장이 받는 알람
   @Override
   public void createClubCreatedAlarm(User user, Club club) {
     Alarm alarm = new Alarm();
     alarm.setUserNo(user);
     alarm.setAlarmType(AlarmType.CREATE);
     alarm.setAlarmContent(club.getClubName() + " 모임이 생성되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //모임 삭제시 모임장이 받는 알람
+  @Override
+  public void createClubDeletedAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.DELETE);
+    alarm.setAlarmContent(club.getClubName() + " 모임이 삭제되었습니다.");
     alarm.setAlarmCreateDate(Instant.now());
     alarm.setIsRead('0');
     alarmRepository.save(alarm);
@@ -80,7 +93,7 @@ public class AlarmServiceImpl implements AlarmService {
   public void createCancelParticipateAlarm(User user, Schedule schedule) {
     Alarm alarm = new Alarm();
     alarm.setUserNo(user);
-    alarm.setAlarmType(AlarmType.CANCEL_PARTICIPATE); // 새로운 알람 타입을 사용합니다.
+    alarm.setAlarmType(AlarmType.CANCEL_PARTICIPATE);
     alarm.setAlarmContent(schedule.getScheduleTitle() + " 일정 참가를 취소하셨습니다.");
     alarm.setAlarmCreateDate(Instant.now());
     alarm.setIsRead('0');

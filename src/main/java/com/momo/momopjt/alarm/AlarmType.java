@@ -3,6 +3,7 @@ package com.momo.momopjt.alarm;
 public enum AlarmType {
 
   CREATE("생성"),
+  DELETE("삭제"),
   JOIN("가입"),
   LEAVE("탈퇴"),
   LIKE("좋아요"),

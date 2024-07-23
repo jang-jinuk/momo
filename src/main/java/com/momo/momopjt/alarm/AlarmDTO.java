@@ -16,12 +16,12 @@ public class AlarmDTO {
 
   private User userNo;
 
-  private Character isRead='0'; // 기본값설정 읽으면 1
+  private Character isRead = '0'; // 기본값설정 읽으면 1
 
   private String alarmType; //
 
   private String alarmContent;
 
-  private Instant alarmCreateDate= Instant.now(); // 기본 값 설정
+  private Instant alarmCreateDate = Instant.now(); // 기본 값 설정
 
 }
