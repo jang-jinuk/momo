@@ -3,6 +3,9 @@ package com.momo.momopjt.club;
 //모임 CRUD기능 구현
 
 import com.momo.momopjt.alarm.AlarmService;
+import com.momo.momopjt.article.Article;
+import com.momo.momopjt.article.ArticleRepository;
+import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
@@ -13,6 +16,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyService;
+import com.momo.momopjt.schedule.Schedule;
+import com.momo.momopjt.schedule.ScheduleRepository;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
@@ -42,6 +49,10 @@ public class ClubServiceImpl implements ClubService {
   private final UserAndClubService userAndClubService;
   private final UserRepository userRepository;
   private final AlarmService alarmService;
+  private final ReplyService replyService;
+  private final ScheduleRepository scheduleRepository;
+  private final ArticleRepository articleRepository;
+  private final ArticleService articleService;
 
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
@@ -138,18 +149,42 @@ public class ClubServiceImpl implements ClubService {
   }
 
   //모임 해산
-  //일정, 게시글, 사진, 인원 삭제 필요
+  //일정, 게시글, 사진, 인원, 댓글 삭제 필요
+  //TODO 대표사진, 일정 사진, 후기 사진 삭제 로직 추가 필요 JW
   @Override
   public void deleteClub(Long clubNo) {
-    //TODO 해당 모임에 전체 게시글을 삭제하는 기능 추가 필요 JW
-
-    //해당 모임의 모든 일정 삭제
     Club club = new Club();
     club.setClubNo(clubNo);
+
+    //해당 모임의 모든 일정 댓글 삭제
+    List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(club);
+    for (Schedule schedule : scheduleList) {
+      List<Reply> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
+      for (Reply reply : replyList) {
+        replyService.deleteReply(reply.getReplyNo());
+      }
+    }
+
+    //해당 모임의 모든 일정 삭제
     scheduleService.deleteScheduleByClub(club);
+
+    //해당 모임의 모든 후기글 댓글 삭제
+    List<Article> articleList = articleRepository.findByClubNo(club);
+    for (Article article : articleList) {
+      List<Reply> replyList = replyService.readReplyAllByArticle(article.getArticleNo());
+      for (Reply reply : replyList) {
+        replyService.deleteReply(reply.getReplyNo());
+      }
+    }
+
+    //해당 모임의 모든 후기글 삭제
+    for (Article article : articleList) {
+      articleService.deleteArticle(article.getArticleNo());
+    }
 
     //해당 모임 맴버 전체 삭제
     userAndClubService.deleteAllMembers(clubNo);
+
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     club = result.orElseThrow();

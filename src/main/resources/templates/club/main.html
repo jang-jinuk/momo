@@ -52,9 +52,6 @@
         <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
         <hr>
         <h2>마감된 일정</h2>
-        <span>
-            <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
-        </span>
         <div class="row">
             <div class="col-4" th:each="schedule : ${endSchedules}">
                 <div class="card mb-3" style="max-width: 415px;">
