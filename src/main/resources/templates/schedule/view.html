@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <br>
     <div class="container">
         <div class="row">
@@ -27,10 +23,12 @@
                         <h1 th:text="${scheduleDTO.scheduleTitle}"></h1>
                     </div>
                     <div class="col-12">
-                        <p th:text="${scheduleDTO.schedulePlace}"></p>
+                        <p th:text="${#dates.format(scheduleDTO.scheduleStartDate, 'yyyy년 MM월 dd일 HH:mm')}"></p>
                     </div>
                     <div class="col-12">
-                        <p th:text="${#dates.format(scheduleDTO.scheduleStartDate, 'yyyy년 MM월 dd일 HH:mm')}"></p>
+                        <div id="map" style="width:300px;height:300px;margin-top:10px;"></div>
+                        <p  type="text" id="copyTxt" th:text="${scheduleDTO.schedulePlace}"></p>
+                        <button onclick="copyText()">복사하기</button>
                     </div>
                     <div class="col-12">
                     </div>
@@ -91,10 +89,53 @@
         </div>
     </div>
 </th:block>
-<script layout:fragment="script" th:inline="javascript">
+<th:block layout:fragment="script">
+<script th:inline="javascript">
     /*<![CDATA[*/
     var message = /*[[${message}]]*/ null;
     if (message) {
-        alert(message)
+    alert(message);
+    }
+
+    var address = /*[[${scheduleDTO.schedulePlace}]]*/ '';
+    /*]]>*/
+
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 5 // 지도의 확대 레벨
+        };
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(address, function(result, status) {
+
+    // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+    // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
+    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
+
+    function copyText() {
+        var copyTxt = document.getElementById("copyTxt").innerText;
+        navigator.clipboard.writeText(copyTxt).then(function() {
+            alert('주소가 복사되었습니다.');
+        });
     }
 </script>
+</th:block>
