@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -179,10 +178,10 @@ public class UserController {
     }
   }
 
-
+  //내 신고 페이지 조회/페이징
   @GetMapping("/profile/my-report")
   public String myReportGet(Model model,
-    @RequestParam(value = "page", defaultValue = "1") int page) {
+                            @RequestParam(value = "page", defaultValue = "1") int page) {
     log.info("...... [get profile/my-report]..........KSW");
     // 로그인된 사용자 정보 가져오기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -196,9 +195,9 @@ public class UserController {
 //    }
     List<ReportDTO> reportDTOS = reportService.readReport(user);
 
-     int totalReports = reportDTOS.size(); // 총 데이터 수
-     int pageSize = 10; // 한 번에 표시할 페이지 수
-     int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
+    int totalReports = reportDTOS.size(); // 총 데이터 수
+    int pageSize = 10; // 한 번에 표시할 페이지 수
+    int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
 
     // 페이지에 맞게 데이터 나누기
     int fromIndex = (page - 1) * pageSize;
@@ -219,5 +218,17 @@ public class UserController {
 
     log.info("...... [userIdReport]..........KSW");
     return "user/profile/my-report";  // 뷰 반환
+  }
+  //user프로필 조회
+  @GetMapping("/profile/dumyprofile")
+  public String getUserProfile(HttpSession session, Model model) {
+    String sessionData = (String) session.getAttribute("sessionData");
+    model.addAttribute("sessionData", sessionData);
+    // 사용자 ID로 사용자 정보를 조회
+    //User user = userService.findByUserId();  // findByUserNo 메서드 사용
+    // 모델에 사용자 정보 추가
+    //model.addAttribute("user", user);
+    // 프로필 페이지 템플릿 반환
+    return "user/profile/dumyprofile";
   }
 }
