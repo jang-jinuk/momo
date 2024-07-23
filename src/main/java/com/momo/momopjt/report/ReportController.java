@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -31,19 +34,23 @@ public class ReportController {
     reportDTO.setReportResult('0');
     reportDTO.setReportDate(Instant.now());
 
-    // 현재 로그인한 유저 정보 가져오기
-    // 이 부분은 실제 로그인한 사용자의 ID를 가져오는 방법에 따라 변경될 수 있습니다.
-      // 예시로 세션에서 가져온다고 가정합니다.
-    //Long loggedInUserId = (Long) request.getSession().getAttribute("loggedInUserId"); // 세션에서 로그인한 사용자 ID 가져오기
-    User reporter = userRepository.findById(2L).orElseThrow(); // 로그인한 유저
-    User reportedUser = userRepository.findById(reportedUserId).orElseThrow(); // 신고할 유저
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+     String userNameTest = authentication.getName();
+
+    User reporter = userRepository.findByUserId(userNameTest); // 로그인한 유저
+    User reported = userRepository.findById(reportedUserId).orElseThrow(); // 신고할 유저
 
     reportDTO.setReporterNo(reporter);
-    reportDTO.setReportedNo(reportedUser);
+    reportDTO.setReportedNo(reported);
 
     log.info("...... [{}]..........KSW", reportDTO.getReportCategory());
     reportService.addReport(reportDTO);
+
     return "redirect:" + request.getHeader("Referer"); // 이전 페이지 리디렉션
+  } else {
+    throw new RuntimeException("당신 누구야.");
+      }
+    }
   }
-}
 

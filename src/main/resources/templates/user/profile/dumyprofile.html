@@ -27,23 +27,28 @@
     </style>
 </head>
 <body>
-<h1>Session Data</h1>
-<p th:text="${sessionData}"></p>
-<h1>사용자 프로필</h1>
-<p>사용자 ID: <span th:text="${user.userId}"></span></p>
-<p>이메일: <span th:text="${user.userEmail}"></span></p>
-<p>닉네임: <span th:text="${user.userNickname}"></span></p>
-<p>성별: <span th:text="${user.userGender}"></span></p>
-<p>나이: <span th:text="${user.userAge}"></span></p>
-<p>생년월일: <span th:text="${user.userBirth}"></span></p>
-<p>주소: <span th:text="${user.userAddress}"></span></p>
-<p>MBTI: <span th:text="${user.userMBTI}"></span></p>
-<p>상태: <span th:text="${user.userState}"></span></p>
-<p>소셜: <span th:text="${user.userSocial}"></span></p>
-<p>프로필 사진: <span th:text="${user.userPhoto}"></span></p>
-<p>좋아요 수: <span th:text="${user.userLikeNumber}"></span></p>
-<p>생성일: <span th:text="${user.userCreateDate}"></span></p>
-<p>수정일: <span th:text="${user.userModifyDate}"></span></p>
+<div class="container">
+    <h1>사용자 프로필</h1>
+    <div>
+        <p>사용자 No: <span th:text="${user.userNo}"></span></p>
+        <p>사용자 ID: <span th:text="${user.userId}"></span></p>
+        <p>사용자 Pw: <span th:text="${user.userPw}"></span></p>
+        <p>이메일: <span th:text="${user.userEmail}"></span></p>
+        <p>닉네임: <span th:text="${user.userNickname}"></span></p>
+        <p>성별: <span th:text="${user.userGender}"></span></p>
+        <p>나이: <span th:text="${user.userAge}"></span></p>
+        <p>생년월일: <span th:text="${user.userBirth}"></span></p>
+        <p>사용자 관심사: <span th:text="${user.userCategory}"></span></p>
+        <p>주소: <span th:text="${user.userAddress}"></span></p>
+        <p>MBTI: <span th:text="${user.userMBTI}"></span></p>
+        <p>상태: <span th:text="${user.userState}"></span></p>
+        <p>소셜: <span th:text="${user.userSocial}"></span></p>
+        <p>프로필 사진: <img th:src="@{${user.userPhoto}}" alt="프로필 사진" width="100" height="100"/></p>
+        <p>좋아요 수: <span th:text="${user.userLikeNumber}"></span></p>
+        <p>생성일: <span th:text="${#dates.format(user.userCreateDate, 'yyyy-MM-dd')}"></span></p>
+        <p>수정일: <span th:text="${#dates.format(user.userModifyDate, 'yyyy-MM-dd')}"></span></p>
+    </div>
+</div>
 <div>
 <button onclick="location.href='/profile/dumyprofile'">프로필 페이지로 이동</button>
 </div>
@@ -92,12 +97,11 @@
                 <div class="report-button-container d-grid gap-4 col-6 mx-auto mt-6">
                     <input type="hidden" name="reporterId" th:value="${#authentication.name}">
                     <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
-                    <p>신고할 유저 ID: <span id="displayReportedNo"></span></p> <!-- 모달에서 보여줄 ID -->
                     <button type="button" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
-                    <span onclick="closeModal()" style="cursor:pointer; float:right;">닫기</span>
                 </div>
             </form>
         </nav>
+        <!-- todo 자기 자신이 로그인했으면 버튼 안보이게 함 <button th:if="${loggedInUserId != user.userId}" -->
         <span onclick="closeModal()" style="cursor:pointer; float:right;">닫기</span>
     </div>
 </div>

@@ -20,13 +20,12 @@
                         </a>
                         <div class="col-md-3 text-end">
                             <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">알림</button>
-                            <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">회원정보</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/user/profile/dumyprofile}'|">회원정보</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>
                             <button th:if="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/login}'|">Login</button>
-                            <!-- todo 임시 회원 정보페이지 -->
-                            <button onclick="location.href='/user/profile/dumyprofile'">userNo1 페이지로</button>
                         </div>
                     </header>
                         <span th:unless="${#authentication.name == 'anonymousUser'}" th:text="${#authentication.name} + 님"></span>

@@ -219,16 +219,24 @@ public class UserController {
     log.info("...... [userIdReport]..........KSW");
     return "user/profile/my-report";  // 뷰 반환
   }
-  //user프로필 조회
+
+  //user 프로필 조회
   @GetMapping("/profile/dumyprofile")
-  public String getUserProfile(HttpSession session, Model model) {
-    String sessionData = (String) session.getAttribute("sessionData");
-    model.addAttribute("sessionData", sessionData);
-    // 사용자 ID로 사용자 정보를 조회
-    //User user = userService.findByUserId();  // findByUserNo 메서드 사용
-    // 모델에 사용자 정보 추가
-    //model.addAttribute("user", user);
-    // 프로필 페이지 템플릿 반환
-    return "user/profile/dumyprofile";
+  public String getUserProfile(Model model) {
+    log.info("...... [UserController/getUserProfile/running]..........KSW");
+    // Spring Security의 SecurityContext에서 사용자 정보 가져오기
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserSecurityDTO) {
+      UserSecurityDTO userDetails = (UserSecurityDTO) authentication.getPrincipal();
+      String userId = userDetails.getUserId();
+      log.info("-----------User ID retrieved from SecurityContext: {}----------------", userId);
+
+      // 사용자 정보 조회
+      User user = userService.findByUserId(userId);
+      model.addAttribute("user", user);
+      model.addAttribute("loggedInUserId", userId);
+    }
+      return "user/profile/dumyprofile";
+    }
   }
-}
+
