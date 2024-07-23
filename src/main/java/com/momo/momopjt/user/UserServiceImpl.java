@@ -291,4 +291,8 @@ public class UserServiceImpl implements UserService {
             log.warn("User not found.");
         }
     }
+    @Override
+    public User findByUserNo(Long userNo) {
+        return userRepository.findById(userNo).orElse(null); // userNo로 User 찾기
+    }
 }
