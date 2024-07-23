@@ -10,9 +10,13 @@ import java.util.Optional;
 public interface AlarmService {
 
   List<Alarm> getAlarmsByUserId(User user);
+  //모임 알람
   void createJoinApprovalAlarm(User user, Club club);
   void createLeaveAlarm(User user, Club club);
+  //일정알람
   void createParticipateAlarm(User user, Schedule schedule);
+  void createCancelParticipateAlarm(User user, Schedule schedule);
+
   void deleteAlarm(Long alarmNo);
 
 }

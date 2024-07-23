@@ -217,6 +217,8 @@ public class ScheduleController {
     String message = scheduleService.leaveSchedule(scheduleNo, userAndScheduleDTO);
     redirectAttributes.addFlashAttribute("message", message);
 
+
+
     return "redirect:/schedule/" + scheduleNo;
   }
 

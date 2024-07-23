@@ -144,6 +144,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     schedule.setScheduleParticipants(participants - 1);
     scheduleRepository.save(schedule);
     log.info("------------ [참가 취소 완료] ------------");
+
+      // 참가 취소 알람 생성
+      User user = userAndScheduleDTO.getUserNo();
+      alarmService.createCancelParticipateAlarm(user, schedule);
+      log.info("------------[일정 참가 취소 이벤트 알림]---------------");
     }
     return "참석이 취소되었습니다.";
   }
