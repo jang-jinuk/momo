@@ -1,6 +1,8 @@
 package com.momo.momopjt.club;
 
+import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
@@ -9,7 +11,9 @@ import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -37,6 +41,12 @@ public class ClubController {
   private UserAndClubService userAndClubService;
 @Autowired
 private PhotoService photoService;
+  @Autowired
+  private PhotoRepository photoRepository;
+  @Qualifier("modelMapper")
+  @Autowired
+  private ModelMapper modelMapper;
+
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String mainPage(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
@@ -109,8 +119,8 @@ private PhotoService photoService;
   //모임 생성
   @PostMapping("/create")
   public String createClub(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
-
-
+    Photo photo = photoRepository.findById("a0ac077b-3e10-468e-8502-4c9f8d7bb81b").orElseThrow();
+    photoDTO = modelMapper.map(photo, PhotoDTO.class);
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -123,7 +133,6 @@ private PhotoService photoService;
     //TODO 파일 업로드 기능과 연결필요 JW
 
     try {
-
       clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
 
     } catch (ClubService.ClubNameException e) {

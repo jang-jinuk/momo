@@ -29,6 +29,17 @@ public class AlarmServiceImpl implements AlarmService {
     return alarmRepository.findByUserNo(user);
   }
 
+  @Override
+  public void createClubCreatedAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.CREATE);
+    alarm.setAlarmContent(club.getClubName() + " 모임이 생성되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
   // 모임 가입시 뜨는 알람
   @Override
   public void createJoinApprovalAlarm(User user, Club club) {
