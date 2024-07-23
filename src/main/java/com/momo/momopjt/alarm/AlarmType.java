@@ -6,7 +6,10 @@ public enum AlarmType {
   LEAVE("탈퇴"),
   LIKE("좋아요"),
   REPORT("신고"),
-  KICKOUT("강퇴");
+  KICKOUT("강퇴"),
+  PARTICIPATE("참가");
+
+
   private final String message;
 
   AlarmType(String message) {

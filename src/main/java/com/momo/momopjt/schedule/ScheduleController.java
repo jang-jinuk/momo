@@ -133,6 +133,7 @@ public class ScheduleController {
     Instant instant = zonedDateTime.toInstant();
     scheduleDTO.setScheduleStartDate(instant);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
+    scheduleDTO.setSchedulePhoto("baf05b22-434b-4a6f-bafb-1b565b2aad8e");
 
     Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
     log.info("------------ [일정 등록 완료] ------------");

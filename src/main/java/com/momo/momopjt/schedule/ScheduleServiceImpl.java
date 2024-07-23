@@ -1,8 +1,11 @@
 package com.momo.momopjt.schedule;
 //일정 CRUD 및 일정 참가 기능
 
+import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.photo.PhotoService;
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final ModelMapper modelMapper;
   private final UserAndScheduleService userAndScheduleService;
   private final PhotoService photoService;
+  private final AlarmService alarmService;
 
   //일정 생성
   @Override
@@ -41,6 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     userAndScheduleService.addParticipant(userAndScheduleDTO);
     log.info("------------ [주체자 등록 완료] ------------");
     return scheduleNo;
+
   }
 
   //특정 일정 조회
@@ -104,6 +109,10 @@ public class ScheduleServiceImpl implements ScheduleService {
       scheduleRepository.save(schedule);
       log.info("------------ [참가인원 추가 완료]------------");
 
+      // 참가 알람 생성
+      User user = userAndScheduleDTO.getUserNo();
+      alarmService.createParticipateAlarm(user, schedule);
+      log.info("---------------[참가인원 알림 이벤트 전송 완료]-----------------");
     } else {
       return "인원이 마감되었습니다.";
     }
