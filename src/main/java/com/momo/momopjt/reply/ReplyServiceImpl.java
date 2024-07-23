@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,26 @@ public class ReplyServiceImpl implements ReplyService {
     List<Reply> replyList = replyRepository.findAll();
     log.info("replyList: {}", replyList);
     return replyList;
+  }
 
+  @Override
+  public List<Reply> readReplyAllBySchedule(Long scheduleNo){
+    log.info("----------------- [readRepyAllBySchedule]-----------------");
+    List<Reply> replyByScheduleList = readReplyAll()
+        .stream()
+        .filter(reply -> reply.getScheduleNo().getScheduleNo()==scheduleNo)
+        .collect(Collectors.toList());
+    return replyByScheduleList;
+  }
 
+  @Override
+  public List<Reply> readReplyAllByArticle(Long articleNo) {
+    log.info("----------------- [readRepyAllByArticle]-----------------");
+    List<Reply> replyByArticleList = readReplyAll()
+        .stream()
+        .filter(reply -> reply.getArticleNo().getArticleNo()==articleNo)
+        .collect(Collectors.toList());
+    return replyByArticleList;
   }
 
   @Override
