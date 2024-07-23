@@ -45,8 +45,6 @@
                 <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
                 <tr th:each="member : ${userAndClubDTOS}">
                     <td th:text="${member.userNo.userNickname}"></td>
-                    <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
-                </tr>
                 </tbody>
             </table>
         </div>

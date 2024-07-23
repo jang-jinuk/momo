@@ -46,6 +46,8 @@ public class Club {
   @Column(name = "club_create_date", nullable = false)
   private Instant clubCreateDate;
 
+
+
 //  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //  private List<Article> articles;
   //모임 정보 수정 메소드

@@ -1,5 +1,6 @@
 package com.momo.momopjt.alarm;
 
+import com.momo.momopjt.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ public class AlarmDTO {
 
   private Long alarmNo;
 
-  private Long userNo;
+  private User userNo;
 
   private Character isRead='0'; // 기본값설정 읽으면 1
 

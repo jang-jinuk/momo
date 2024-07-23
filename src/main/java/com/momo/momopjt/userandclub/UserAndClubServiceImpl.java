@@ -2,6 +2,7 @@ package com.momo.momopjt.userandclub;
 
 //모임 맴버 관리 기능
 
+import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
 import java.util.Comparator;
@@ -9,16 +10,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
-
 import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleService;
+import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -27,6 +31,8 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @Transactional
 @RequiredArgsConstructor
+
+
 public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final ClubRepository clubRepository;
@@ -35,6 +41,8 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final ScheduleService scheduleService;
   private final UserAndScheduleService userAndScheduleService;
+  private final AlarmService alarmService; // 알림 서비스
+  private final UserRepository userRepository;
 
   private final ModelMapper modelMapper;
 
@@ -46,30 +54,36 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     userAndClubRepository.save(userAndClub);
   }
 
-  //모입 가입 승인
   @Override
   public Boolean approveJoin(UserAndClubDTO userAndClubDTO) {
     Optional<Club> result = clubRepository.findById(userAndClubDTO.getClubNo().getClubNo());
     Club club = result.orElseThrow();
 
-     int countMembers = countMembers(userAndClubDTO.getClubNo());
+    int countMembers = countMembers(userAndClubDTO.getClubNo());
 
-    if (club.getClubMax() == countMembers) { //모임 정원을 넘는지 확인
+    if (club.getClubMax() == countMembers) {
       return false;
     }
 
     UserAndClub userAndClub = userAndClubRepository.findByUserNoAndClubNo(
         userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
 
-    //가입 승인 날짜 추가
+    // 가입 승인 날짜 추가
     userAndClub.setJoinDate(Instant.now());
-    userAndClub.setIsLeader(false); //모임원 등록
+    userAndClub.setIsLeader(false); // 모임원 등록
     userAndClubRepository.save(userAndClub);
     log.info("-------------가입 승인 완료-------------");
 
+    // User 객체와 Club 객체가 null이 아닌지 확인
+    User user = userAndClub.getUserNo();
+    if (user == null || club == null) {
+      throw new IllegalArgumentException("User or Club cannot be null");
+    }
+    log.info("----------------모임 가입 신청 알림 이벤트 --------------");
+    alarmService.createJoinApprovalAlarm(user, club);
+
     return true;
   }
-
   //모임 탈퇴
   //등록한 일정, 게시글, 사진과 참석한 일정에서 삭제
   @Override
@@ -96,6 +110,18 @@ public class UserAndClubServiceImpl implements UserAndClubService {
 
     userAndClubRepository.deleteByClubNoAndUserNo(userAndClubDTO.getClubNo(),userAndClubDTO.getUserNo());
     log.info("-------------모임 탈퇴 완료-------------");
+
+    // User 객체와 Club 객체를 가져옴
+    Optional<User> userOptional = userRepository.findById(userAndClubDTO.getUserNo().getUserNo());
+    Optional<Club> clubOptional = clubRepository.findById(userAndClubDTO.getClubNo().getClubNo());
+
+    User user = userOptional.orElseThrow(() -> new IllegalArgumentException("User not found"));
+    Club club = clubOptional.orElseThrow(() -> new IllegalArgumentException("Club not found"));
+
+    // 모임 탈퇴 알림 이벤트 생성
+    log.info("----------------모임 탈퇴 알림 이벤트 --------------");
+    alarmService.createLeaveAlarm(user, club);
+
   }
 
   //모임 맴버 조회

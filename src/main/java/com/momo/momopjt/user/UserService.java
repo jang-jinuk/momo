@@ -8,6 +8,8 @@ public interface UserService {
 
     void updateUser(UserDTO userDTO);
 
+    User findByUserNo(Long userNo);
+
     String findUsernameByEmail(String userEmail);
 
     boolean resetPassword(String userId, String userEmail, String newPassword);

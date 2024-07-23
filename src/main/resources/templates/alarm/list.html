@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 알림 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .alert-list {
+            list-style: none;
+            padding: 0;
+        }
+        .alert-item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+        .alert-type {
+            font-weight: bold;
+        }
+        .alert-content {
+            margin-top: 5px;
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .alert-date {
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .delete-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        .delete-button:hover {
+            background-color: #ff1a1a;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .back-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+    <script>
+        function deleteAlarm(alarmNo) {
+            if (confirm('정말로 이 알림을 삭제하시겠습니까?')) {
+                fetch('/alarm/delete/' + alarmNo, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('알림 삭제에 실패했습니다.');
+                        }
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>내 알림 목록</h1>
+    <ul class="alert-list" th:each="alarm : ${alarms}">
+        <li class="alert-item">
+            <div class="alert-content">
+                <span class="alert-type" th:text="${alarm.alarmType.message}"></span>
+                <div th:text="${alarm.alarmContent}"></div>
+                <div class="alert-date" th:text="${#dates.format(alarm.alarmCreateDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+            </div>
+            <button class="delete-button" th:onclick="'deleteAlarm(' + ${alarm.alarmNo} + ')'">삭제</button>
+        </li>
+    </ul>
+    <a href="/home" class="back-link">홈으로 돌아가기</a>
+</div>
+</body>
+</html>

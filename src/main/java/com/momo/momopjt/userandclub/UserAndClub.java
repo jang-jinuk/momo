@@ -35,4 +35,12 @@ public class UserAndClub {
   @JoinColumn(name = "club_no", nullable = false)
   private Club clubNo;
 
+  public User getUserNo() {
+    return userNo;
+  }
+
+  public void setUserNo(User userNo) {
+    this.userNo = userNo;
+  }
+
 }

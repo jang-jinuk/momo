@@ -1,8 +1,10 @@
 package com.momo.momopjt.club;
 
+import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
@@ -11,7 +13,9 @@ import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,8 +44,12 @@ public class ClubController {
   @Autowired
   private PhotoService photoService;
   @Autowired
+  private PhotoRepository photoRepository;
+  @Autowired
   private ArticleService articleService;
-
+  @Qualifier("modelMapper")
+  @Autowired
+  private ModelMapper modelMapper;
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
@@ -49,6 +57,8 @@ public class ClubController {
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
+    log.info("------------clubNo {}------------",clubDTO.getClubNo());
+
     Club club = new Club();
     club.setClubNo(clubNo);
     List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정
@@ -131,7 +141,6 @@ public class ClubController {
     //TODO 파일 업로드 기능과 연결필요 JW
 
     try {
-
       clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
 
     } catch (ClubService.ClubNameException e) {
