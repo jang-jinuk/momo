@@ -19,11 +19,11 @@ public class Report {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "reporter_no", nullable = false)
-  private User reporterNo;
+  private User reporterNo;   //신고한사람
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "reported_no", nullable = false)
-  private User reportedNo;
+  private User reportedNo;  // 신고당한사람
 
   @Column(name = "report_category", nullable = false, length = 100)
   private String reportCategory;

@@ -19,7 +19,8 @@
                             <img src="/assets/favicon.ico">
                         </a>
                         <div class="col-md-3 text-end">
-                            <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">알림</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/alarm/list}'|">알림</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">회원정보</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>

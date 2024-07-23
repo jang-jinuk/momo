@@ -1,5 +1,6 @@
 package com.momo.momopjt.user;
 
+import com.momo.momopjt.alarm.Alarm;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,6 +49,8 @@ public class User {
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
 
+    @OneToMany(mappedBy = "userNo")
+    private List<Alarm> alarms;
 
   // 비밀번호 변경 메서드
   public void changePassword(String userPw){this.userPw = userPw;
