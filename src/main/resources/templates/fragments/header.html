@@ -32,13 +32,12 @@
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-secondary me-2">알림</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
-                                    type="button" class="btn btn-outline-secondary me-2">회원정보</button>
+                                    type="button" class="btn btn-outline-secondary me-2"
+                                    th:onclick="|location.href='@{/user/profile/dumyprofile/{userId}(userId=${#authentication.principal.userId})}'|">회원정보</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>
                             <button th:if="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/login}'|">Login</button>
-                            <button th:unless="${#authentication.name == 'anonymousUser'}"
-                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/user/profile/testprofile}'|">테스트 남의 프로필</button>
                         </div>
                     </header>
                     <span th:unless="${#authentication.name == 'anonymousUser'}" th:text="${#authentication.name} + 님"></span>

@@ -30,17 +30,12 @@
 <div class="container">
     <h1>사용자 프로필</h1>
     <div>
-        <p>사용자 No: <span th:text="${user.userNo}"></span></p>
-        <p>사용자 ID: <span th:text="${user.userId}"></span></p>
-        <p>사용자 Pw: <span th:text="${user.userPw}"></span></p>
-        <p>이메일: <span th:text="${user.userEmail}"></span></p>
         <p>닉네임: <span th:text="${user.userNickname}"></span></p>
-        <p>성별: <span th:text="${user.userGender}"></span></p>
-        <p>나이: <span th:text="${user.userAge}"></span></p>
+        <p>MBTI: <span th:text="${user.userMBTI}"></span></p>
+        <p>나이: <span th:text="${user.userAge}"></span> 성별: <span th:text="${user.userGender}"></span></p>
+        <p>주소: <span th:text="${user.userAddress}"></span></p>
         <p>생년월일: <span th:text="${user.userBirth}"></span></p>
         <p>사용자 관심사: <span th:text="${user.userCategory}"></span></p>
-        <p>주소: <span th:text="${user.userAddress}"></span></p>
-        <p>MBTI: <span th:text="${user.userMBTI}"></span></p>
         <p>상태: <span th:text="${user.userState}"></span></p>
         <p>소셜: <span th:text="${user.userSocial}"></span></p>
         <p>프로필 사진: <img th:src="@{${user.userPhoto}}" alt="프로필 사진" width="100" height="100"/></p>
@@ -58,6 +53,13 @@
 <!-- 신고 버튼 -->
 <div><!-- 자기 자신이 로그인했으면 버튼 안보이게 함 <button th:if="${loggedInUserId != user.userId}" -->
     <button th:if="${loggedInUserId != user.userId}" onclick="openModal()" class="btn btn-primary">신고하기</button>
+
+    <div th:if="${errorCategoryMessage}" style="color: red;">
+        <p th:text="${errorCategoryMessage}"></p> <!-- 에러 메시지 표시 -->
+    </div>
+    <div    th:if="${successMessage}" style="color: blue;">
+        <p th:text="${successMessage}"></p>
+    </div>
 </div>
 <!-- 신고 버튼 끝 -->
 
@@ -114,6 +116,11 @@
 <script>
     function openModal() {
         document.getElementById('myModal').style.display = 'block'; // 모달 표시
+
+        const radioButtons = document.querySelectorAll('#myModal input[type="radio"]');
+        radioButtons.forEach(function(radio) {
+            radio.checked = false; // 모든 라디오 버튼의 선택 해제
+        });
     }
     function closeModal() {
         document.getElementById('myModal').style.display = 'none'; // 모달 닫기

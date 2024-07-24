@@ -5,7 +5,6 @@ import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,10 +30,10 @@ public class ReportController {
 
   //신고하기
   @PostMapping("/create")
-  public String reportUser(@RequestParam Long reportedUserId, ReportDTO reportDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-    log.info("...... [ReportController/reportCreate/running]..........KSW");
-    reportDTO.setReportResult('0');
-    reportDTO.setReportDate(Instant.now());
+  public String reportUserPOST(@RequestParam Long reportedUserId, ReportDTO reportDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    log.info("...... [ReportController/reportCreate/running POST]..........KSW");
+    reportDTO.setReportResult('0'); // 신고 상태(쓰이진 않음)
+    reportDTO.setReportDate(Instant.now()); // 신고 날짜
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
@@ -53,16 +52,17 @@ public class ReportController {
 
         log.info("...... [{}]..........KSW", reportDTO.getReportCategory()); // 카테고리 로그 출력
         reportService.addReport(reportDTO); // 신고 저장
+        redirectAttributes.addFlashAttribute("successMessage", "신고가 성공적으로 제출되었습니다.");
+        return "redirect:/user/profile/dumyprofile/" + reported.getUserId(); // 성공 시 이동
 
-        return "redirect:/user/profile/testprofile"; // 성공 시 이동
       } catch (RuntimeException e) {
-        log.info("...... [예외 처리 뭔가 걸림]..........KSW");
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/user/profile/testprofile"; // 에러 발생 시 리다이렉트
+        log.info("...... [카테고리 들어온 값이 없음!]..........KSW");
+        redirectAttributes.addFlashAttribute("errorCategoryMessage", e.getMessage());
+        return "redirect:" + request.getHeader("Referer"); // 기존 뷰로 가기
       }
     } else {
-      redirectAttributes.addFlashAttribute("errorMessage", "당신 누구야."); // 인증 실패 메시지
-      return "redirect:" + request.getHeader("Referer"); // 기존 뷰로 리디렉션
+      redirectAttributes.addFlashAttribute("errorUserMessage", "알 수 없는 에러"); // 인증 실패 메시지
+      return "redirect:" + request.getHeader("Referer"); // 기존 뷰로 가기
     }
   }
 }

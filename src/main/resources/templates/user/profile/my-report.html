@@ -20,7 +20,9 @@
 <table class="container">
     <thead>
     <div>
-        <button onclick="location.href='/user/profile/dumyprofile'">내 프로필로</button>
+        <button th:unless="${#authentication.name == 'anonymousUser'}"
+                type="button" class="btn btn-outline-secondary me-2"
+                th:onclick="|location.href='@{/user/profile/dumyprofile/{userId}(userId=${#authentication.principal.userId})}'|">내 프로필로</button>
     </div>
     <tr>
         <th scope="col">신고번호</th>
@@ -37,7 +39,8 @@
     <tr th:each="report : ${reportDTOS}">
         <td th:text="${report.reportNo}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
-        <td th:text="${report.reportedNo.getUserNickname()}"></td>
+        <td> <a th:href="@{/user/profile/dumyprofile/{userId}(userId=${report.reportedNo.userId})}"
+                th:text="${report.reportedNo.getUserNickname()}"></a></td>
         <td th:text="${report.reportCategory}"></td>
         <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
         <td>
