@@ -186,7 +186,7 @@ public class UserController {
     // 로그인된 사용자 정보 가져오기
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName(); // 사용자 이름 가져오기
-    // 사용자 정보 조회 (username을 통해 User 객체를 가져오는 로직 필요)
+
     User user = userService.findByUserId(username); // 사용자 서비스에서 사용자 정보 조회
 //    if (user == null) {
 //      // 사용자 정보를 찾을 수 없는 경우 처리
@@ -236,7 +236,21 @@ public class UserController {
       model.addAttribute("user", user);
       model.addAttribute("loggedInUserId", userId);
     }
-      return "user/profile/dumyprofile";
-    }
+    return "user/profile/dumyprofile";
   }
+
+  //남의 프로필 테스트용
+  @GetMapping("/profile/testprofile")
+  public String getTsetProfile(Model model) {
+    log.info("...... [UserController/getTsetProfile/running]..........KSW");
+
+    User user = userService.findByUserId("uWPWrYOKuYXmccwuOvsjVv7TjLPGQ9fZ9ZtvI3NIWKI");
+    User userId = userService.findByUserId("test2");// userNo 1번 조회
+    model.addAttribute("user", user); // 모델에 사용자 정보 추가
+    model.addAttribute("loggedInUserId", userId);
+
+    return "user/profile/testprofile"; // 프로필 페이지 템플릿 반환
+  }
+}
+
 

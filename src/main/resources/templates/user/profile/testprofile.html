@@ -28,7 +28,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>사용자 프로필</h1>
+    <h1>1번의 프로필</h1>
     <div>
         <p>사용자 No: <span th:text="${user.userNo}"></span></p>
         <p>사용자 ID: <span th:text="${user.userId}"></span></p>
@@ -49,15 +49,18 @@
         <p>수정일: <span th:text="${#dates.format(user.userModifyDate, 'yyyy-MM-dd')}"></span></p>
     </div>
 </div>
-    <div>
-        <button onclick="location.href='/home'">홈으로</button>
-    </div>
-    <div>
-        <button th:if="${loggedInUserId == user.userId}" onclick="location.href='/user/profile/my-report'">내 신고내역</button>
-    </div>
+<div>
+    <button onclick="location.href='/home'">홈으로</button>
+</div>
+<div>
+    <button th:if="${loggedInUserId == user.userId}" onclick="location.href='/user/profile/my-report'">내 신고내역</button>
+</div>
 <!-- 신고 버튼 -->
 <div><!-- 자기 자신이 로그인했으면 버튼 안보이게 함 <button th:if="${loggedInUserId != user.userId}" -->
     <button th:if="${loggedInUserId != user.userId}" onclick="openModal()" class="btn btn-primary">신고하기</button>
+    <div th:if="${errorMessage}" style="color: red;">
+        <p th:text="${errorMessage}"></p> <!-- 에러 메시지 표시 -->
+    </div>
 </div>
 <!-- 신고 버튼 끝 -->
 
