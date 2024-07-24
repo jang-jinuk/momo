@@ -16,20 +16,16 @@ public class PhotoDTO {
 
   private String photoUUID;
 
-  private Long photoSize;
+  private String photoURL;
 
   private Instant photoCreateDate;
 
   private String photoOriginalName;
 
-  private String photoSaveName;
+  private User uploader; // User의 ID만 전달
 
-  private String photoThumbnail;
-
-  private byte[] photoData;
-
-  private Article articleNo;
-
-  private User userNo;
+  private Character tag; // User, Club, Schedule, Article 속성 어디에 필요한 것인지 명시
 
 }
+
+
