@@ -30,18 +30,13 @@
 <div class="container">
     <h1>사용자 프로필</h1>
     <div>
+        <p>프로필 사진: <img th:src="@{${user.userPhoto}}" alt="프로필 사진" width="100" height="100"/></p>
         <p>닉네임: <span th:text="${user.userNickname}"></span></p>
         <p>MBTI: <span th:text="${user.userMBTI}"></span></p>
         <p>나이: <span th:text="${user.userAge}"></span> 성별: <span th:text="${user.userGender}"></span></p>
         <p>주소: <span th:text="${user.userAddress}"></span></p>
-        <p>생년월일: <span th:text="${user.userBirth}"></span></p>
         <p>사용자 관심사: <span th:text="${user.userCategory}"></span></p>
-        <p>상태: <span th:text="${user.userState}"></span></p>
-        <p>소셜: <span th:text="${user.userSocial}"></span></p>
-        <p>프로필 사진: <img th:src="@{${user.userPhoto}}" alt="프로필 사진" width="100" height="100"/></p>
         <p>좋아요 수: <span th:text="${user.userLikeNumber}"></span></p>
-        <p>생성일: <span th:text="${#dates.format(user.userCreateDate, 'yyyy-MM-dd')}"></span></p>
-        <p>수정일: <span th:text="${#dates.format(user.userModifyDate, 'yyyy-MM-dd')}"></span></p>
     </div>
 </div>
     <div>
