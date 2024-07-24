@@ -1,5 +1,10 @@
 package com.momo.momopjt.file;
 
+import com.momo.momopjt.photo.PhotoDTO;
+import com.momo.momopjt.photo.PhotoRepository;
+import com.momo.momopjt.photo.PhotoService;
+import com.momo.momopjt.photo.PhotoServiceImpl;
+import com.momo.momopjt.user.User;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -16,15 +21,25 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 @RestController
 @Log4j2
 public class FileController {
 
+  private final PhotoServiceImpl photoServiceImpl;
+  private final PhotoService photoService;
+  private final PhotoRepository photoRepository;
   //600p
   @Value("${com.momo.upload.path}")
   private String uploadPath;
+
+  public FileController(PhotoServiceImpl photoServiceImpl, PhotoService photoService, PhotoRepository photoRepository) {
+    this.photoServiceImpl = photoServiceImpl;
+    this.photoService = photoService;
+    this.photoRepository = photoRepository;
+  }
 
   //599p
   @ApiOperation(value = "파일업로드")
@@ -57,6 +72,20 @@ public class FileController {
         try{
           log.info("----------------- [TRY file save]-----------------");
           multipartFile.transferTo(savePath);
+          log.info("----------------- [TRY file save at DB]-----------------");
+          User user = new User();
+          user.setUserNo(1L);
+          photoService.savePhoto(multipartFile, PhotoDTO.builder()
+                  .photoData(multipartFile.getBytes())
+                  .photoUUID(UUID.randomUUID().toString())
+                  .photoCreateDate(Instant.now())
+                  .photoSize((int)multipartFile.getSize())
+                  .photoOriginalName(originalFileName)
+                  .userNo(user)
+              .build());
+
+          log.info("----------------- [isDone?]-----------------");
+
 
           //603p 이미지 파일인 경우 썸네일 파일 생성
           if(Files.probeContentType(savePath).startsWith("image")){
@@ -83,6 +112,8 @@ public class FileController {
       return uploadResultDTOList;
     }// end if
     return null;
+
+
   }
 
 //  GET방식 파일 조회

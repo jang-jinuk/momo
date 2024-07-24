@@ -18,9 +18,10 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class PhotoServiceImpl implements PhotoService {
 
-  private final ModelMapper modelMapper;
   private final PhotoRepository photoRepository;
   private final ClubRepository clubRepository;
+
+  private final ModelMapper modelMapper;
 
   @Override
   public Photo savePhoto(PhotoDTO photoDTO) {
@@ -45,6 +46,34 @@ public class PhotoServiceImpl implements PhotoService {
     log.info("------------------Photo saved--------------------");
     return photo;
   }
+
+
+/*
+@Override
+  public Photo updatePhoto(MultipartFile file, PhotoDTO photoDTO) throws IOException {
+
+    byte[] fileBytes = file.getBytes();// 실제 작동시 이걸로
+    log.info("----------------- [file.getBytes]-----------------", fileBytes);
+    //이건 임시
+    byte[] testNewBytes = new byte[]{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
+
+    Photo photo = photoRepository.findById(photoDTO.getPhotoUUID()).orElseThrow();
+    photo.setPhotoData(testNewBytes);
+    if ( photo != null ){
+
+      Photo newPhoto = modelMapper.map(photoDTO, Photo.class);
+      photoRepository.save(newPhoto);
+      return newPhoto;
+
+    } else {
+
+    return photo;
+
+    }
+
+  }*/
+
+
 
 
   @Override

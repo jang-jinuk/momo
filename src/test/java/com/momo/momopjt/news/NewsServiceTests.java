@@ -2,6 +2,7 @@ package com.momo.momopjt.news;
 
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,19 +15,27 @@ class NewsServiceTests {
 
   @Autowired
   private NewsService newsService;
+  @Autowired
+  private ModelMapper modelMapper;
 
   //Test 순서대로 Create, Read, ReadAll, Update, Delete
   @Test
   void newsCreateTest(){
     log.info("----------------- [news create test]-----------------");
-    News tempNews = new News();
-    tempNews.setNewsNo(100L); // 없는거 지정하면 알아서 Auto-increment 들어감
-    tempNews.setNewsContent("createTestContent");
-    tempNews.setNewsCreateDate(Instant.now()); //
-    tempNews.setNewsModifyDate(null);
-    tempNews.setNewsTag("testTag"); // char(10) 넘지않게
-    tempNews.setNewsTitle("createTestTitle");
-    newsService.createNews(tempNews);
+
+    for (int i=1; i<100; i++) {
+
+      NewsDTO tempNewsDTO = new NewsDTO();
+      tempNewsDTO.setNewsNo(-1L); // 없는거 지정하면 알아서 Auto-increment 들어감
+      tempNewsDTO.setNewsContent("TestContent"+i);
+      tempNewsDTO.setNewsCreateDate(Instant.now()); //
+      tempNewsDTO.setNewsModifyDate(null);
+      tempNewsDTO.setNewsTag("tag"+i%10);
+//      tempNews.setNewsTag("testTag"); // char(10) 넘지않게
+      tempNewsDTO.setNewsTitle("testTitle"+i);
+      newsService.createNews(tempNewsDTO);
+
+    }
 
   }
 
@@ -49,13 +58,14 @@ class NewsServiceTests {
     log.info("----------------- [news update test]-----------------");
     //1번 정보를 2번에다가 업데이트
     News willUpdateNews = newsService.readNews(1L);
+    NewsDTO updateNewsDTO = modelMapper.map(willUpdateNews, NewsDTO.class);
 
     log.info("willUpdateNews modifyDate (1L) : "+willUpdateNews.getNewsModifyDate());
 
     //modify date 추가
-    willUpdateNews.setNewsModifyDate(Instant.now());
-    willUpdateNews.setNewsNo(2L);
-    newsService.updateNews(willUpdateNews);
+    updateNewsDTO.setNewsModifyDate(Instant.now());
+    updateNewsDTO.setNewsNo(2L);
+    newsService.updateNews(updateNewsDTO);
 
 
     News newsCheckUpdated = newsService.readNews(2L);

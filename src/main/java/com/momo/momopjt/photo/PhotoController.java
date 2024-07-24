@@ -34,6 +34,9 @@ public class PhotoController {
 //    MIME_TYPES.put("png", MediaType.IMAGE_PNG_VALUE);
 //  }
 
+  // 파일경로 확인 test
+//    String uploadPath = System.getProperty("user.dir");
+//    log.info("----------------- [{}]-----------------",uploadPath);
 
   @GetMapping("/photo/photo")
   public String photoGet() {

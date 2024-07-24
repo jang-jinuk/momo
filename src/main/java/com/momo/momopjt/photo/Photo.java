@@ -43,6 +43,11 @@ public class Photo {
   private byte[] photoData;
 
   @NotNull
+  @Column(name = "photo_data")
+  @Lob
+  private byte[] photoData;
+
+  @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)
   private User userNo;

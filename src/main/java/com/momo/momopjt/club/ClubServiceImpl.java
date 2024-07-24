@@ -41,19 +41,21 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class ClubServiceImpl implements ClubService {
 
-  private final ClubRepository clubRepository;
-  private final ScheduleService scheduleService;
-  private final UserAndClubRepository userAndClubRepository;
-  private final PhotoService photoService;
-  private final ModelMapper modelMapper;
-  private final UserAndClubService userAndClubService;
   private final UserRepository userRepository;
-  private final AlarmService alarmService;
-  private final ReplyService replyService;
+  private final ClubRepository clubRepository;
   private final ScheduleRepository scheduleRepository;
   private final ArticleRepository articleRepository;
-  private final ArticleService articleService;
+  private final UserAndClubRepository userAndClubRepository;
 
+  private final ArticleService articleService;
+  private final ScheduleService scheduleService;
+  private final AlarmService alarmService;
+  private final ReplyService replyService;
+  private final PhotoService photoService;
+  private final UserAndClubService userAndClubService;
+
+  private final ModelMapper modelMapper;
+  
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
@@ -101,7 +103,7 @@ public class ClubServiceImpl implements ClubService {
 
   // 특정 모임 조회
   @Override
-  @Transactional
+//  @Transactional TODO 지울지 확인 0724 YY 
   public ClubDTO readOneClub(Long clubNo) {
     Optional<Club> result = clubRepository.findById(clubNo);
 
