@@ -64,3 +64,31 @@ h1 {
 p {
     margin-bottom: 1rem;
 }
+
+.member-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: #ccc;
+    border-radius: 5px;
+}
+
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-info h5 {
+    margin: 0 0 10px 0;
+}
+
+.member-info p {
+    margin: 5px 0;
+}

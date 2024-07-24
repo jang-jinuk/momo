@@ -12,6 +12,17 @@
             </div>
         </div>
         <div class="row">
+            <div class="member-container">
+                <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image">
+                <div class="member-info">
+                    <h5 th:text="${articleDTO.userNo.userNickname}"></h5>
+                    <p th:text="${articleDTO.userNo.userAddress}"></p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <div class="row">
             <h2 th:text="${articleDTO.articleTitle}">제목</h2>
             <p th:text="${articleDTO.articleContent}">내용</p>
 
@@ -20,11 +31,13 @@
         </div>
         <div class="row">
             <div class="col-8"></div>
-            <div class="col-4">
+            <div class="col-4" th:if="${articleDTO.userNo.userId} == ${#authentication.name}">
                 <button type="button" th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">수정</button>
                 <button type="button" onclick="confirmDelete()">삭제</button>
             </div>
         </div>
+        <hr>
+        <br>
         <div class="row"> <!-- 댓글 입력창 부분 -->
 
             <form id="articleReplyForm" action="/reply/create" method="post">
