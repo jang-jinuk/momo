@@ -1,6 +1,8 @@
 package com.momo.momopjt.user;
 
 
+import com.momo.momopjt.article.ArticleDTO;
+import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.find.EmailService;
@@ -37,6 +39,7 @@ public class UserController {
   private final EmailService emailService;
   private final ModelMapper modelMapper;
   private final ReportService reportService;
+  private final ArticleService articleService;
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -222,8 +225,8 @@ public class UserController {
 
   //user 프로필 조회
   @GetMapping("/profile/dumyprofile/{userId}")
-  public String getUserProfile(@PathVariable String userId, Model model) {
-    log.info("...... [UserController/getUserProfile/running]..........KSW");
+  public String getUserProfileGET(@PathVariable String userId, Model model) {
+    log.info("...... [UserController/getUserProfileGET/running GET]..........KSW");
 
     // 사용자 정보 조회
     User user = userService.findByUserId(userId);
@@ -242,6 +245,11 @@ public class UserController {
         model.addAttribute("loggedInUserId", loggedInUserId); // 로그인한 사용자 ID 설정
         model.addAttribute("isOwnProfile", loggedInUserId.equals(userId)); // 로그인한 사용자의 프로필인지 여부
       }
+
+      // 사용자가 쓴 후기 조회
+      List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
+      model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
+
     } else {
       // 사용자 정보가 없는 경우의 처리
       log.warn("User not found for ID: {}", userId);

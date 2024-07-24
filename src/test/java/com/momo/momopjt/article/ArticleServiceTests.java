@@ -70,7 +70,7 @@ public class ArticleServiceTests {
   @Test
   void getAllArticles() {
     Club club = Club.builder().clubNo(1L).build();
-    List<ArticleDTO> articles = articleService.getAllArticles(club);
+    List<ArticleDTO> articles = articleService.getAllArticlesByClub(club);
     log.info(articles);
   }
 

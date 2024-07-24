@@ -2,6 +2,9 @@ package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyService;
+import com.momo.momopjt.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -22,6 +25,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   private final ArticleRepository articleRepository;
   private final ClubRepository clubRepository;
+  private final ReplyService replyService;
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
@@ -37,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
 
  //모든 후기글 가져오는 메서드
  @Override
- public List<ArticleDTO> getAllArticles(Club clubNo) {
+ public List<ArticleDTO> getAllArticlesByClub(Club clubNo) {
    List<Article> articles = articleRepository.findByClubNo(clubNo);
    List<ArticleDTO> articleDTOS = articles.stream()
        .map(article -> modelMapper.map(article, ArticleDTO.class))
@@ -45,6 +49,15 @@ public class ArticleServiceImpl implements ArticleService {
 
    return articleDTOS;
  }
+
+  @Override
+  public List<ArticleDTO> getAllArticlesByUser(User userNo) {
+    List<Article> articles = articleRepository.findByUserNo(userNo);
+    List<ArticleDTO> articleDTOS = articles.stream()
+        .map(article -> modelMapper.map(article, ArticleDTO.class))
+        .collect(Collectors.toList());
+    return articleDTOS;
+  }
 
 
  // 특정 아이디의 후기글을 가져오는 메서드
