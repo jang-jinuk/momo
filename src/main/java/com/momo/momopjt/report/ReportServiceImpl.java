@@ -58,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
 
   //유저 제제 (수정)
   @Override
-  public void activateUser(ReportDTO reportDTO) {
+  public void deactivateUser(ReportDTO reportDTO) {
     log.info("...... [updateReport START]..........KSW");
 
     Optional<Report> suspend = reportRepository.findById(reportDTO.getReportNo());

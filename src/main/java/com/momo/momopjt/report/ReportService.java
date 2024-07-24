@@ -12,7 +12,7 @@ public interface ReportService {
   //신고 전부 조회
   List<ReportDTO> readAllReport();
   //유저 제제(수정)
-  void activateUser(ReportDTO reportDTO);
+  void deactivateUser(ReportDTO reportDTO);
   //유저 제제해제(수정)
   void reactivateUser(ReportDTO reportDTO);
   //내역 삭제
