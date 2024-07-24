@@ -49,7 +49,7 @@ public class SecurityConfig {
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
-        .antMatchers("/admin/**").hasRole("ADMIN")
+        //.antMatchers("/admin/**").hasRole("ADMIN") todo 잠깐 죽여놓음
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/home")

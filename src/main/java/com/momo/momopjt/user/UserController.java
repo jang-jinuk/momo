@@ -1,6 +1,8 @@
 package com.momo.momopjt.user;
 
 
+import com.momo.momopjt.article.ArticleDTO;
+import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.find.EmailService;
@@ -37,6 +39,7 @@ public class UserController {
   private final EmailService emailService;
   private final ModelMapper modelMapper;
   private final ReportService reportService;
+  private final ArticleService articleService;
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -221,35 +224,37 @@ public class UserController {
   }
 
   //user 프로필 조회
-  @GetMapping("/profile/dumyprofile")
-  public String getUserProfile(Model model) {
-    log.info("...... [UserController/getUserProfile/running]..........KSW");
-    // Spring Security의 SecurityContext에서 사용자 정보 가져오기
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof UserSecurityDTO) {
-      UserSecurityDTO userDetails = (UserSecurityDTO) authentication.getPrincipal();
-      String userId = userDetails.getUserId();
-      log.info("-----------User ID retrieved from SecurityContext: {}----------------", userId);
+  @GetMapping("/profile/dumyprofile/{userId}")
+  public String getUserProfileGET(@PathVariable String userId, Model model) {
+    log.info("...... [UserController/getUserProfileGET/running GET]..........KSW");
 
-      // 사용자 정보 조회
-      User user = userService.findByUserId(userId);
+    // 사용자 정보 조회
+    User user = userService.findByUserId(userId);
+
+    // 사용자 정보가 존재하는지 확인
+    if (user != null) {
       model.addAttribute("user", user);
       model.addAttribute("loggedInUserId", userId);
+
+      // 현재 로그인한 사용자 정보 확인
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication != null && authentication.getPrincipal() instanceof UserSecurityDTO) {
+        UserSecurityDTO userDetails = (UserSecurityDTO) authentication.getPrincipal();
+        String loggedInUserId = userDetails.getUserId();
+
+        model.addAttribute("loggedInUserId", loggedInUserId); // 로그인한 사용자 ID 설정
+        model.addAttribute("isOwnProfile", loggedInUserId.equals(userId)); // 로그인한 사용자의 프로필인지 여부
+      }
+
+      // 사용자가 쓴 후기 조회
+      List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
+      model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
+
+    } else {
+      // 사용자 정보가 없는 경우의 처리
+      log.warn("User not found for ID: {}", userId);
+      return "error/userNotFound"; // 사용자 없음 처리 페이지 (없음)
     }
-    return "user/profile/dumyprofile";
+    return "user/profile/dumyprofile"; // 프로필 뷰 페이지 반환
   }
-
-  //남의 프로필 테스트용
-  @GetMapping("/profile/testprofile")
-  public String getTsetProfile(Model model) {
-    log.info("...... [UserController/getTsetProfile/running]..........KSW");
-
-    User user = userService.findByUserId("uWPWrYOKuYXmccwuOvsjVv7TjLPGQ9fZ9ZtvI3NIWKI");
-    User userId = userService.findByUserId("test2");// userNo 1번 조회
-    model.addAttribute("user", user); // 모델에 사용자 정보 추가
-    model.addAttribute("loggedInUserId", userId);
-
-    return "user/profile/testprofile"; // 프로필 페이지 템플릿 반환
-  }
-
 }

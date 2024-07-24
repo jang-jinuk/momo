@@ -26,6 +26,7 @@ public class ArticleServiceImpl implements ArticleService {
   private final ArticleRepository articleRepository;
   private final ClubRepository clubRepository;
   private final ReplyService replyService;
+
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
@@ -39,7 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
 
- //모든 후기글 가져오는 메서드
+ //모임의 모든 후기글 가져오는 메서드
  @Override
  public List<ArticleDTO> getAllArticlesByClub(Club clubNo) {
    List<Article> articles = articleRepository.findByClubNo(clubNo);
@@ -50,9 +51,10 @@ public class ArticleServiceImpl implements ArticleService {
    return articleDTOS;
  }
 
+ //유저의 후기글 가져오는 메서드
   @Override
   public List<ArticleDTO> getAllArticlesByUser(User userNo) {
-    List<Article> articles = articleRepository.findByuUserNo(userNo);
+    List<Article> articles = articleRepository.findByUserNo(userNo);
     List<ArticleDTO> articleDTOS = articles.stream()
         .map(article -> modelMapper.map(article, ArticleDTO.class))
         .collect(Collectors.toList());
@@ -60,11 +62,12 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
 
- // 특정 아이디의 후기글을 가져오는 메서드
+ // 특정 아이디의 후기글을 1개 가져오는 메서드
   @Override
   public ArticleDTO getArticleById(Long articleNo) {
+
     boolean check = articleRepository.existsById(articleNo);
-    // 0724 YY return 두개... ㅎㅎ 수정
+
     if(check){
       Optional<Article> optionalArticle = articleRepository.findById(articleNo);
 

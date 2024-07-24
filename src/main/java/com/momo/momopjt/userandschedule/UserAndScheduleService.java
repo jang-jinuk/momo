@@ -2,6 +2,7 @@ package com.momo.momopjt.userandschedule;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
+import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.user.UserDTO;
 
 import java.util.List;
