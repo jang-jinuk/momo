@@ -68,9 +68,9 @@ public class ArticleServiceTests {
 
   //후기글 모두 조회
   @Test
-  void getAllArticles() {
+  void getAllArticlesByClub() {
     Club club = Club.builder().clubNo(1L).build();
-    List<ArticleDTO> articles = articleService.getAllArticles(club);
+    List<ArticleDTO> articles = articleService.getAllArticlesByClub(club);
     log.info(articles);
   }
 

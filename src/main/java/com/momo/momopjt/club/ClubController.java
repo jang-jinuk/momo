@@ -1,6 +1,5 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.PhotoDTO;
@@ -65,7 +64,7 @@ public class ClubController {
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
-     List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
+     List<ArticleDTO> articles = articleService.getAllArticlesByClub(club); //후기 글
      model.addAttribute("articles", articles);
 
     //0722 YY

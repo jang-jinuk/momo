@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
-    <div class="container">
+    <div class="container" style="width: 850px">
         <div class="row">
             <div class="col-10"></div>
             <div class="col-2">
@@ -12,6 +12,7 @@
             </div>
         </div>
         <div class="row">
+            <h1 th:text="${articleDTO.articleTitle}">제목</h1>
             <div class="member-container">
                 <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image">
                 <div class="member-info">
@@ -20,14 +21,9 @@
                 </div>
             </div>
         </div>
-        <br>
-        <hr>
         <div class="row">
-            <h2 th:text="${articleDTO.articleTitle}">제목</h2>
-            <p th:text="${articleDTO.articleContent}">내용</p>
-
-            <input type="hidden" name="_method" value="delete" />
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <textarea th:text="${articleDTO.articleContent}" style="width: 100%; height: 400px; resize: none; border: none;"
+                      class="form-control" id="content" readonly></textarea>
         </div>
         <div class="row">
             <div class="col-8"></div>
@@ -36,7 +32,6 @@
                 <button type="button" onclick="confirmDelete()">삭제</button>
             </div>
         </div>
-        <hr>
         <br>
         <div class="row"> <!-- 댓글 입력창 부분 -->
 
