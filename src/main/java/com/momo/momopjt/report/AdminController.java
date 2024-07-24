@@ -25,9 +25,9 @@ public class AdminController {
   //조회와 페이징 검색
   @GetMapping("/manage-report")
   public String manageReportGet(Model model,
-                                @RequestParam(value = "page", defaultValue = "1") int page,
-                                @RequestParam(value = "query", defaultValue = "") String query) {
-    log.info(".......... [GET /manage-report]..........KSW");
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             @RequestParam(value = "query", defaultValue = "") String query) {
+    log.info("...... [ReportController/manage-report/running GET]..........KSW");
     // 검색어를 사용하여 리포트 조회
     List<ReportDTO> findReports;
 
@@ -59,6 +59,7 @@ public class AdminController {
     model.addAttribute("query", query); // 검색어를 모델에 추가
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
+    log.info("...... [AdminController/manage-report/ END]..........KSW");
     return "admin/manage-report";
   }
 

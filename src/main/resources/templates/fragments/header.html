@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="headerFragment">
 <head>
     <title>MOMO</title>
     <meta charset="UTF-8">
@@ -16,6 +15,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+<th:block th:fragment="headerFragment">
+
     <header>
         <nav class="navbar bg-body-tertiary">
             <div class="container-fluid">
@@ -26,12 +27,15 @@
                         </a>
                         <div class="col-md-3 text-end">
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
-                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/alarm/list}'|">알림</button>
-                            <button th:unless="${#authentication.name == 'anonymousUser'}" type="button" class="btn btn-outline-secondary me-2">회원정보</button>
+                                    type="button" class="btn btn-outline-secondary me-2">알림</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-secondary me-2">회원정보</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>
                             <button th:if="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/login}'|">Login</button>
+                            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/user/profile/testprofile}'|">테스트 남의 프로필</button>
                         </div>
                     </header>
                     <span th:unless="${#authentication.name == 'anonymousUser'}" th:text="${#authentication.name} + 님"></span>

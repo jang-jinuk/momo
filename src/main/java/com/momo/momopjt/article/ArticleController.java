@@ -20,8 +20,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-@Log4j2
 @RequestMapping("/article")
+@Log4j2
 public class ArticleController {
 
   @Autowired
@@ -36,7 +36,8 @@ public class ArticleController {
 
   // 새로운 후기글 작성 폼을 보여주는 페이지
   @GetMapping("/create")
-  public String showCreateForm(@RequestParam(value = "scheduleNo", required = false)Long scheduleNo, Model model) {
+  public String createArticleGet(@RequestParam(value = "scheduleNo", required = false)Long scheduleNo, Model model) {
+    log.info("----------------- [GET article /create]-----------------");
     if (scheduleNo != null) {
       ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
       model.addAttribute("scheduleDTO", scheduleDTO);
@@ -47,7 +48,8 @@ public class ArticleController {
 
   // 새로운 후기글을 생성하는 메서드
   @PostMapping("/create")
-  public String createArticle(@ModelAttribute ArticleDTO articleDTO, HttpSession session) {
+  public String createArticlePost(@ModelAttribute ArticleDTO articleDTO, HttpSession session) {
+    log.info("----------------- [POST article /create]-----------------");
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
@@ -109,4 +111,5 @@ public class ArticleController {
     redirectAttributes.addFlashAttribute("message", "후기글이 삭제되었습니다.");
     return "redirect:/club/main/" + clubNo; // 삭제 후 글 목록 페이지로 리디렉션
   }
+
 }

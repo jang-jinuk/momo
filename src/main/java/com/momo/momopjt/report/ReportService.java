@@ -12,10 +12,10 @@ public interface ReportService {
   //신고 전부 조회
   List<ReportDTO> readAllReport();
   //유저 제제(수정)
-  void suspendUser(ReportDTO reportDTO);
+  void activateUser(ReportDTO reportDTO);
   //유저 제제해제(수정)
   void reactivateUser(ReportDTO reportDTO);
-  //상태 수정후 삭제
+  //내역 삭제
   void deleteReport(Long reportNo);
   //검색 페이징
   List<ReportDTO> searchReports(String query);
