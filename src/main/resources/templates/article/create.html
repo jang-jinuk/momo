@@ -1,37 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>글 작성</title>
-  <script th:inline="javascript">
-    /* Thymeleaf의 JavaScript 인라인 사용 */
-    function limitTitleLength() {
-      var maxLength = 50;
-      var title = document.getElementById("articleTitle").value;
-      if (title.length > maxLength) {
-        document.getElementById("articleTitle").value = title.substring(0, maxLength);
-      }
-    }
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
+        <label for="articleTitle">제목:</label>
+        <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
+               oninput="limitTitleLength()"><br>
+        <label for="articleContent">내용:</label>
+        <textarea name="articleContent" id="articleContent" requiredoninput="limitTextarea()"></textarea><br>
+        <button type="submit">제출하기</button>
+    </form>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
 
+        /* Thymeleaf의 JavaScript 인라인 사용 */
+        function limitTitleLength() {
+            var maxLength = 50;
+            var title = document.getElementById("articleTitle").value;
+            if (title.length > maxLength) {
+                document.getElementById("articleTitle").value = title.substring(0, maxLength);
+            }
+        }
 
-    function limitTextarea() {
-      var maxLength = 500;
-      var text = document.getElementById("articleContent").value;
-      if (text.length > maxLength) {
-        document.getElementById("articleContent").value = text.substring(0, maxLength);
-      }
-    }
-  </script>
-</head>
-<body>
-<form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
-  <label for="articleTitle">제목:</label>
-  <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
-         oninput="limitTitleLength()"><br>
-  <label for="articleContent">내용:</label>
-  <textarea name="articleContent" id="articleContent" requiredoninput="limitTextarea()"></textarea><br>
-  <button type="submit">제출하기</button>
-</form>
-</body>
-</html>
-
+        function limitTextarea() {
+            var maxLength = 500;
+            var text = document.getElementById("articleContent").value;
+            if (text.length > maxLength) {
+                document.getElementById("articleContent").value = text.substring(0, maxLength);
+            }
+        }
+    </script>
+</th:block>

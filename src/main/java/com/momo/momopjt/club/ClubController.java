@@ -57,8 +57,6 @@ public class ClubController {
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
-    log.info("------------clubNo {}------------",clubDTO.getClubNo());
-
     Club club = new Club();
     club.setClubNo(clubNo);
     List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정

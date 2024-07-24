@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ArticleService {
 
-  Article createArticle(ArticleDTO articleDTO);
+  Long createArticle(ArticleDTO articleDTO);
   ArticleDTO getArticleById(Long articleNo);
   //모든 게시글을 반환하는 메서드
   //시스템에 저장된 모든 게시글을 필요로 할 때 사용

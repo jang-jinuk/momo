@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -58,17 +59,20 @@ public class ArticleController {
     club.setClubNo(clubNo);
     articleDTO.setClubNo(club);
 
-    articleService.createArticle(articleDTO);
-    return "redirect:/article/list"; // 생성 후 후기글 목록 페이지로 리디렉션
+    Long articleNo = articleService.createArticle(articleDTO);
+    return "redirect:/article/" + articleNo;
   }
 
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
-  public String getArticleById(@PathVariable Long articleNo, Model model) {
-    log.info("-------- [get ArticleById : {}]-------you",articleNo);
+  public String getArticleById(@PathVariable Long articleNo, Model model, HttpSession session) {
+    log.info("-------- [get ArticleById]-------you");
+
+    Long clubNo = (Long) session.getAttribute("clubNo");
+    model.addAttribute("clubNo", clubNo);
+
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", articleDTO);
-    model.addAttribute("articleNo", articleNo);
 
     //출력할 댓글 조회 YY
     List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
@@ -93,15 +97,16 @@ public class ArticleController {
   public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
     log.info("-------- [article update]-------you");
     articleService.updateArticle(articleNo, articleDTO);
-    return "redirect:/article/list"; // 수정 후 후기글 목록 페이지로 리디렉션
+    return "redirect:/article/" + articleNo; // 수정 후 후기글 목록 페이지로 리디렉션
   }
 
   // 기존 후기글을 삭제하는 메서드
-  @PostMapping("/delete/{articleNo}")
-  public String deleteArticle(@PathVariable Long articleNo) {
+  @GetMapping("/delete/{articleNo}")
+  public String deleteArticle(@PathVariable Long articleNo, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("-------- [article delete] -------");
+    Long clubNo = (Long) session.getAttribute("clubNo");
     articleService.deleteArticle(articleNo);
-    return "redirect:/article/list"; // 삭제 후 글 목록 페이지로 리디렉션
+    redirectAttributes.addFlashAttribute("message", "후기글이 삭제되었습니다.");
+    return "redirect:/club/main/" + clubNo; // 삭제 후 글 목록 페이지로 리디렉션
   }
-
 }

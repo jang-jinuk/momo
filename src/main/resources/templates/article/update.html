@@ -1,15 +1,38 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>편집</title>
-    <script type="text/javascript">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
+    <head>
+        <meta charset="UTF-8">
+        <title>편집</title>
+
+    </head>
+    <div class="container">
+        <div class="row">
+            <form th:action="@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}" th:object="${articleDTO}"
+                  method="post">
+                <label for="articleTitle">제목:</label>
+                <input type="text" id="articleTitle" th:field="*{articleTitle}" required><br>
+                <label for="articleContent">내용:</label>
+                <textarea id="articleContent" th:field="*{articleContent}" required></textarea><br>
+                <div>글자 수: <span id="charCount">0/500</span></div>
+                <br>
+                <button type="submit">수정하기</button>
+                <button type="button" th:onclick="history.back()">취소</button>
+            </form>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
         // textarea의 글자 수 제한과 현재 입력한 글자 수 표시
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             var textarea = document.getElementById('articleContent');
             var maxLength = 500;
 
-            textarea.addEventListener('input', function() {
+            textarea.addEventListener('input', function () {
                 var currentLength = textarea.value.length;
                 if (currentLength > maxLength) {
                     textarea.value = textarea.value.slice(0, maxLength);
@@ -21,7 +44,7 @@
             var titleInput = document.getElementById('articleTitle');
             var maxTitleLength = 50;
 
-            titleInput.addEventListener('input', function() {
+            titleInput.addEventListener('input', function () {
                 var currentTitleLength = titleInput.value.length;
                 if (currentTitleLength > maxTitleLength) {
                     titleInput.value = titleInput.value.slice(0, maxTitleLength);
@@ -30,19 +53,4 @@
             });
         });
     </script>
-</head>
-
-<body>
-
-<h1>편집</h1>
-<form th:action="@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}" th:object="${articleDTO}" method="post">
-    <label for="articleTitle">제목:</label>
-    <input type="text" id="articleTitle" th:field="*{articleTitle}" required><br>
-    <label for="articleContent">내용:</label>
-    <textarea id="articleContent" th:field="*{articleContent}" required></textarea><br>
-    <div>글자 수: <span id="charCount">0/500</span></div><br>
-    <button type="submit">수정하기</button>
-</form>
-<a th:href="@{/article}">Back to List</a>
-</body>
-</html>
+</th:block>

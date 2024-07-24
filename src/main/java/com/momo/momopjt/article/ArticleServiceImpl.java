@@ -22,16 +22,16 @@ public class ArticleServiceImpl implements ArticleService {
 
   private final ArticleRepository articleRepository;
   private final ClubRepository clubRepository;
-
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
   @Override
-  public Article createArticle(ArticleDTO articleDTO) {
+  public Long createArticle(ArticleDTO articleDTO) {
     articleDTO.setArticleNo(-1L);
     articleDTO.setArticleCreateDate(Instant.now());
     Article article = modelMapper.map(articleDTO, Article.class);
-    return articleRepository.save(article);
+    article = articleRepository.save(article);
+    return article.getArticleNo();
   }
 
 

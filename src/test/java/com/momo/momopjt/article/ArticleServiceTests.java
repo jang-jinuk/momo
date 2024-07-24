@@ -35,7 +35,7 @@ public class ArticleServiceTests {
         .articleState('0')
         .articleScore(2)
         .build();
-    Article createdArticle = articleService.createArticle(articleDTO);
+    Long articleNo = articleService.createArticle(articleDTO);
   }
 
 
@@ -61,7 +61,7 @@ public class ArticleServiceTests {
         .articleScore(2)
         .build();
 
-    Article createdArticle = articleService.createArticle(articleDTO);
+    Long articleNo = articleService.createArticle(articleDTO);
 
   }
 
