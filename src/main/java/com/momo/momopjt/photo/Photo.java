@@ -27,23 +27,18 @@ public class Photo {
 
   @Size(max = 255)
   @NotNull
-  @Column(name = "photo_original_name", nullable = false)
+  @Column(name = "photo_original_name")
   private String photoOriginalName;
 
   @NotNull
-  @Column(name = "photo_size", nullable = false)
+  @Column(name = "photo_size")
   private Long photoSize;
 
   @Size(max = 255)
   @Column(name = "photo_thumbnail")
   private String photoThumbnail;
 
-  @Lob
   @Column(name= "photo_data")
-  private byte[] photoData;
-
-  @NotNull
-  @Column(name = "photo_data")
   @Lob
   private byte[] photoData;
 

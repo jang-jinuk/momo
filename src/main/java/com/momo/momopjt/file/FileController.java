@@ -75,16 +75,17 @@ public class FileController {
           log.info("----------------- [TRY file save at DB]-----------------");
           User user = new User();
           user.setUserNo(1L);
-          photoService.savePhoto(multipartFile, PhotoDTO.builder()
-                  .photoData(multipartFile.getBytes())
-                  .photoUUID(UUID.randomUUID().toString())
-                  .photoCreateDate(Instant.now())
-                  .photoSize((int)multipartFile.getSize())
-                  .photoOriginalName(originalFileName)
-                  .userNo(user)
-              .build());
+          // TODO 필요시 수정  0724 YY //
+          //          photoService.savePhoto(multipartFile, PhotoDTO.builder()
+//                  .photoData(multipartFile.getBytes())
+//                  .photoUUID(UUID.randomUUID().toString())
+//                  .photoCreateDate(Instant.now())
+//                  .photoSize(multipartFile.getSize())
+//                  .photoOriginalName(originalFileName)
+//                  .userNo(user)
+//              .build());
 
-          log.info("----------------- [isDone?]-----------------");
+          log.info("----------------- [need fix]-----------------");
 
 
           //603p 이미지 파일인 경우 썸네일 파일 생성
