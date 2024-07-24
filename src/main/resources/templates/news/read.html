@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
     <title>News Read</title>
@@ -84,23 +86,28 @@
 
     <div class="container">
         <div class="input-group mb-6">
-            <textarea class="form-control" id="newsContent" name="newsContent" rows="6"
-                      th:text="${news.newsContent}"></textarea>
+            <textarea class="form-control" id="newsContent" name="newsContent" rows="10"
+                      th:text="${news.newsContent}"
+                      th:readonly="${!#authorization.expression('hasRole(''ADMIN'')')}">
+            <!-- 만약 admin 아니면 readonly -->
+            </textarea>
         </div>
         <!--YY-->
         <div class="d-grid gap-4 col-2 mx-auto">
-            <button class="btn btn-primary" type="submit" >등록/수정</button>
+            <button sec:authorize="hasRole('ADMIN')" class="btn btn-primary" type="submit" >등록/수정</button>
             <!--onclick="submitNewsForm('/news/create')"-->
             <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
-            <button class="btn btn-primary" type="button" th:onclick="window.location.href='/news/main'">돌아가기</button>
+            <div> </div>
+            <button class="btn btn-primary" type="button" th:onclick="|location.href='/news/main/'|">돌아가기</button>
 
         </div>
+        <!-- TODO 수정필요 이거 왜있지?? -->
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <!--활성화된 신고하기 버튼-->
             <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
             <!--YY-->
             <button class="btn btn-danger"
-                    th:onclick="window.location.href='../../report/create'"
+                    th:onclick="|window.location.href='../../report/create'|"
                     type="button">신고하기
             </button>
             <!--YY-->

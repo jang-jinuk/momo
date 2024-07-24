@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
     <title>News Main</title>
@@ -22,7 +24,7 @@
         <th scope="col">제목</th>
         <th scope="col">등록일</th>
         <th scope="col">수정</th>
-        <th scope="col">삭제</th>
+        <th scope="col" sec:authorize="hasRole('ADMIN')">delete</th>
     </tr>
     </thead>
     <tbody>
@@ -43,8 +45,13 @@ odd: 홀수 인덱스인지 여부 (true 또는 false)
 first: 첫 번째 요소인지 여부 (true 또는 false)
 last: 마지막 요소인지 여부 (true 또는 false)
 -->
-<!--날짜 예쁘게 표시
+<!--
+날짜 예쁘게 표시
 <span th:text="${#dates.format(news.dateTime, 'yyyy-MM-dd HH:mm')}"></span>
+
+시큐리티 로그인, role 가진 사람 표시
+<div sec:authorize="isAuthenticated()"></div>
+<div sec:authorize="hasRole('ADMIN')"></div>
 
 -->
 <!--YY-->
@@ -59,7 +66,7 @@ last: 마지막 요소인지 여부 (true 또는 false)
         </td>
         <td th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
         <td>수정칸</td>
-        <td>
+        <td sec:authorize="hasRole('ADIMIN')">
             <form action="/news/delete/" method="post">
                 <input type="hidden" name="newsNo" th:value="${news.newsNo}">
             <button type="submit" class="btn btn-danger">삭제하기</button>
