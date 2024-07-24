@@ -22,6 +22,7 @@ public class ArticleServiceImpl implements ArticleService {
 
   private final ArticleRepository articleRepository;
   private final ClubRepository clubRepository;
+
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
@@ -49,11 +50,20 @@ public class ArticleServiceImpl implements ArticleService {
  // 특정 아이디의 후기글을 가져오는 메서드
   @Override
   public ArticleDTO getArticleById(Long articleNo) {
-    Optional<Article> optionalArticle = articleRepository.findById(articleNo);
-    return optionalArticle.map(article -> {
-      modelMapper.getConfiguration().setAmbiguityIgnored(true); // 충돌 무시 설정
+    boolean check = articleRepository.existsById(articleNo);
+    // 0724 YY return 두개... ㅎㅎ 수정
+    if(check){
+      Optional<Article> optionalArticle = articleRepository.findById(articleNo);
+
+//      return optionalArticle.map(article -> {
+//        modelMapper.getConfiguration().setAmbiguityIgnored(true); // 충돌 무시 설정
+//        return modelMapper.map(article, ArticleDTO.class);
+//      }).orElse(null);
+
+      Article article = optionalArticle.orElseThrow();
       return modelMapper.map(article, ArticleDTO.class);
-    }).orElse(null);
+    }
+    return null;
   }
 
 

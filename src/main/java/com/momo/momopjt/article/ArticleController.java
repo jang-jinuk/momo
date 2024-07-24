@@ -1,6 +1,8 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @Log4j2
@@ -26,6 +29,8 @@ public class ArticleController {
   private ScheduleService scheduleService;
   @Autowired
   private UserService userService;
+  @Autowired
+  private ReplyService replyService;
 
 
   // 새로운 후기글 작성 폼을 보여주는 페이지
@@ -60,9 +65,17 @@ public class ArticleController {
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
   public String getArticleById(@PathVariable Long articleNo, Model model) {
-    log.info("-------- [get ArticleById]-------you");
-    ArticleDTO article = articleService.getArticleById(articleNo);
-    model.addAttribute("article", article);
+    log.info("-------- [get ArticleById : {}]-------you",articleNo);
+    ArticleDTO articleDTO = articleService.getArticleById(articleNo);
+    model.addAttribute("articleDTO", articleDTO);
+    model.addAttribute("articleNo", articleNo);
+
+    //출력할 댓글 조회 YY
+    List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
+
+    //출력할 댓글 추가 YY
+    model.addAttribute("replyList",replyList);
+
     return "article/detail"; // "articles/detail.html" 뷰를 반환
   }
 

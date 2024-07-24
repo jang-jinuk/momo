@@ -5,6 +5,8 @@
  */
 package com.momo.momopjt.reply;
 
+import com.momo.momopjt.article.Article;
+import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleDTO;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.Instant;
 
 @Controller
@@ -30,7 +33,7 @@ public class ReplyController {
 
   private final UserService userService;
   private final ScheduleService  scheduleService;
-  private final ArticleService artcleService;
+  private final ArticleService articleService;
   private final ReplyService replyService;
   private final ModelMapper modelMapper;
 
@@ -55,9 +58,25 @@ public class ReplyController {
     replyDTO.setReplyState('0');
     replyDTO.setUserNo(user);
 
-    ScheduleDTO s = scheduleService.readOneSchedule(replyDTO.getScheduleNo().getScheduleNo());
-    Schedule schedule = modelMapper.map(s, Schedule.class);
-    replyDTO.setScheduleNo(schedule);
+    // Schedule 댓글인지 Article 댓글인지 처리
+
+//    log.info("----------------- [{}]-----------------",replyDTO);
+//    log.info("----------------- [{}]-----------------",replyDTO.getScheduleNo());
+//    log.info("----------------- [{}]-----------------",replyDTO.getScheduleNo().getScheduleNo());
+//    log.info("----------------- [{}]-----------------",scheduleService.readOneSchedule(replyDTO.getScheduleNo().getScheduleNo()));
+
+    if(replyDTO.getScheduleNo()!=null)
+    {
+      ScheduleDTO s = scheduleService.readOneSchedule(replyDTO.getScheduleNo().getScheduleNo());
+      Schedule schedule = modelMapper.map(s, Schedule.class);
+      replyDTO.setScheduleNo(schedule);
+    }
+    if(replyDTO.getArticleNo()!=null) {
+      ArticleDTO a = articleService.getArticleById(replyDTO.getArticleNo().getArticleNo());
+      Article article = modelMapper.map(a, Article.class);
+      replyDTO.setArticleNo(article);
+    }
+
     //test
 //    Article article = new Article();
 //    article.setArticleNo(-1L);

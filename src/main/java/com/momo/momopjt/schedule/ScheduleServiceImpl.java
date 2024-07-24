@@ -53,9 +53,15 @@ public class ScheduleServiceImpl implements ScheduleService {
   //특정 일정 조회
   @Override
   public ScheduleDTO readOneSchedule(Long scheduleNo) {
+    // 0724 YY
+    boolean checkExist = scheduleRepository.existsById(scheduleNo);
+    if(checkExist){
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
-    return modelMapper.map(schedule, ScheduleDTO.class);
+    return modelMapper.map(schedule, ScheduleDTO.class); }
+//    return null;
+    ScheduleDTO scheduleDTO = new ScheduleDTO();
+    return scheduleDTO;
   }
 
   //일정 정보 수정

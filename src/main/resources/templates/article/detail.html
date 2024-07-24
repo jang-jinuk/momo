@@ -9,10 +9,49 @@
     </script>
 </head>
 <body>
-<h2 th:text="${article.articleTitle}">제목</h2>
-<p th:text="${article.articleContent}">내용</p>
+<div class="container">
+    <div class="row"> <!-- 후기글 표시 부분 -->
+
+        <h2 th:text="${articleDTO.articleTitle}">제목</h2>
+        <p th:text="${articleDTO.articleContent}">내용</p>
+
+    </div>
+    <div class="row"> <!-- 댓글 입력창 부분 -->
+
+        <form id="articleReplyForm" action="/reply/create" method="post">
+            <div>
+                <label for="replyContent">Reply Content:</label>
+                <textarea id="replyContent" name="replyContent" required></textarea>
+            </div>
+            <div>
+                <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+            </div>
+            <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
+        </form>
+
+    </div>
+    <div class="row"> <!-- 댓글 표시 부분 -->
+
+        <div class="reply" th:each="reply : ${replyList}">
+            <hr>
+            <span th:text="${reply.getReplyContent()}"></span>
+            <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
+            <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
+            <span>작성자필요<!--TODO--></span>
+            <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
+            <form id="replyDeleteForm" action="/reply/delete" method="post">
+                <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
+                <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
 <a th:href="@{/article}">목록으로</a>
-<form th:action="@{/article/delete/{articleNo}(articleNo=${article.articleNo})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+<form th:action="@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
     <input type="hidden" name="_method" value="delete" />
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     <button type="submit">삭제</button>

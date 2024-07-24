@@ -50,20 +50,20 @@ public class ReplyServiceImpl implements ReplyService {
 
   @Override
   public List<Reply> readReplyAllBySchedule(Long scheduleNo){
-    log.info("----------------- [readRepyAllBySchedule]-----------------");
+    log.info("----------------- [readReplyAllBySchedule]-----------------");
     List<Reply> replyByScheduleList = readReplyAll()
         .stream()
-        .filter(reply -> reply.getScheduleNo().getScheduleNo()==scheduleNo)
+        .filter(reply -> reply.getScheduleNo() != null && reply.getScheduleNo().getScheduleNo() == scheduleNo)
         .collect(Collectors.toList());
     return replyByScheduleList;
   }
 
   @Override
   public List<Reply> readReplyAllByArticle(Long articleNo) {
-    log.info("----------------- [readRepyAllByArticle]-----------------");
+    log.info("----------------- [readReplyAllByArticle]-----------------");
     List<Reply> replyByArticleList = readReplyAll()
         .stream()
-        .filter(reply -> reply.getArticleNo().getArticleNo()==articleNo)
+        .filter(reply -> reply.getArticleNo() != null && reply.getArticleNo().getArticleNo() == articleNo)
         .collect(Collectors.toList());
     return replyByArticleList;
   }

@@ -190,6 +190,7 @@ public class ScheduleController {
 
     //출력할 댓글 추가
     model.addAttribute("replyList",replyList);
+
     return "schedule/view";
   }
 
