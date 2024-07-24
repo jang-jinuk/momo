@@ -22,21 +22,17 @@ public class QPhoto extends EntityPathBase<Photo> {
 
     public static final QPhoto photo = new QPhoto("photo");
 
-    public final com.momo.momopjt.article.QArticle articleNo;
-
     public final DateTimePath<java.time.Instant> photoCreateDate = createDateTime("photoCreateDate", java.time.Instant.class);
-
-    public final ArrayPath<byte[], Byte> photoData = createArray("photoData", byte[].class);
 
     public final StringPath photoOriginalName = createString("photoOriginalName");
 
-    public final NumberPath<Long> photoSize = createNumber("photoSize", Long.class);
-
-    public final StringPath photoThumbnail = createString("photoThumbnail");
+    public final StringPath photoURL = createString("photoURL");
 
     public final StringPath photoUUID = createString("photoUUID");
 
-    public final com.momo.momopjt.user.QUser userNo;
+    public final ComparablePath<Character> tag = createComparable("tag", Character.class);
+
+    public final com.momo.momopjt.user.QUser uploader;
 
     public QPhoto(String variable) {
         this(Photo.class, forVariable(variable), INITS);
@@ -56,8 +52,7 @@ public class QPhoto extends EntityPathBase<Photo> {
 
     public QPhoto(Class<? extends Photo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.articleNo = inits.isInitialized("articleNo") ? new com.momo.momopjt.article.QArticle(forProperty("articleNo"), inits.get("articleNo")) : null;
-        this.userNo = inits.isInitialized("userNo") ? new com.momo.momopjt.user.QUser(forProperty("userNo")) : null;
+        this.uploader = inits.isInitialized("uploader") ? new com.momo.momopjt.user.QUser(forProperty("uploader")) : null;
     }
 
 }
