@@ -6,8 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,5 +92,29 @@ public class PhotoServiceImpl implements PhotoService {
   public void deletePhoto(String photoUUID) {
     photoRepository.deleteById(photoUUID);
   }
+
+
+
+  //YY
+  @Override
+  public String saveFile(MultipartFile file) {
+
+    String uploadPath = "C:\\uploadtest";
+
+
+    log.info("----------------- [PhotoServiceImpl saveFile() run]-----------------");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+    Calendar calendar = Calendar.getInstance();
+    String SysFileName=
+        sdf.format(calendar.getTime())+file.getOriginalFilename();
+    File saveFile = new File(uploadPath, SysFileName);
+            //.substring(file.getOriginalFilename().length()-4;
+
+//    return sysFileName;
+    return null;
+  }
+
+
+
 
 }

@@ -68,51 +68,70 @@
     document.addEventListener('DOMContentLoaded', setMinDateTime);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
+    <script>
 
-    const form1 = document.getElementById("schedulePhotoForm");
-    const form2 = document.getElementById("scheduleForm");
-    const submitBtn = document.getElementById("createScheduleBtn");
-
-    submitBtn.addEventListener('click', async function (e) {
-        e.preventDefault();
+        //YY 0725
 
 
-        console.log("----------------------try form submit start------------------");
-        try {
-            await Promise.all([submitForm(form1), submitForm(form2)]);
-
-        } catch (error) {
-            console.error('Error submitting forms:', error);
-        }
-        console.log("----------------------form submit end------------------");
-
-    });
-
-    function submitForm(form) {
-        return new Promise((resolve, reject) => {
-            const formData = new FormData(form);
-
-            axios({
-                method: form.method,
-                url: form.action,
-                data: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        function readURL(input) {
+            var file = input.files[0]
+            console.log(file)
+            if (file != '') {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+                    console.log(e.target)
+                    console.log(e.target.result)
+                    $('#preview').attr('src', e.target.result);
                 }
-            })
-                .then(response => {
-                    if (response.status >= 200 && response.status < 300) {
-                        resolve(); // Resolve the Promise if the submission is successful
-                    } else {
-                        reject(new Error(`HTTP error ${response.status}`)); // Reject the Promise if there's an error
-                    }
-                })
-                .catch(error => {
-                    reject(error); // Reject the Promise if there's an error
-                });
-        });
-    }
+            }
+        }
+
+
+
+        //    const form1 = document.getElementById("schedulePhotoForm");
+//    const form2 = document.getElementById("scheduleForm");
+//    const submitBtn = document.getElementById("createScheduleBtn");
+//
+//    submitBtn.addEventListener('click', async function (e) {
+//        e.preventDefault();
+//
+//
+//        console.log("----------------------try form submit start------------------");
+//        try {
+//            await Promise.all([submitForm(form1), submitForm(form2)]);
+//
+//        } catch (error) {
+//            console.error('Error submitting forms:', error);
+//        }
+//        console.log("----------------------form submit end------------------");
+//
+//    });
+//
+//    function submitForm(form) {
+//        return new Promise((resolve, reject) => {
+//            const formData = new FormData(form);
+//
+//            axios({
+//                method: form.method,
+//                url: form.action,
+//                data: formData,
+//                headers: {
+//                    'Content-Type': 'multipart/form-data'
+//                }
+//            })
+//                .then(response => {
+//                    if (response.status >= 200 && response.status < 300) {
+//                        resolve(); // Resolve the Promise if the submission is successful
+//                    } else {
+//                        reject(new Error(`HTTP error ${response.status}`)); // Reject the Promise if there's an error
+//                    }
+//                })
+//                .catch(error => {
+//                    reject(error); // Reject the Promise if there's an error
+//                });
+//        });
+//    }
 
 
     // const form1 = document.getElementById("schedulePhotoForm");

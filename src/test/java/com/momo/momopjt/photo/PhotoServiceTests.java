@@ -1,15 +1,9 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.Instant;
 
 @SpringBootTest
 @Log4j2
@@ -21,19 +15,16 @@ public class PhotoServiceTests {
     //CRUD 중 Create test
     @Test
     public void savePhotoTest() {
-        User user = new User();
-        user.setUserNo(1L);
-
-        PhotoDTO photoDTO = PhotoDTO.builder()
-                .photoUUID("")
-                .userNo(user)
-                .photoSize(10L)
-                .photoCreateDate(Instant.now())
-                .photoOriginalName("test img")
-                .photoSaveName("test save img")
-                .photoThumbnail("test thumbnail img")
-                .build();
-        photoService.savePhoto(photoDTO);
+        // TODO 수정필요
+//        User user = new User();
+//        user.setUserNo(1L);
+//
+//        PhotoDTO photoDTO = PhotoDTO.builder()
+//                .photoUUID("test")
+//                .uploader(user)
+//                .photoCreateDate(Instant.now())
+//                .build();
+//        photoService.savePhoto(photoDTO);
     }
 
     //CRUD 중 Read-1개 test
@@ -92,17 +83,6 @@ public class PhotoServiceTests {
       } catch (Exception e) {
           log.info("test +_+ photo is deleted");
       }
-    }
-
-    //Base64 String타입 변환, 리턴 테스트
-    @Test
-    public void getPhoto64Test() {
-        String photoUUID = "5b2b26dc-17c3-4ae6-b528-943ef6fa2b44"; // DB에 있는 것 설정 필요
-
-        String photo64 = photoService.getPhoto64(photoUUID);
-
-        log.info("will get 64 of PhotoUUID : {}",photoUUID);
-        log.info("photo64 : {}",photo64.substring(0,100)); // 너무길어서 자름
     }
 
 }

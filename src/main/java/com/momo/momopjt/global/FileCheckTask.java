@@ -1,29 +1,17 @@
 package com.momo.momopjt.global;
 
-import static org.apache.commons.io.file.PathUtils.*;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
+//import static org.apache.commons.io.file.PathUtils.*;
 
 import com.momo.momopjt.photo.PhotoRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//import com.amazonaws.services.s3.AmazonS3;
-//import com.amazonaws.services.s3.model.S3ObjectSummary;
-//import com.community.dogcat.domain.ImgBoard;
-//import com.community.dogcat.repository.upload.UploadRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Log4j2

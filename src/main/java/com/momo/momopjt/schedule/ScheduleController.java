@@ -3,7 +3,6 @@ package com.momo.momopjt.schedule;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.reply.Reply;
 import com.momo.momopjt.reply.ReplyService;
-import com.momo.momopjt.reply.ReplyServiceImpl;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -28,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Log4j2
@@ -64,36 +64,12 @@ public class ScheduleController {
   public String scheduleCreatePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
     log.info("------------ [Post schedule create] ------------");
 
-    //이미지 파일 처리
-    //1. form 받은 multipart 파일을 rest controller에 전달
-    //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
-    //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
-    //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
-//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
-
-     /* 주석처리
-
     //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
 
-
-//    photoService.savePhoto();
-//    이미지 파일 처리 YY
-//    String resultPhotoUUID;
-//    byte[] photoBytes = file.getBytes();
-//    resultPhotoUUID = photoService.savePhoto(
-//        PhotoDTO.builder()
-//            .photoData(photoBytes)
-//            .photoSize(file.getSize())
-//            .photoOriginalName(file.getOriginalFilename())
-//            .userNo(user)
-//            .build())
-//        .getPhotoUUID();
-
-
-    //이미지 처리 후 UUID만 반환
+    //TODO 0724 YY photo 엮어야함
     String resultPhotoUUID = UUID.randomUUID().toString();
     scheduleDTO.setSchedulePhoto(resultPhotoUUID);
     //이미지를 일정 DTO에 전달 끝
@@ -114,34 +90,14 @@ public class ScheduleController {
     Instant instant = zonedDateTime.toInstant();
     scheduleDTO.setScheduleStartDate(instant);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
-    Long scheduleNo;
+
+    Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
+
     if (resultPhotoUUID != null) {
       scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
       return "redirect:/schedule/" + scheduleNo;
     }
-    log.info("------------ [일정 등록 완료] ------------");
-    return "redirect:/schedule";
 
-*/
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
-    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
-    userAndScheduleDTO.setUserNo(user);
-    log.info("------------ [현재 로그인 중인 정보] ------------");
-
-    Long clubNo = (Long) session.getAttribute("clubNo");
-    Club club = new Club();
-    club.setClubNo(clubNo);
-    scheduleDTO.setClubNo(club);
-    LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
-    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-    Instant instant = zonedDateTime.toInstant();
-    scheduleDTO.setScheduleStartDate(instant);
-    log.info("------------ [날짜/시간 포매팅 완료] ------------");
-    scheduleDTO.setSchedulePhoto("baf05b22-434b-4a6f-bafb-1b565b2aad8e");
-
-    Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
     log.info("------------ [일정 등록 완료] ------------");
 
     return "redirect:/schedule/" + scheduleNo;

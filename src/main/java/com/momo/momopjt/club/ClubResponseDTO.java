@@ -7,12 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClubDTO {
+public class ClubResponseDTO {
 
   private Long clubNo;
 
@@ -32,6 +33,6 @@ public class ClubDTO {
 
   private Instant clubCreateDate;
 
-
+  List<String> imageUrls;
 
 }

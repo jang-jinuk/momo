@@ -30,12 +30,8 @@ public class ClubServiceTests {
 
     PhotoDTO photoDTO = PhotoDTO.builder()
         .photoUUID("test.jpg")
-        .userNo(user)
-        .photoSize(10L)
+        .uploader(user)
         .photoCreateDate(Instant.now())
-        .photoOriginalName("test img")
-        .photoSaveName("test save img")
-        .photoThumbnail("test thumbnail img")
         .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
@@ -81,12 +77,8 @@ public class ClubServiceTests {
 
     PhotoDTO photoDTO = PhotoDTO.builder()
         .photoUUID("00002test")
-        .userNo(user)
-        .photoSize(10L)
+        .uploader(user)
         .photoCreateDate(Instant.now())
-        .photoOriginalName("test img 수정")
-        .photoSaveName("test save img 수정")
-        .photoThumbnail("test thumbnail img 수정")
         .build();
 
     ClubDTO clubDTO = ClubDTO.builder()

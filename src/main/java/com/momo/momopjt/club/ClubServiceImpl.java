@@ -9,13 +9,6 @@ import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoService;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-
 import com.momo.momopjt.reply.Reply;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.Schedule;
@@ -33,6 +26,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -68,7 +68,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
 //    Photo photo = photoService.savePhoto(photoDTO);
-    Photo photo = photoService.getPhoto("437d27cd-8818-48ab-8cdf-639d0ce94705");
+    Photo photo = photoService.getPhoto("21b5cad5-c919-4410-bd08-e7c7dede5813");
     clubDTO.setPhotoUUID(photo);
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
