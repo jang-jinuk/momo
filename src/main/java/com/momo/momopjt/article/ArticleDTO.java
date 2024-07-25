@@ -7,8 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,5 +31,9 @@ public class ArticleDTO {
   private Club clubNo;
 
   private User userNo;
+
+  // 첨부파일 이름들 640
+  private List<String> fileNames;
+  //Article 에서 Set<ArticleImage> 로 변경 되어야 함
 
 }

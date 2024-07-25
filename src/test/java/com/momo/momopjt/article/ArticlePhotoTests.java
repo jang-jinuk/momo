@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.UUID;
 
 @SpringBootTest
@@ -19,7 +20,8 @@ public class ArticlePhotoTests {
   private ArticleRepository articleRepository;
   @Autowired
   private ReplyRepository replyRepository;
-
+@Autowired
+private ArticleService articleService;
 
 //  @Test
 //  public void testInsertWithImage(){
@@ -99,8 +101,46 @@ public class ArticlePhotoTests {
 
 
   //더미 데이터 추가
+//  @Test
+//  public void testInsertDummyData(){
+//
+//    User user = new User();
+//    user.setUserNo(1L);
+//
+//    Club club = new Club();
+//    club.setClubNo(1L);
+//
+//    for (int i=0; i<100; i++){
+//
+//      Article article = Article.builder()
+//          .articleNo(-1L)
+//          .articleCreateDate(Instant.now())
+//          .articleContent("articleContent" + i)
+//          .articleTitle("articleTitle" + i)
+//          .userNo(user)
+//          .clubNo(club)
+//          .build();
+//
+//      for (int j=0; j<3; j++){
+//
+//        if(i%5==0) {
+//          continue;
+//        }
+//        article.addImage(UUID.randomUUID().toString(), ".jpg");
+//
+//      }
+//
+//      articleRepository.save(article);
+//
+//    }
+//
+//  }
+
   @Test
-  public void testInsertDummyData(){
+  void testRegisterWithImages(Article article){
+
+    log.info("----------------- [articleService.getClass.getName]-----------------{}",
+        articleService.getClass().getName());
 
     User user = new User();
     user.setUserNo(1L);
@@ -108,30 +148,39 @@ public class ArticlePhotoTests {
     Club club = new Club();
     club.setClubNo(1L);
 
-    for (int i=0; i<100; i++){
 
-      Article article = Article.builder()
-          .articleNo(-1L)
-          .articleCreateDate(Instant.now())
-          .articleContent("articleContent" + i)
-          .articleTitle("articleTitle" + i)
-          .userNo(user)
-          .clubNo(club)
-          .build();
 
-      for (int j=0; j<3; j++){
+    ArticleDTO articleDTO = ArticleDTO.builder()
+        .articleNo(-1L)
+        .articleContent("testContent asd")
+        .articleTitle("testTitle title")
 
-        if(i%5==0) {
-          continue;
-        }
-        article.addImage(UUID.randomUUID().toString(), ".jpg");
+        .articleState('0')
+        .articleScore(0)
+        .articleCreateDate(Instant.now())
+        .userNo(user)
+        .clubNo(club)
+        .build();
+//
+//    List<String> fileNames = article.getImageSet().stream()
+//        .map(articleImage -> articleImage.getUuid()+articleImage.getExtension())
+//        .collect(Collectors.toList());
 
-      }
+    articleDTO.setFileNames(
+        Arrays.asList(
+            UUID.randomUUID().toString()+".png",
+            UUID.randomUUID().toString()+".png",
+            UUID.randomUUID().toString()+".png"
+        ));
 
-      articleRepository.save(article);
-
-    }
+//    long articleNo = articleService.register(articleDTO);
+//    articleService.register(articleDTO);
+    long articleNo = articleService.createArticle(articleDTO);
+    log.info("----------------- [articleNo]-----------------{}", articleNo);
 
   }
+
+  @Test
+
 
 }

@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -14,5 +15,44 @@ public interface ArticleService {
   List<ArticleDTO> getAllArticles(Club clubNo);
   ArticleDTO updateArticle(Long articleNo, ArticleDTO articleDTO);
   void deleteArticle(Long articleNo);
+
+
+  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
+
+  //641
+  default Article dtoToEntity(ArticleDTO articleDTO) {
+
+    ModelMapper modelMapper = new ModelMapper();
+
+    Article article =
+
+    //책 코드
+        Article.builder()
+            .articleNo(articleDTO.getArticleNo())
+            .articleContent(articleDTO.getArticleContent())
+            .articleTitle(articleDTO.getArticleTitle())
+            .articleState(articleDTO.getArticleState())
+            .articleScore(articleDTO.getArticleScore())
+            .articleCreateDate(articleDTO.getArticleCreateDate())
+            //TODO user랑 club ?
+            .build();
+
+    if(articleDTO.getFileNames() != null){
+      articleDTO.getFileNames().forEach(fileName -> {
+            String[] arr = fileName.split("\\.");
+          article.addImage(arr[0],"."+arr[1]);
+          }
+      );
+    }
+
+
+        //내 코드
+//        modelMapper.map(
+//        articleDTO, Article.class
+//    );
+    return article;
+  }
+
+
 
 }
