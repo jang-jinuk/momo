@@ -34,7 +34,7 @@
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/login}'|">Login</button>
                         </div>
                     </header>
-                    <span th:unless="${#authentication.name == 'anonymousUser'}" th:text="${#authentication.name} + 님"></span>
+
                 </div>
             </div>
         </nav>

@@ -53,4 +53,5 @@ public class UserDTO {
 
     private Instant userModifyDate;
 
+    private String confirmUserPw;
 }

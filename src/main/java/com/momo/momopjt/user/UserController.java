@@ -66,6 +66,24 @@ public class UserController {
     return "user/signup";
   }
 
+  @GetMapping("/checkUserIdDuplicate")
+  @ResponseBody
+  public boolean checkUserIdDuplicate(@RequestParam("userId") String userId) {
+    return userRepository.existsByUserId(userId);
+  }
+
+  @GetMapping("/checkUserNicknameDuplicate")
+  @ResponseBody
+  public boolean checkUserNicknameDuplicate(@RequestParam("userNickname") String userNickname) {
+    return userRepository.existsByUserNickname(userNickname);
+  }
+
+  @GetMapping("/checkUserEmailDuplicate")
+  @ResponseBody
+  public boolean checkUserEmailDuplicate(@RequestParam("userEmail") String userEmail) {
+    return userRepository.existsByUserEmail(userEmail);
+  }
+
   @PostMapping("/signup")
   public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /signup with data: {}", userDTO);
@@ -89,10 +107,15 @@ public class UserController {
       redirectAttributes.addFlashAttribute("errorEmail", "userEmail");
       return "redirect:/user/signup";
 
+    } catch (UserService.UserNicknameException e) {
+      redirectAttributes.addFlashAttribute("errorNickname", "userNickname");
+      return "redirect:/user/signup";
+
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
       return "redirect:/user/signup";
     }
+
     redirectAttributes.addFlashAttribute("result", "success");
     return "redirect:/home"; // 회원가입 후 홈으로
 
