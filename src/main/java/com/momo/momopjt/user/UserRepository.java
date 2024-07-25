@@ -20,7 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
   User findByUserId(String userId);
   User findByUserIdAndUserEmail(String userId, String userEmail);
   boolean existsByUserEmail(String userEmail); //UserEmail로 존재 여부 확인
-  boolean existsByUserId(String userId); // userId로 존재 여부 확인
+  boolean existsByUserId(String userId);// userId로 존재 여부 확인
+  boolean existsByUserNickname(String userNickname);
+
   @EntityGraph(attributePaths = "roleSet")
   Optional<User> findByUserEmail(String email);
 
