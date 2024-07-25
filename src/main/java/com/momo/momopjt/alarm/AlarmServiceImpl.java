@@ -53,6 +53,8 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
+
+
   // 모임 가입시 뜨는 알람
   @Override
   public void createJoinApprovalAlarm(User user, Club club) {
@@ -65,7 +67,34 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
-  //모임 탈퇴시 뜨는 알람
+  //모임장이 모임원 강퇴시 유저에게 강퇴되었다는 알림
+  @Override
+  public void createKickOutAlarm(User user, Club club) {
+
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.KICKOUT);
+    alarm.setAlarmContent(club.getClubName() + "에서 강퇴되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+
+  }
+
+  //모임장이 유저 강퇴시 모임장에게 뜨는 알림
+  @Override
+  public void createKickOutOwnerAlarm(User user, Club club){
+    String userNickname = user.getUserNickname();
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.KICKOUT);
+    alarm.setAlarmContent(userNickname + "님을 " + club.getClubName() + "에서 강퇴했습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //회원이 모임 탈퇴시 뜨는 알람
   @Override
   public void createLeaveAlarm(User user, Club club) {
     Alarm alarm = new Alarm();
@@ -77,7 +106,9 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
-  //일정 참가시 뜨는 알람
+
+
+  //회원이 일정 참가시 뜨는 알람
   @Override
   public void createParticipateAlarm(User user, Schedule schedule) {
     Alarm alarm = new Alarm();
@@ -89,6 +120,7 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
+  //회원이 일정 참가 취소시 뜨는 알람
   @Override
   public void createCancelParticipateAlarm(User user, Schedule schedule) {
     Alarm alarm = new Alarm();

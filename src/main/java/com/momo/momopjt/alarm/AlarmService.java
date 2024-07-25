@@ -18,7 +18,8 @@ public interface AlarmService {
 
   void createJoinApprovalAlarm(User user, Club club);
   void createLeaveAlarm(User user, Club club);
-
+  void createKickOutAlarm(User user, Club club);
+  void createKickOutOwnerAlarm(User user, Club club);
 
   //일정알람
   void createParticipateAlarm(User user, Schedule schedule);

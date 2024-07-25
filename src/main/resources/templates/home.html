@@ -5,7 +5,11 @@
 <th:block layout:fragment="content">
     <br>
     <div class="container">
-        <div class="row" th:unless="${#authentication.name == 'anonymousUser'}">
+        <!-- 로그인한 사용자에게만 보이는 부분 -->
+        <div class="row" th:if="${userNickname}">
+            <p th:text="${userNickname + '님 어서오세요!'}">userNickname님 어서오세요!</p>
+        </div>
+        </div>
             <h2>나의 모임</h2>
             <div class="col-6" th:each="myClubDTO : ${myClubDTOList}">
                 <div class="card mb-3" style="max-width: 415px;">
