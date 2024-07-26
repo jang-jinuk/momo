@@ -264,4 +264,5 @@ public class UserController {
     }
     return "user/profile/dumyprofile"; // 프로필 뷰 페이지 반환
   }
+
 }
