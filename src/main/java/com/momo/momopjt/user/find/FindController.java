@@ -26,19 +26,31 @@ public class FindController {
     return "user/find/id";
   }
 
-  // 아이디 찾기
+  //아이디찾기
   @PostMapping("/id")
   public String findUserId(@ModelAttribute("findUserIdRequest") FindUserIdRequest findUserIdRequest, Model model) {
     String userEmail = findUserIdRequest.getFindUserEmail();
     String userId = userService.findUsernameByEmail(userEmail);
+
     if (userId != null) {
-      model.addAttribute("userId", userId);
+      // 아이디의 일부를 마스킹합니다.
+      String maskedUserId = maskUserId(userId);
+      model.addAttribute("userId", maskedUserId);
       log.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
     } else {
       model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
       log.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
     }
     return "user/find/id";
+  }
+
+  private String maskUserId(String userId) {
+    if (userId.length() > 4) {
+      String prefix = userId.substring(0, 2); // 앞부분 두 자리를 보이게
+      String suffix = userId.substring(userId.length() - 2); // 끝부분 두 자리를 보이게
+      return prefix + "**" + suffix; // 가운데 부분을 **로 마스킹
+    }
+    return userId; // 아이디가 4자리 이하일 경우 마스킹하지 않음
   }
 
   // 비밀번호 찾기 폼 렌더링
