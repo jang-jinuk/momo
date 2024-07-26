@@ -23,6 +23,29 @@
             }).open();
         }
     </script>
+
+    <style>
+        .btn-outline-info {
+            color: #5e9bd2; /* 버튼 텍스트 색상 */
+            border-color: #5e9bd2; /* 버튼 테두리 색상 */
+        }
+        .btn-outline-info:hover {
+            color: #fff; /* 버튼 텍스트 색상 (호버 상태) */
+            background-color: #5e9bd2; /* 버튼 배경색상 (호버 상태) */
+            border-color: #5e9bd2; /* 버튼 테두리 색상 (호버 상태) */
+        }
+        .btn-success {
+            color: #ffffff; /* 버튼 텍스트 색상 */
+            background-color: #a2d9ce; /* 버튼 배경색상 */
+            border-color: #a2d9ce; /* 버튼 테두리 색상 */
+        }
+        .btn-success:hover {
+            color: #ffffff; /* 버튼 텍스트 색상 (호버 상태) */
+            background-color: #7fbf9b; /* 버튼 배경색상 (호버 상태) */
+            border-color: #7fbf9b; /* 버튼 테두리 색상 (호버 상태) */
+        }
+    </style>
+
 </head>
 <body>
 <div class="d-flex justify-content-center align-items-center vh-100">
@@ -98,7 +121,40 @@
                             <!-- 관심사 -->
                             <div class="input-group mb-3">
                                 <label for="userCategory" class="input-group-text">관심사</label>
-                                <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="맛집탐방" required>
+                                <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="관심사를 선택해주세요" required>
+                            </div>
+
+                            <div class="container">
+                                <nav class="navbar bg-body-tertiary">
+                                    <div class="container-fluid justify-content-start">
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="동네친구">#동네친구</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="또래친구">#또래친구</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="성별모임">#성별모임</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="20대 모임">#20대 모임</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="30대 모임">#30대 모임</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="술친구">#술친구</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="운동">#운동</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="악기">#악기</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="그림">#그림</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="사진">#사진</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="수집">#수집</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="노래">#노래</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="낚시">#낚시</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="캠핑">#캠핑</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="국내여행">#국내여행</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="해외여행">#해외여행</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="맛집투어">#맛집투어</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="힐링투어">#힐링투어</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="LOL">#LOL</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="마인크래프트">#마인크래프트</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="오버워치">#오버워치</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="배틀그라운드">#배틀그라운드</button>
+                                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="게임">#게임</button>
+
+
+
+                                    </div>
+                                </nav>
                             </div>
 
 
@@ -282,6 +338,43 @@
 
         $('#userPw, #confirmUserPw').on('input', function() {
             validatePassword();
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const userCategoryInput = document.getElementById('userCategory');
+        let selectedCategories = [];
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const category = this.value;
+
+                // 카테고리가 이미 선택되었는지 확인
+                if (selectedCategories.includes(category)) {
+                    // 카테고리 선택 해제
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-info');
+                    selectedCategories = selectedCategories.filter(item => item !== category);
+                } else {
+                    // 최대 선택 가능한 카테고리 개수 확인
+                    if (selectedCategories.length < 3) {
+                        // 카테고리 선택
+                        this.classList.remove('btn-outline-info');
+                        this.classList.add('btn-success');
+                        selectedCategories.push(category);
+                    } else {
+                        // 최대 개수 초과 시 알림
+                        alert('최대 3개의 카테고리까지 선택할 수 있습니다.');
+                        return;
+                    }
+                }
+
+                // 선택된 카테고리 목록을 입력 필드에 표시
+                userCategoryInput.value = selectedCategories.join(', ');
+            });
         });
     });
 </script>

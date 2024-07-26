@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.momo.momopjt.user.QUser.user;
+
 
 @Controller
 @RequestMapping("/user")
@@ -200,6 +202,20 @@ public class UserController {
       return "user/delete-account"; // 에러 발생 시 다시 탈퇴 폼 페이지로
     }
   }
+  @PostMapping("/submitCategory")
+  public String submitCategory(@RequestParam("userCategory") String userCategory,
+                               RedirectAttributes redirectAttributes) {
+
+    // UserDTO 객체 생성 및 userCategory 설정
+    UserDTO userDTO = new UserDTO();
+    userDTO.setUserCategory(userCategory);
+
+    // 여기서 userDTO를 사용하여 필요한 작업을 수행합니다 (예: 데이터베이스 저장)
+
+    redirectAttributes.addFlashAttribute("result", "success");
+    return "redirect:/home"; // 성공 시 홈으로 리다이렉트
+  }
+
 
 
   @GetMapping("/profile/my-report")
