@@ -77,6 +77,9 @@ public class UserServiceImpl implements UserService {
         user.setUserState('0');
         user.setUserLikeNumber(0);
 
+        // 주소 설정 추가
+        user.setUserAddress(userDTO.getUserAddress());
+
         userRepository.save(user);
     }
 
