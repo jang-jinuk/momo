@@ -194,8 +194,11 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   //모임 즐겨찾기 여부 조회
   @Override
   public List<Club> findMyWishClubs(User user) {
+    log.info("...... [U and C ServiceImpl/findMyWishClubs/Start]..........KSW");
+    // userNo로 isWish 가 Y인 clubNo 들을 조회해서 Long 타입 List 로 받음
     List<Long> clubNumbers = userAndClubRepository.findClubNumbersByUser(user);
     log.info("User 의 즐겨찾기 클럽 번호 목록: {}", clubNumbers);
+
     if (clubNumbers.isEmpty()) {
       return Collections.emptyList();
     }
@@ -204,20 +207,18 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     return clubs;
   }
 
-  //모임 찜하기
- // @Override
-  /*public char updateWishClub(UserAndClubDTO userAndClubDTO) {
+  //모임 즐겨찾기/해제 todo 0726 시간 남으시면 코드 한번 봐주세요 SW
+  @Override
+  public void updateWishClub(UserAndClubDTO userAndClubDTO) {
     log.info("...... [U and C ServiceImpl/updateWishClub/Start]..........KSW");
     UserAndClub updateWish = userAndClubRepository.findByUserNoAndClubNo(
-    userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo());
-
+    userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo()); //현재 클럽과 유저를 받아와서 주입
+    //isWish 값 변경
     if(userAndClubDTO.getIsWish() == 'N'){
-      userAndClubDTO.setIsWish('Y');
-    } else if(userAndClubDTO.getIsWish() != 'Y'){
-      userAndClubDTO.setIsWish('N');
+      updateWish.setIsWish('Y');
+    } else if(userAndClubDTO.getIsWish() == 'Y'){
+      updateWish.setIsWish('N');
     }
     userAndClubRepository.save(updateWish);
-
-    return userAndClubDTO.getIsWish();
-  }*/
+  }
 }

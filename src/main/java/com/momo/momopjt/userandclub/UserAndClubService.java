@@ -29,5 +29,5 @@ public interface UserAndClubService {
   List<Club> findMyWishClubs(User user);
 
   //모임 즐겨찾기 상태 업데이트
-  //char updateWishClub(UserAndClubDTO userAndClubDTO);
+  void updateWishClub(UserAndClubDTO userAndClubDTO);
 }
