@@ -55,7 +55,7 @@ public class ClubServiceImpl implements ClubService {
     }
 
 //    Photo photo = photoService.savePhoto(photoDTO);
-    Photo photo = photoService.getPhoto("a0ac077b-3e10-468e-8502-4c9f8d7bb81b");
+    Photo photo = photoService.getPhoto("6bc23790-215d-4132-896f-6de3396f1306");
     clubDTO.setPhotoUUID(photo);
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
