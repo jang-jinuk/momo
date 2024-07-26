@@ -13,10 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -67,28 +69,30 @@ public class ArticleController {
 
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
-  public String getArticleById(@PathVariable Long articleNo, Model model, HttpSession session) {
-    log.info("-------- [get ArticleById]-------you");
+  public String getArticleById(@PathVariable Long articleNo, Model model, HttpSession session) { // TODO PageRequestDTO 추가예정
+    log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
+    // club number 세션에 저장 // TODO model로 저장 ?
     Long clubNo = (Long) session.getAttribute("clubNo");
-    model.addAttribute("clubNo", clubNo);
-
+    
+    //출력할 게시글 조회
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
-    model.addAttribute("articleDTO", articleDTO);
-
     //출력할 댓글 조회 YY
     List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
 
+
+    model.addAttribute("clubNo", clubNo);
+    model.addAttribute("articleDTO", articleDTO);
     //출력할 댓글 추가 YY
     model.addAttribute("replyList",replyList);
-
+    
     return "article/detail"; // "articles/detail.html" 뷰를 반환
   }
 
   // 기존 후기글 수정 폼을 보여주는 페이지
   @GetMapping("/update/{articleNo}")
   public String showEditForm(@PathVariable Long articleNo, Model model) {
-    log.info("-------- [get article edit]-------you");
+    log.info("-------- [GET article update/ ]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
     return "article/update"; // "article/update.html" 뷰를 반환
@@ -96,16 +100,37 @@ public class ArticleController {
 
   // 기존 후기글을 업데이트하는 메서드
   @PostMapping("/update/{articleNo}")
-  public String updateArticle(@PathVariable Long articleNo, @ModelAttribute ArticleDTO articleDTO) {
-    log.info("-------- [article update]-------you");
-    articleService.updateArticle(articleNo, articleDTO);
+  public String updateArticle(@PathVariable Long articleNo,
+                              @Valid @ModelAttribute ArticleDTO articleDTO,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) { //pageRequestDTO? TODO
+    log.info("-------- [POST article update]-------you");
+
+//    if(bindingResult.hasErrors()) {
+//      log.info("has errors.......");
+//
+//      String link = pageRequestDTO.getLink();
+//
+//      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
+//
+//      redirectAttributes.addAttribute("articleNo", articleDTO.getArticleNo());
+//
+//      return "redirect:/board/modify?"+link;
+
+
+      articleService.updateArticle(articleNo, articleDTO);
+
+    redirectAttributes.addFlashAttribute("result", "modified");
+    redirectAttributes.addAttribute("articleNo", articleNo);
+
     return "redirect:/article/" + articleNo; // 수정 후 후기글 목록 페이지로 리디렉션
   }
+
 
   // 기존 후기글을 삭제하는 메서드
   @GetMapping("/delete/{articleNo}")
   public String deleteArticle(@PathVariable Long articleNo, HttpSession session, RedirectAttributes redirectAttributes) {
-    log.info("-------- [article delete] -------");
+    log.info("-------- [POST article /delete] -------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     articleService.deleteArticle(articleNo);
     redirectAttributes.addFlashAttribute("message", "후기글이 삭제되었습니다.");

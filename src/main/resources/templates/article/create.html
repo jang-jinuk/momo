@@ -4,25 +4,62 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 
+<head>
+    <title>Article Create</title>
+</head>
+
+
 <th:block layout:fragment="content">
 
-    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
-        <label for="articleTitle">제목:</label>
-        <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
-               oninput="limitTitleLength()"><br>
-        <label for="articleContent">내용:</label>
-        <textarea name="articleContent" id="articleContent" oninput="limitTextarea()"></textarea><br>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Article Create
+                </div>
+                <div class="card-body">
+<!--                    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">-->
+                    <form th:action="@{/article/create}" method="post">
 
-        <!-- 이미지 업로드 YY -->
-        <span class="input-group mb-3">Images</span>
-        <div class="float-end uploadHidden">
-            <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" name="articleTitle" id="articleTitle" class="form-control"
+                                   th:value="${scheduleDTO?.scheduleTitle ?: ''}" required>
+                        </div>
+
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="articleContent" id="articleContent"
+                                      oninput="limitTextarea()"></textarea>
+                        </div>
+
+                        <!-- 이미지 업로드 YY -->
+                        <div class="input-group mb-3">
+
+                            <span class="input-group mb-3">Images</span>
+                            <div class="float-end uploadHidden">
+                                <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
-        <button type="reset" class="btn btn-secondary">Reset</button>
-    </form>
-
+    </div>
++
+    <!-- Image Thumbnail display -->
+    <div class="row mt-3">
+        <div class="col ">
+            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+            </div>
+        </div>
+    </div>
 
     <!--    upload Modal Part YY -->
     <div class="modal uploadModal" tabindex="-1">
@@ -141,6 +178,40 @@
 
             uploadResult.innerHTML += str
         }
+
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
+
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
+                targetDiv.remove()
+            })
+
+        }
+
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            e.preventDefault()
+            e.stopPropagation()
+
+            const target = document.querySelector(".uploadHidden")
+            const uploadFiles = uploadResult.querySelectorAll("img")
+
+            let str = ''
+
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                const imgLink = uploadFile.getAttribute("src")
+
+                str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+            }
+
+            target.innerHTML = str;
+            //document.querySelector("form").submit();
+        }, false)
 
 
         /* Thymeleaf의 JavaScript 인라인 사용 */
