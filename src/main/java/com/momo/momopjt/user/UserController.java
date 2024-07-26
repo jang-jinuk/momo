@@ -60,6 +60,11 @@ public class UserController {
     }
   }
 
+  @GetMapping("/signup")
+  public String signupGet() {
+    log.info("----Processing GET request for /signup");
+    return "user/signup";
+  }
 
   @GetMapping("/checkUserIdDuplicate")
   @ResponseBody
@@ -79,41 +84,42 @@ public class UserController {
     return userRepository.existsByUserEmail(userEmail);
   }
 
-  @GetMapping("/signup")
-  public String showRegistrationForm(Model model) {
-    model.addAttribute("userDTO", new UserDTO());
-    return "user/signup";
-  }
-
   @PostMapping("/signup")
-  public String registerUser(@Valid @ModelAttribute("userDTO") UserDTO userDTO,
-                             BindingResult bindingResult,
-                             RedirectAttributes redirectAttributes) {
+  public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    log.info("----Processing POST request for /signup with data: {}", userDTO);
+
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-      return "redirect:/signup";
+
+      return "redirect:/user/signup";
     }
 
     try {
+
       userService.signup(userDTO);
+
     } catch (UserService.UserIdException e) {
+
       redirectAttributes.addFlashAttribute("errorId", "userId");
-      return "redirect:/signup";
+      return "redirect:/user/signup";
+
     } catch (UserService.UserEmailException e) {
       redirectAttributes.addFlashAttribute("errorEmail", "userEmail");
-      return "redirect:/signup";
+      return "redirect:/user/signup";
+
     } catch (UserService.UserNicknameException e) {
       redirectAttributes.addFlashAttribute("errorNickname", "userNickname");
-      return "redirect:/signup";
+      return "redirect:/user/signup";
+
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
-      return "redirect:/signup";
+      return "redirect:/user/signup";
     }
 
     redirectAttributes.addFlashAttribute("result", "success");
-    return "redirect:/home";
-  }
+    return "redirect:/home"; // 회원가입 후 홈으로
 
+  }
 
   @PostMapping("/logout")
   public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {

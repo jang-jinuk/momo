@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user/find")
 @RequiredArgsConstructor
 @Log4j2
-public class FindController {
+public class FindController  {
 
   private final UserService userService;
   private final UserRepository userRepository;

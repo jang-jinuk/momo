@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setUserEmail(userEmail);
         user.setUserNickname(userNickname);
-        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
+        user.changePassword(passwordEncoder.encode(password));
         user.addRole(UserRole.USER);
 
         // 생년월일로 나이 계산
@@ -77,17 +77,22 @@ public class UserServiceImpl implements UserService {
         user.setUserState('0');
         user.setUserLikeNumber(0);
 
-        // 주소 설정 추가
+
         user.setUserAddress(userDTO.getUserAddress());
+        user.setUserCategory(userDTO.getUserCategory());
+        user.setUserGender(userDTO.getUserGender());
+        user.setUserMBTI(userDTO.getUserMBTI());
+        user.setUserBirth(userDTO.getUserBirth());
 
         userRepository.save(user);
     }
 
-    // 생년월일로 나이 계산하는 메소드
-    private int calculateAge(LocalDate birthDate) {
-        return Period.between(birthDate, LocalDate.now()).getYears();
+    private int calculateAge(LocalDate userBirth) {
+        if (userBirth == null) {
+            throw new IllegalArgumentException("생년월일이 null입니다.");
+        }
+        return Period.between(userBirth, LocalDate.now()).getYears();
     }
-
 
 
     //TODO 리뷰 필요 YY JJ

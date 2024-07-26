@@ -40,79 +40,83 @@
                               onsubmit="return validateForm()">
                             <!-- 아이디 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 아이디</span>
-                                <input type="text" name="userId" class="form-control" placeholder="abc123" required>
+                                <label for="userId" class="input-group-text">* 아이디</label>
+                                <input type="text" id="userId" name="userId" class="form-control" placeholder="abc123" required>
                                 <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserId()">중복확인</button>
                             </div>
                             <div id="duplicateCheckResult" class="alert" role="alert"></div>
 
                             <!-- 비밀번호 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 비밀번호</span>
+                                <label for="userPw" class="input-group-text">* 비밀번호</label>
                                 <input type="password" id="userPw" name="userPw" class="form-control" required autocomplete="off">
                             </div>
 
                             <!-- 비밀번호 확인 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 비밀번호 확인</span>
+                                <label for="confirmUserPw" class="input-group-text">* 비밀번호 확인</label>
                                 <input type="password" id="confirmUserPw" name="confirmUserPw" class="form-control" required autocomplete="off">
                             </div>
                             <div id="passwordMatchMessage" class="alert" role="alert"></div>
 
                             <!-- 닉네임 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 닉네임</span>
-                                <input type="text" name="userNickname" class="form-control" placeholder="abc" required>
+                                <label for="userNickname" class="input-group-text">* 닉네임</label>
+                                <input type="text" id="userNickname" name="userNickname" class="form-control" placeholder="abc" required>
                                 <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserNickname()">중복확인</button>
                             </div>
                             <div id="nicknameCheckResult" class="alert" role="alert"></div>
 
                             <!-- 성별 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 성별</span>
-                                <div class="form-check form-check-inline my-2">
+                                <span class="input-group-text">성별</span>
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="userGender" id="male" value="m" required>
                                     <label class="form-check-label" for="male">남성</label>
                                 </div>
-                                <div class="form-check form-check-inline my-2">
+                                <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="userGender" id="female" value="w" required>
                                     <label class="form-check-label" for="female">여성</label>
                                 </div>
                             </div>
 
+
+
                             <!-- 생년월일 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 생년월일</span>
-                                <input type="date" class="form-control" name="userBirth" required>
+                                <label for="userBirth" class="input-group-text">* 생년월일</label>
+                                <input type="date" id="userBirth" name="userBirth" class="form-control" required>
                             </div>
-
-                            <!-- 이메일 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">* 이메일</span>
-                                <input type="email" class="form-control" name="userEmail" required>
+                                <label for="userEmail" class="input-group-text">* 이메일</label>
+                                <input type="email" id="userEmail" class="form-control" name="userEmail" required>
                                 <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserEmail()">중복확인</button>
                             </div>
                             <div id="emailCheckResult" class="alert" role="alert"></div>
 
+
                             <!-- 관심사 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">관심사</span>
-                                <input type="text" name="userCategory" class="form-control" placeholder="맛집탐방" required>
+                                <label for="userCategory" class="input-group-text">관심사</label>
+                                <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="맛집탐방" required>
                             </div>
+
 
 
                             <!-- 주소 -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">주소</span>
+                                <label for="userAddress" class="input-group-text">주소</label>
                                 <input type="text" id="userAddress" name="userAddress" class="form-control" placeholder="주소를 입력하세요"/>
                                 <button type="button" class="btn btn-outline-dark" onclick="searchAddress()">주소 검색</button>
                             </div>
 
+
                             <!-- MBTI -->
                             <div class="input-group mb-3">
-                                <span class="input-group-text">MBTI</span>
-                                <input type="text" name="userMBTI" class="form-control">
+                                <label for="userMBTI" class="input-group-text">MBTI</label>
+                                <input type="text" id="userMBTI" name="userMBTI" class="form-control">
                             </div>
+
 
                             <!-- 등록 및 취소 버튼 -->
                             <div class="mt-4">
@@ -127,7 +131,7 @@
             </div><!-- end col -->
         </div><!-- end row -->
     </div><!-- end container -->
-</div>
+
 
 <!-- JavaScript -->
 <script>
