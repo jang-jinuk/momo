@@ -11,6 +11,7 @@ import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubRepository;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -47,14 +50,16 @@ public class ClubController {
   private PhotoRepository photoRepository;
   @Autowired
   private ArticleService articleService;
-  @Qualifier("modelMapper")
   @Autowired
   private ModelMapper modelMapper;
+  @Autowired
+  private UserAndClubRepository userAndClubRepository;
+
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
     log.info("------------ [Get club main no: {}] ------------",clubNo);
-    
+
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
     Club club = new Club();
@@ -69,7 +74,7 @@ public class ClubController {
      model.addAttribute("articles", articles);
 
     //0722 YY
-//    //scheduleDTOList에 담긴 사진 확인 로그
+//    //scheduleDTOList 에 담긴 사진 확인 로그
 //    for(ScheduleDTO s : scheduleDTOList) {
 //      log.trace(s.getSchedulePhoto());
 //    }
@@ -84,12 +89,16 @@ public class ClubController {
     UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
-
     int isMember = userAndClubService.isMember(userAndClubDTO); //모임에 소속되었는지 확인
     if (isMember == 0 || isMember == 1) {
       return "redirect:/club/join-page";
     }
     model.addAttribute("isMember", isMember);
+
+    // 유저의 찜 상태 조회
+    //UserAndClubDTO clubNos = userAndClubService.
+    //char isWish = userAndClubService.readWishClubStatus(user, club);
+   // model.addAttribute("isWish", isWish); // 모델에 찜 상태 추가
 
     //YY
     //일정 사진 표시 기능
@@ -112,11 +121,24 @@ public class ClubController {
 //log.info(schedule64List.get(1).substring(1,100));
 
     //YY
+    // 사용자 즐겨찾기 클럽 목록을 가져옵니다.
+    List<Club> wishLists = userAndClubService.findMyWishClubs(user);
+    log.info("User 의 즐겨찾기 클럽 목록: {}", wishLists);
 
+    // clubNo가 wishLists 에 있는지 확인
+    boolean isWishInList = wishLists.stream()
+        .anyMatch(clubItem -> clubItem.getClubNo().equals(clubNo));
+    log.info("클럽 번호 {}가 즐겨찾기 목록에 포함되어 있는지 여부: {}", clubNo, isWishInList);
 
+    // isWish 상태를 설정
+    char isWish = isWishInList ? 'Y' : 'N';
+    model.addAttribute("isWish", isWish);
+    log.info("모델에 추가된 isWish 값: {}", isWish);
 
     return "club/main";
   }
+
+
   @GetMapping("/create")
   public String createClubGet() {
     log.info("------------ [Get club create] ------------");

@@ -3,9 +3,13 @@ package com.momo.momopjt.user;
 
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.club.ClubDTO;
+import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.find.EmailService;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -24,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -40,6 +46,8 @@ public class UserController {
   private final ModelMapper modelMapper;
   private final ReportService reportService;
   private final ArticleService articleService;
+  private final UserAndClubService userAndClubService;
+  private final ClubService clubService;
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -245,10 +253,9 @@ public class UserController {
         model.addAttribute("loggedInUserId", loggedInUserId); // 로그인한 사용자 ID 설정
         model.addAttribute("isOwnProfile", loggedInUserId.equals(userId)); // 로그인한 사용자의 프로필인지 여부
       }
-
-      // 사용자가 쓴 후기 조회
-      List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
-      model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
+        // 사용자의 즐겨찾기 모임들 조회
+        List<Club> userWishClubs = userAndClubService.findMyWishClubs(user);
+        model.addAttribute("userWishClub", userWishClubs);
 
     } else {
       // 사용자 정보가 없는 경우의 처리

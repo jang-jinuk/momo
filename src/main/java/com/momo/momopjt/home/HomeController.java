@@ -1,10 +1,12 @@
 package com.momo.momopjt.home;
 
+import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +26,6 @@ public class HomeController {
 
   @GetMapping("/home")
   public String home(Model model) {
-
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();

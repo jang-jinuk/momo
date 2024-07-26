@@ -20,8 +20,8 @@ public class UserAndClubDTO {
   private Boolean isLeader;
 
   private Instant joinDate;
-
-  private Character isWish;
+  //todo 0725 즐겨찾기 No or Yes => N / Y  notNull 처리는 어떤지? 기본값 N SW
+  private Character isWish = 'N';
 
   private User userNo;
 
