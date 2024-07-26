@@ -43,6 +43,7 @@ public class PhotoController {
   private String uploadPath;
 
 
+
   @GetMapping("/photo/photo")
   public String photoGet() {
     log.info("----------------- [GET /photo/photo]-----------------");

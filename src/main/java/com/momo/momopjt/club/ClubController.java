@@ -68,8 +68,15 @@ public class ClubController {
     log.info("----------------- [club photo 처리]-----------------");
 
     Photo clubPhoto = photoService.getPhoto("12f2b64b-0fe2-43bf-8b5c-423e3e9aacad");
-    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
+//    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
+    String clubProfilePhotoStr = clubPhoto.toString();
     model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
+    // 이미지 html 에서 쓸때 아래 처럼
+    // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
+
+
+
+
     log.info("----------------- [{}]-----------------",clubProfilePhotoStr);
      List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
      model.addAttribute("articles", articles);

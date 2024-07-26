@@ -40,4 +40,10 @@ public class Photo {
   @Column(name = "photo_tag")
   private Character tag; // User, Club, Schedule, Article 속성 어디에 필요한 것인지 명시
 
+
+  //toString custom : uuid+extension 해서 파일 이름을 String 타입으로 return
+  @Override
+  public String toString() {
+    return photoUUID+photoExtension;
+  }
 }

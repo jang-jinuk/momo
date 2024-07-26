@@ -151,9 +151,9 @@ public class FileController {
 //  GET방식 파일 조회
     //608p
   @ApiOperation(value = "파일조회")
-  @GetMapping("/view/{fileName}")
+  @GetMapping("/{fileName}")
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
-    log.info("----------------- [viewFileGet]-----------------");
+    log.info("----------------- [GET viewFile  /{fileName}]-----------------");
 
     Resource resource = new FileSystemResource(uploadPath +File.separator+ fileName);
 
