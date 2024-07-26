@@ -60,15 +60,14 @@ public class Article {
   @BatchSize(size = 20) // N번의 쿼리 한번에 실행
   private Set<ArticleImage> imageSet = new HashSet<>();
 
-
-
   // Article 업데이트 메서드
   public void update(ArticleDTO articleDTO, Club clubNo) {
     this.articleTitle = articleDTO.getArticleTitle();
     this.articleContent = articleDTO.getArticleContent();
     this.articleState = articleDTO.getArticleState();
     this.articleScore = articleDTO.getArticleScore();
-    this.clubNo = clubNo;
+    this.clubNo = articleDTO.getClubNo();
+    this.userNo = articleDTO.getUserNo();
   }
 
   public void addImage(String uuid, String extension){

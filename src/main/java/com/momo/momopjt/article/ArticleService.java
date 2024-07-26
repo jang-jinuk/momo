@@ -1,23 +1,30 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.global.PageRequestDTO;
+import com.momo.momopjt.global.PageResponseDTO;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ArticleService {
 
   Long createArticle(ArticleDTO articleDTO);
+
   ArticleDTO getArticleById(Long articleNo);
   //모든 게시글을 반환하는 메서드
   //시스템에 저장된 모든 게시글을 필요로 할 때 사용
   // 클럽 번호에 관계 없이 모든 게시글을 가져올 수 있음
+
   List<ArticleDTO> getAllArticles(Club clubNo);
+
   ArticleDTO updateArticle(Long articleNo, ArticleDTO articleDTO);
+
   void deleteArticle(Long articleNo);
 
 
-//  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
+  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
   //641
   default Article dtoToEntity(ArticleDTO articleDTO) {
@@ -51,6 +58,30 @@ public interface ArticleService {
 //        articleDTO, Article.class
 //    );
     return article;
+  }
+
+  default ArticleDTO entityToDTO(Article article) {
+
+    ArticleDTO articleDTO = ArticleDTO.builder()
+        .articleNo(article.getArticleNo())
+        .articleTitle(article.getArticleTitle())
+        .articleContent(article.getArticleContent())
+        .articleCreateDate(article.getArticleCreateDate())
+        .articleState(article.getArticleState())
+        .articleScore(article.getArticleScore())
+
+        .clubNo(article.getClubNo())
+        .userNo(article.getUserNo())
+
+        .build();
+
+    List<String> fileNames =
+        article.getImageSet().stream().sorted().map(boardImage ->
+            boardImage.getUuid()+boardImage.getExtension()).collect(Collectors.toList());
+
+    articleDTO.setFileNames(fileNames);
+
+    return articleDTO;
   }
 
 

@@ -59,9 +59,9 @@ public class PhotoController {
     final List<UploadResultDTO> uploadResultDTOList = new ArrayList<>();
 
     files.forEach(multipartFile -> {
-
+      
       String originalFileName = multipartFile.getOriginalFilename();
-
+      
       int lastDotIndex = originalFileName.lastIndexOf('.');
       String extension = (lastDotIndex != -1) ? originalFileName.substring(originalFileName.lastIndexOf('.')) : "";
 
@@ -103,23 +103,23 @@ public class PhotoController {
             .uploader(user)
             .build());
 
-        log.info("----------------- [need fix]-----------------");
-
+        log.info("----------------- [07-26 15:44:57]-----------------");
 
         //603p 이미지 파일인 경우 썸네일 파일 생성
         if (Files.probeContentType(savePath).startsWith("image")) {
           isImage = true;
 //          File thumbFile = new File(uploadPath, "t_" + uuid + "_" + originalFileName);
-          File thumbFile = new File(uploadPath, uuid+extension);
+          File thumbFile = new File(uploadPath, "t_"+uuid+extension);
           Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
           log.trace("썸네일 파일 생성--");
 
-          photoService.savePhoto(PhotoDTO.builder()
-              .photoUUID(UUID.randomUUID().toString()) // 썸네일 uuid 새로 지정
-              .photoCreateDate(Instant.now())
-              .photoExtension(extension)
-              .uploader(user)
-              .build());
+//          썸네일 DB 저장 x
+//          photoService.savePhoto(PhotoDTO.builder()
+//              .photoUUID(UUID.randomUUID().toString()) // 썸네일 uuid 새로 지정
+//              .photoCreateDate(Instant.now())
+//              .photoExtension(extension)
+//              .uploader(user)
+//              .build());
 
           log.info("----------------- [썸네일 파일 저장]-----------------");
 

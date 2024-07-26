@@ -2,6 +2,8 @@ package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.global.PageRequestDTO;
+import com.momo.momopjt.global.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -108,14 +110,12 @@ public class ArticleServiceImpl implements ArticleService {
   }
 
 
-  /*
   //TODO need Fix
   @Override
   public PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO) {
     return null;
   }
 
-   */
 }
 
 

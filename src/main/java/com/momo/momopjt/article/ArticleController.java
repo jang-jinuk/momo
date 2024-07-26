@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.global.PageRequestDTO;
 import com.momo.momopjt.reply.Reply;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.ScheduleDTO;
@@ -69,7 +70,8 @@ public class ArticleController {
 
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
-  public String getArticleById(@PathVariable Long articleNo, Model model, HttpSession session) { // TODO PageRequestDTO 추가예정
+  public String getArticleById(@PathVariable Long articleNo, Model model,
+                               HttpSession session, PageRequestDTO pageRequestDTO) {
     log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
     // club number 세션에 저장 // TODO model로 저장 ?
@@ -103,19 +105,20 @@ public class ArticleController {
   public String updateArticle(@PathVariable Long articleNo,
                               @Valid @ModelAttribute ArticleDTO articleDTO,
                               BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes) { //pageRequestDTO? TODO
+                              RedirectAttributes redirectAttributes,
+                              PageRequestDTO pageRequestDTO) {
     log.info("-------- [POST article update]-------you");
 
-//    if(bindingResult.hasErrors()) {
-//      log.info("has errors.......");
-//
-//      String link = pageRequestDTO.getLink();
-//
-//      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
-//
-//      redirectAttributes.addAttribute("articleNo", articleDTO.getArticleNo());
-//
-//      return "redirect:/board/modify?"+link;
+    if(bindingResult.hasErrors()) {
+      log.info("has errors.......");
+
+      String link = pageRequestDTO.getLink();
+
+      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
+
+      redirectAttributes.addAttribute("articleNo", articleDTO.getArticleNo());
+
+      return "redirect:/board/modify?"+link; }
 
 
       articleService.updateArticle(articleNo, articleDTO);

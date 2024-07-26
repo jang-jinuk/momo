@@ -42,7 +42,7 @@ public class PhotoServiceImpl implements PhotoService {
 
     photoRepository.save(photo);
 
-    log.info("저장된 photoUUID : {}",photo.getPhotoUUID());
+    log.info("DB에 저장된 photoUUID : {}",photo.getPhotoUUID());
     log.info("------------------Photo saved--------------------");
     return photo;
   }

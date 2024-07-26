@@ -16,17 +16,18 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ArticleListAllDTO {
+
   //633p
   private long articleNo;
   private String articleTitle;
   private String articleContent;
+  private Instant articleCreateDate;
   private char articleState;
   private int articleScore;
 
   private User user;
   private Club club;
 
-  private Instant articleCreateDate;
 
   //TODO check
   private long replyCount;

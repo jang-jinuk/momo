@@ -21,9 +21,9 @@ public class UploadResultDTO {
   public String getLink(){ // getLink 나중 JSON 처리?
     log.info("----------------- [getLink()]-----------------");
     if(isImage){
-      return "t_"+uuid; // 이미지인 경우 섬네일
+      return "t_"+uuid+extension; // 이미지인 경우 섬네일
     } else {
-      return uuid;
+      return uuid+extension;
     }
   }
 

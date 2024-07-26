@@ -69,6 +69,8 @@ public class FileController {
         log.info(originalFileName);
 
         String uuid = UUID.randomUUID().toString();
+        log.info("----------------- [uuid : {}]-----------------",uuid);
+        log.info("----------------- [07-26 15:46:17]-----------------");
 //        Path savePath = Paths.get(uploadPath, uuid+"_"+originalFileName);
         Path savePath = Paths.get(uploadPath, uuid+extension);
 
@@ -110,19 +112,19 @@ public class FileController {
           //603p 이미지 파일인 경우 썸네일 파일 생성
           if(Files.probeContentType(savePath).startsWith("image")){
             isImage = true;
-            String thumbUUID = UUID.randomUUID().toString();
-            File thumbFile = new File(uploadPath, "t_"+thumbUUID+extension);
+//            String thumbUUID = UUID.randomUUID().toString(); // 새로운 uuid X
+            File thumbFile = new File(uploadPath, "t_"+uuid+extension);
             Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
             log.trace("썸네일 파일 생성--");
 
-            photoService.savePhoto(PhotoDTO.builder()
-                .photoUUID(thumbUUID) // 썸네일 uuid 새로 지정
-                .photoCreateDate(Instant.now())
-                .photoExtension(extension)
-                .uploader(user)
-                .build());
+//            photoService.savePhoto(PhotoDTO.builder()
+//                .photoUUID(uuid) // 썸네일 uuid 새로 지정
+//                .photoCreateDate(Instant.now())
+//                .photoExtension(extension)
+//                .uploader(user)
+//                .build());
 
-            log.info("----------------- [썸네일 파일 저장]-----------------");
+            log.info("----------------- [썸네일 파일 저장 / DB에 x]-----------------");
 
           }
 
@@ -176,7 +178,7 @@ public class FileController {
   // Delete 방식 삭제
 //  609p
   @ApiOperation(value = "파일삭제")
-  @DeleteMapping("/delete/{fileName}")
+  @DeleteMapping("/remove/{fileName}")
   public Map<String, Boolean> deleteFile(@PathVariable String fileName){
 
     log.info("----------------- [deleteFile]-----------------");
@@ -201,6 +203,7 @@ public class FileController {
       log.info("----------------- [delete Fail]-----------------");
       log.error(e.getMessage());
     }
+
     resultMap.put("result", isRemoved);
 
 
@@ -208,6 +211,8 @@ public class FileController {
 
     int lastDotIndex = fileName.lastIndexOf('.');
     photoService.deletePhoto(fileName.substring(0,lastDotIndex));
+
+    log.info("----------------- [filedeleted]-----------------{}",fileName);
 
     return resultMap;
   }
