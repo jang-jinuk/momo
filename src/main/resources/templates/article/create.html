@@ -3,6 +3,171 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
+
+<th:block layout:fragment="content">
+
+    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
+        <label for="articleTitle">제목:</label>
+        <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
+               oninput="limitTitleLength()"><br>
+        <label for="articleContent">내용:</label>
+        <textarea name="articleContent" id="articleContent" oninput="limitTextarea()"></textarea><br>
+
+        <!-- 이미지 업로드 YY -->
+        <span class="input-group mb-3">Images</span>
+        <div class="float-end uploadHidden">
+            <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+    </form>
+
+
+    <!--    upload Modal Part YY -->
+    <div class="modal uploadModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Upload Files(Modal Title)</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="file" name="files" class="form-control" multiple>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
+
+            console.log("upload to server.....................+formObj")
+            console.log(formObj)
+
+            const response = await axios({
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            return response.data
+
+
+        }
+
+        async function removeFileToServer(uuid, extension) {
+            const response = await axios.delete(`/remove/${uuid}${filename}`)
+            return response.data
+        }
+
+        //image upload modal event (show / hide)
+        const errors = [[${errors}]]
+        console.log(errors)
+
+        let errorMsg = ''
+        if (errors) {
+            for (let i = 0; i < errors.length; i++) {
+                errorMsg += `${errors[i].field} is ${errors[i].code} \n`
+            }
+            alert(errorMsg) //error message display!
+        }
+
+        //upload modal set
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.show()
+        }, false)
+
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+            const formObj = new FormData();
+            const fileInput = document.querySelector("input[name='files']")
+
+            console.log("fileInput.files")
+            console.log(fileInput.files)
+
+            const files = fileInput.files
+
+            for (let i = 0; i < files.length; i++) {
+                formObj.append("files", files[i]);
+            }
+
+            uploadToServer(formObj).then(result => {
+                console.log("result")
+                console.log(result)
+
+
+                uploadModal.hide()
+            }).catch(e => {
+                uploadModal.hide()
+            })
+
+        }, false)
+
+
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
+        fuction
+        showUploadFile({uuid, extension, link})
+        {
+            const str =
+                `<div class="card col-4">
+<div class="card-header d-flex justify-content-center">${fileName},${uuid}
+<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+</div>
+<div class="card-body">
+<img src="/view/${link}" data-src="${uuid}${extension}">
+</div>
+</div>`
+
+            uploadResult.innerHTML += str
+        }
+
+
+        /* Thymeleaf의 JavaScript 인라인 사용 */
+        function limitTitleLength() {
+            var maxLength = 50;
+            var title = document.getElementById("articleTitle").value;
+            if (title.length > maxLength) {
+                document.getElementById("articleTitle").value = title.substring(0, maxLength);
+            }
+        }
+
+        function limitTextarea() {
+            var maxLength = 500;
+            var text = document.getElementById("articleContent").value;
+            if (text.length > maxLength) {
+                document.getElementById("articleContent").value = text.substring(0, maxLength);
+            }
+        }
+    </script>
+</th:block>
+<!-- 원본
+
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
 <th:block layout:fragment="content">
     <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
         <label for="articleTitle">제목:</label>
@@ -34,3 +199,6 @@
         }
     </script>
 </th:block>
+
+
+-->

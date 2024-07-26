@@ -1,6 +1,5 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.PhotoDTO;
@@ -15,7 +14,6 @@ import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -47,7 +45,7 @@ public class ClubController {
   private PhotoRepository photoRepository;
   @Autowired
   private ArticleService articleService;
-  @Qualifier("modelMapper")
+//  @Qualifier("modelMapper")
   @Autowired
   private ModelMapper modelMapper;
   //모임 메인페이지 조회

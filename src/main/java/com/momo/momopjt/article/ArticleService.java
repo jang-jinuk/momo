@@ -17,7 +17,7 @@ public interface ArticleService {
   void deleteArticle(Long articleNo);
 
 
-  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
+//  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
   //641
   default Article dtoToEntity(ArticleDTO articleDTO) {

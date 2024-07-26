@@ -73,7 +73,8 @@ public class SecurityConfig {
 
 
     // 소셜 로그인 설정
-    http.oauth2Login()
+    http
+        .oauth2Login()
         .loginPage("/user/login")
         .defaultSuccessUrl("/home", true)
         .successHandler(authenticationSuccessHandler())
