@@ -1,6 +1,5 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.article.Article;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +16,7 @@ import java.time.Instant;
 @Table(name = "photo")
 public class Photo {
   @Id
-  @Size(max = 255)
+  @Size(max = 36)
   @Column(name = "photo_uuid", nullable = false)
   private String photoUUID;
 
@@ -27,27 +26,21 @@ public class Photo {
 
   @Size(max = 255)
   @NotNull
-  @Column(name = "photo_original_name")
-  private String photoOriginalName;
-
-  @NotNull
-  @Column(name = "photo_size")
-  private Long photoSize;
-
-  @Size(max = 255)
-  @Column(name = "photo_thumbnail")
-  private String photoThumbnail;
-
-  @Column(name= "photo_data")
-  @Lob
-  private byte[] photoData;
+  @Column(name = "photo_extension")
+  private String photoExtension;
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)
-  private User userNo;
+  private User uploader;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name= "article_no")
-  private Article articleNo;
+  @Column(name = "photo_tag")
+  private Character tag; // User, Club, Schedule, Article 속성 어디에 필요한 것인지 명시
+
+
+  //toString custom : uuid+extension 해서 파일 이름을 String 타입으로 return
+  @Override
+  public String toString() {
+    return photoUUID+photoExtension;
+  }
 }
