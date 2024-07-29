@@ -31,34 +31,40 @@ public class UserServiceImpl implements UserService {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     @Override
-    //@Transactional
-    public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
-        log.info("----------------- [signup()]-----------------YY");
-
-        //UserId 중복 검사
+    public void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException {
         String userId = userDTO.getUserId();
         String userEmail = userDTO.getUserEmail();
-        boolean existId = userRepository.existsByUserId(userId);
-        boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
+        String userNickname = userDTO.getUserNickname();
+        String password = userDTO.getUserPw();
+        String confirmPassword = userDTO.getConfirmUserPw();
 
-        if (existId) {
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        // 아이디 중복 검사
+        if (userRepository.existsByUserId(userId)) {
             throw new UserIdException();
         }
 
-        if(existEmail){
+        // 이메일 중복 검사
+        if (userRepository.existsByUserEmail(userEmail)) {
             throw new UserEmailException();
         }
 
-//      Email 중복 검사
-        User user = modelMapper.map(userDTO, User.class);
+        // 닉네임 중복 검사
+        if (userRepository.existsByUserNickname(userNickname)) {
+            throw new UserNicknameException();
+        }
 
-        // 비밀번호 암호화
-        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
-
-        // 역할 설정
+        // User 엔티티 생성 및 설정
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserEmail(userEmail);
+        user.setUserNickname(userNickname);
+        user.changePassword(passwordEncoder.encode(password));
         user.addRole(UserRole.USER);
 
-        // 나이 계산
+        // 생년월일로 나이 계산
         int userAge = calculateAge(userDTO.getUserBirth());
         user.setUserAge(userAge);
 
@@ -71,16 +77,23 @@ public class UserServiceImpl implements UserService {
         user.setUserState('0');
         user.setUserLikeNumber(0);
 
-        log.info(user);
-        log.info(user.getRoleSet());
+
+        user.setUserAddress(userDTO.getUserAddress());
+        user.setUserCategory(userDTO.getUserCategory());
+        user.setUserGender(userDTO.getUserGender());
+        user.setUserMBTI(userDTO.getUserMBTI());
+        user.setUserBirth(userDTO.getUserBirth());
 
         userRepository.save(user);
     }
 
-    //가입된 생년월일로 데이터베이스에 age항목에 넣는다.
-    private int calculateAge(LocalDate birthDate) {
-        return Period.between(birthDate, LocalDate.now()).getYears();
+    private int calculateAge(LocalDate userBirth) {
+        if (userBirth == null) {
+            throw new IllegalArgumentException("생년월일이 null입니다.");
+        }
+        return Period.between(userBirth, LocalDate.now()).getYears();
     }
+
 
     //TODO 리뷰 필요 YY JJ
     @Override

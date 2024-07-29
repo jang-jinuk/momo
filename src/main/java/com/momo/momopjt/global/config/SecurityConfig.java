@@ -48,7 +48,7 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**", "/alarm/**").permitAll()
         //.antMatchers("/admin/**").hasRole("ADMIN") todo 잠깐 죽여놓음
         .and()
         .formLogin().loginPage("/user/login")

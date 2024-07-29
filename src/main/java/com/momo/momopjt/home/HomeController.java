@@ -37,6 +37,11 @@ public class HomeController {
 
     model.addAttribute("myClubDTOList", myClubDTOList);
     model.addAttribute("clubDTOList", clubDTOList);
+    if (user != null) {
+      // 로그인한 사용자의 닉네임을 모델에 추가
+      model.addAttribute("userNickname", user.getUserNickname()); // 또는 user.getNickname()이 적절한 방법입니다
+    }
     return "home";
   }
 }
+

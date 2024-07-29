@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.momo.momopjt.user.QUser.user;
+
 
 @Controller
 @RequestMapping("/user")
@@ -77,6 +79,24 @@ public class UserController {
     return "user/signup";
   }
 
+  @GetMapping("/checkUserIdDuplicate")
+  @ResponseBody
+  public boolean checkUserIdDuplicate(@RequestParam("userId") String userId) {
+    return userRepository.existsByUserId(userId);
+  }
+
+  @GetMapping("/checkUserNicknameDuplicate")
+  @ResponseBody
+  public boolean checkUserNicknameDuplicate(@RequestParam("userNickname") String userNickname) {
+    return userRepository.existsByUserNickname(userNickname);
+  }
+
+  @GetMapping("/checkUserEmailDuplicate")
+  @ResponseBody
+  public boolean checkUserEmailDuplicate(@RequestParam("userEmail") String userEmail) {
+    return userRepository.existsByUserEmail(userEmail);
+  }
+
   @PostMapping("/signup")
   public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /signup with data: {}", userDTO);
@@ -100,10 +120,15 @@ public class UserController {
       redirectAttributes.addFlashAttribute("errorEmail", "userEmail");
       return "redirect:/user/signup";
 
+    } catch (UserService.UserNicknameException e) {
+      redirectAttributes.addFlashAttribute("errorNickname", "userNickname");
+      return "redirect:/user/signup";
+
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
       return "redirect:/user/signup";
     }
+
     redirectAttributes.addFlashAttribute("result", "success");
     return "redirect:/home"; // 회원가입 후 홈으로
 
@@ -188,6 +213,20 @@ public class UserController {
       return "user/delete-account"; // 에러 발생 시 다시 탈퇴 폼 페이지로
     }
   }
+  @PostMapping("/submitCategory")
+  public String submitCategory(@RequestParam("userCategory") String userCategory,
+                               RedirectAttributes redirectAttributes) {
+
+    // UserDTO 객체 생성 및 userCategory 설정
+    UserDTO userDTO = new UserDTO();
+    userDTO.setUserCategory(userCategory);
+
+    // 여기서 userDTO를 사용하여 필요한 작업을 수행합니다 (예: 데이터베이스 저장)
+
+    redirectAttributes.addFlashAttribute("result", "success");
+    return "redirect:/home"; // 성공 시 홈으로 리다이렉트
+  }
+
 
   //내 신고 페이지 조회/페이징
   @GetMapping("/profile/my-report")

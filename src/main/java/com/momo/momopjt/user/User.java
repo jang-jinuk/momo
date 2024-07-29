@@ -34,12 +34,13 @@ public class User {
     private String  userCategory;
     private String userAddress;
     private String userMBTI;
-    private Character userState;
-    private Character userSocial;
-    private String userPhoto;
-    private Integer userLikeNumber;
+    private Character userState='0';
+    private Character userSocial= 'M';
+    private String userPhoto="";
+    private Integer userLikeNumber= 0;
     private Instant userCreateDate;
     private Instant userModifyDate;
+
 
     @Enumerated(EnumType.ORDINAL)
     private UserRole userRole = UserRole.USER; // 기본값 설정

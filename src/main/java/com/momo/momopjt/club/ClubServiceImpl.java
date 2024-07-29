@@ -55,7 +55,7 @@ public class ClubServiceImpl implements ClubService {
   private final UserAndClubService userAndClubService;
 
   private final ModelMapper modelMapper;
-  
+
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
@@ -104,7 +104,7 @@ public class ClubServiceImpl implements ClubService {
 
   // 특정 모임 조회
   @Override
-//  @Transactional TODO 지울지 확인 0724 YY 
+//  @Transactional TODO 지울지 확인 0724 YY
   public ClubDTO readOneClub(Long clubNo) {
     Optional<Club> result = clubRepository.findById(clubNo);
 
@@ -187,7 +187,6 @@ public class ClubServiceImpl implements ClubService {
 
     //해당 모임 맴버 전체 삭제
     userAndClubService.deleteAllMembers(clubNo);
-
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     club = result.orElseThrow();
@@ -197,6 +196,12 @@ public class ClubServiceImpl implements ClubService {
 
     // 모임 삭제
     clubRepository.deleteById(clubNo);
+
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = getCurrentUser(); // 현재 사용자 정보를 반환하는 메서드
+    //모임 삭제 이벤트
+    alarmService.createClubDeletedAlarm(user,club);
+    log.info("-------- [모임 삭제시 모임장에게 알람 이벤트 전송]-------you");
 
     //해당 모임 대표사진 삭제
     if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경

@@ -11,7 +11,7 @@
 <div class="container">
     <h2>비밀번호 찾기</h2>
 
-    <form id="passwordResetForm" action="/user/find/password" method="post" th:object="${findPasswordRequest}">
+    <form id="passwordResetForm" action="/user/find/pw" method="post" th:object="${findPasswordRequest}">
         <div class="form-group">
             <label for="userId">아이디</label>
             <input type="text" id="userId" name="userId" th:field="*{userId}" class="form-control" required>
