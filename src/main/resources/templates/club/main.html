@@ -1,116 +1,133 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
-    <br>
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                <div class="col-3">
-                    이미지 자리
-                </div>
-                <div class="col-9">
-                    <h1 th:text="${club.clubName}"></h1>
-                    <p th:text="${club.clubContent}">Club Content</p>
-                </div>
-            </div>
-                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband-page}'|" th:if="${isMember == 2}">해산하기</button>
-                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 2}">수정하기</button>
-                <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leave-page}'|" th:if="${isMember == 3}">탈퇴하기</button>
-                <button style="float: right;" class="btn btn-outline-primary" th:onclick="|location.href='@{/club/members}'|" th:if="${isMember == 2}">맴버관리</button>
-            <!--  즐겨찾기 버튼 추가-->
-            <form th:action="@{/club/update-Wish}" method="post">
-                <input type="hidden" name="clubNo" th:value="${club.clubNo}"/>
-                <input type="hidden" name="isWish" th:value="${isWish}"/>
-                <div th:switch="${isWish}">
-                    <button type="submit" style="float: left;" th:case="'Y'" th:text="'즐겨찾기 해제'" th:style="'background-color: gray; color: white;'">즐겨찾기 해제</button>
-                    <button type="submit" style="float: left;" th:case="'N'" th:text="'즐겨찾기'" th:style="'background-color: red; color: white;'">즐겨찾기 추가</button>
-                </div>
-            </form>
-
-            <hr>
-        <h2>진행 중인 일정</h2>
-        <span>
-            <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
-        </span>
-        <div class="row">
-            <div class="col-4" th:each="schedule : ${getOngoingSchedules}">
-                <div class="card mb-3" style="max-width: 415px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="/assets/game.jpg" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
-                                    <h3 class="card-title" th:text="${schedule.scheduleTitle}"></h3>
+    <div class="sb-nav-fixed">
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">
+                                <a class="link member-manage" th:href="@{/club/members}" th:if="${isMember == 2}">
+                                    <h5>모임원 ></h5>
                                 </a>
-                                <p class="card-text" th:text="${#dates.format(schedule.scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정 시작시간</p>
-                                <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
-                                <p class="card-text" th:text="|${schedule.scheduleParticipants} / ${schedule.scheduleMax}|">참가인원</p>
+                                <h5 th:unless="${isMember == 2}">모임원</h5>
+                            </div>
+                            <hr>
+                            <div th:each="member : ${userAndClubDTOS}" class="member-container">
+                                <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image clubMain">
+                                <div class="member-info">
+                                    <h6 class="sb-sidenav-menu" th:text="${member.userNo.userNickname}"></h6>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </nav>
             </div>
-        </div>
-        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
-        <hr>
-        <h2>마감된 일정</h2>
-        <div class="row">
-            <div class="col-4" th:each="schedule : ${endSchedules}">
-                <div class="card mb-3" style="max-width: 415px;">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-<!--                            <span th:text="${schedule64List.get(0)}"></span>-->
-
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(0)}" alt="schedule Image"/>-->
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(1)}" alt="schedule Image"/>-->
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(2)}" alt="schedule Image"/>-->
-                            <img src="/assets/game.jpg" class="img-fluid rounded-start" alt="...">
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid" style="width: 80%">
+                        <div class="row">
+                            <div class="col-12 d-flex align-items-center">
+                                <img class="club-cover" src="/assets/프로필.png">
+                                <div class="club-info">
+                                    <h1 class="mt-4" th:text="${club.clubName}">모임명</h1>
+                                    <p th:text="${club.clubContent}">모임 소개</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
-                                    <h3 class="card-title" th:text="${schedule.scheduleTitle}"></h3>
-                                </a>
-                                <p class="card-text" th:text="${#dates.format(schedule.scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정 시작시간</p>
-                                <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
-                                <p class="card-text" th:text="|${schedule.scheduleParticipants} / ${schedule.scheduleMax}|">참가인원</p>
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <h2>진행 중인 일정</h2>
+                            <div class="row row-cols-1 row-cols-md-3 g-0">
+                                <div class="col-3" th:each="schedule, iterStat : ${getOngoingSchedules}">
+                                    <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
+                                        <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
+                                            <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+                                        </a>
+                                        <div class="card-body">
+                                            <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
+                                                <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
+                                            </a>
+                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
+                         (${ampm == 'AM'} ? '오전' : '오후') +
+                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
+                                                일정 시작시간
+                                            </p>
+                                            <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline-dark mt-3 load-more">더보기</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <br>
+                        <div class="row">
+                            <h2>마감된 일정</h2>
+                            <div class="row row-cols-1 row-cols-md-3 g-0">
+                                <div class="col-3" th:each="schedule, iterStat : ${endSchedules}">
+                                    <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
+                                        <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
+                                            <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+                                        </a>
+                                        <div class="card-body">
+                                            <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}" th:inline="text">
+                                                <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
+                                            </a>
+                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
+                         (${ampm == 'AM'} ? '오전' : '오후') +
+                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
+                                                일정 시작시간
+                                            </p>
+                                            <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline-dark mt-3 load-more">더보기</button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
-        </div>
-        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
-        <hr>
-        <h2>후기</h2>
-        <span>
-            <button class="btn btn-outline-success" th:onclick="|location.href='@{/article/create}'|">후기글 등록</button>
-        </span>
-        <div class="container">
-
-            <div class="row">
-                <div class="col-3" th:each="article : ${articles}">
-                    <div class="card">
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                            <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
-        </div>
         </div>
     </div>
 </th:block>
-<script layout:fragment="script" th:inline="javascript">
-    /*<![CDATA[*/
-    var message = /*[[${message}]]*/ null;
-    if (message) {
-        alert(message)
-    }
-</script>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var titles = document.querySelectorAll('.truncate-title');
+            titles.forEach(function (title) {
+                if (title.textContent.length > 20) {
+                    title.textContent = title.textContent.substr(0, 20) + '...';
+                }
+            });
+
+            document.querySelectorAll('.load-more').forEach(button => {
+                const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule');
+                if (hiddenSchedules.length <= 3) {
+                    button.style.display = 'none';
+                }
+                button.addEventListener('click', function() {
+                    const hiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.more-schedule.d-none');
+                    for (let i = 0; i < 3 && i < hiddenSchedules.length; i++) {
+                        hiddenSchedules[i].classList.remove('d-none');
+                    }
+                    if (hiddenSchedules.length <= 3) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</th:block>
+</html>
