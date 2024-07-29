@@ -22,5 +22,4 @@ public interface ClubService {
 
   class ClubNameException extends Exception{}
 
-  ClubDTO getClubByClubNo(Long clubNo);
 }

@@ -217,10 +217,4 @@ public class ClubServiceImpl implements ClubService {
 
     return clubDTOS;
   }
-  //
-  @Override
-  public ClubDTO getClubByClubNo(Long clubNo) {
-    Club club = clubRepository.findById(clubNo).orElse(null); // 클럽이 존재하지 않을 때 null 반환
-    return club != null ? modelMapper.map(club, ClubDTO.class) : null;
-  }
 }
