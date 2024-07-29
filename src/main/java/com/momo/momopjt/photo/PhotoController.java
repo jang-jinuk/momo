@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.UUID;
 
 @Controller
@@ -61,21 +60,17 @@ public class PhotoController {
         //DB 저장 로직 1 DTO 생성
         PhotoDTO photoDTO = PhotoDTO.builder()
             .photoUUID(newUUID)
+            .photoExtension("")
+            .photoURL("")
 //            .photoCreateDate() // serviceImpl에서 처리
-            .photoData(photoBytes)
-            .photoOriginalName(file.getOriginalFilename())
-            .photoSize(file.getSize())
 //            .photoThumbnail() //임시
 //            .articleNo(articleRepository.findById(6L).orElseThrow()) // not null 아님
-            .userNo(userRepository.findById(1L).orElseThrow())
+            .uploader(userRepository.findById(1L).orElseThrow())
             .build();
         //DB 저장 로직 2 저장
-        photoService.savePhoto(photoDTO);
+//        photoService.savePhoto(photoDTO); 위 내용 정리후 주석풀기 //TODO
 
-        log.info("----------------- [base64 처리]-----------------");
-        String base64Image = Base64.getEncoder().encodeToString(photoBytes);
-        model.addAttribute("base64Image", base64Image);
-
+//TODO 수정중 BASE64 제거한 부분
         model.addAttribute("message", "File uploaded successfully!");
 
       } catch (IOException e) {
@@ -93,10 +88,9 @@ public class PhotoController {
   @GetMapping("/photo/photo/{photoUUID}")
   public String getPhoto(@PathVariable String photoUUID, Model model) {
     log.info("----------------- [GET Photo]-----------------");
+
     Photo photo = photoService.getPhoto(photoUUID);
-    byte[] data = photo.getPhotoData();
-    String base64data = Base64.getEncoder().encodeToString(data);
-    model.addAttribute("base64data", base64data);
+
     return "photo/photo";
   }
 

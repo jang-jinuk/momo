@@ -1,16 +1,14 @@
 package com.momo.momopjt.photo;
 
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Optional;
-
 import com.momo.momopjt.club.ClubRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -91,13 +89,5 @@ public class PhotoServiceImpl implements PhotoService {
   }
 
 
-  @Override
-  public String getPhoto64(String photoUUID) {
-
-    Photo Photo = photoRepository.findById(photoUUID).orElseThrow();
-    String base64str = Base64.getEncoder().encodeToString(Photo.getPhotoData());
-
-    return base64str;
-  }
 
 }
