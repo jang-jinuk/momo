@@ -5,17 +5,21 @@ package com.momo.momopjt.userandclub;
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+
+import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.user.UserServiceImpl;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
@@ -45,6 +49,7 @@ public class UserAndClubServiceImpl implements UserAndClubService {
   private final UserRepository userRepository;
 
   private final ModelMapper modelMapper;
+  private final UserService userService;
 
 
   //모임 가입 신청
@@ -184,5 +189,36 @@ public class UserAndClubServiceImpl implements UserAndClubService {
     List<UserAndClub> userAndClub = userAndClubRepository.findMemberByClubNoAndIsLeader(clubNo,true);
     UserAndClubDTO userAndClubDTO = modelMapper.map(userAndClub.get(0), UserAndClubDTO.class);
     return userAndClubDTO;
+  }
+
+  //모임 즐겨찾기 여부 조회
+  @Override
+  public List<Club> findMyWishClubs(User user) {
+    log.info("...... [U and C ServiceImpl/findMyWishClubs/Start]..........KSW");
+    // userNo로 isWish 가 Y인 clubNo 들을 조회해서 Long 타입 List 로 받음
+    List<Long> clubNumbers = userAndClubRepository.findClubNumbersByUser(user);
+    log.info("User 의 즐겨찾기 클럽 번호 목록: {}", clubNumbers);
+
+    if (clubNumbers.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<Club> clubs = clubRepository.findAllById(clubNumbers);
+    log.info("즐겨찾기 클럽 목록: {}", clubs);
+    return clubs;
+  }
+
+  //모임 즐겨찾기/해제 todo 0726 시간 남으시면 코드 한번 봐주세요 SW
+  @Override
+  public void updateWishClub(UserAndClubDTO userAndClubDTO) {
+    log.info("...... [U and C ServiceImpl/updateWishClub/Start]..........KSW");
+    UserAndClub updateWish = userAndClubRepository.findByUserNoAndClubNo(
+    userAndClubDTO.getUserNo(), userAndClubDTO.getClubNo()); //현재 클럽과 유저를 받아와서 주입
+    //isWish 값 변경
+    if(userAndClubDTO.getIsWish() == 'N'){
+      updateWish.setIsWish('Y');
+    } else if(userAndClubDTO.getIsWish() == 'Y'){
+      updateWish.setIsWish('N');
+    }
+    userAndClubRepository.save(updateWish);
   }
 }

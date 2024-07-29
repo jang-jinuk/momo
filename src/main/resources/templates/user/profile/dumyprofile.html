@@ -52,17 +52,33 @@
                 <p>점수: <span th:text="${article.articleScore}">점수</span></p>
             </li>
         </th:block>
-        <th:block th:if="${userArticles.size() == 0}">
-            <li class="list-group-item">작성한 기사가 없습니다.</li>
+        <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
+            <li class="list-group-item">작성한 후기가 없습니다.</li>
         </th:block>
     </ul>
+
+<h4>즐겨찾기한 모임</h4>
+<ul class="list-group">
+    <th:block th:each="club : ${userWishClub}">
+        <li class="list-group-item">
+            <h5>
+                <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:text="${club.clubName}">모임 이름</a>
+            </h5>
+            <!-- todo 0725 후기 사진 칼럼 SW -->
+            <p th:text="${club.clubCategory}">모임 소개</p>
+        </li>
+    </th:block>
+    <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
+        <li class="list-group-item">즐겨찾기한 모임이 없습니다.</li>
+    </th:block>
+</ul>
 </div>
-    <div>
-        <button onclick="location.href='/home'">홈으로</button>
-    </div>
-    <div>
-        <button th:if="${loggedInUserId == user.userId}" onclick="location.href='/user/profile/my-report'">내 신고내역</button>
-    </div>
+<div>
+    <button onclick="location.href='/home'">홈으로</button>
+</div>
+<div>
+    <button th:if="${loggedInUserId == user.userId}" onclick="location.href='/user/profile/my-report'">내 신고내역</button>
+</div>
 <!-- 신고 버튼 -->
 <div><!-- 자기 자신이 로그인했으면 버튼 안보이게 함 <button th:if="${loggedInUserId != user.userId}" -->
     <button th:if="${loggedInUserId != user.userId}" onclick="openModal()" class="btn btn-primary">신고하기</button>

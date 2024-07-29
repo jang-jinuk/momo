@@ -20,10 +20,17 @@
                 <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 2}">수정하기</button>
                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leave-page}'|" th:if="${isMember == 3}">탈퇴하기</button>
                 <button style="float: right;" class="btn btn-outline-primary" th:onclick="|location.href='@{/club/members}'|" th:if="${isMember == 2}">맴버관리</button>
-        </div>
+            <!--  즐겨찾기 버튼 추가-->
+            <form th:action="@{/club/update-Wish}" method="post">
+                <input type="hidden" name="clubNo" th:value="${club.clubNo}"/>
+                <input type="hidden" name="isWish" th:value="${isWish}"/>
+                <div th:switch="${isWish}">
+                    <button type="submit" style="float: left;" th:case="'Y'" th:text="'즐겨찾기 해제'" th:style="'background-color: gray; color: white;'">즐겨찾기 해제</button>
+                    <button type="submit" style="float: left;" th:case="'N'" th:text="'즐겨찾기'" th:style="'background-color: red; color: white;'">즐겨찾기 추가</button>
+                </div>
+            </form>
 
-        <br>
-        <hr>
+            <hr>
         <h2>진행 중인 일정</h2>
         <span>
             <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
@@ -97,6 +104,7 @@
             </div>
             <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
         </div>
+        </div>
     </div>
 </th:block>
 <script layout:fragment="script" th:inline="javascript">
@@ -105,5 +113,4 @@
     if (message) {
         alert(message)
     }
-
 </script>

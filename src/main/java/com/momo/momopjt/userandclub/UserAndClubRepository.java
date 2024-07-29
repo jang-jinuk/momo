@@ -39,4 +39,7 @@ public interface UserAndClubRepository extends JpaRepository<UserAndClub, Long> 
   @Query("SELECT u.clubNo FROM UserAndClub u WHERE u.userNo = :userNo AND u.isLeader IS NOT NULL")
   List<Club> findMyClubs(@Param("userNo")User userNo);
 
+  //특정 유저의 즐겨찾기 모임 조회
+  @Query("SELECT u.clubNo.clubNo FROM UserAndClub u WHERE u.userNo = :userNo AND u.isWish = 'Y'")
+  List<Long> findClubNumbersByUser(@Param("userNo") User userNo);
 }
