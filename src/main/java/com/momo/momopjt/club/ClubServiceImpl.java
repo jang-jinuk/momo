@@ -66,7 +66,11 @@ public class ClubServiceImpl implements ClubService {
     if (existClubName) {
       throw new ClubNameException();
     }
-    log.info("----------------- [clubphoto UUID{}]-----------------",clubDTO.getClubPhotoUUID());
+
+
+
+
+    log.info("----------------- [clubphoto UUID : {}]-----------------",clubDTO.getClubPhotoUUID());
     //YY
     Photo photo = photoService.getPhoto(clubDTO.getClubPhotoUUID()); // TODO Err
 

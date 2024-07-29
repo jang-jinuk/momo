@@ -78,6 +78,7 @@ public class PhotoServiceImpl implements PhotoService {
   public Photo getPhoto(String photoUUID) {
     log.info("------------ getPhoto() ----------jinuk");
     Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
+    log.info("----------------- [{}]-----------------",photoOptional);
 
     return photoOptional.orElseThrow();
 

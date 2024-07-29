@@ -8,6 +8,7 @@
         <div class="container row-8 col-2 my-5">
             <h1>모임 생성</h1>
         </div>
+
         <form action="/club/create" method="post" onsubmit=" return validateForm()">
             <div class="container row-4">
                 <div class="row align-items-center mb-3">
@@ -57,11 +58,11 @@
                             </div>
                         </div>
 
-<!--                        <div class="d-grid gap-2 d-md-flex">-->
-<!--                            <div class="form-group">-->
-<!--                                <input name="files" type="file" class="form-control-file" id="photoUpload" accept="image/*">-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <!--                        <div class="d-grid gap-2 d-md-flex">-->
+                        <!--                            <div class="form-group">-->
+                        <!--                                <input name="files" type="file" class="form-control-file" id="photoUpload" accept="image/*">-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                     </div>
                     <div class="container mt-5">
                         <div class="row align-items-center text-container">
@@ -69,7 +70,9 @@
                                 <h4>모임 소개</h4>
                             </div>
                             <div class="mb-3 col-2">
-                                <textarea name="clubContent" id="limitedTextarea" class="form-control custom-text" rows="3" minlength="10" maxlength="1000" placeholder="10~1000자까지 입력 가능합니다."></textarea>
+                                <textarea name="clubContent" id="limitedTextarea" class="form-control custom-text"
+                                          rows="3" minlength="10" maxlength="1000"
+                                          placeholder="10~1000자까지 입력 가능합니다."></textarea>
                                 <div id="charCount" class="form-text">0 / 1000 글자</div>
                             </div>
                             <div class="container mt-4">
@@ -78,7 +81,8 @@
                                         <h4>모임 카테고리</h4>
                                     </div>
                                     <div class="col">
-                                        <input name="clubCategory" type="text" class="form-control custom-input" placeholder="맛집탐방, 카페투어">
+                                        <input name="clubCategory" type="text" class="form-control custom-input"
+                                               placeholder="맛집탐방, 카페투어">
                                         <button class="btn btn-dark" type="submit">선택</button>
                                     </div>
                                 </div>
@@ -87,18 +91,19 @@
                                         <div class="col-2">
                                             <h4>정원(3-100명)</h4>
                                             <div class="input-group mt-2">
-                                                <input name="clubMax" type="number" class="form-control text-center" value="3" id="count" min="3" max="300">
+                                                <input name="clubMax" type="number" class="form-control text-center"
+                                                       value="3" id="count" min="3" max="300">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
 
-
                                 <div class="d-grid my-4 d-md-flex justify-content-md-end">
                                     <div class="me-10">
-                                        <button type="submit" class="btn btn-dark SubmitBtn">만들기</button>
-                                        <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
+                                        <button type="submit" class="btn btn-dark submitBtn">만들기</button>
+                                        <button type="button" class="btn btn-dark" th:onclick="history.back()">취소
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -120,12 +125,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control" > <!-- 모임 대표사진 multipole x  -->
+                        <input type="file" name="files" class="form-control"> <!-- 모임 대표사진 multipole x  -->
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close
+                    </button>
 
                 </div>
             </div>
@@ -134,103 +140,103 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
-
 </th:block>
 
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
 
-            //이미지 업로드 처리 JS  YY
-            async function uploadToServer(formObj) {
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
 
             console.log("upload to server.....................+formObj")
             console.log(formObj)
 
             const response = await axios({
-            method: 'post',
-            url: '/upload',
-            data: formObj,
-            headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-        });
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
             return response.data
 
 
         }
 
-            async function removeFileToServer(uuid, extension) {
+        async function removeFileToServer(uuid, extension) {
             const response = await axios.delete(`/remove/${uuid}${extension}`)
             return response.data
         }
 
-            //image upload modal event (show / hide)
-            const errors = [[${errors}]]
-            console.log(errors)
+        //image upload modal event (show / hide)
+        const errors = [[${errors}]]
+        console.log(errors)
 
-            let errorMsg = ''
-            if (errors) {
+        let errorMsg = ''
+        if (errors) {
             for (let i = 0; i < errors.length; i++) {
-            errorMsg += `${errors[i].field} is ${errors[i].code} \n`
-        }
+                errorMsg += `${errors[i].field} is ${errors[i].code} \n`
+            }
             alert(errorMsg) //error message display!
         }
 
-            //upload modal set
-            const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-            document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+        //upload modal set
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
             e.stopPropagation()
             e.preventDefault()
             uploadModal.show()
         }, false)
 
-            //file upload for modal and thumb
-            document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
             const formObj = new FormData();
             const fileInput = document.querySelector("input[name='files']")
 
-            console.log("fileInput.files")
+            console.log("fileInput.files--------")
             console.log(fileInput.files)
 
             const files = fileInput.files
 
             for (let i = 0; i < files.length; i++) {
-            formObj.append("files", files[i]);
-        }
+                formObj.append("files", files[i]);
+            }
 
             uploadToServer(formObj).then(result => {
-            console.log("result")
-            console.log(result)
+                console.log("result-------")
+                console.log(result)
 
-            for( const uploadResult of result){
-            showUploadFile(uploadResult)
-        }
+                for (const uploadResult of result) {
+                    showUploadFile(uploadResult)
+                }
 
-            uploadModal.hide()
-        }).catch(e => {
-            uploadModal.hide()
-        })
+                uploadModal.hide()
+            }).catch(e => {
+                uploadModal.hide()
+            })
 
         }, false)
 
 
-            //656p showUploadFile
-            const uploadResult = document.querySelector(".uploadResult")
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
 
-            function showUploadFile({uuid, extension, link}) {
+        function showUploadFile({uuid, extension, link}) {
 
             const str = `<div class="card col-4">
-<div class="card-header d-flex justify-content-center">${uuid}${extension}
+<div class="card-header d-flex justify-content-center">
+${uuid}${extension}
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
-<img src="/${link}" data-src="${uuid}${extension}" uuid-src="${uuid}" alt="uploadfile image on card body">
+<img src="/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
 
 </div>
 </div>`
-            console.log("uploadResult str")
+            console.log("uploadResult link  str --------------------")
             console.log(link)
             console.log(str)
 
@@ -238,64 +244,73 @@
         }
 
 
-            /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
+        /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
 
-            //upload remove,, local file and div card all deleted
-            function removeFile(uuid, extension, obj) {
-                console.log("removefile log")
-                console.log(uuid)
-                console.log(extension)
-                console.log(obj)
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log("remove file log--------------")
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
 
-                const targetDiv = obj.closest(".card")
-                removeFileToServer(uuid, extension).then(data => {
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
                 targetDiv.remove()
             })
 
-            }
+        }
 
-            // After Image, finally Article Form Submitted !!
-            document.querySelector(".submitBtn").addEventListener("click", function (e) {
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
 
-                e.preventDefault()
-                e.stopPropagation()
+            e.preventDefault()
+            e.stopPropagation()
 
-                const target = document.querySelector(".uploadHidden")
+            const target = document.querySelector(".uploadHidden")
 
-                const uploadFile = uploadResult.querySelectorAll("img")
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
+
+            let str = ''
+
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
                 console.log(uploadFile)
-                let str = ''
+                const imgLink = uploadFile.getAttribute("data-src")
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
 
-                // for (let i = 0; i < uploadFiles.length; i++) {
-                //     const uploadFile = uploadFiles[i]
-                //     const imgLink = uploadFile.getAttribute("data-src")
-                    const imguuid = uploadFile.getAttribute("uuid-src")
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
 
-                str += `<input type='hidden' name='clubPhotoUUID' value="${imguuid}">`
+                str += `<input type='hidden' name='clubPhotoUUID' value="${imgUUID}">`
 
+
+            }
                 console.log(str)
 
                 target.innerHTML = str;
 
-                // document.querySelector("form").submit();
+            // document.querySelector("form").submit();
 
-                const formObj = document.querySelector("form")
+            const formObj = document.querySelector("form")
 
-                formObj.submit();
-                formObj.reset();
+            formObj.submit();
+            formObj.reset();
 
-            }, false)
+        }, false)
 
 
-            // upload modal close btn
-            document.querySelector(".closeUploadBtn").addEventListener("click", function(e){
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
 
-                e.stopPropagation()
-                e.preventDefault()
+            e.stopPropagation()
+            e.preventDefault()
 
-                uploadModal.hide();
+            uploadModal.hide();
 
-            }, false)
+        }, false)
     </script>
 </th:block>
 
