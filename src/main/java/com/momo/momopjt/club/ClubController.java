@@ -104,25 +104,6 @@ public class ClubController {
     }
     model.addAttribute("isMember", isMember);
 
-    //YY
-    //일정 사진 표시 기능
-//    for (ScheduleDTO scheduleDTO : scheduleDTOList) {
-//      String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
-//      String[] list = new String[0];
-//      Arrays.stream(list).map(schedulePhoto64);
-//      model.addAttribute("schdule64List", schedule64List);
-//    }
-//List<String> schedule64List = new ArrayList<>();
-//
-//for (ScheduleDTO scheduleDTO : scheduleDTOList) {
-//    String schedulePhoto64 = photoService.getPhoto64(scheduleDTO.getSchedulePhoto());
-//    schedule64List.add(schedulePhoto64);
-//    log.trace(schedulePhoto64.substring(1,100)+"---------------------------------------------------------");
-//}
-//model.addAttribute("schedule64List", schedule64List);
-//    log.info("----------------- [07-18 11:43:22]-----------------");
-//log.info(schedule64List.get(0).substring(1,100));
-//log.info(schedule64List.get(1).substring(1,100));
 
     //YY
 

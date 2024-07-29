@@ -51,8 +51,17 @@ public class ArticleController {
 
   // 새로운 후기글을 생성하는 메서드
   @PostMapping("/create")
-  public String createArticlePost(@ModelAttribute ArticleDTO articleDTO, HttpSession session) {
+  public String createArticlePost(@ModelAttribute ArticleDTO articleDTO, HttpSession session,
+                                  BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----------------- [POST article /create]-----------------");
+
+    if (bindingResult.hasErrors()) {
+      log.info(" article has error -----------------");
+      redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
+      return "redirect:/article/create";
+    }
+
+
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
@@ -65,6 +74,9 @@ public class ArticleController {
     articleDTO.setClubNo(club);
 
     Long articleNo = articleService.createArticle(articleDTO);
+
+    redirectAttributes.addFlashAttribute("result", articleNo);
+
     return "redirect:/article/" + articleNo;
   }
 
@@ -97,6 +109,12 @@ public class ArticleController {
     log.info("-------- [GET article update/ ]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
+
+
+//    //TODO
+//    model.addAttribute("repsonseDTO",responseDTO);
+
+
     return "article/update"; // "article/update.html" 뷰를 반환
   }
 

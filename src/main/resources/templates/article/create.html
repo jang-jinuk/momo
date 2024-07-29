@@ -175,7 +175,8 @@
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
-<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+<img src="/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+
 </div>
 </div>`
             console.log("uploadResult str")
@@ -184,6 +185,9 @@
 
             uploadResult.innerHTML += str;
         }
+
+
+        /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
 
         //upload remove,, local file and div card all deleted
         function removeFile(uuid, extension, obj) {
@@ -219,11 +223,12 @@
             }
 
             target.innerHTML = str;
-            //document.querySelector("form").submit();
+
+            document.querySelector("form").submit();
 
             const formObj = document.querySelector("form")
 
-            formObj.submit();
+            // formObj.submit();
             formObj.reset();
 
         }, false)

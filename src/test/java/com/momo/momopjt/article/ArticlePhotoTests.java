@@ -23,34 +23,35 @@ public class ArticlePhotoTests {
 @Autowired
 private ArticleService articleService;
 
-//  @Test
-//  public void testInsertWithImage(){
-//
-//    User user = new User();
-//    user.setUserNo(1L);
-//
-//    Club club = new Club();
-//    club.setClubNo(1L);
-//
-//    Article article = Article.builder()
-//        .articleNo(-1L)
-//        .userNo(user)
-//        .articleContent("articleContent")
-//        .articleCreateDate(Instant.now())
-//        .articleTitle("articleTitle")
-//        .clubNo(club)
-//        .build();
-//
-//    for (int i=0; i<3; i++){
-//
-//      article.addImage(UUID.randomUUID().toString(), ".jpg");
-//      log.info("----------------- [addImage]-----------------");
-//
-//    }
-//
-//    articleRepository.save(article);
-//
-//  }
+  @Test
+  public void testInsertWithImage(){
+
+    User user = new User();
+    user.setUserNo(1L);
+
+    Club club = new Club();
+    club.setClubNo(1L);
+
+    Article article = Article.builder()
+        .articleNo(-1L)
+        .userNo(user)
+        .articleContent("articleContent")
+        .articleCreateDate(Instant.now())
+        .articleTitle("articleTitle")
+        .articleState('0')
+        .clubNo(club)
+        .build();
+
+    for (int i=0; i<3; i++){
+
+      article.addImage(UUID.randomUUID().toString(), ".jpg");
+      log.info("----------------- [addImage]-----------------");
+
+    }
+
+    articleRepository.save(article);
+
+  }
 
 
 //  @Test
@@ -180,7 +181,7 @@ private ArticleService articleService;
 
   }
 
-  @Test
+
 
 
 }

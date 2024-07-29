@@ -48,7 +48,7 @@ public class FileController {
   //605p
   public List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO){
     log.info("----------------- [FileController uploadFile()]-----------------");
-    log.info(uploadFileDTO);
+    log.info("uploadFileDTO : {}",uploadFileDTO);
 
     //600p add
     if(uploadFileDTO.getFiles() != null){
@@ -58,7 +58,7 @@ public class FileController {
 
       uploadFileDTO.getFiles().forEach(multipartFile -> {
 
-//        log.info(multipartFile.getOriginalFilename());
+        log.info("foreach file.getOrgfileName : {}",multipartFile.getOriginalFilename());
         //602p
         String originalFileName = multipartFile.getOriginalFilename();
 
@@ -71,6 +71,7 @@ public class FileController {
         String uuid = UUID.randomUUID().toString();
         log.info("----------------- [uuid : {}]-----------------",uuid);
         log.info("----------------- [07-26 15:46:17]-----------------");
+
 //        Path savePath = Paths.get(uploadPath, uuid+"_"+originalFileName);
         Path savePath = Paths.get(uploadPath, uuid+extension);
 
@@ -153,7 +154,7 @@ public class FileController {
   @ApiOperation(value = "파일조회")
   @GetMapping("/{fileName}")
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
-    log.info("----------------- [GET viewFile  /{fileName}]-----------------");
+    log.info("----------------- [GET File  /{fileName}]-----------------");
 
     Resource resource = new FileSystemResource(uploadPath +File.separator+ fileName);
 
