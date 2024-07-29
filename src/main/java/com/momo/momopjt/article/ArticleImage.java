@@ -1,6 +1,5 @@
-package com.momo.momopjt.file;
+package com.momo.momopjt.article;
 
-import com.momo.momopjt.article.Article;
 import lombok.*;
 
 import javax.persistence.Entity;

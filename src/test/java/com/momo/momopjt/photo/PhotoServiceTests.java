@@ -30,7 +30,8 @@ public class PhotoServiceTests {
     //CRUD 중 Read-1개 test
     @Test
     public void getPhotoTest() {
-        String photoUUID = "5b2b26dc-17c3-4ae6-b528-943ef6fa2b44";
+        log.info("----------------- [get Photo Test]-----------------");
+        String photoUUID = "adfb4ebb-d477-49d7-9e10-d8ce5f16fb4e"; // Photo 테이블에 존재하는 UUID 입력
         Photo photo = photoService.getPhoto(photoUUID);
         log.info("test ^0^ photo : {}", photo);
         log.info("test *_* photoUUID : {}",photoUUID);
@@ -74,11 +75,11 @@ public class PhotoServiceTests {
     @Test
     public void removePhotoTest() {
         String photoUUID = "46afcc3e-ca2f-4441-a3e6-5c8407a5deb4";
+
         photoService.deletePhoto(photoUUID);
         Photo photo;
       try {
           photo = photoService.getPhoto(photoUUID);
-
           log.info("test -_- photo is not deleted");
       } catch (Exception e) {
           log.info("test +_+ photo is deleted");

@@ -16,8 +16,8 @@
 
                 </div>
                 <div class="col-9">
-                    <h1 th:text="${club.clubName}"></h1>
-                    <p th:text="${club.clubContent}">Club Content</p>
+                    <h1 th:text="${clubDTO.clubName}"></h1>
+                    <p th:text="${clubDTO.clubContent}">Club Content</p>
                 </div>
             </div>
                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband-page}'|" th:if="${isMember == 2}">해산하기</button>
@@ -84,7 +84,8 @@
         </div>
         <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
         <hr>
-        <h2>후기</h2>
+
+        <h2>후기</h2> <!-- 후기 출력 부분 ------------------------------------- -->
         <span>
             <button class="btn btn-outline-success" th:onclick="|location.href='@{/article/create}'|">후기글 등록</button>
         </span>
@@ -93,9 +94,17 @@
             <div class="row">
                 <div class="col-3" th:each="article : ${articles}">
                     <div class="card">
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                            <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
-                        </a>
+                        <div class="card-body">
+                            <img style="width: 100px" th:each="articleImage: ${dto.articleImages}"
+                                 th:src="|/t_${articleImage.uuid}${articleImage.extension}|">
+
+                            <hr>
+                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+                            </a>
+
+                        </div>
+
                     </div>
                 </div>
             </div>

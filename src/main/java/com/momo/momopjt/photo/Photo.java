@@ -20,17 +20,15 @@ public class Photo {
   @Column(name = "photo_uuid", nullable = false)
   private String photoUUID;
 
-  @Column(name = "photo_url")
-  private String photoURL;
-
-  @NotNull
-  @Column(name = "photo_create_date", nullable = false)
-  private Instant photoCreateDate;
 
   @Size(max = 255)
   @NotNull
   @Column(name = "photo_extension")
   private String photoExtension;
+
+  @NotNull
+  @Column(name = "photo_create_date", nullable = false)
+  private Instant photoCreateDate;
 
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

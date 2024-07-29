@@ -59,17 +59,18 @@ public class ClubServiceImpl implements ClubService {
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
-  public Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndClubDTO) throws ClubNameException {
+  public Long createClub(ClubDTO clubDTO, UserAndClubDTO userAndClubDTO) throws ClubNameException { // 0729 YY photoDTO 제거
 
     Boolean existClubName = clubRepository.existsByClubName(clubDTO.getClubName());
 
     if (existClubName) {
       throw new ClubNameException();
     }
+    log.info("----------------- [clubphoto UUID{}]-----------------",clubDTO.getClubPhotoUUID());
+    //YY
+    Photo photo = photoService.getPhoto(clubDTO.getClubPhotoUUID()); // TODO Err
 
-//    Photo photo = photoService.savePhoto(photoDTO);
-    Photo photo = photoService.getPhoto("12f2b64b-0fe2-43bf-8b5c-423e3e9aacad");
-    clubDTO.setPhotoUUID(photo);
+    clubDTO.setClubPhotoUUID(photo.getPhotoUUID()); // 0729 YY
     Instant instant = Instant.now();
     clubDTO.setClubCreateDate(instant);//모임 생성일 추가
     Club club = modelMapper.map(clubDTO, Club.class);
@@ -131,7 +132,7 @@ public class ClubServiceImpl implements ClubService {
   @Override
   public Boolean updateClub(ClubDTO clubDTO, PhotoDTO photoDTO) {
     Photo photo = photoService.savePhoto(photoDTO);
-    clubDTO.setPhotoUUID(photo);
+    clubDTO.setClubPhotoUUID(photo.getPhotoUUID());
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
 
@@ -143,7 +144,7 @@ public class ClubServiceImpl implements ClubService {
       return false;
     }
 
-    club.change(clubDTO.getPhotoUUID(), clubDTO.getClubCategory(), clubDTO.getClubContent(),
+    club.change( clubDTO.getClubCategory(), clubDTO.getClubContent(),
             clubDTO.getClubArea(), clubDTO.getClubMax()
     );
     clubRepository.save(club);
@@ -191,16 +192,21 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     club = result.orElseThrow();
-    Photo photo = club.getClubPhoto();
-    String clubPhoto = photo.getPhotoUUID();
-    log.info(clubPhoto);
+
+    //0729 YY
+    String clubPhotoStr = club.getClubPhoto();
+    log.info(clubPhotoStr);
 
     // 모임 삭제
     clubRepository.deleteById(clubNo);
 
     //해당 모임 대표사진 삭제
-    if(!clubPhoto.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
-      photoService.deletePhoto(clubPhoto);
+    if(!clubPhotoStr.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
+
+      int lastDotIndex = clubPhotoStr.lastIndexOf('.');
+      String clubPhotoUUID = (lastDotIndex != -1) ? clubPhotoStr.substring(0,lastDotIndex) : "";
+
+      photoService.deletePhoto(clubPhotoUUID);
     }
   }
 

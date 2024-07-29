@@ -31,7 +31,8 @@ public class PhotoServiceImpl implements PhotoService {
 
     Photo photo = new Photo();
     //사진을 등록하지 않으면 "default"사진 자동 저장
-    if(photoDTO.getPhotoUUID().equals("")) {
+    if(photoDTO.getPhotoUUID().equals("") || photoDTO.getPhotoUUID() == null) {
+      log.error("uuid is null or empty");
       photo.setPhotoUUID("default"); //TODO 실제 디폴트 사진으로 변경 필요 JW
       return photo;
     }
@@ -92,7 +93,6 @@ public class PhotoServiceImpl implements PhotoService {
   public void deletePhoto(String photoUUID) {
     photoRepository.deleteById(photoUUID);
   }
-
 
 
   //YY

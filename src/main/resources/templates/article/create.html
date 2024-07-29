@@ -234,6 +234,16 @@
         }, false)
 
 
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function(e){
+
+            e.stopPropagation()
+            e.preventDefault()
+
+            uploadModal.hide();
+
+        }, false)
+
         /* Thymeleaf의 JavaScript 인라인 사용 */
         function limitTitleLength() {
             var maxLength = 50;
@@ -251,15 +261,6 @@
             }
         }
 
-        // close btn
-        document.querySelector(".closeUploadBtn").addEventListener("click", function(e){
-
-            e.stopPropagation()
-            e.preventDefault()
-
-            uploadModal.hide();
-
-        }, false)
 
 
     </script>

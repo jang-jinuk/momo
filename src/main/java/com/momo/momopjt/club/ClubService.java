@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ClubService {
 
-  Long createClub(ClubDTO clubDTO, PhotoDTO photoDTO, UserAndClubDTO userAndDTO) throws ClubNameException;
+  Long createClub(ClubDTO clubDTO, UserAndClubDTO userAndDTO) throws ClubNameException; // 0729 YY photoDTO 제거
 
   ClubDTO readOneClub(Long clubNo);
 

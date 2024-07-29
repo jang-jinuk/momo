@@ -39,27 +39,34 @@ public class ClubController {
   @Autowired
   private UserService userService;
   @Autowired
-  private UserAndClubService userAndClubService;
-  @Autowired
   private PhotoService photoService;
   @Autowired
-  private PhotoRepository photoRepository;
-  @Autowired
   private ArticleService articleService;
+
+  @Autowired
+  private UserAndClubService userAndClubService;
+
+  @Autowired
+  private PhotoRepository photoRepository;
+
 //  @Qualifier("modelMapper")
   @Autowired
   private ModelMapper modelMapper;
+
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
     log.info("------------ [Get club main no: {}] ------------",clubNo);
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
-    model.addAttribute("club", clubDTO);
+    model.addAttribute("clubDTO", clubDTO);
+
     Club club = new Club();
     club.setClubNo(clubNo);
+
     List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정
     model.addAttribute("endSchedules", endSchedules);
+
     List<ScheduleDTO> getOngoingSchedules= scheduleService.readOngoingSchedules(club);//마감되지 않은 일정
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
@@ -67,7 +74,7 @@ public class ClubController {
 
     log.info("----------------- [club photo 처리]-----------------");
 
-    Photo clubPhoto = photoService.getPhoto("12f2b64b-0fe2-43bf-8b5c-423e3e9aacad");
+    Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
 //    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
     String clubProfilePhotoStr = clubPhoto.toString();
     model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
@@ -119,7 +126,7 @@ public class ClubController {
 
   //모임 생성
   @PostMapping("/create")
-  public String createClubPost(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes)  {
+  public String createClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes)  { // 0729 YY photoDTO 제거
     log.info("------------ [Post club create] ------------");
 
     //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
@@ -133,7 +140,7 @@ public class ClubController {
     //TODO 파일 업로드 기능과 연결필요 JW
 
     try {
-      clubNo = clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+      clubNo = clubService.createClub(clubDTO, userAndClubDTO); //0729 YY photoDTO 따로 필요 x
 
     } catch (ClubService.ClubNameException e) {
       redirectAttributes.addFlashAttribute("error", "clubName");

@@ -1,7 +1,6 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.file.ArticleImage;
 import com.momo.momopjt.user.User;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;

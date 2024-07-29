@@ -45,7 +45,7 @@ public class ClubServiceTests {
         .build();
 
     try {
-      clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+      clubService.createClub(clubDTO, userAndClubDTO); //PhotoDTO 제거 0729 YY
     } catch (ClubService.ClubNameException e) {
       e.printStackTrace();
     }

@@ -152,7 +152,7 @@ public class FileController {
 //  GET방식 파일 조회
     //608p
   @ApiOperation(value = "파일조회")
-  @GetMapping("/{fileName}")
+  @GetMapping("/{fileName}") // 원래 view/{fileName}
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
     log.info("----------------- [GET File  /{fileName}]-----------------");
 
