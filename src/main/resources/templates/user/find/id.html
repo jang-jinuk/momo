@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모모 아이디 찾기</title>
     <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
         .result {
             font-weight: bold;
             color: #007bff; /* 파란색으로 강조 */
@@ -24,28 +35,29 @@
     </style>
 </head>
 <body>
-<h1>아이디 찾기</h1>
+<div class="container">
+    <h1>아이디 찾기</h1>
 
-<!-- 아이디 찾기 폼 -->
-<form action="/user/find/id" method="post" th:object="${findUserIdRequest}">
-    <div>
-        <label for="findUserEmail">이메일:</label>
-        <input type="email" id="findUserEmail" name="findUserEmail" th:field="*{findUserEmail}" required />
+    <!-- 아이디 찾기 폼 -->
+    <form action="/user/find/id" method="post" th:object="${findUserIdRequest}">
+        <div>
+            <label for="findUserEmail">이메일:</label>
+            <input type="email" id="findUserEmail" name="findUserEmail" th:field="*{findUserEmail}" required />
+        </div>
+        <button type="submit">아이디 찾기</button>
+    </form>
+
+    <!-- 아이디 찾기 결과 -->
+    <div th:if="${userId}">
+        <p class="result">Your User ID is: <span th:text="${userId}"></span></p>
     </div>
-    <button type="submit">아이디 찾기</button>
-</form>
+    <div th:if="${errorMessageUserId}">
+        <p class="error" th:text="${errorMessageUserId}"></p>
+    </div>
 
-<!-- 아이디 찾기 결과 -->
-<div th:if="${userId}">
-    <p class="result">Your User ID is: <span th:text="${userId}"></span></p>
+    <!-- 비밀번호 찾기 바로가기 -->
+    <a href="/user/find/pw" class="btn-link ms-2">비밀번호 찾기</a>
+    <a href="/user/login" class="btn btn-return">로그인 화면으로</a>
 </div>
-<div th:if="${errorMessageUserId}">
-    <p class="error" th:text="${errorMessageUserId}"></p>
-</div>
-
-<!-- 비밀번호 찾기 바로가기 -->
-<a href="/user/find/pw" class="btn-link ms-2">비밀번호 찾기</a>
-<a href="/user/login" class="btn btn-return">로그인 화면으로</a>
 </body>
 </html>
-
