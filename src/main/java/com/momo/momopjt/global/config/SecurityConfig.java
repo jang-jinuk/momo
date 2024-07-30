@@ -50,7 +50,7 @@ public class SecurityConfig {
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**", "/article/**", "/alarm/**", "/club/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
-        .antMatchers("/update/**").authenticated()  // /update/** 경로를 인증된 사용자만 접근 가능하도록 설정
+        .antMatchers("/update/**").authenticated()
         .and()
         .formLogin()
         .loginPage("/user/login")
