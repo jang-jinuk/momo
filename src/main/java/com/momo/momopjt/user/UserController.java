@@ -168,17 +168,18 @@ public class UserController {
     }
 
     // 현재 로그인한 사용자 정보 가져오기
-    User currentUser = userRepository.findByUserId(userId);
+    User currentUser = userRepository.findByUserId(currentUsername);
     if (currentUser == null) {
       throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
     }
 
-    // 현재 로그인한 사용자 또는 관리자 권한이 있는 사용자만 업데이트 가능
+    // 업데이트할 사용자 정보 가져오기
     User user = userRepository.findByUserId(userId);
     if (user == null) {
       throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
     }
 
+    // 현재 로그인한 사용자 또는 관리자 권한이 있는 사용자만 업데이트 가능
     if (!userId.equals(currentUser.getUserId()) && !currentUser.getUserRole().equals(UserRole.ADMIN)) {
       throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
     }
@@ -186,11 +187,12 @@ public class UserController {
     // 사용자 정보를 DTO로 변환
     ModelMapper modelMapper = new ModelMapper();
     UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+
+    // DTO를 모델에 추가
     model.addAttribute("userDTO", userDTO);
 
     return "user/update"; // Thymeleaf 템플릿 경로
   }
-
 
   @PostMapping("/update")
   public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,

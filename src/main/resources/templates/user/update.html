@@ -58,10 +58,11 @@
     <div class="form-container">
         <form id="updateForm" th:action="@{/user/update}" method="post">
             <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
+
             <!-- 닉네임 -->
             <div class="input-group mb-3">
                 <label for="userNickname" class="input-group-text">* 닉네임</label>
-                <input type="text" id="userNickname" name="userNickname" class="form-control" placeholder="abc" required>
+                <input type="text" id="userNickname" name="userNickname" class="form-control" th:value="${userDTO.userNickname}" placeholder="abc" required>
                 <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserNickname()">중복확인</button>
             </div>
             <div id="nicknameCheckResult" class="alert" role="alert"></div>
@@ -70,11 +71,11 @@
             <div class="input-group mb-3">
                 <span class="input-group-text">성별</span>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userGender" id="male" value="m" required>
+                    <input class="form-check-input" type="radio" name="userGender" id="male" value="m" th:checked="${userDTO.userGender == 'm'}" required>
                     <label class="form-check-label" for="male">남성</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userGender" id="female" value="w" required>
+                    <input class="form-check-input" type="radio" name="userGender" id="female" value="w" th:checked="${userDTO.userGender == 'w'}" required>
                     <label class="form-check-label" for="female">여성</label>
                 </div>
             </div>
@@ -87,7 +88,7 @@
 
             <div class="mb-4">
                 <label for="userCategory" class="form-label">관심사</label>
-                <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="관심사를 선택하세요" readonly>
+                <input type="text" id="userCategory" name="userCategory" th:value="${userDTO.userCategory}" class="form-control" placeholder="관심사를 선택하세요" readonly>
             </div>
             <div class="container mb-4">
                 <nav class="navbar bg-body-tertiary">
@@ -122,14 +123,14 @@
             <!-- 주소 -->
             <div class="input-group mb-3">
                 <label for="userAddress" class="input-group-text">주소</label>
-                <input type="text" id="userAddress" name="userAddress" class="form-control" placeholder="주소를 입력하세요"/>
+                <input type="text" id="userAddress" name="userAddress" th:value="${userDTO.userAddress}" class="form-control" placeholder="주소를 입력하세요"/>
                 <button type="button" class="btn btn-outline-dark" onclick="searchAddress()">주소 검색</button>
             </div>
 
             <!-- MBTI -->
             <div class="input-group mb-3">
                 <label for="userMBTI" class="input-group-text">MBTI</label>
-                <input type="text" id="userMBTI" name="userMBTI" class="form-control">
+                <input type="text" id="userMBTI" name="userMBTI" th:value="${userDTO.userMBTI}" class="form-control">
             </div>
 
             <div class="mt-4">
