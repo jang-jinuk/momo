@@ -4434,7 +4434,7 @@ textarea.form-control-lg {
 .card-img-bottom {
     display: block;
     width: 100%;
-    height: 90%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -11199,7 +11199,7 @@ body {
 }
 
 .sb-sidenav-light {
-    background-color: #f8f9fa;
+    background-color: white;
     color: #212529;
 }
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
@@ -11400,3 +11400,23 @@ body {
 .load-more {
     margin-bottom: 1rem;
 }
+.edit-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.3rem;
+    padding-left: 1.5rem;
+}
+
+.edit-link svg {
+    margin-right: 1.5rem;
+    transform: translateY(-8px);
+    width: 24px;
+    height: 24px;
+}
+
+.more-review {
+    display: block;
+}
+
