@@ -1,16 +1,9 @@
 package com.momo.momopjt.article;
 
-import com.momo.momopjt.club.Club;
 import com.momo.momopjt.reply.ReplyRepository;
-import com.momo.momopjt.user.User;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.UUID;
 
 @SpringBootTest
 @Log4j2
@@ -23,35 +16,35 @@ public class ArticlePhotoTests {
 @Autowired
 private ArticleService articleService;
 
-  @Test
-  public void testInsertWithImage(){
-
-    User user = new User();
-    user.setUserNo(1L);
-
-    Club club = new Club();
-    club.setClubNo(1L);
-
-    Article article = Article.builder()
-        .articleNo(-1L)
-        .userNo(user)
-        .articleContent("articleContent")
-        .articleCreateDate(Instant.now())
-        .articleTitle("articleTitle")
-        .articleState('0')
-        .clubNo(club)
-        .build();
-
-    for (int i=0; i<3; i++){
-
-      article.addImage(UUID.randomUUID().toString(), ".jpg");
-      log.info("----------------- [addImage]-----------------");
-
-    }
-
-    articleRepository.save(article);
-
-  }
+//  @Test
+//  public void testInsertWithImage(){
+//
+//    User user = new User();
+//    user.setUserNo(1L);
+//
+//    Club club = new Club();
+//    club.setClubNo(1L);
+//
+//    Article article = Article.builder()
+//        .articleNo(-1L)
+//        .userNo(user)
+//        .articleContent("articleContent")
+//        .articleCreateDate(Instant.now())
+//        .articleTitle("articleTitle")
+//        .articleState('0')
+//        .clubNo(club)
+//        .build();
+//
+//    for (int i=0; i<3; i++){
+//
+//      article.addImage(UUID.randomUUID().toString(), ".jpg");
+//      log.info("----------------- [addImage]-----------------");
+//
+//    }
+//
+//    articleRepository.save(article);
+//
+//  }
 
 
 //  @Test
@@ -137,49 +130,49 @@ private ArticleService articleService;
 //
 //  }
 
-  @Test
-  void testRegisterWithImages(Article article){
-
-    log.info("----------------- [articleService.getClass.getName]-----------------{}",
-        articleService.getClass().getName());
-
-    User user = new User();
-    user.setUserNo(1L);
-
-    Club club = new Club();
-    club.setClubNo(1L);
-
-
-
-    ArticleDTO articleDTO = ArticleDTO.builder()
-        .articleNo(-1L)
-        .articleContent("testContent asd")
-        .articleTitle("testTitle title")
-
-        .articleState('0')
-        .articleScore(0)
-        .articleCreateDate(Instant.now())
-        .userNo(user)
-        .clubNo(club)
-        .build();
+//  @Test
+//  void testRegisterWithImages(Article article){
 //
-//    List<String> fileNames = article.getImageSet().stream()
-//        .map(articleImage -> articleImage.getUuid()+articleImage.getExtension())
-//        .collect(Collectors.toList());
-
-    articleDTO.setFileNames(
-        Arrays.asList(
-            UUID.randomUUID().toString()+".png",
-            UUID.randomUUID().toString()+".png",
-            UUID.randomUUID().toString()+".png"
-        ));
-
-//    long articleNo = articleService.register(articleDTO);
-//    articleService.register(articleDTO);
-    long articleNo = articleService.createArticle(articleDTO);
-    log.info("----------------- [articleNo]-----------------{}", articleNo);
-
-  }
+//    log.info("----------------- [articleService.getClass.getName]-----------------{}",
+//        articleService.getClass().getName());
+//
+//    User user = new User();
+//    user.setUserNo(1L);
+//
+//    Club club = new Club();
+//    club.setClubNo(1L);
+//
+//
+//
+//    ArticleDTO articleDTO = ArticleDTO.builder()
+//        .articleNo(-1L)
+//        .articleContent("testContent asd")
+//        .articleTitle("testTitle title")
+//
+//        .articleState('0')
+//        .articleScore(0)
+//        .articleCreateDate(Instant.now())
+//        .userNo(user)
+//        .clubNo(club)
+//        .build();
+////
+////    List<String> fileNames = article.getImageSet().stream()
+////        .map(articleImage -> articleImage.getUuid()+articleImage.getExtension())
+////        .collect(Collectors.toList());
+//
+//    articleDTO.setFileNames(
+//        Arrays.asList(
+//            UUID.randomUUID().toString()+".png",
+//            UUID.randomUUID().toString()+".png",
+//            UUID.randomUUID().toString()+".png"
+//        ));
+//
+////    long articleNo = articleService.register(articleDTO);
+////    articleService.register(articleDTO);
+//    long articleNo = articleService.createArticle(articleDTO);
+//    log.info("----------------- [articleNo]-----------------{}", articleNo);
+//
+//  }
 
 
 

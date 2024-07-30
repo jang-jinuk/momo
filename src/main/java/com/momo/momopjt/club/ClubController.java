@@ -100,7 +100,6 @@ public class ClubController {
     log.info("----------------- [club photo 처리]-----------------");
     log.trace("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
-//    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
     String clubProfilePhotoStr = clubPhoto.toString();
     log.trace("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
     model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
@@ -110,15 +109,9 @@ public class ClubController {
 
 
 
-    log.info("----------------- [{}]-----------------",clubProfilePhotoStr);
-    List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
-    model.addAttribute("articles", articles); // 주석처리 TODO YY
+    log.info("----------------- [clubphoto str {}]-----------------",clubProfilePhotoStr);
 
-    //0722 YY
-//    //scheduleDTOList에 담긴 사진 확인 로그
-//    for(ScheduleDTO s : scheduleDTOList) {
-//      log.trace(s.getSchedulePhoto());
-//    }
+
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
@@ -138,7 +131,18 @@ public class ClubController {
     model.addAttribute("isMember", isMember);
 
 
-    //YY
+    List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글 조회
+    model.addAttribute("articles", articles);
+    List<String> articlePhotoList = new ArrayList<>();
+    //YY 후기글 이미지 처리
+    if(!articles.isEmpty()) {
+      articlePhotoList = articles.stream()
+          .map(articleDTO -> photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString())//YY
+          .collect(Collectors.toList());
+    }
+    //일정 끝난 사진 파일들 view로 데이터 넘김
+    model.addAttribute("articlePhotoList", articlePhotoList);
+    log.trace("----------------- [endSchedulePhotoList : {}]-----------------", articlePhotoList);
 
 
 

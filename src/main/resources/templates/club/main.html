@@ -99,13 +99,16 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${endSchedules[i].scheduleNo})}" th:inline="text">
+                      <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${endSchedules[i].scheduleNo})}"
+                         th:inline="text">
                         <h3 class="card-title" th:text="${endSchedules[i].scheduleTitle}"></h3>
                       </a>
-                      <p class="card-text" th:text="${#dates.format(endSchedules[i].scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">
+                      <p class="card-text"
+                         th:text="${#dates.format(endSchedules[i].scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">
                         일정 시작시간</p>
                       <p class="card-text" th:text="${endSchedules[i].schedulePlace}">장소</p>
-                      <p class="card-text" th:text="|${endSchedules[i].scheduleParticipants} / ${endSchedules[i].scheduleMax}|">
+                      <p class="card-text"
+                         th:text="|${endSchedules[i].scheduleParticipants} / ${endSchedules[i].scheduleMax}|">
                         참가인원</p>
                     </div>
                   </div>
@@ -124,27 +127,33 @@
         <div class="container">
 
           <div class="row">
-            <!--                <div class="col-3" th:each="article : ${articles}">-->
-            <!--                    <div class="card">-->
-            <!--                        <div class="card-body">-->
-            <!--                            <img style="width: 100px" th:each="articleImage: ${dto.articleImages}"-->
-            <!--                                 th:src="|/view/t_${articleImage.uuid}${articleImage.extension}|">-->
+            <div th:if="${articles!=null && articles.size()>0}"
+                 th:with="artMaxIndex=${#lists.size(articles) - 1}">
+              <div class="col-4" th:each="i : ${#numbers.sequence(0, artMaxIndex)}">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="col">
+                      <img class="card-img-top"
+                           th:src="@{/view/{fileName}(fileName=${articlePhotoList[i]})}" alt="article image">
 
-            <!--                            <hr>-->
-            <!--                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">-->
-            <!--                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>-->
-            <!--                            </a>-->
+                    </div>
+                    <hr>
+                    <a th:href="@{/article/{articleNo}(articleNo=${articles[i].articleNo})}" th:inline="text">
+                      <h4 class="card-title" th:text="${articles[i].articleTitle}">후기글 제목</h4>
+                    </a>
 
-            <!--                        </div>-->
+                  </div>
 
-            <!--                    </div>-->
-            <!--                </div>-->
+                </div>
+              </div>
+            </div>
           </div>
-          <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
         </div>
+        <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
       </div>
     </div>
   </div>
+
 
 </th:block>
 <script layout:fragment="script" th:inline="javascript">

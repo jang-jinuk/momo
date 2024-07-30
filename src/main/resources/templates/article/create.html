@@ -47,20 +47,22 @@
                             <button type="reset" class="btn btn-secondary">Reset</button>
                         </div>
 
+                        <!-- Image Thumbnail display -->
+                        <div class="row mt-3">
+                            <div class="col ">
+                                <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                                    uploadResult 자리 // 삭제
+                                </div>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Image Thumbnail display -->
-    <div class="row mt-3">
-        <div class="col ">
-            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
-            uploadResult 자리 // 삭제
-            </div>
-        </div>
-    </div>
+
 
     <!--    upload Modal Part YY -->
     <div class="modal uploadModal" tabindex="-1">
@@ -72,7 +74,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control" multiple>
+                        <input type="file" name="files" class="form-control"> <!-- multiple 제외 -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -112,6 +114,7 @@
 
         async function removeFileToServer(uuid, extension) {
             const response = await axios.delete(`/remove/${uuid}${extension}`)
+            // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
             return response.data
         }
 
@@ -140,7 +143,7 @@
             const formObj = new FormData();
             const fileInput = document.querySelector("input[name='files']")
 
-            console.log("fileInput.files")
+            console.log("fileInput.files--------")
             console.log(fileInput.files)
 
             const files = fileInput.files
@@ -150,10 +153,10 @@
             }
 
             uploadToServer(formObj).then(result => {
-                console.log("result")
+                console.log("result-------")
                 console.log(result)
 
-                for( const uploadResult of result){
+                for (const uploadResult of result) {
                     showUploadFile(uploadResult)
                 }
 
@@ -171,7 +174,8 @@
         function showUploadFile({uuid, extension, link}) {
 
             const str = `<div class="card col-4">
-<div class="card-header d-flex justify-content-center">${uuid}${extension}
+<div class="card-header d-flex justify-content-center">
+${uuid}${extension}
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
@@ -179,7 +183,7 @@
 
 </div>
 </div>`
-            console.log("uploadResult str")
+            console.log("uploadResult link  str --------------------")
             console.log(link)
             console.log(str)
 
@@ -191,7 +195,7 @@
 
         //upload remove,, local file and div card all deleted
         function removeFile(uuid, extension, obj) {
-            console.log("removefile log")
+            console.log("remove file log--------------")
             console.log(uuid)
             console.log(extension)
             console.log(obj)
@@ -205,6 +209,7 @@
 
         // After Image, finally Article Form Submitted !!
         document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
 
             e.preventDefault()
             e.stopPropagation()
@@ -212,32 +217,43 @@
             const target = document.querySelector(".uploadHidden")
 
             const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
 
             let str = ''
 
             for (let i = 0; i < uploadFiles.length; i++) {
                 const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
+                console.log(uploadFile)
                 const imgLink = uploadFile.getAttribute("data-src")
 
-                str += `<input type='hidden' name='fileNames' value="${imgLink}">`
-            }
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
 
-            target.innerHTML = str;
-            console.log("str")
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+                console.log("imgUUID")
+                console.log(imgUUID)
+
+                str += `<input type='hidden' name='articlePhotoUUID' value="${imgUUID}">`
+
+
+            }
             console.log(str)
 
-            document.querySelector("form").submit();
+            target.innerHTML = str;
+
+            // document.querySelector("form").submit();
 
             const formObj = document.querySelector("form")
 
-            // formObj.submit();
+            formObj.submit();
             formObj.reset();
 
         }, false)
 
 
         // upload modal close btn
-        document.querySelector(".closeUploadBtn").addEventListener("click", function(e){
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
 
             e.stopPropagation()
             e.preventDefault()

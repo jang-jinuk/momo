@@ -3,12 +3,9 @@ package com.momo.momopjt.article;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.user.User;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -50,14 +47,17 @@ public class Article {
   private User userNo;
 
   //YY
-  @OneToMany(mappedBy = "article",
-      cascade = {CascadeType.ALL},
-      fetch = FetchType.LAZY,
-      orphanRemoval = true
-  )
-  @Builder.Default
-  @BatchSize(size = 20) // N번의 쿼리 한번에 실행
-  private Set<ArticleImage> imageSet = new HashSet<>();
+//  @OneToMany(mappedBy = "article",
+//      cascade = {CascadeType.ALL},
+//      fetch = FetchType.LAZY,
+//      orphanRemoval = true
+//  )
+//  @Builder.Default
+//  @BatchSize(size = 20) // N번의 쿼리 한번에 실행
+//  private Set<ArticleImage> imageSet = new HashSet<>();
+
+  @Column(name = "article_photo")
+  private String articlePhotoUUID;
 
   // Article 업데이트 메서드
   public void update(ArticleDTO articleDTO, Club clubNo) {
@@ -65,24 +65,27 @@ public class Article {
     this.articleContent = articleDTO.getArticleContent();
     this.articleState = articleDTO.getArticleState();
     this.articleScore = articleDTO.getArticleScore();
+
+    this.articlePhotoUUID = articleDTO.getArticlePhotoUUID();
+
     this.clubNo = articleDTO.getClubNo();
     this.userNo = articleDTO.getUserNo();
   }
 
-  public void addImage(String uuid, String extension){
-    ArticleImage articleImage = ArticleImage.builder()
-        .uuid(uuid)
-        .extension(extension)
-        .article(this)
-        .ord(imageSet.size())
-        .build();
-    this.imageSet.add(articleImage);
-  }
-
-  public void clearImages(){
-    imageSet.forEach(articleImage -> articleImage.changeArticle(null));
-    this.imageSet.clear();
-  }
+//  public void addImage(String uuid, String extension){
+//    ArticleImage articleImage = ArticleImage.builder()
+//        .uuid(uuid)
+//        .extension(extension)
+//        .article(this)
+//        .ord(imageSet.size())
+//        .build();
+//    this.imageSet.add(articleImage);
+//  }
+//
+//  public void clearImages(){
+//    imageSet.forEach(articleImage -> articleImage.changeArticle(null));
+//    this.imageSet.clear();
+//  }
 
 
 

@@ -2,6 +2,7 @@ package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.global.PageRequestDTO;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.Reply;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.ScheduleDTO;
@@ -35,6 +36,8 @@ public class ArticleController {
   private UserService userService;
   @Autowired
   private ReplyService replyService;
+  @Autowired
+  private PhotoService photoService;
 
 
   // 새로운 후기글 작성 폼을 보여주는 페이지
@@ -88,7 +91,9 @@ public class ArticleController {
 
     // club number 세션에 저장 // TODO model로 저장 ?
     Long clubNo = (Long) session.getAttribute("clubNo");
-    
+
+
+
     //출력할 게시글 조회
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     //출력할 댓글 조회 YY
@@ -99,6 +104,10 @@ public class ArticleController {
     model.addAttribute("articleDTO", articleDTO);
     //출력할 댓글 추가 YY
     model.addAttribute("replyList",replyList);
+    //출력할 사진 조회 YY
+    //출력할 사진 추가 YY
+    String articlePhoto = photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString();
+    model.addAttribute("articlePhoto",articlePhoto);
     
     return "article/detail"; // "articles/detail.html" 뷰를 반환
   }

@@ -1,12 +1,9 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.global.PageRequestDTO;
-import com.momo.momopjt.global.PageResponseDTO;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface ArticleService {
 
@@ -24,7 +21,7 @@ public interface ArticleService {
   void deleteArticle(Long articleNo);
 
 
-  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
+//  PageResponseDTO<ArticleListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
   //641
   default Article dtoToEntity(ArticleDTO articleDTO) {
@@ -44,13 +41,13 @@ public interface ArticleService {
             //TODO user랑 club ?
             .build();
 
-    if(articleDTO.getFileNames() != null){
-      articleDTO.getFileNames().forEach(fileName -> {
-            String[] arr = fileName.split("\\.");
-          article.addImage(arr[0],"."+arr[1]);
-          }
-      );
-    }
+//    if(articleDTO.getFileNames() != null){
+//      articleDTO.getFileNames().forEach(fileName -> {
+//            String[] arr = fileName.split("\\.");
+//          article.addImage(arr[0],"."+arr[1]);
+//          }
+//      );
+//    }
 
 
         //내 코드
@@ -70,16 +67,18 @@ public interface ArticleService {
         .articleState(article.getArticleState())
         .articleScore(article.getArticleScore())
 
+        .articlePhotoUUID(article.getArticlePhotoUUID())
+
         .clubNo(article.getClubNo())
         .userNo(article.getUserNo())
 
         .build();
 
-    List<String> fileNames =
-        article.getImageSet().stream().sorted().map(boardImage ->
-            boardImage.getUuid()+boardImage.getExtension()).collect(Collectors.toList());
-
-    articleDTO.setFileNames(fileNames);
+//    List<String> fileNames =
+//        article.getImageSet().stream().sorted().map(boardImage ->
+//            boardImage.getUuid()+boardImage.getExtension()).collect(Collectors.toList());
+//
+//    articleDTO.setFileNames(fileNames);
 
     return articleDTO;
   }
