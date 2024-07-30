@@ -1,6 +1,8 @@
 package com.momo.momopjt.user;
 
 
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.userandclub.UserAndClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,7 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,8 +32,9 @@ public class UserServiceImpl implements UserService {
 
     private static final int PASSWORD_LENGTH = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String SOCIAL_LOGIN_PASSWORD = "1111";
+    private final UserAndClubRepository userAndClubRepository;
 
-    @Override
     public void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException {
         String userId = userDTO.getUserId();
         String userEmail = userDTO.getUserEmail();
@@ -290,27 +294,52 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(String userId, String userPw) {
-        log.info("----------------- [deleteAccount]-----------------");
-
-        if (userId == null || userId.isEmpty() || userPw == null || userPw.isEmpty()) {
-            throw new IllegalArgumentException("User ID and password cannot be null or empty");
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("User ID cannot be null or empty");
         }
 
         User user = userRepository.findByUserId(userId);
 
         if (user != null) {
-            if (passwordEncoder.matches(userPw, user.getUserPw())) { // 비밀번호 검증
-                userRepository.delete(user);
-                log.info("User account has been deleted.");
+            if (user.getUserSocial() != null && user.getUserSocial() != ' ') {
+                // 소셜 로그인 사용자일 경우 기본 비밀번호와 비교
+                if ("1111".equals(userPw)) {
+                    // 사용자가 가입된 클럽에서 삭제
+                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
+                    for (Club club : clubs) {
+                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+                    }
+
+                    // 사용자 삭제
+                    userRepository.delete(user);
+                    log.info("Social login user account has been deleted.");
+                } else {
+                    throw new IllegalArgumentException("Invalid password for social login user");
+                }
             } else {
-                throw new IllegalArgumentException("Incorrect password");
+                // 일반 사용자일 경우 실제 비밀번호와 비교
+                if (passwordEncoder.matches(userPw, user.getUserPw())) {
+                    // 사용자가 가입된 클럽에서 삭제
+                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
+                    for (Club club : clubs) {
+                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+                    }
+
+                    // 사용자 삭제
+                    userRepository.delete(user);
+                    log.info("User account has been deleted.");
+                } else {
+                    throw new IllegalArgumentException("Incorrect password");
+                }
             }
         } else {
-            log.warn("User not found.");
+            throw new IllegalArgumentException("User not found");
         }
     }
+
     @Override
-    public User findByUserNo(Long userNo) {
-        return userRepository.findById(userNo).orElse(null); // userNo로 User 찾기
-    }
+    public Optional<User> findByUserNo(Long userNo) {
+        return userRepository.findById(userNo);
+}
+
 }

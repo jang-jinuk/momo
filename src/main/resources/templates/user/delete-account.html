@@ -1,32 +1,120 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 탈퇴</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <style>
+        /* 전체 스타일 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-message, .password-field {
+            margin-bottom: 20px;
+        }
+
+        .info-message p {
+            color: #666;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="password"], input[type="hidden"] {
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button.submit-button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button.submit-button:hover {
+            background-color: #c0392b;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h2>회원 탈퇴</h2>
-    <form th:action="@{/user/deleteAccount}" method="post">
-        <div class="form-group">
-            <label for="userId">사용자 ID</label>
-            <input type="text" id="userId" name="userId" required>
-        </div>
-        <div class="form-group">
-            <label for="userPw">비밀번호</label>
-            <input type="password" id="userPw" name="userPw" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm">탈퇴 확인</label>
-            <input type="checkbox" id="confirm" name="confirm" required>
-            <span>회원 탈퇴를 확인합니다.</span>
-        </div>
-        <button type="submit">탈퇴</button>
-    </form>
-    <div th:if="${message}">
-        <p th:text="${message}"></p>
-    </div>
+    <header>
+        <h1>회원 탈퇴</h1>
+    </header>
+    <main>
+        <form th:action="@{/user/delete-account}" method="post" class="form">
+            <input type="hidden" name="userId" th:value="${userId}" />
+
+            <div class="info-message" th:if="${userSocial != null and userSocial != ''}">
+                <input type="hidden" name="userPw" value="1111" />
+                <p>계정을 삭제하려면 아래 버튼을 클릭하세요.</p>
+            </div>
+
+            <div class="password-field" th:unless="${userSocial != null and userSocial != ''}">
+                <label for="userPw">비밀번호:</label>
+                <input type="password" id="userPw" name="userPw" required />
+            </div>
+
+            <button type="submit" class="submit-button">계정 삭제</button>
+        </form>
+        <a href="/home" class="home-link">홈으로 돌아가기</a>
+    </main>
 </div>
 </body>
 </html>

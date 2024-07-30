@@ -45,45 +45,53 @@
         }
         .form-container {
             max-width: 800px; /* 최대 너비 설정 */
-            margin: 0 auto; /* 중앙 정렬 */
+            width: 100%; /* 전체 너비 */
         }
         .full-height {
             min-height: 100vh; /* 전체 화면 높이 */
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 수직 중앙 정렬 */
+            justify-content: center; /* 수평 중앙 정렬 */
         }
     </style>
 </head>
 <body>
 
-<div class="container d-flex justify-content-center align-items-center full-height">
+<div class="container full-height">
     <div class="form-container">
         <form id="updateForm" th:action="@{/user/update}" method="post">
             <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
-            <div class="mb-3">
-                <label for="userNickname" class="form-label">닉네임</label>
-                <input type="text" id="userNickname" name="userNickname" th:value="${userDTO.userNickname}" class="form-control" required>
+
+            <!-- 닉네임 -->
+            <div class="input-group mb-3">
+                <label for="userNickname" class="input-group-text">* 닉네임</label>
+                <input type="text" id="userNickname" name="userNickname" class="form-control" th:value="${userDTO.userNickname}" placeholder="abc" required>
+                <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserNickname()">중복확인</button>
             </div>
+            <div id="nicknameCheckResult" class="alert" role="alert"></div>
 
             <!-- 성별 -->
             <div class="input-group mb-3">
                 <span class="input-group-text">성별</span>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userGender" id="male" value="m" required>
+                    <input class="form-check-input" type="radio" name="userGender" id="male" value="m" th:checked="${userDTO.userGender == 'm'}" required>
                     <label class="form-check-label" for="male">남성</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="userGender" id="female" value="w" required>
+                    <input class="form-check-input" type="radio" name="userGender" id="female" value="w" th:checked="${userDTO.userGender == 'w'}" required>
                     <label class="form-check-label" for="female">여성</label>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label for="userEmail" class="form-label">이메일</label>
-                <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" required>
+                <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" required readonly>
+                <small id="emailHelp" class="form-text text-muted">*이메일은 변경할 수 없습니다.</small>
             </div>
 
             <div class="mb-4">
                 <label for="userCategory" class="form-label">관심사</label>
-                <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="관심사를 선택하세요" readonly>
+                <input type="text" id="userCategory" name="userCategory" th:value="${userDTO.userCategory}" class="form-control" placeholder="관심사를 선택하세요" readonly>
             </div>
             <div class="container mb-4">
                 <nav class="navbar bg-body-tertiary">
@@ -118,21 +126,21 @@
             <!-- 주소 -->
             <div class="input-group mb-3">
                 <label for="userAddress" class="input-group-text">주소</label>
-                <input type="text" id="userAddress" name="userAddress" class="form-control" placeholder="주소를 입력하세요"/>
+                <input type="text" id="userAddress" name="userAddress" th:value="${userDTO.userAddress}" class="form-control" placeholder="주소를 입력하세요"/>
                 <button type="button" class="btn btn-outline-dark" onclick="searchAddress()">주소 검색</button>
             </div>
 
             <!-- MBTI -->
             <div class="input-group mb-3">
                 <label for="userMBTI" class="input-group-text">MBTI</label>
-                <input type="text" id="userMBTI" name="userMBTI" class="form-control">
+                <input type="text" id="userMBTI" name="userMBTI" th:value="${userDTO.userMBTI}" class="form-control">
             </div>
 
             <div class="mt-4">
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-success me-2">저장</button>
                     <button type="reset" class="btn btn-secondary me-2" onclick="resetForm()">지우기</button>
-                    <a href="/user/reset/userPw" class="btn btn-outline-info me-2">비밀번호 바꾸기</a>
+                    <a href="/user/find/reset-pw" class="btn btn-outline-info me-2">비밀번호 바꾸기</a>
                     <a href="/home" class="btn btn-outline-info">돌아가기</a>
                 </div>
             </div>
@@ -140,10 +148,58 @@
     </div>
 </div>
 
+
+
 <script>
     function resetForm() {
         document.getElementById('updateForm').reset();
     }
+</script>
+
+<script>
+
+    function validateForm() {
+        const userNickname = document.getElementById('userNickname').value;
+        const userGender = document.querySelector('input[name="userGender"]:checked').value;
+
+        const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+
+        if (!NicknamePattern.test(userNickname)) {
+            alert("닉네임은 6글자까지 가능합니다.");
+            return false;
+        }
+
+        if (userGender !== "m" && userGender !== "w") {
+            alert("성별이 유효하지 않습니다.");
+            return false;
+        }
+        return true;
+    }
+
+    function checkDuplicateUserNickname() {
+        const userNickname = document.getElementById('userNickname').value;
+
+        $.ajax({
+            type: "GET",
+            url: "/user/checkUserNicknameDuplicate",
+            data: { userNickname: userNickname },
+            success: function (response) {
+                if (response === true) {
+                    $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+                    $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+                } else {
+                    $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
+                    $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
+                }
+                $('#nicknameCheckResult').show();
+            },
+            error: function () {
+                alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            }
+        });
+        return false; // 폼의 기본 동작을 막습니다.
+    }
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -181,6 +237,8 @@
         });
     });
 </script>
+
+
 
 <!-- Bootstrap JavaScript dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
