@@ -33,7 +33,6 @@
         th:nth-child(8), td:nth-child(8) { width: 10%; } /* 제제 */
         th:nth-child(9), td:nth-child(9) { width: 10%; } /* 지우기 */
     </style>
-    </style>
 </head>
 <body>
 
@@ -41,7 +40,7 @@
     <div class="container d-flex justify-content-between align-items-center">
         <h6 th:text="${logoText}">momo</h6>
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-dark" onclick="location.href='/home'">홈으로</button>
+            <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
             <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
         </div>
     </div>
