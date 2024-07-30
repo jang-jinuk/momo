@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetailService implements UserDetailsService {
 
   private final UserRepository userRepository;
+  private static final String SOCIAL_LOGIN_PASSWORD = "1111";
 
   @Autowired
   public CustomUserDetailService(UserRepository userRepository) {
@@ -41,6 +42,10 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     User user = result.get();
+
+    // 비밀번호가 null이거나 비어있으면 소셜 로그인 사용자로 처리
+    boolean isSocialUser = user.getUserPw() == null || user.getUserPw().isEmpty();
+
 
     UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
         user.getUserId(),

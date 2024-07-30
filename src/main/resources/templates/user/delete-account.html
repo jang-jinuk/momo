@@ -1,32 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원 탈퇴</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<div class="container">
-    <h2>회원 탈퇴</h2>
-    <form th:action="@{/user/deleteAccount}" method="post">
-        <div class="form-group">
-            <label for="userId">사용자 ID</label>
-            <input type="text" id="userId" name="userId" required>
-        </div>
-        <div class="form-group">
-            <label for="userPw">비밀번호</label>
-            <input type="password" id="userPw" name="userPw" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm">탈퇴 확인</label>
-            <input type="checkbox" id="confirm" name="confirm" required>
-            <span>회원 탈퇴를 확인합니다.</span>
-        </div>
-        <button type="submit">탈퇴</button>
-    </form>
-    <div th:if="${message}">
-        <p th:text="${message}"></p>
+<h1>회원 탈퇴</h1>
+
+<!-- 폼을 작성합니다 -->
+<form th:action="@{/user/delete-account}" method="post">
+    <!-- 사용자 ID는 히든 필드로 전달 -->
+    <input type="hidden" name="userId" th:value="${userId}" />
+
+    <!-- 소셜 로그인 사용자인지 확인 -->
+    <div th:if="${userSocial != null and userSocial != ''}">
+        <!-- 소셜 로그인 사용자일 경우, 비밀번호 필드를 숨깁니다 -->
+        <input type="hidden" name="userPw" value="1111" />
+        <p>계정을 삭제하려면 아래 버튼을 클릭하세요.</p>
     </div>
-</div>
+
+    <div th:unless="${userSocial != null and userSocial != ''}">
+        <!-- 일반 사용자일 경우, 비밀번호 입력 필드 -->
+        <label for="userPw">비밀번호:</label>
+        <input type="password" id="userPw" name="userPw" required />
+    </div>
+
+    <button type="submit">계정 삭제</button>
+</form>
+
+<a href="/home">홈으로 돌아가기</a>
 </body>
 </html>

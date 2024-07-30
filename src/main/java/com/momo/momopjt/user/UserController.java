@@ -7,9 +7,14 @@ import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +45,7 @@ public class UserController {
   private final EmailService emailService;
   private final ModelMapper modelMapper;
   private final ReportService reportService;
+  private final PasswordEncoder passwordEncoder;
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -144,27 +150,47 @@ public class UserController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String currentUsername = null;
 
-    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-      currentUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
+    // 인증된 사용자의 사용자 이름을 가져옴
+    if (authentication instanceof UsernamePasswordAuthenticationToken) {
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof UserSecurityDTO) {
+        UserSecurityDTO userSecurityDTO = (UserSecurityDTO) principal;
+        currentUsername = userSecurityDTO.getUsername(); // Get user ID
+      }
+    } else if (authentication instanceof OAuth2AuthenticationToken) {
+      OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
+      DefaultOAuth2User oAuth2User = (DefaultOAuth2User) oauth2Token.getPrincipal();
+      currentUsername = oAuth2User.getAttribute("email"); // Get email
     }
 
-    User currentUser = userRepository.findByUserId(currentUsername);
-
-    if (currentUser == null || !userId.equals(currentUser.getUserId())) {
-      throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
+    if (currentUsername == null) {
+      throw new SecurityException("사용자가 인증되지 않았습니다.");
     }
 
+    // 현재 로그인한 사용자 정보 가져오기
+    User currentUser = userRepository.findByUserId(userId);
+    if (currentUser == null) {
+      throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
+    }
+
+    // 현재 로그인한 사용자 또는 관리자 권한이 있는 사용자만 업데이트 가능
     User user = userRepository.findByUserId(userId);
     if (user == null) {
       throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
     }
 
+    if (!userId.equals(currentUser.getUserId()) && !currentUser.getUserRole().equals(UserRole.ADMIN)) {
+      throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
+    }
+
+    // 사용자 정보를 DTO로 변환
     ModelMapper modelMapper = new ModelMapper();
     UserDTO userDTO = modelMapper.map(user, UserDTO.class);
     model.addAttribute("userDTO", userDTO);
 
-    return "user/update";
+    return "user/update"; // Thymeleaf 템플릿 경로
   }
+
 
   @PostMapping("/update")
   public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
@@ -185,6 +211,7 @@ public class UserController {
       currentUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
     }
 
+    // 현재 로그인한 사용자 정보 가져오기
     User currentUser = userRepository.findByUserId(currentUsername);
 
     if (currentUser == null || !userId.equals(currentUser.getUserId())) {
@@ -193,6 +220,7 @@ public class UserController {
     }
 
     try {
+      // 사용자 정보 업데이트
       userService.updateUser(userDTO);
     } catch (Exception e) {
       log.error("Failed to update user with userId: {}", userId, e);
@@ -205,31 +233,75 @@ public class UserController {
   }
 
   @GetMapping("/delete-account")
-  public String deleteAccountForm(Model model) {
-    model.addAttribute("message", "");
-    return "user/delete-account"; // 회원 탈퇴 폼 페이지로 이동
+  public String deleteAccountPage(Model model, HttpServletRequest request) {
+    // 현재 로그인된 사용자 정보 가져오기
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserSecurityDTO user = (UserSecurityDTO) authentication.getPrincipal();
+
+    model.addAttribute("userId", user.getUsername());
+    model.addAttribute("userSocial", user.getUserSocial());
+
+    return "user/delete-account";
   }
+
 
   @PostMapping("/delete-account")
   public String deleteAccount(HttpServletRequest request, HttpServletResponse response,
-                              Model model, @RequestParam String userId, @RequestParam String userPw) {
+                              @RequestParam String userId, @RequestParam(required = false) String userPw,
+                              RedirectAttributes redirectAttributes) {
     try {
-      userService.deleteAccount(userId, userPw); // 회원 탈퇴 서비스 호출
+      // 사용자 정보를 가져옵니다
+      User user = userRepository.findByUserId(userId);
 
-      // 로그아웃 처리
-      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-      if (auth != null) {
-        new SecurityContextLogoutHandler().logout(request, response, auth);
+      if (user == null) {
+        throw new IllegalArgumentException("User not found");
       }
 
-      model.addAttribute("message", "Your account has been deleted successfully.");
-      return "redirect:/home"; // 탈퇴 처리 후 홈 페이지로 리다이렉트
+      // 소셜 로그인 사용자인지 확인합니다
+      if (user.getUserSocial() != null && user.getUserSocial() != ' ') {
+        // 소셜 로그인 사용자일 경우, 비밀번호는 기본값으로 설정합니다
+        if ("1111".equals(userPw)) {
+          userService.deleteAccount(userId, userPw);
+          log.info("Social login user account has been deleted.");
 
+          // 로그아웃 처리
+          Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+          if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+          }
+
+          redirectAttributes.addFlashAttribute("message", "Your account has been deleted successfully.");
+          return "redirect:/home";
+        } else {
+          throw new IllegalArgumentException("Invalid password for social login user");
+        }
+      } else {
+        // 일반 사용자인 경우, 실제 비밀번호와 비교합니다
+        if (userPw != null && passwordEncoder.matches(userPw, user.getUserPw())) {
+          userService.deleteAccount(userId, userPw);
+          log.info("User account has been deleted.");
+
+          // 로그아웃 처리
+          Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+          if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+          }
+
+          redirectAttributes.addFlashAttribute("message", "Your account has been deleted successfully.");
+          return "redirect:/home";
+        } else {
+          throw new IllegalArgumentException("Incorrect password");
+        }
+      }
     } catch (Exception e) {
-      model.addAttribute("message", "Error deleting account: " + e.getMessage());
-      return "user/delete-account"; // 에러 발생 시 다시 탈퇴 폼 페이지로
+      log.error("Error deleting account: {}", e.getMessage());
+      redirectAttributes.addFlashAttribute("message", "Error deleting account: " + e.getMessage());
+      return "redirect:/user/delete-account";
     }
+
   }
+
+
   @PostMapping("/submitCategory")
   public String submitCategory(@RequestParam("userCategory") String userCategory,
                                RedirectAttributes redirectAttributes) {

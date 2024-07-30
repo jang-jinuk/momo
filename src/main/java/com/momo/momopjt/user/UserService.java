@@ -1,14 +1,16 @@
 package com.momo.momopjt.user;
 
 
+import java.util.Optional;
 
 public interface UserService {
 
+    Optional<User> findByUserNo(Long userNo);
     void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException;
 
     void updateUser(UserDTO userDTO);
 
-    User findByUserNo(Long userNo);
+
 
     String findUsernameByEmail(String userEmail);
 

@@ -48,11 +48,12 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**","/alarm/**","/club/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**", "/article/**", "/alarm/**", "/club/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
-        .antMatchers("/update/**").authenticated() // /update/** 경로를 인증된 사용자만 접근 가능하도록 설정
+        .antMatchers("/update/**").authenticated()  // /update/** 경로를 인증된 사용자만 접근 가능하도록 설정
         .and()
-        .formLogin().loginPage("/user/login")
+        .formLogin()
+        .loginPage("/user/login")
         .defaultSuccessUrl("/home")
         .successHandler(authenticationSuccessHandler())
         .permitAll()
@@ -72,11 +73,10 @@ public class SecurityConfig {
         .maximumSessions(1)  // 동시 세션 최대 수 설정
         .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
 
-
     // 소셜 로그인 설정
     http.oauth2Login()
         .loginPage("/user/login")
-        .defaultSuccessUrl("/home", true)
+        .defaultSuccessUrl("/user/home", true)
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
         .userService(customOAuth2UserService);
