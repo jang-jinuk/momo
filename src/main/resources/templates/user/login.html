@@ -81,6 +81,8 @@
             background-color: #007bff;
         }
     </style>
+
+
 </head>
 <body>
 <div class="container-fluid">
@@ -125,40 +127,7 @@
     </div>
 </div>
 
-<!-- HTML 콘텐츠 및 모달 -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="messageModalLabel">알림</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalMessage">
-                <!-- 메시지가 여기에 표시됩니다. -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- JavaScript 파일 포함 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9t9jkTtRzFJzVti9M7t+X3gE2DgP7Ai6VIMmtbVZxtHTtxE/8qZ" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-5cJ6Goh3pDq8LCCc2VbOnDlfoySfGdTq5BhEUSuEzQbr6E8F7N1OcdzQ9Oe+nWZP" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // URL 쿼리 파라미터에서 error 값을 가져옵니다.
-        const queryParams = new URLSearchParams(window.location.search);
-        const error = queryParams.get('error');
 
-        if (error === 'true') {
-            document.getElementById('modalMessage').textContent = '로그인에 실패했습니다. 다시 시도해 주세요.';
-            const myModal = new bootstrap.Modal(document.getElementById('messageModal'));
-            myModal.show();
-        }
-    });
-</script>
 </body>
 </html>
