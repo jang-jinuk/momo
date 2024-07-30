@@ -134,6 +134,10 @@ public class ClubController {
     model.addAttribute("isWish", isWish);
     log.info("모델에 추가된 isWish 값: {}", isWish);
 
+    List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
+
+    model.addAttribute("userAndClubDTOS", userAndClubDTOS);
+
     return "club/main";
   }
 
