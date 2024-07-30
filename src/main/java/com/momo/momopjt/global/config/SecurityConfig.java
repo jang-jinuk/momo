@@ -48,7 +48,11 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
+        .antMatchers("/", "/home", "/register", "/login", "/css/**",
+            "/js/**", "/images/**", "/public/**", "/user/**",
+            "/find/**","/article/**").permitAll()
+        .antMatchers("/static/**","/assets/**").permitAll()
+
         .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
         .formLogin().loginPage("/user/login")

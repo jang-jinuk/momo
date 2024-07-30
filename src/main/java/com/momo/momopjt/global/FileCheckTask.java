@@ -2,16 +2,21 @@ package com.momo.momopjt.global;
 
 //import static org.apache.commons.io.file.PathUtils.*;
 
+import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoRepository;
+import com.momo.momopjt.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Log4j2
@@ -24,6 +29,7 @@ public class FileCheckTask {
   private String UploadPath;
 
   private final PhotoRepository photoRepository;
+  private final PhotoService photoService;
 
   //TODO 꼭 배포 전에 활성화 시키기
 
@@ -33,13 +39,22 @@ public class FileCheckTask {
    @Scheduled(cron = "0/10 * * * * *")
   // 테스트용 30분마다 정리 실행
   // @Scheduled(cron = "0 30 * * * *")
-  @Transactional
+  @Async
+   @Transactional
   public void checkFiles() throws Exception {
      log.info("----------------- [checkFiles start]-----------------");
 //    log.info("===========================================");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 EEEE");
 //    log.info("File Check Task run.................");
     log.info("오늘은 {} ", LocalDateTime.now().format(formatter) + " 입니다.");
+
+     List<String> uuids = photoRepository.findAll().stream().map(Photo::toString).collect(Collectors.toList());
+     log.info("----------------- [uuids in DB : {}]-----------------",uuids);
+
+     String delUUID ="";
+
+     photoRepository.deleteById(delUUID);
+
 //    log.info("-------------------------------------------");
 //    // summernote temp 폴더는 항상 삭제
 ////    if (Paths.get(UploadPath).toFile().exists()) {

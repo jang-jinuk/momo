@@ -11,6 +11,10 @@
         <form action="/club/update" method="post">
             <div class="container row-4">
                 <div class="row align-items-center mb-3">
+                    <h4>현재 모임 대표 사진</h4>
+                    <img th:src="@{/view/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
+
+
                     <div class="col-2 ms-4">
                         <h4>모임명</h4>
                         <div class="sticky-sm-top">*모임명은 수정불가</div>
@@ -33,14 +37,25 @@
             <div class="container mt-5">
                 <div class="row align-items-center text-container">
                     <div class="col-2 ms-4">
-                        <h4>대표사진 등록</h4>
-                    </div>
-                    <!--사진등록-->
-                    <div class="col">
-                        <div class="d-grid gap-2 d-md-flex">
-                            <div class="form-group">
-                                <img>이미지 미리보기
-                                <input name="photoUUID" type="file" class="form-control-file" id="photoUpload" accept="image/*">
+                        <h4>변경할 사진 등록</h4>
+
+                        <!--사진등록-->
+
+                      <!-- 이미지 업로드 YY -->
+                      <div class="input-group d-grid gap-2 d-md-flex">
+
+                        <span class="input-group mb-3">Images</span>
+                        <div class="float-end uploadHidden">
+                          <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                        </div>
+                      </div>
+
+
+                      <!-- Image Thumbnail display -->
+
+                        <div class="col ">
+                            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                                uploadResult 자리 // 삭제
                             </div>
                         </div>
                     </div>
@@ -51,7 +66,8 @@
                             </div>
                             <div class="mb-3 col-2">
                                 <textarea th:text="${clubDTO.clubContent}" name="clubContent" id="limitedTextarea"
-                                          class="form-control custom-text" rows="3" maxlength="1000" placeholder="최대 1000자까지 입력 가능합니다."></textarea>
+                                          class="form-control custom-text" rows="3" maxlength="1000"
+                                          placeholder="최대 1000자까지 입력 가능합니다."></textarea>
                                 <div id="charCount" class="form-text">0 / 1000 글자</div>
                             </div>
                             <div class="container mt-4">
@@ -60,7 +76,8 @@
                                         <h4>모임 카테고리</h4>
                                     </div>
                                     <div class="col">
-                                        <input th:value="${clubDTO.clubCategory}" name="clubCategory" type="text" class="form-control custom-input" placeholder="맛집탐방, 카페투어">
+                                        <input th:value="${clubDTO.clubCategory}" name="clubCategory" type="text"
+                                               class="form-control custom-input" placeholder="맛집탐방, 카페투어">
                                         <button class="btn btn-dark" type="submit">선택</button>
                                     </div>
                                 </div>
@@ -78,7 +95,7 @@
                                 </div>
                                 <div class="d-grid my-4 d-md-flex justify-content-md-end">
                                     <div class="me-10">
-                                        <button type="submit" class="btn btn-success">수정하기</button>
+                                        <button type="submit" class="btn btn-success submitBtn">수정하기</button>
                                         <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
                                     </div>
                                 </div>
@@ -89,16 +106,210 @@
             </div>
         </form>
     </div>
+
+    <!--    upload Modal Part YY -->
+    <div class="modal uploadModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Upload Files(Modal Title)</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="file" name="files" class="form-control"> <!-- 모임 대표사진 multipole x  -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </th:block>
 <th:block layout:fragment="script">
-<script th:inline="javascript">
+    <script th:inline="javascript">
 
-    /*<![CDATA[*/
-    var message = /*[[${message}]]*/ null;
-    if (message) {
-        alert(message);
-    }
-    /*]]>*/
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
 
-</script>
+            console.log("upload to server.....................+formObj")
+            console.log(formObj)
+
+            const response = await axios({
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            return response.data
+
+
+        }
+
+        async function removeFileToServer(uuid, extension) {
+            const response = await axios.delete(`/remove/${uuid}${extension}`)
+            return response.data
+        }
+
+        //image upload modal event (show / hide)
+        const errors = [[${errors}]]
+        console.log(errors)
+
+        let errorMsg = ''
+        if (errors) {
+            for (let i = 0; i < errors.length; i++) {
+                errorMsg += `${errors[i].field} is ${errors[i].code} \n`
+            }
+            alert(errorMsg) //error message display!
+        }
+
+        //upload modal set
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.show()
+        }, false)
+
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+            const formObj = new FormData();
+            const fileInput = document.querySelector("input[name='files']")
+
+            console.log("fileInput.files--------")
+            console.log(fileInput.files)
+
+            const files = fileInput.files
+
+            for (let i = 0; i < files.length; i++) {
+                formObj.append("files", files[i]);
+            }
+
+            uploadToServer(formObj).then(result => {
+                console.log("result-------")
+                console.log(result)
+
+                for (const uploadResult of result) {
+                    showUploadFile(uploadResult)
+                }
+
+                uploadModal.hide()
+            }).catch(e => {
+                uploadModal.hide()
+            })
+
+        }, false)
+
+
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
+
+        function showUploadFile({uuid, extension, link}) {
+
+            const str = `<div class="card col-4">
+<div class="card-header d-flex justify-content-center">
+${uuid}${extension}
+<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+</div>
+<div class="card-body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+
+</div>
+</div>`
+            console.log("uploadResult link  str --------------------")
+            console.log(link)
+            console.log(str)
+
+            uploadResult.innerHTML += str;
+        }
+
+
+        /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
+
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log("remove file log--------------")
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
+
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
+                targetDiv.remove()
+            })
+
+        }
+
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
+
+            e.preventDefault()
+            e.stopPropagation()
+
+            const target = document.querySelector(".uploadHidden")
+
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
+
+            let str = ''
+
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
+                console.log(uploadFile)
+                const imgLink = uploadFile.getAttribute("data-src")
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
+
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+
+                str += `<input type='hidden' name='clubPhotoUUID' value="${imgUUID}">`
+
+
+            }
+            console.log(str)
+
+            target.innerHTML = str;
+
+            // document.querySelector("form").submit();
+
+            const formObj = document.querySelector("form")
+
+            formObj.submit();
+            formObj.reset();
+
+        }, false)
+
+
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
+
+            e.stopPropagation()
+            e.preventDefault()
+
+            uploadModal.hide();
+
+        }, false)
+
+
+        // 0730 YY 불필요해 보여서 주석처리
+
+        // /*<![CDATA[*/
+        // var message = /*[[${message}]]*/ null;
+        // if (message) {
+        //     alert(message);
+        // }
+        // /*]]>*/
+
+    </script>
 </th:block>

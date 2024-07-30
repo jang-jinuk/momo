@@ -152,14 +152,14 @@ public class FileController {
 //  GET방식 파일 조회
     //608p
   @ApiOperation(value = "파일조회")
-  @GetMapping("/{fileName}") // 원래 view/{fileName}
+  @GetMapping("/view/{fileName}") // 원래 view/{fileName}
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
-    log.info("----------------- [GET File  /{fileName}]-----------------");
+    log.info("----------------- [GET File  /{}]-----------------",fileName);
 
     Resource resource = new FileSystemResource(uploadPath +File.separator+ fileName);
 
     String resourceName = resource.getFilename();
-    log.info("..................resourceName = "+resourceName);
+    log.trace("..................resourceName = "+resourceName);
 
     HttpHeaders headers = new HttpHeaders();
 
@@ -168,11 +168,11 @@ public class FileController {
 
     } catch(Exception e){
 
-      log.info("----------------- [조회 Fail return]-----------------");
+      log.warn("----------------- [조회 Fail return]-----------------");
       return ResponseEntity.internalServerError().build();
     }
 
-    log.info("----------------- [조회 정상 return]-----------------");
+    log.trace("----------------- [조회 정상 return]-----------------");
     return ResponseEntity.ok().headers(headers).body(resource);
   }
 
@@ -195,7 +195,7 @@ public class FileController {
 
       //섬네일 처리 TODO t_ThumbUUID + extension 임. 수정필요
       if(contentType.startsWith("image")){
-        log.info("----------------- [썸네일 파일 처리 IF문]-----------------");
+        log.trace("----------------- [썸네일 파일 처리 IF문]-----------------");
         File thumbFile = new File(uploadPath, File.separator+"t_"+fileName);
         thumbFile.delete(); // 썸네일 삭제
       }//end if

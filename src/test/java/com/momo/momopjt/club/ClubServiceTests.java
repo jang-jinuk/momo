@@ -75,20 +75,21 @@ public class ClubServiceTests {
     User user = new User();
     user.setUserNo(1L);
 
-    PhotoDTO photoDTO = PhotoDTO.builder()
-        .photoUUID("00002test")
-        .uploader(user)
-        .photoCreateDate(Instant.now())
-        .build();
+//    PhotoDTO photoDTO = PhotoDTO.builder()
+//        .photoUUID("00002test")
+//        .uploader(user)
+//        .photoCreateDate(Instant.now())
+//        .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
         .clubNo(2L)
+        .clubPhotoUUID("testPhoto")
         .clubArea("테스트 지역 수정")
         .clubCategory("테스트 카테고리 수정")
         .clubContent("테스트 모임 소개 수정")
         .clubMax(5)
         .build();
-    clubService.updateClub(clubDTO, photoDTO);
+    clubService.updateClub(clubDTO);
   }
 
   //모인 해산 기능 테스트

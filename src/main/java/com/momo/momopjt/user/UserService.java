@@ -4,7 +4,7 @@ package com.momo.momopjt.user;
 
 public interface UserService {
 
-    void signup(UserDTO userDTO) throws UserIdException, UserEmailException;
+    void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException;
 
     void updateUser(UserDTO userDTO);
 
@@ -32,5 +32,7 @@ public interface UserService {
     class UserEmailException extends Exception {}
 
     class UserIdException extends Exception {}
+
+    class UserNicknameException extends Exception {}
 
 }

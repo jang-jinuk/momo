@@ -15,8 +15,6 @@ public class ClubDTO {
 
   private Long clubNo;
 
-//  private Photo photoUUID;
-
   private String clubName;
 
   private String clubCategory;
@@ -33,7 +31,6 @@ public class ClubDTO {
 
   //YY 모임 대표 이미지
   private String clubPhotoUUID; // uuid , no extension
-
 
 
 }

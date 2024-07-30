@@ -32,11 +32,13 @@ import java.util.List;
 public class UserController {
 
 
-  private final UserService userService;
   private final UserRepository userRepository;
+
+  private final UserService userService;
   private final EmailService emailService;
-  private final ModelMapper modelMapper;
   private final ReportService reportService;
+
+  private final ModelMapper modelMapper;
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -66,9 +68,28 @@ public class UserController {
     return "user/signup";
   }
 
+  @GetMapping("/checkUserIdDuplicate")
+  @ResponseBody
+  public boolean checkUserIdDuplicate(@RequestParam("userId") String userId) {
+    return userRepository.existsByUserId(userId);
+  }
+
+  @GetMapping("/checkUserNicknameDuplicate")
+  @ResponseBody
+  public boolean checkUserNicknameDuplicate(@RequestParam("userNickname") String userNickname) {
+    return userRepository.existsByUserNickname(userNickname);
+  }
+
+  @GetMapping("/checkUserEmailDuplicate")
+  @ResponseBody
+  public boolean checkUserEmailDuplicate(@RequestParam("userEmail") String userEmail) {
+    return userRepository.existsByUserEmail(userEmail);
+  }
+
   @PostMapping("/signup")
   public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /signup with data: {}", userDTO);
+
 
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -89,10 +110,15 @@ public class UserController {
       redirectAttributes.addFlashAttribute("errorEmail", "userEmail");
       return "redirect:/user/signup";
 
+    } catch (UserService.UserNicknameException e) {
+      redirectAttributes.addFlashAttribute("errorNickname", "userNickname");
+      return "redirect:/user/signup";
+
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("errorException", "An unexpected error occurred.");
       return "redirect:/user/signup";
     }
+
     redirectAttributes.addFlashAttribute("result", "success");
     return "redirect:/home"; // 회원가입 후 홈으로
 
@@ -178,78 +204,41 @@ public class UserController {
     }
   }
 
-  //내 신고 페이지 조회/페이징
+
   @GetMapping("/profile/my-report")
-  public String myReportGet(Model model,
-                            @RequestParam(value = "page", defaultValue = "1") int page) {
+  public String myReportGet(Model model){
+    //@RequestParam(value = "page", defaultValue = "1") int page) {
     log.info("...... [GET profile/my-report]..........KSW");
-    // 로그인된 사용자 정보 가져오기
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName(); // 사용자 이름 가져오기
+    // ID를 조회하여 모델에 추가 (임시)
+    User user = new User();
+    //SecurityContextHolder.getContext().getAuthentication().getPrincipal(); //로그인 정보 가져옴
+    user.setUserNo(4L);
+    //TODO 로그인된 사용자 정보 불러와서 아이디 넣어줘야 함 그 후 페이징 처리 SW
+    List<ReportDTO> sandIdReport = reportService.readReport(user);
 
-    User user = userService.findByUserId(username); // 사용자 서비스에서 사용자 정보 조회
-//    if (user == null) {
-//      // 사용자 정보를 찾을 수 없는 경우 처리
-//      model.addAttribute("error", "사용자를 찾을 수 없습니다.");
-//      return "error"; // 에러 페이지로 리턴
-//    }
-    List<ReportDTO> reportDTOS = reportService.readReport(user);
-
-    int totalReports = reportDTOS.size(); // 총 데이터 수
-    int pageSize = 10; // 한 번에 표시할 페이지 수
-    int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
+    // int totalReports = sandIdReport.size(); // 총 데이터 수
+    // int pageSize = 10; // 한 번에 표시할 페이지 수
+    // int lastPage = (totalReports + pageSize - 1) / pageSize; // 총 페이지 수
 
     // 페이지에 맞게 데이터 나누기
-    int fromIndex = (page - 1) * pageSize;
-    int toIndex = Math.min(fromIndex + pageSize, totalReports);
-    List<ReportDTO> reports = reportDTOS.subList(fromIndex, toIndex);
+//    int fromIndex = (page - 1) * pageSize;
+//    int toIndex = Math.min(fromIndex + pageSize, totalReports);
+//    List<ReportDTO> reports = sandIdReport.subList(fromIndex, toIndex);
 
     // 페이지 그룹 계산
-    int pageGroupSize = 10; // 한 번에 표시할 페이지 번호 수
-    int currentGroup = (page - 1) / pageGroupSize;
-    int startPage = currentGroup * pageGroupSize + 1;
-    int endPage = Math.min(startPage + pageGroupSize - 1, lastPage);
-
-    model.addAttribute("reportDTOS", reports);
-    model.addAttribute("page", page);
-    model.addAttribute("lastPage", lastPage);
-    model.addAttribute("startPage", startPage);
-    model.addAttribute("endPage", endPage);
+//    int pageGroupSize = 10; // 한 번에 표시할 페이지 번호 수
+//    int currentGroup = (page - 1) / pageGroupSize;
+//    int startPage = currentGroup * pageGroupSize + 1;
+//    int endPage = Math.min(startPage + pageGroupSize - 1, lastPage);
+    model.addAttribute("reportDTO", sandIdReport);
+//    model.addAttribute("page", page);
+//    model.addAttribute("lastPage", lastPage);
+//    model.addAttribute("startPage", startPage);
+//    model.addAttribute("endPage", endPage);
 
     log.info("...... [userIdReport]..........KSW");
     return "user/profile/my-report";  // 뷰 반환
   }
 
-  //user 프로필 조회
-  @GetMapping("/profile/dumyprofile")
-  public String getUserProfile(Model model) {
-    log.info("...... [UserController/getUserProfile/running]..........KSW");
-    // Spring Security의 SecurityContext에서 사용자 정보 가져오기
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof UserSecurityDTO) {
-      UserSecurityDTO userDetails = (UserSecurityDTO) authentication.getPrincipal();
-      String userId = userDetails.getUserId();
-      log.info("-----------User ID retrieved from SecurityContext: {}----------------", userId);
-
-      // 사용자 정보 조회
-      User user = userService.findByUserId(userId);
-      model.addAttribute("user", user);
-      model.addAttribute("loggedInUserId", userId);
-    }
-    return "user/profile/dumyprofile";
-  }
-
-  //남의 프로필 테스트용
-  @GetMapping("/profile/testprofile")
-  public String getTsetProfile(Model model) {
-    log.info("...... [UserController/getTsetProfile/running]..........KSW");
-
-    User user = userService.findByUserId("uWPWrYOKuYXmccwuOvsjVv7TjLPGQ9fZ9ZtvI3NIWKI");
-    User userId = userService.findByUserId("test2");// userNo 1번 조회
-    model.addAttribute("user", user); // 모델에 사용자 정보 추가
-    model.addAttribute("loggedInUserId", userId);
-
-    return "user/profile/testprofile"; // 프로필 페이지 템플릿 반환
-  }
-
 }
+

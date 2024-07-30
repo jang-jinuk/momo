@@ -232,7 +232,7 @@ ${uuid}${extension}
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
-<img src="/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
 
 </div>
 </div>`
@@ -279,10 +279,13 @@ ${uuid}${extension}
                 console.log("uploadFile in for loop")
                 console.log(uploadFile)
                 const imgLink = uploadFile.getAttribute("data-src")
+
                 //
                 // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
 
                 const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+                console.log("imgUUID")
+                console.log(imgUUID)
 
                 str += `<input type='hidden' name='clubPhotoUUID' value="${imgUUID}">`
 

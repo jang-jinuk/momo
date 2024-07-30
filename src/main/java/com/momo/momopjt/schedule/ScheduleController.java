@@ -91,7 +91,8 @@ public class ScheduleController {
     scheduleDTO.setScheduleStartDate(instant);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
 
-    Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
+    Long scheduleNo=0L;
+//    = scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
 
     if (resultPhotoUUID != null) {
       scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);

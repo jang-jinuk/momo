@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-3">
                     이미지 자리
-<img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
+<img th:src="@{/view/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
 
 
                 </div>
@@ -21,13 +21,20 @@
                 </div>
             </div>
                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/disband-page}'|" th:if="${isMember == 2}">해산하기</button>
-                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update}'|" th:if="${isMember == 2}">수정하기</button>
+                <button style="float: right;" class="btn btn-outline-success" th:onclick="|location.href='@{/club/update/}'+@{${clubNo}}|" th:if="${isMember == 2}">수정하기</button>
                 <button style="float: right;" class="btn btn-outline-danger" th:onclick="|location.href='@{/club/leave-page}'|" th:if="${isMember == 3}">탈퇴하기</button>
                 <button style="float: right;" class="btn btn-outline-primary" th:onclick="|location.href='@{/club/members}'|" th:if="${isMember == 2}">맴버관리</button>
-        </div>
+            <!--  즐겨찾기 버튼 추가-->
+            <form th:action="@{/club/update-Wish}" method="post">
+                <input type="hidden" name="clubNo" th:value="${clubDTO.clubNo}"/>
+                <input type="hidden" name="isWish" th:value="${isWish}"/>
+                <div th:switch="${isWish}">
+                    <button type="submit" style="float: left;" th:case="'Y'" th:text="'즐겨찾기 해제'" th:style="'background-color: gray; color: white;'">즐겨찾기 해제</button>
+                    <button type="submit" style="float: left;" th:case="'N'" th:text="'즐겨찾기'" th:style="'background-color: red; color: white;'">즐겨찾기 추가</button>
+                </div>
+            </form>
 
-        <br>
-        <hr>
+            <hr>
         <h2>진행 중인 일정</h2>
         <span>
             <button class="btn btn-outline-success" th:onclick="|location.href='@{/schedule/create}'|">일정 추가</button>
@@ -37,7 +44,8 @@
                 <div class="card mb-3" style="max-width: 415px;">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="/assets/game.jpg" class="img-fluid rounded-start" alt="...">
+                          이미지 자리 game
+                            <img src="/img/testimg.png" class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -61,12 +69,8 @@
                 <div class="card mb-3" style="max-width: 415px;">
                     <div class="row g-0">
                         <div class="col-md-4">
-<!--                            <span th:text="${schedule64List.get(0)}"></span>-->
-
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(0)}" alt="schedule Image"/>-->
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(1)}" alt="schedule Image"/>-->
-<!--                            <img th:src="'data:image/png; base64,' + ${schedule64List.get(2)}" alt="schedule Image"/>-->
-                            <img src="/assets/game.jpg" class="img-fluid rounded-start" alt="...">
+                          이미지 자리
+                            <img th:src="@{/img/testimg.png}" class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -92,21 +96,21 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-3" th:each="article : ${articles}">
-                    <div class="card">
-                        <div class="card-body">
-                            <img style="width: 100px" th:each="articleImage: ${dto.articleImages}"
-                                 th:src="|/t_${articleImage.uuid}${articleImage.extension}|">
+<!--                <div class="col-3" th:each="article : ${articles}">-->
+<!--                    <div class="card">-->
+<!--                        <div class="card-body">-->
+<!--                            <img style="width: 100px" th:each="articleImage: ${dto.articleImages}"-->
+<!--                                 th:src="|/view/t_${articleImage.uuid}${articleImage.extension}|">-->
 
-                            <hr>
-                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
-                            </a>
+<!--                            <hr>-->
+<!--                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">-->
+<!--                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>-->
+<!--                            </a>-->
 
-                        </div>
+<!--                        </div>-->
 
-                    </div>
-                </div>
+<!--                    </div>-->
+<!--                </div>-->
             </div>
             <button style="margin: auto;" class="btn btn-outline-success">더보기</button>
         </div>

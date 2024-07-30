@@ -3,7 +3,6 @@ package com.momo.momopjt.club;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
-import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
@@ -60,9 +59,11 @@ public class ClubController {
     
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
+    log.info("----------------- [clubDTO : {}]-----------------",clubDTO);
 
     Club club = new Club();
     club.setClubNo(clubNo);
+
 
     List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정
     model.addAttribute("endSchedules", endSchedules);
@@ -73,10 +74,11 @@ public class ClubController {
 
 
     log.info("----------------- [club photo 처리]-----------------");
-
+    log.info("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
 //    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
     String clubProfilePhotoStr = clubPhoto.toString();
+    log.info("----------------- [clubphoto str 결과 : {}]-----------------",clubProfilePhotoStr);
     model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
     // 이미지 html 에서 쓸때 아래 처럼
     // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
@@ -85,8 +87,8 @@ public class ClubController {
 
 
     log.info("----------------- [{}]-----------------",clubProfilePhotoStr);
-     List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
-     model.addAttribute("articles", articles);
+    List<ArticleDTO> articles = articleService.getAllArticles(club); //후기 글
+    model.addAttribute("articles", articles); // 주석처리 TODO YY
 
     //0722 YY
 //    //scheduleDTOList에 담긴 사진 확인 로그
@@ -152,23 +154,31 @@ public class ClubController {
     return "redirect:/club/main/" + clubNo;
   }
 
-  @GetMapping("/update")
-  public String updateClubGet(Model model, HttpSession session) {
+  @GetMapping("/update/{clubNo}")
+  public String updateClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
     log.info("------------ [Get club update] ------------");
-    Long clubNo = (Long) session.getAttribute("clubNo");
+    clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
+
+    //모임대표사진 출력
+    log.trace(clubDTO.getClubPhotoUUID());
+    log.trace(photoService.getPhoto(clubDTO.getClubPhotoUUID().toString()));
+    String clubProfilePhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID()).toString();
+
+    model.addAttribute("clubProfilePhoto", clubProfilePhoto);
     return "club/update";
   }
 
   //모임 수정
   @PostMapping("/update")
-  public String updateClubPost(ClubDTO clubDTO, PhotoDTO photoDTO, RedirectAttributes redirectAttributes, HttpSession session) {
+  public String updateClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes, HttpSession session) {
     log.info("------------ [Post club update] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
+    log.trace("clubNo : {}",clubNo);
     clubDTO.setClubNo(clubNo);
 
-    Boolean isSuccess = clubService.updateClub(clubDTO, photoDTO);
+    Boolean isSuccess = clubService.updateClub(clubDTO);
 
     if (isSuccess) {
       redirectAttributes.addFlashAttribute("message","모임 수정이 완료되었습니다.");

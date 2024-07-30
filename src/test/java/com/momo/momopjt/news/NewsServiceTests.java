@@ -31,7 +31,7 @@ class NewsServiceTests {
       tempNewsDTO.setNewsCreateDate(Instant.now()); //
       tempNewsDTO.setNewsModifyDate(null);
       tempNewsDTO.setNewsTag("tag"+i%10);
-//      tempNews.setNewsTag("testTag"); // char(10) 넘지않게
+    tempNewsDTO.setNewsTag("testTag"); // char(10) 넘지않게
       tempNewsDTO.setNewsTitle("testTitle"+i);
       newsService.createNews(tempNewsDTO);
 

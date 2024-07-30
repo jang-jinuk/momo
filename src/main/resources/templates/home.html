@@ -5,42 +5,83 @@
 <th:block layout:fragment="content">
     <br>
     <div class="container">
-        <div class="row" th:unless="${#authentication.name == 'anonymousUser'}">
-            <h2>나의 모임</h2>
-            <div class="col-6" th:each="myClubDTO : ${myClubDTOList}">
+        <!-- 로그인한 사용자에게만 보이는 부분 -->
+        <div class="row" th:if="${userNickname}">
+            <p th:text="${userNickname + '님 어서오세요!'}">userNickname님 어서오세요!</p>
+        </div>
+    </div>
+    <h2>나의 모임</h2>
+    <div class="row">
+
+        <div th:if="${myClubDTOList!=null && myClubDTOList.size()>0}" th:with="myMaxIndex=${#lists.size(myClubDTOList) - 1}">
+            <div class="col-3" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">
+
                 <div class="card mb-3" style="max-width: 415px;">
                     <div class="row g-0">
+
                         <div class="col-md-4">
-                            이미지 자리
+                            <img class="card-img-top" th:src="@{/view/}+@{${myClubPhotoList[i]}}">
                         </div>
+
                         <div class="col-md-8">
                             <div class="card-body">
-                                <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTO.clubNo})}" th:inline="text">
-                                    <h3 class="card-title" th:text="${myClubDTO.clubName}"></h3>
+                                <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTOList[i].clubNo})}"
+                                   th:inline="text">
+                                    <h3 class="card-title" th:text="${myClubDTOList[i].clubName}"></h3>
                                 </a>
-                                <p class="card-text" th:text="${myClubDTO.clubContent}"></p>
+                                <p class="card-text" th:text="${myClubDTOList[i].clubContent}"></p>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="row">
-            <div>
-                <button th:unless="${#authentication.name == 'anonymousUser'}" th:onclick="|location.href='@{/club/create}'|">생성</button>
-            </div>
+    </div>
+
+    <hr>
+    <div class="row">
+        <div>
+            <button th:unless="${#authentication.name == 'anonymousUser'}"
+                    th:onclick="|location.href='@{/club/create}'|">생성
+            </button>
         </div>
-        <div class="row">
-            <div class="col-3" th:each="clubDTO : ${clubDTOList}">
-                <div class="card">
-                    <img class="card-img-top" src="/assets/게시글사진1.jpg">
-                    <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTO.clubNo})}" th:inline="text">
-                        <h3 class="card-title" th:text="${clubDTO.clubName}"></h3>
-                    </a>
-                    <p th:text="${clubDTO.clubContent}"></p>
+    </div>
+    <div class="row-cols-auto">
+
+        <div th:if="${ clubDTOList.size()>0}" th:with="maxIndex=${#lists.size(clubDTOList) - 1}">
+            <div th:each="i : ${#numbers.sequence(0, maxIndex)}">
+                <div class="card mb-3" style="max-width: 415px;">
+                    <div class="row g-0">
+
+                        <div class="col-md-4">
+                            <img class="card-img-top" th:src="@{/view/}+@{${clubPhotoList[i]}}">
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTOList[i].clubNo})}" th:inline="text">
+                                    <h3 class="card-title" th:text="${clubDTOList[i].clubName}"></h3>
+                                </a>
+                                <p th:text="${clubDTOList[i].clubContent}"></p>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+        <!--            원본-->
+        <!--            <div class="col-3" th:each="clubDTO : ${clubDTOList}">-->
+        <!--                <div class="card">-->
+        <!--                    -->
+        <!--&lt;!&ndash;                    <img class="card-img-top" th:src="@{/view/}@{${clubPhotoList[i]}}">&ndash;&gt;-->
+        <!--                    <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTO.clubNo})}" th:inline="text">-->
+        <!--                        <h3 class="card-title" th:text="${clubDTO.clubName}"></h3>-->
+        <!--                    </a>-->
+        <!--                    <p th:text="${clubDTO.clubContent}"></p>-->
+        <!--                </div>-->
+        <!--            </div>-->
+
 </th:block>

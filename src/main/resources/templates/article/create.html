@@ -175,7 +175,7 @@
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
-<img src="/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
 
 </div>
 </div>`
@@ -223,6 +223,8 @@
             }
 
             target.innerHTML = str;
+            console.log("str")
+            console.log(str)
 
             document.querySelector("form").submit();
 

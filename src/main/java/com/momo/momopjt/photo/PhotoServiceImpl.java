@@ -77,6 +77,10 @@ public class PhotoServiceImpl implements PhotoService {
   @Override
   public Photo getPhoto(String photoUUID) {
     log.info("------------ getPhoto() ----------jinuk");
+
+    boolean existCheck = photoRepository.existsById(photoUUID);
+    log.info("----------------- [uuid : {}, exist : {}]-----------------",photoUUID, existCheck);
+
     Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
     log.info("----------------- [{}]-----------------",photoOptional);
 
@@ -84,6 +88,7 @@ public class PhotoServiceImpl implements PhotoService {
 
   }
 
+  //현재는 안씀
   @Override
   public List<Photo> getPhotoList(Character condition) {
     List<Photo> photoList = photoRepository.findAll();
@@ -92,7 +97,17 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public void deletePhoto(String photoUUID) {
-    photoRepository.deleteById(photoUUID);
+
+    if (photoUUID == null || photoUUID.equals("")){
+      log.warn("----------------- [deletePhoto(UUID) UUID is null or empty]-----------------{}",photoUUID);
+      return;
+    }
+    else {
+      log.info("----------------- [deletePhoto : {} at DB]-----------------",photoUUID);
+      photoRepository.deleteById(photoUUID);
+    }
+
+
   }
 
 

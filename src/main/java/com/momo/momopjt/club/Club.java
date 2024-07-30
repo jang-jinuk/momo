@@ -45,16 +45,16 @@ public class Club {
   private Instant clubCreateDate;
 
   @Column(name = "club_photo")
-  private String clubPhoto;
+  private String clubPhotoUUID;
 
 
 
 //  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //  private List<Article> articles;
   //모임 정보 수정 메소드
-  public void change(String clubCategory, String clubContent,
+  public void change(String clubPhotoUUID, String clubCategory, String clubContent,
                      String clubArea, Integer clubMax) {
-//    this.clubPhoto = clubPhoto;
+    this.clubPhotoUUID = clubPhotoUUID;
     this.clubCategory = clubCategory;
     this.clubContent = clubContent;
     this.clubArea = clubArea;
