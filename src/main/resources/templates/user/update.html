@@ -58,10 +58,13 @@
     <div class="form-container">
         <form id="updateForm" th:action="@{/user/update}" method="post">
             <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
-            <div class="mb-3">
-                <label for="userNickname" class="form-label">닉네임</label>
-                <input type="text" id="userNickname" name="userNickname" th:value="${userDTO.userNickname}" class="form-control" required>
+            <!-- 닉네임 -->
+            <div class="input-group mb-3">
+                <label for="userNickname" class="input-group-text">* 닉네임</label>
+                <input type="text" id="userNickname" name="userNickname" class="form-control" placeholder="abc" required>
+                <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserNickname()">중복확인</button>
             </div>
+            <div id="nicknameCheckResult" class="alert" role="alert"></div>
 
             <!-- 성별 -->
             <div class="input-group mb-3">
@@ -78,7 +81,8 @@
 
             <div class="mb-3">
                 <label for="userEmail" class="form-label">이메일</label>
-                <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" required>
+                <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" required readonly>
+                <small id="emailHelp" class="form-text text-muted">*이메일은 변경할 수 없습니다.</small>
             </div>
 
             <div class="mb-4">
@@ -140,10 +144,58 @@
     </div>
 </div>
 
+
+
 <script>
     function resetForm() {
         document.getElementById('updateForm').reset();
     }
+</script>
+
+<script>
+
+    function validateForm() {
+        const userNickname = document.getElementById('userNickname').value;
+        const userGender = document.querySelector('input[name="userGender"]:checked').value;
+
+        const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+
+        if (!NicknamePattern.test(userNickname)) {
+            alert("닉네임은 6글자까지 가능합니다.");
+            return false;
+        }
+
+        if (userGender !== "m" && userGender !== "w") {
+            alert("성별이 유효하지 않습니다.");
+            return false;
+        }
+        return true;
+    }
+
+    function checkDuplicateUserNickname() {
+        const userNickname = document.getElementById('userNickname').value;
+
+        $.ajax({
+            type: "GET",
+            url: "/user/checkUserNicknameDuplicate",
+            data: { userNickname: userNickname },
+            success: function (response) {
+                if (response === true) {
+                    $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+                    $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+                } else {
+                    $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
+                    $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
+                }
+                $('#nicknameCheckResult').show();
+            },
+            error: function () {
+                alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            }
+        });
+        return false; // 폼의 기본 동작을 막습니다.
+    }
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -181,6 +233,8 @@
         });
     });
 </script>
+
+
 
 <!-- Bootstrap JavaScript dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
