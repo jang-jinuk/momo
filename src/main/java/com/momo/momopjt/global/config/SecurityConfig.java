@@ -44,12 +44,13 @@ public class SecurityConfig {
     log.info("------------configure----------------");
 
     http
-        .csrf().disable()// CSRF 보호 활성화
+        .csrf().disable() // CSRF 보호 비활성화
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**","/alarm/**","/club/**").permitAll()
         .antMatchers("/admin/**").hasRole("ADMIN")
+        .antMatchers("/update/**").authenticated() // /update/** 경로를 인증된 사용자만 접근 가능하도록 설정
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/home")

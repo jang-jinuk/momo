@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,12 +141,24 @@ public class UserController {
 
   @GetMapping("/update/{userId}")
   public String updateGet(@PathVariable String userId, Model model) {
-    // userId에 해당하는 User 엔티티 조회
-    User user = userRepository.findByUserId(userId);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = null;
 
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      currentUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
+    }
+
+    User currentUser = userRepository.findByUserId(currentUsername);
+
+    if (currentUser == null || !userId.equals(currentUser.getUserId())) {
+      throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
+    }
+
+    User user = userRepository.findByUserId(userId);
     if (user == null) {
       throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
     }
+
     ModelMapper modelMapper = new ModelMapper();
     UserDTO userDTO = modelMapper.map(user, UserDTO.class);
     model.addAttribute("userDTO", userDTO);
@@ -164,6 +177,21 @@ public class UserController {
       log.error(bindingResult.getAllErrors().toString());
       return "redirect:/user/update/" + userId;
     }
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = null;
+
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      currentUsername = ((UserDetails) authentication.getPrincipal()).getUsername();
+    }
+
+    User currentUser = userRepository.findByUserId(currentUsername);
+
+    if (currentUser == null || !userId.equals(currentUser.getUserId())) {
+      redirectAttributes.addFlashAttribute("error", "현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
+      return "redirect:/user/update/" + userId;
+    }
+
     try {
       userService.updateUser(userDTO);
     } catch (Exception e) {
