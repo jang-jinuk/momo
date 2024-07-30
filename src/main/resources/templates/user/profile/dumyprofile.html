@@ -11,18 +11,30 @@
             z-index: 1; /* 다른 요소 위에 표시 */
             left: 0;
             top: 0;
-            width: 100%; /* 전체 너비 */
+            right: 0;
+            bottom: 0;
             height: 100%; /* 전체 높이 */
             overflow: auto; /* 필요시 스크롤 가능 */
-            background-color: rgba(0, 0, 0, 0.4); /* 반투명 배경 */
+            background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
             padding-top: 60px; /* 상단 여백 */
+            opacity: 0; /* 초기 투명도 */
+            transition: opacity 0.5s ease; /* 부드러운 전환 효과 */
+
         }
+        #myModal.show {
+            display: block; /* 모달을 보여줌 */
+            opacity: 1; /* 완전 불투명 */
+        }
+
         .modal-content {
             background-color: #fefefe;
-            margin: 5% auto; /* 중앙 정렬 */
+            margin: auto; /* 중앙 정렬 */
             padding: 20px;
             border: 1px solid #888;
             width: 80%; /* 너비 */
+            max-width: 600px; /* 최대 너비 설정 (필요시 조정) */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+            border-radius: 8px; /* 모서리 둥글게 */
         }
     </style>
 </head>
@@ -144,28 +156,38 @@
 <!-- 모달 기능 -->
 <script>
     function openModal() {
-        document.getElementById('myModal').style.display = 'block'; // 모달 표시
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block'; // 모달을 표시
+        setTimeout(() => {
+            modal.style.opacity = '1'; // 모달을 완전히 불투명하게
+        }, 10); // 약간의 지연 후 opacity 변경
 
         const radioButtons = document.querySelectorAll('#myModal input[type="radio"]');
         radioButtons.forEach(function(radio) {
             radio.checked = false; // 모든 라디오 버튼의 선택 해제
         });
     }
+
     function closeModal() {
-        document.getElementById('myModal').style.display = 'none'; // 모달 닫기
+        const modal = document.getElementById('myModal');
+        modal.style.opacity = '0'; // 모달을 투명하게
+        setTimeout(() => {
+            modal.style.display = 'none'; // 모달을 숨김
+        }, 500); // 투명화 효과가 끝난 후 숨김
     }
+
     // 배경 클릭 시 모달 닫기
     window.onclick = function(event) {
         if (event.target === document.getElementById('myModal')) {
             closeModal();
         }
     }
+
     // ESC 키로 모달 닫기
     window.onkeydown = function(event) {
         if (event.key === "Escape") {
             closeModal();
         }
     }
-    <!-- 모달 기능 끝 -->
 </script>
 </html>
