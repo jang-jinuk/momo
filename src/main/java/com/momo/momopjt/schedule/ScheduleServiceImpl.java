@@ -3,7 +3,6 @@ package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.club.ClubService;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +36,10 @@ public class ScheduleServiceImpl implements ScheduleService {
   public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) {
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
-    schedule.setSchedulePhoto("437d27cd-8818-48ab-8cdf-639d0ce94705");
+
+
+
+
     Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
     log.info("------------ [일정 생성 완료] ------------");
 
@@ -85,6 +88,7 @@ public class ScheduleServiceImpl implements ScheduleService {
       schedule.setScheduleMax(scheduleDTO.getScheduleMax());
       schedule.setSchedulePlace(scheduleDTO.getSchedulePlace());
       schedule.setScheduleStartDate(scheduleDTO.getScheduleStartDate());
+      schedule.setSchedulePhotoUUID(scheduleDTO.getSchedulePhotoUUID());
 
       scheduleRepository.save(schedule);
     }
@@ -191,8 +195,8 @@ public class ScheduleServiceImpl implements ScheduleService {
   public void deleteSchedule(Long scheduleNo) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
-    if(!schedule.getSchedulePhoto().equals("default.jpg")){ //TODO 실제 디폴트 사진 UUID로 변경 필요 JW
-      photoService.deletePhoto(schedule.getSchedulePhoto());
+    if(!schedule.getSchedulePhotoUUID().equals("default.jpg")){
+      photoService.deletePhoto(schedule.getSchedulePhotoUUID());
     }
     log.info("------------ [일정 사진 삭제 처리 완료] ------------");
     schedule.setScheduleNo(scheduleNo);
@@ -211,8 +215,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(clubNo);
 
     for (Schedule schedule : scheduleList) {
-      if(!schedule.getSchedulePhoto().equals("default.jpg")){ //TODO 실제 디폴트 사진 UUID로 변경 필요 JW
-        photoService.deletePhoto(schedule.getSchedulePhoto()); //모든 일정의 사진 삭제
+      if(!schedule.getSchedulePhotoUUID().equals("default.jpg")){
+        photoService.deletePhoto(schedule.getSchedulePhotoUUID()); //모든 일정의 사진 삭제
       }
     }
   }

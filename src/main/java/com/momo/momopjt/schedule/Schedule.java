@@ -30,8 +30,8 @@ public class Schedule {
   @Column(name = "schedule_content", nullable = false, length = 500)
   private String scheduleContent;
 
-  @Column(name = "schedule_photo", nullable = false)
-  private String schedulePhoto;
+  @Column(name = "schedule_photo")
+  private String schedulePhotoUUID;
 
   @Column(name = "schedule_max", nullable = false)
   private Integer scheduleMax;

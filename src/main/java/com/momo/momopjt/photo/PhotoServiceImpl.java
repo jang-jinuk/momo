@@ -82,7 +82,7 @@ public class PhotoServiceImpl implements PhotoService {
     log.info("----------------- [uuid : {}, exist : {}]-----------------",photoUUID, existCheck);
 
     Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
-    log.info("----------------- [{}]-----------------",photoOptional);
+    log.trace("----------------- [{}]-----------------",photoOptional);
 
     return photoOptional.orElseThrow();
 

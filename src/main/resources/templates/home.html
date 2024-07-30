@@ -20,7 +20,8 @@
                     <div class="row g-0">
 
                         <div class="col-md-4">
-                            <img class="card-img-top" th:src="@{/view/}+@{${myClubPhotoList[i]}}">
+                            <img class="card-img-top" th:src="@{/view/{photo}(photo=${myClubPhotoList[i]})}">
+
                         </div>
 
                         <div class="col-md-8">
@@ -55,7 +56,7 @@
                     <div class="row g-0">
 
                         <div class="col-md-4">
-                            <img class="card-img-top" th:src="@{/view/}+@{${clubPhotoList[i]}}">
+                            <img class="card-img-top" th:src="@{/view/{photo}(photo=${clubPhotoList[i]})}">
                         </div>
 
                         <div class="col-md-8">

@@ -30,7 +30,7 @@
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/alarm/list}'|">알림</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
-                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/user/update/}@{${userId}}'|">회원정보수정</button>
+                                    type="button" class="btn btn-outline-secondary me-2" th:onclick="|location.href='@{/user/update/}@{${userId}}'|">info</button>
                             <button th:unless="${#authentication.name == 'anonymousUser'}"
                                     type="button" class="btn btn-outline-primary me-2" th:onclick="|location.href='@{/user/logout}'|">Logout</button>
                             <button th:if="${#authentication.name == 'anonymousUser'}"

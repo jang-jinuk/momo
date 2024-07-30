@@ -33,4 +33,5 @@ public class Alarm {
 
   @Column(name = "alarm_create_date")
   private Instant alarmCreateDate;
+
 }

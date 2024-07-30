@@ -23,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -72,15 +74,37 @@ public class ClubController {
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
+    List<String> endSchedulePhotoList = new ArrayList<>();
+    //일정 끝난 사진 파일들 조회
+    if(!endSchedules.isEmpty()) {
+      endSchedulePhotoList = endSchedules.stream()
+          .map(scheduleDTO -> photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString())
+          .collect(Collectors.toList());
+    }
+    //일정 끝난 사진 파일들 view로 데이터 넘김
+    model.addAttribute("endSchedulePhotoList", endSchedulePhotoList);
+    log.trace("----------------- [endSchedulePhotoList : {}]-----------------",endSchedulePhotoList);
+
+    //일정 진행중 사진 파일들 조회
+    List<String> ongoingSchedulePhotoList = new ArrayList<>();
+    if(!getOngoingSchedules.isEmpty()){
+      ongoingSchedulePhotoList = getOngoingSchedules.stream()
+          .map(scheduleDTO -> photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString())
+          .collect(Collectors.toList());
+    }
+    //일정 진행중 사진 파일들 view로 데이터 넘김
+    model.addAttribute("ongoingSchedulePhotoList", ongoingSchedulePhotoList);
+    log.trace("----------------- [ongoingSchedulePhotoList : {}]-----------------",ongoingSchedulePhotoList);
+
 
     log.info("----------------- [club photo 처리]-----------------");
-    log.info("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
+    log.trace("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
 //    String clubProfilePhotoStr = clubPhoto.getPhotoUUID()+clubPhoto.getPhotoExtension();
     String clubProfilePhotoStr = clubPhoto.toString();
-    log.info("----------------- [clubphoto str 결과 : {}]-----------------",clubProfilePhotoStr);
+    log.trace("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
     model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
-    // 이미지 html 에서 쓸때 아래 처럼
+    // 이미지 html 에서 쓸때 아래 처럼 (예시)
     // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
 
 
@@ -176,6 +200,7 @@ public class ClubController {
     log.info("------------ [Post club update] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     log.trace("clubNo : {}",clubNo);
+
     clubDTO.setClubNo(clubNo);
 
     Boolean isSuccess = clubService.updateClub(clubDTO);
