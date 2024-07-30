@@ -26,8 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -49,6 +47,7 @@ public class ClubController {
   private PhotoRepository photoRepository;
   @Autowired
   private ArticleService articleService;
+  @Qualifier("modelMapper")
   @Autowired
   private ModelMapper modelMapper;
   @Autowired
@@ -57,7 +56,7 @@ public class ClubController {
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
-    log.info("------------ [Get club main no: {}] ------------", clubNo);
+    log.info("------------ [Get club main no: {}] ------------",clubNo);
 
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("club", clubDTO);
@@ -88,16 +87,12 @@ public class ClubController {
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
+
     int isMember = userAndClubService.isMember(userAndClubDTO); //모임에 소속되었는지 확인
     if (isMember == 0 || isMember == 1) {
       return "redirect:/club/join-page";
     }
     model.addAttribute("isMember", isMember);
-
-    // 유저의 찜 상태 조회
-    //UserAndClubDTO clubNos = userAndClubService.
-    //char isWish = userAndClubService.readWishClubStatus(user, club);
-    // model.addAttribute("isWish", isWish); // 모델에 찜 상태 추가
 
     //YY
     //일정 사진 표시 기능
@@ -119,7 +114,6 @@ public class ClubController {
 //log.info(schedule64List.get(0).substring(1,100));
 //log.info(schedule64List.get(1).substring(1,100));
 
-    //YY
     // 사용자 즐겨찾기 클럽 목록을 가져옵니다.
     List<Club> wishLists = userAndClubService.findMyWishClubs(user);
     log.info("User 의 즐겨찾기 클럽 목록: {}", wishLists);
@@ -342,8 +336,8 @@ public class ClubController {
 
   //가입 신청 승인
   @GetMapping("/approve-join")
-  public String approveJoinGet(@RequestParam("userNo") Long userNo, HttpSession session,
-                               RedirectAttributes redirectAttributes) {
+  public String approveJoinGet(@RequestParam("userNo")Long userNo, HttpSession session,
+                            RedirectAttributes redirectAttributes) {
     log.info("------------ [Get club approve join] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
@@ -357,7 +351,7 @@ public class ClubController {
     userAndClubDTO.setClubNo(club);
 
     Boolean isSuccess = userAndClubService.approveJoin(userAndClubDTO);
-    if (!isSuccess) {
+    if(!isSuccess) {
       redirectAttributes.addFlashAttribute("message", "인원 초과입니다. 최대인원수를 수정해주세요");
       return "redirect:/club/members";
     }

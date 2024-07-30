@@ -6,10 +6,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        .active .page-link {
-            font-weight: bold;
-            text-decoration: underline;
+        table {
+            margin-top: 20px;
+            width: 100%; /* 테이블 전체 너비 설정 */
+            border-collapse: collapse; /* 테두리 간격 없애기 */
         }
+        th, td {
+            padding: 12px; /* 패딩 추가 */
+            border: 1px solid #dee2e6; /* 테두리 색상 */
+            text-align: center; /* 중앙 정렬 */
+            vertical-align: middle; /* 수직 중앙 정렬 */
+            overflow: hidden; /* 넘치는 텍스트 숨기기 */
+            white-space: nowrap; /* 한 줄로 표시 */
+            text-overflow: ellipsis; /* 줄임표로 표시 */
+            max-width: 150px; /* 최대 너비 설정 */
+            word-wrap: break-word; /* 단어 줄바꿈 허용 */
+        }
+        /* 각 열의 너비 조정 */
+        th:nth-child(1), td:nth-child(1) { width: 5%; } /* 번호 */
+        th:nth-child(2), td:nth-child(2) { width: 15%; } /* 신고자 */
+        th:nth-child(3), td:nth-child(3) { width: 15%; } /* 피신고자 */
+        th:nth-child(4), td:nth-child(4) { width: 20%; } /* 피신고자 닉네임 */
+        th:nth-child(5), td:nth-child(5) { width: 15%; } /* 죄목 */
+        th:nth-child(6), td:nth-child(6) { width: 15%; } /* 날짜 */
+        th:nth-child(7), td:nth-child(7) { width: 10%; } /* 상태 */
+        th:nth-child(8), td:nth-child(8) { width: 10%; } /* 제제 */
+        th:nth-child(9), td:nth-child(9) { width: 10%; } /* 지우기 */
     </style>
 </head>
 <body>
@@ -18,8 +40,7 @@
     <div class="container d-flex justify-content-between align-items-center">
         <h6 th:text="${logoText}">momo</h6>
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-dark">회원관리</button>
-            <button type="button" class="btn btn-light">게시판관리</button>
+            <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
             <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
         </div>
     </div>
@@ -35,7 +56,7 @@
     </div>
 </nav>
 <!-- 신고 내역 양식 -->
-<table class="container">
+<table class="table table-bordered table-striped container">
     <thead>
     <tr>
         <th>번호</th>
@@ -49,59 +70,50 @@
         <th>지우기</th>
     </tr>
     </thead>
-    <!-- 신고 내역 양식 끝 -->
     <tbody id="reportTableBody">
-<!-- DB 에서 가져온 신고내역 -->
+    <!-- DB 에서 가져온 신고내역 -->
     <tr th:each="report : ${reportDTO}">
         <td th:text="${report.reportNo}"></td>
-        <td th:text="${report.reporterNo.getUserId()}"></td>    
+        <td th:text="${report.reporterNo.getUserId()}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
-        <td> <a th:href="@{/user/profile/dumyprofile/{userId}(userId=${report.reportedNo.userId})}"
-                th:text="${report.reportedNo.getUserNickname()}"></a></td>
+        <td>
+            <a th:href="@{/user/profile/dumyprofile/{userId}(userId=${report.reportedNo.userId})}"
+               th:text="${report.reportedNo.getUserNickname()}"></a>
+        </td>
         <td th:text="${report.reportCategory}"></td>
         <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
         <td>
-        <span th:switch="${report.reportedNo.getUserState}">
-        <span th:case="'0'">정상</span>
-        <span th:case="'1'">정지</span>
-        <span th:case="*">알 수 없음</span>
-        </span>
+                <span th:switch="${report.reportedNo.getUserState}">
+                    <span th:case="'0'">정상</span>
+                    <span th:case="'1'">정지</span>
+                    <span th:case="*">알 수 없음</span>
+                </span>
         </td>
-        <!-- DB 에서 가져온 신고내역 끝 -->
         <!-- 버튼 -->
         <td th:if="${report.reportedNo.getUserState} == '0'">
-            <div>
-                <form th:action="@{/admin/deactivate-user}" method="post">
-                    <input type="hidden" name="reportNo" th:value="${report.reportNo}">
-                    <input type="hidden" name="currentPage" th:value="${page}">
-                    <input type="hidden" name="query" th:value="${query}">
-                    <button class="btn btn-danger" type="submit" th:onclick="ban()">유저정지</button>
-                </form>
-            </div>
+            <form th:action="@{/admin/deactivate-user}" method="post">
+                <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+                <input type="hidden" name="currentPage" th:value="${page}">
+                <input type="hidden" name="query" th:value="${query}">
+                <button class="btn btn-danger btn-custom" type="submit" th:onclick="ban()">유저정지</button>
+            </form>
         </td>
         <td th:if="${report.reportedNo.getUserState} == '1'">
-            <div>
-                <form th:action="@{/admin/reactivate-user}" method="post">
-                    <input type="hidden" name="reportNo" th:value="${report.reportNo}">
-                    <input type="hidden" name="currentPage" th:value="${page}">
-                    <input type="hidden" name="query" th:value="${query}">
-                    <button class="btn btn-danger" type="submit" th:onclick="free()">정지해제</button>
-                </form>
-            </div>
+            <form th:action="@{/admin/reactivate-user}" method="post">
+                <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+                <input type="hidden" name="currentPage" th:value="${page}">
+                <input type="hidden" name="query" th:value="${query}">
+                <button class="btn btn-success btn-custom" type="submit" th:onclick="free()">정지해제</button>
+            </form>
         </td>
         <td>
-            <div>
             <form th:action="@{/admin/delete-report}" method="post">
                 <input type="hidden" name="reportNo" th:value="${report.reportNo}">
                 <input type="hidden" name="currentPage" th:value="${page}">
                 <input type="hidden" name="query" th:value="${query}">
-                <div th:switch="${report.reportedNo.getUserState}">
-                    <button class="btn btn-danger" type="submit" th:onclick ="deleting()">삭제</button>
-                </div>
+                <button class="btn btn-danger btn-custom" type="submit" th:onclick="deleting()">삭제</button>
             </form>
-            </div>
         </td>
-        <!-- 버튼 끝 -->
     </tr>
     <tr th:if="${#lists.isEmpty(reportDTO)}">
         <td colspan="9" class="text-center">신고 내역이 없습니다</td>

@@ -7,205 +7,13 @@
 <head>Article Detail</head>
 
 <th:block layout:fragment="content">
-
-    <div class="row mt-3">
-
-        <div class="col-2">
-            <button type="button" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${clubNo})}'|">모임 홈
-            </button>
-        </div>
-    </div>
-    <div class="row mt-3">
-
-        <div class="col">
-            <div class="card">
-
-                <!-- article 조회 부분 -->
-                <div class="card-header">
-                    Article Detail
-                </div>
-
-                <div class="card-body">
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Article No</span>
-                        <input type="text" class="form-control" th:value="${articleDTO.articleNo}" readonly>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Title</span>
-                        <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Content</span>
-                        <textarea class="form-control col-sm-5" rows="5"
-                                  readonly>[[${articleDTO.articleContent}]]</textarea>
-                    </div>
-
-
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">ArticleCreateDate</span>
-                        <input type="datetime-local" class="form-control"
-                               th:value="${#dates.format(articleDTO.articleCreateDate, 'yyyy-MM-dd HH:mm')}"
-                               readonly>
-                    </div>
-
-                </div>
-
-                <!-- 작성자 정보 -->
-
-                <div class="card-body">
-                    <span>Member Detail</span>
-                    <div>
-                        <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image">
-                    </div>
-                    <div>
-                        <h5 th:text="${articleDTO.userNo.userNickname}"></h5>
-                        <p th:text="${articleDTO.userNo.userAddress}"></p>
-                    </div>
-
-                    <!-- 버튼 -->
-                    <div class="my-4">
-                        <!--                        <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">-->
-                        <a th:href="|@{/article/list}?${link}|" class="text-decoration-none">
-                            <button type="button" class="btn btn-primary">List</button>
-                        </a>
-
-                        <a th:if="${articleDTO.userNo.userId} == ${#authentication.name}" class="text-decoration-none">
-                            <!--                               th:href="|@{/article/modify(articleNo=${articleDTO.articleNo})}&${link}|"-->
-
-                            <button type="button" class="btn btn-secondary">Modify</button>
-                        </a>
-                        /User/yjpark/upload/t_d302f3dd-8157-4fb7-952e-657932f46ea0.jpg
-
-                        <!-- 기존 수정 버튼 -->
-                        <div class="col-4" th:if="${articleDTO.userNo.userId} == ${#authentication.name}">
-                            <button type="button"
-                                    th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
-                                수정
-                            </button>
-                        </div>
-
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제</button>
-
-                    </div>
-                </div>
-
-                //사진 출력 부분 수정 필요
-                <div class="col">
-                    <div class="card" th:if="${articleDTO.fileNames != null && dto.fileNames.size() > 0}">
-                        <div class="card-body" th:each="fileName : ${articleDTO.fileNames}">
-                            <div th:text="${fileName}"></div>
-
-                            <img class="card-img-top"
-                                 th:src="|/view/${fileName}|"
-                                 alt ="article image">
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="row"> <!-- 댓글 입력창 부분 -->
-
-        <form id="articleReplyForm" action="/reply/create" method="post">
-            <div>
-                <label for="replyContent">Reply Content:</label>
-                <textarea id="replyContent" name="replyContent" required></textarea>
-            </div>
-            <div>
-                <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
-            </div>
-            <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
-        </form>
-
-    </div>
-    <div class="row"> <!-- 댓글 표시 부분 -->
-        <div class="reply" th:each="reply : ${replyList}">
-            <hr>
-            <span th:text="${reply.getReplyContent()}"></span>
-            <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
-            <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-            <span>작성자필요<!--TODO--></span>
-            <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
-            <form id="replyDeleteForm" action="/reply/delete" method="post">
-                <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
-                <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
-            </form>
-        </div>
-
-    </div>
-
-
-    <div class="container">
-        <div class="row">
-
-            <br>
-            <hr>
-            <div class="row">
-
-                <!--                <input type="hidden" name="_method" value="delete"/>-->
-                <!--                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
-            </div>
-            <div class="row">
-                <div class="col-8"></div>
-            </div>
-            <hr>
-            <br>
-
-        </div>
-
-        <script th:inline="javascript">
-            function confirmDelete() {
-                if (confirm("정말 삭제하시겠습니까?")) {
-                    location.href = /*[[@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}]]*/ '';
-                }
-            }
-        </script>
-    </div>
-</th:block>
-
-
-<!--원본 -->
-<!--
-
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
-
-<head>Article Detail</head>
-
-<th:block layout:fragment="content">
-
-
-
-
-
-    <div class="container">
+    <div class="container" style="width: 850px">
         <div class="row">
             <div class="col-10"></div>
             <div class="col-2">
                 <button type="button" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${clubNo})}'|">모임 홈</button>
             </div>
         </div>
-        <div class="row">
-            <div class="member-container">
-                <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image">
-                <div class="member-info">
-                    <h5 th:text="${articleDTO.userNo.userNickname}"></h5>
-                    <p th:text="${articleDTO.userNo.userAddress}"></p>
-                </div>
-            </div>
-        </div>
-        <br>
-        <hr>
         <div class="row">
             <h2 th:text="${articleDTO.articleTitle}">제목</h2>
             <p th:text="${articleDTO.articleContent}">내용</p>
@@ -215,46 +23,41 @@
         </div>
         <div class="row">
             <div class="col-8"></div>
-            <div class="col-4" th:if="${articleDTO.userNo.userId} == ${#authentication.name}">
+            <div class="col-4">
                 <button type="button" th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">수정</button>
                 <button type="button" onclick="confirmDelete()">삭제</button>
             </div>
         </div>
-        <hr>
-        <br>
-        <div class="row">
-        &lt;!&ndash; 댓글 입력창 부분 &ndash;&gt;
-<form id="articleReplyForm" action="/reply/create" method="post">
-    <div>
-        <label for="replyContent">Reply Content:</label>
-        <textarea id="replyContent" name="replyContent" required></textarea>
-    </div>
-    <div>
-        <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
-    </div>
-    <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
-</form>
+        <div class="row"> <!-- 댓글 입력창 부분 -->
 
-</div>
-<div class="row">
-&lt;!&ndash; 댓글 표시 부분 &ndash;&gt;
-    <div class="reply" th:each="reply : ${replyList}">
-        <hr>
-        <span th:text="${reply.getReplyContent()}"></span>
-        <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
-        <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-        <span>작성자필요
+            <form id="articleReplyForm" action="/reply/create" method="post">
+                <div>
+                    <label for="replyContent">Reply Content:</label>
+                    <textarea id="replyContent" name="replyContent" required></textarea>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+                </div>
+                <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
+            </form>
 
-        &lt;!&ndash;TODO&ndash;&gt;</span>
-        &lt;!&ndash; <button class="btn btn-outline-success modifyBtn">수정하기</button> &ndash;&gt;
-        <form id="replyDeleteForm" action="/reply/delete" method="post">
-            <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
-            <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
-        </form>
+        </div>
+        <div class="row"> <!-- 댓글 표시 부분 -->
+            <div class="reply" th:each="reply : ${replyList}">
+                <hr>
+                <span th:text="${reply.getReplyContent()}"></span>
+                <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
+                <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
+                <span>작성자필요<!--TODO--></span>
+                <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
+                <form id="replyDeleteForm" action="/reply/delete" method="post">
+                    <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
+                    <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
+                </form>
+            </div>
+
+        </div>
     </div>
-
-</div>
-</div>
 </th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
@@ -265,5 +68,3 @@
         }
     </script>
 </th:block>
-
--->
