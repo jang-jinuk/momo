@@ -66,11 +66,6 @@
   <div class="form-container">
     <form id="updateForm" th:action="@{/user/update}" method="post">
       <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
-      <div class="mb-3">
-        <label for="userNickname" class="form-label">닉네임</label>
-        <input type="text" id="userNickname" name="userNickname" th:value="${userDTO.userNickname}" class="form-control"
-               required>
-      </div>
 
       <!-- 닉네임 -->
       <div class="input-group mb-3">
