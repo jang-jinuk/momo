@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="headerFragment">
-
   <header>
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <!-- Navbar Brand-->
 
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
+      <!-- Navbar Brand-->
       <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle-header" href="#!" style="display: none">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
           <path d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z"></path>
@@ -14,8 +14,8 @@
       </a>
 
       <a class="navbar-brand ps-3" href="/home">MOMO</a>
-      <div class="col-md-8"></div>
 
+      <div class="col-md-8"></div>
       <div class="col-md-3 text-end">
 
         <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/alarm/list}">
@@ -34,8 +34,10 @@
         <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/logout}">Logout</a>
 
         <a class="nav-menu" th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/user/login}">Login</a>
+
       </div>
     </nav>
+
   </header>
 
 </th:block>
