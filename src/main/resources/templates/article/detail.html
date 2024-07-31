@@ -59,9 +59,9 @@
             <div class="col"> <!-- 후기글 사진 출력 -->
 
               <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
-                   src="/assets/NullPhoto.png"  style="width:300px;" >
+                   src="/assets/NullPhoto.png" style="width:300px;">
               <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
-                   th:src="@{/view/{photo}(photo=${articlePhoto})}"  style="width:300px;" >
+                   th:src="@{/view/{photo}(photo=${articlePhoto})}" style="width:300px;">
 
 
               <img class="card-img-top"
@@ -94,9 +94,10 @@
         <div class="col-8"></div>
         <!-- 후기글 작성자만 수정 삭제 가능 -->
         <div class="col-4" th:if="${articleDTO.userNo.userId} == ${#authentication.name}">
-          <button type="button" th:onclick="|location.href='
-                @{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|" >수정
+          <button type="button"
+                  th:onclick="@{location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'}">수정
           </button>
+
           <button type="button" class="btn btn-danger" onclick="confirmDelete()">삭제</button>
         </div>
 
@@ -144,12 +145,12 @@
 
 
 <th:block layout:fragment="script">
-    <script th:inline="javascript">
-        function confirmDelete() {
-            if (confirm("정말 삭제하시겠습니까?")) {
-                location.href = /*[[@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}]]*/ '';
-            }
-        }
-    </script>
+  <script th:inline="javascript">
+      function confirmDelete() {
+          if (confirm("정말 삭제하시겠습니까?")) {
+              location.href = /*[[@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}]]*/ '';
+          }
+      }
+  </script>
 
 </th:block>
