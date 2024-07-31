@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -75,7 +74,7 @@
                 <button class="btn btn-primary" type="submit">등록/수정</button>
                 <!--onclick="submitNewsForm('/news/create')"-->
                 <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
-                <button class="btn btn-primary" type="button" th:onclick="window.location.href='/news/main'">돌아가기
+                <button class="btn btn-primary" type="button" th:onclick="'window.location.href\'=\'/news/main\'">돌아가기
                 </button>
 
             </div>
@@ -84,7 +83,7 @@
                 <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
                 <!--YY-->
                 <button class="btn btn-danger"
-                        th:onclick="window.location.href='../../report/create'"
+                        th:onclick="'window.location.href=\''../../report/create\'"
                         type="button">신고하기
                 </button>
                 <!--YY-->

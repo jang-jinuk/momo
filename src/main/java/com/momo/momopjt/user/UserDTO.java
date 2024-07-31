@@ -44,7 +44,7 @@ public class UserDTO {
 
     private Character userSocial='M';
 
-    private String userPhoto = ""; // 기본값 설정
+    private String userPhoto; // 기본값 설정
 
     private Integer userLikeNumber= 0; // 기본값 설정
 

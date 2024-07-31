@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
-public class FileDTO {
+public class UploadFileDTO {
   // 598p
   private List<MultipartFile> files;
 }

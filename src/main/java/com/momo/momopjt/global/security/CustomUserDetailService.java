@@ -3,15 +3,17 @@ package com.momo.momopjt.global.security;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserSecurityDTO;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import lombok.extern.log4j.Log4j2;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -38,6 +40,7 @@ public class CustomUserDetailService implements UserDetailsService {
     Optional<User> result = userRepository.findByUserIdAndUserSocialIn(userId, socialTypes);
 
     if (result.isEmpty()) { // 해당 아이디를 가진 사용자가 없다면
+      log.info("----------------- [07-24 20:17:10 123123123123123]-----------------");
       throw new UsernameNotFoundException("userId not found...");
     }
 

@@ -34,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
   public Long createArticle(ArticleDTO articleDTO) {
     articleDTO.setArticleNo(-1L);
     articleDTO.setArticleCreateDate(Instant.now());
+    articleDTO.setArticleState('0');
+    articleDTO.setArticleScore(0);
     Article article = modelMapper.map(articleDTO, Article.class);
     article = articleRepository.save(article);
     return article.getArticleNo();
@@ -126,6 +128,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
     articleRepository.deleteById(articleNo);
   }
+
+
+
 }
 
 

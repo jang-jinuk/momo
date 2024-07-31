@@ -1,5 +1,6 @@
 package com.momo.momopjt.photo;
 
+import com.momo.momopjt.article.Article;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,9 +21,6 @@ public class Photo {
   @Column(name = "photo_uuid", nullable = false)
   private String photoUUID;
 
-  @NotNull
-  @Column(name = "photo_create_date", nullable = false)
-  private Instant photoCreateDate;
 
   @Size(max = 255)
   @NotNull
@@ -30,12 +28,16 @@ public class Photo {
   private String photoExtension;
 
   @NotNull
+  @Column(name = "photo_create_date", nullable = false)
+  private Instant photoCreateDate;
+
+  @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_no", nullable = false)
   private User uploader;
 
   @Column(name = "photo_tag")
-  private Character tag; // User, Club, Schedule, Article 속성 어디에 필요한 것인지 명시
+  private Character tag; // 현재 사용 x
 
 
   //toString custom : uuid+extension 해서 파일 이름을 String 타입으로 return

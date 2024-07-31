@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByUserIdAndUserSocialIn(@Param("userId") String userId,
                                              @Param("userSocials") Collection<Character> userSocials);
 
+
   User findByUserId(String userId);
   User findByUserIdAndUserEmail(String userId, String userEmail);
 
@@ -26,6 +27,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @EntityGraph(attributePaths = "roleSet")
   Optional<User> findByUserEmail(String email);
-
 
 }

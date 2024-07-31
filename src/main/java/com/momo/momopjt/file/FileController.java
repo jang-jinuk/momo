@@ -3,9 +3,10 @@ package com.momo.momopjt.file;
 import com.momo.momopjt.photo.PhotoDTO;
 import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.photo.PhotoServiceImpl;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserService;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -26,45 +29,52 @@ import java.util.*;
 
 @RestController
 @Log4j2
+@RequiredArgsConstructor
 public class FileController {
 
-  private final PhotoServiceImpl photoServiceImpl;
   private final PhotoService photoService;
   private final PhotoRepository photoRepository;
+  private final UserService userService;
   //600p
-  @Value("${com.momo.upload.path}")
-  private String uploadPath;
 
-  public FileController(PhotoServiceImpl photoServiceImpl, PhotoService photoService, PhotoRepository photoRepository) {
-    this.photoServiceImpl = photoServiceImpl;
-    this.photoService = photoService;
-    this.photoRepository = photoRepository;
-  }
+  //로컬 파일 저장 경로
+  @Value("${UploadPath}")
+  private String uploadPath;
 
   //599p
   @ApiOperation(value = "파일업로드")
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //  public String uploadFile(FileDto fileDto){
   //605p
-  public List<UploadResultDTO> uploadFile(FileDTO fileDTO){
-    log.info("----------------- [filecontroller uploadFile]-----------------");
-    log.info(fileDTO);
+  public List<UploadResultDTO> uploadFile(UploadFileDTO uploadFileDTO){
+    log.info("----------------- [FileController uploadFile()]-----------------");
+    log.info("uploadFileDTO : {}",uploadFileDTO);
 
     //600p add
-    if(fileDTO.getFiles() != null){
+    if(uploadFileDTO.getFiles() != null){
 
       //605p
       final List<UploadResultDTO> uploadResultDTOList = new ArrayList<>();
 
-      fileDTO.getFiles().forEach(multipartFile -> {
+      uploadFileDTO.getFiles().forEach(multipartFile -> {
 
-//        log.info(multipartFile.getOriginalFilename());
+        log.info("foreach file.getOrgfileName : {}",multipartFile.getOriginalFilename());
         //602p
         String originalFileName = multipartFile.getOriginalFilename();
+
+        int lastDotIndex = originalFileName.lastIndexOf('.');
+        String extension = (lastDotIndex != -1) ? originalFileName.substring( originalFileName.lastIndexOf('.') ) : "";
+
+        log.info("----------------- [ext : {}]-----------------", extension);
         log.info(originalFileName);
 
         String uuid = UUID.randomUUID().toString();
-        Path savePath = Paths.get(uploadPath, uuid+"_"+originalFileName);
+        log.info("----------------- [uuid : {}]-----------------",uuid);
+        log.info("----------------- [07-26 15:46:17]-----------------");
+
+//        Path savePath = Paths.get(uploadPath, uuid+"_"+originalFileName);
+        Path savePath = Paths.get(uploadPath, uuid+extension);
+
         boolean isImage = false;
 
 
@@ -73,17 +83,29 @@ public class FileController {
           log.info("----------------- [TRY file save]-----------------");
           multipartFile.transferTo(savePath);
           log.info("----------------- [TRY file save at DB]-----------------");
-          User user = new User();
-          user.setUserNo(1L);
-          // TODO 필요시 수정  0724 YY //
-          //          photoService.savePhoto(multipartFile, PhotoDTO.builder()
-//                  .photoData(multipartFile.getBytes())
-//                  .photoUUID(UUID.randomUUID().toString())
-//                  .photoCreateDate(Instant.now())
-//                  .photoSize(multipartFile.getSize())
-//                  .photoOriginalName(originalFileName)
-//                  .userNo(user)
-//              .build());
+
+
+          //User 1번으로 테스트 할 때
+//          User user = new User();
+//          user.setUserNo(1L);
+
+          //실제 로직
+          log.info("--  Auth 처리 시작 --");
+          Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+          String userName = auth.getName();
+          log.trace("auth name 찾아옴 : "+userName);
+
+          User user = userService.findByUserId(userName);
+
+//           TODO 필요시 수정  0724 YY //
+
+
+          photoService.savePhoto(PhotoDTO.builder()
+                  .photoUUID(uuid)
+                  .photoCreateDate(Instant.now())
+                  .photoExtension(extension)
+              .uploader(user)
+              .build());
 
           log.info("----------------- [need fix]-----------------");
 
@@ -91,8 +113,19 @@ public class FileController {
           //603p 이미지 파일인 경우 썸네일 파일 생성
           if(Files.probeContentType(savePath).startsWith("image")){
             isImage = true;
-            File thumbFile = new File(uploadPath, "s_"+uuid+"_"+originalFileName);
+//            String thumbUUID = UUID.randomUUID().toString(); // 새로운 uuid X
+            File thumbFile = new File(uploadPath, "t_"+uuid+extension);
             Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
+            log.trace("썸네일 파일 생성--");
+
+//            photoService.savePhoto(PhotoDTO.builder()
+//                .photoUUID(uuid) // 썸네일 uuid 새로 지정
+//                .photoCreateDate(Instant.now())
+//                .photoExtension(extension)
+//                .uploader(user)
+//                .build());
+
+            log.info("----------------- [썸네일 파일 저장 / DB에 x]-----------------");
 
           }
 
@@ -104,9 +137,8 @@ public class FileController {
         //606p
         uploadResultDTOList.add(UploadResultDTO.builder()
                 .uuid(uuid)
-                .fileName(originalFileName)
-                .isImage(isImage)
-            .build()
+                .extension(extension)
+                .isImage(isImage).build()
         );
 
       });// end each
@@ -120,29 +152,34 @@ public class FileController {
 //  GET방식 파일 조회
     //608p
   @ApiOperation(value = "파일조회")
-  @GetMapping("/view/{fileName}")
+  @GetMapping("/view/{fileName}") // 원래 view/{fileName}
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
-    log.info("----------------- [viewFileGet]-----------------");
+    log.info("----------------- [GET File  /{}]-----------------",fileName);
 
     Resource resource = new FileSystemResource(uploadPath +File.separator+ fileName);
+
     String resourceName = resource.getFilename();
-    log.info("..................resourceName = "+resourceName);
+    log.trace("..................resourceName = "+resourceName);
+
     HttpHeaders headers = new HttpHeaders();
 
     try{
       headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+
     } catch(Exception e){
-      log.info("----------------- [조회 Fail return]-----------------");
+
+      log.warn("----------------- [조회 Fail return]-----------------");
       return ResponseEntity.internalServerError().build();
     }
-    log.info("----------------- [조회 정상 return]-----------------");
+
+    log.trace("----------------- [조회 정상 return]-----------------");
     return ResponseEntity.ok().headers(headers).body(resource);
   }
 
   // Delete 방식 삭제
 //  609p
   @ApiOperation(value = "파일삭제")
-  @DeleteMapping("/view/{fileName}")
+  @DeleteMapping("/remove/{fileName}")
   public Map<String, Boolean> deleteFile(@PathVariable String fileName){
 
     log.info("----------------- [deleteFile]-----------------");
@@ -156,10 +193,10 @@ public class FileController {
       String contentType = Files.probeContentType(resource.getFile().toPath());
       isRemoved = resource.getFile().delete();
 
-      //섬네일 처리
+      //섬네일 처리 TODO t_ThumbUUID + extension 임. 수정필요
       if(contentType.startsWith("image")){
-        log.info("----------------- [썸네일 파일 처리 IF문]-----------------");
-        File thumbFile = new File(uploadPath, File.separator+"s_"+fileName);
+        log.trace("----------------- [썸네일 파일 처리 IF문]-----------------");
+        File thumbFile = new File(uploadPath, File.separator+"t_"+fileName);
         thumbFile.delete(); // 썸네일 삭제
       }//end if
 
@@ -167,7 +204,17 @@ public class FileController {
       log.info("----------------- [delete Fail]-----------------");
       log.error(e.getMessage());
     }
+
     resultMap.put("result", isRemoved);
+
+
+//    db에서도 삭제
+
+    int lastDotIndex = fileName.lastIndexOf('.');
+    photoService.deletePhoto(fileName.substring(0,lastDotIndex));
+
+    log.info("----------------- [filedeleted]-----------------{}",fileName);
+
     return resultMap;
   }
 

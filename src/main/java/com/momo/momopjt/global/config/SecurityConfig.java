@@ -48,8 +48,8 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**", "/alarm/**").permitAll()
-        //.antMatchers("/admin/**").hasRole("ADMIN") todo 잠깐 죽여놓음
+        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
+        .antMatchers("/admin/**").hasRole("ADMIN")
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/home")
@@ -73,7 +73,8 @@ public class SecurityConfig {
 
 
     // 소셜 로그인 설정
-    http.oauth2Login()
+    http
+        .oauth2Login()
         .loginPage("/user/login")
         .defaultSuccessUrl("/home", true)
         .successHandler(authenticationSuccessHandler())

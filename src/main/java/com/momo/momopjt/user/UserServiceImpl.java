@@ -35,40 +35,51 @@ public class UserServiceImpl implements UserService {
     private static final String SOCIAL_LOGIN_PASSWORD = "1111";
     private final UserAndClubRepository userAndClubRepository;
 
+    @Override
+    //@Transactional
     public void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException {
-        String userId = userDTO.getUserId();
-        String userEmail = userDTO.getUserEmail();
-        String userNickname = userDTO.getUserNickname();
-        String password = userDTO.getUserPw();
-        String confirmPassword = userDTO.getConfirmUserPw();
+        log.info("----------------- [signup()]-----------------YY");
 
-        if (!password.equals(confirmPassword)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-        // 아이디 중복 검사
-        if (userRepository.existsByUserId(userId)) {
-            throw new UserIdException();
-        }
+      String userId = userDTO.getUserId();
+      String userEmail = userDTO.getUserEmail();
+      String userNickname = userDTO.getUserNickname();
+      String password = userDTO.getUserPw();
+      String confirmPassword = userDTO.getConfirmUserPw();
 
-        // 이메일 중복 검사
-        if (userRepository.existsByUserEmail(userEmail)) {
-            throw new UserEmailException();
-        }
+      if (!password.equals(confirmPassword)) {
+        throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+      }
+      // 아이디 중복 검사
+      if (userRepository.existsByUserId(userId)) {
+        throw new UserIdException();
+      }
 
-        // 닉네임 중복 검사
-        if (userRepository.existsByUserNickname(userNickname)) {
-            throw new UserNicknameException();
-        }
+      // 이메일 중복 검사
+      if (userRepository.existsByUserEmail(userEmail)) {
+        throw new UserEmailException();
+      }
 
-        // User 엔티티 생성 및 설정
-        User user = new User();
-        user.setUserId(userId);
-        user.setUserEmail(userEmail);
-        user.setUserNickname(userNickname);
-        user.changePassword(passwordEncoder.encode(password));
+      // 닉네임 중복 검사
+      if (userRepository.existsByUserNickname(userNickname)) {
+        throw new UserNicknameException();
+      }
+
+
+      // User 엔티티 생성 및 설정
+      User user = new User();
+      user.setUserId(userId);
+      user.setUserEmail(userEmail);
+      user.setUserNickname(userNickname);
+      user.changePassword(passwordEncoder.encode(password));
+      user.addRole(UserRole.USER);
+
+        // 비밀번호 암호화 TODO check 필요한건지 모르겠음
+//        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
+
+        // 역할 설정
         user.addRole(UserRole.USER);
 
-        // 생년월일로 나이 계산
+        // 나이 계산
         int userAge = calculateAge(userDTO.getUserBirth());
         user.setUserAge(userAge);
 
@@ -82,20 +93,39 @@ public class UserServiceImpl implements UserService {
         user.setUserLikeNumber(0);
 
 
-        user.setUserAddress(userDTO.getUserAddress());
-        user.setUserCategory(userDTO.getUserCategory());
-        user.setUserGender(userDTO.getUserGender());
-        user.setUserMBTI(userDTO.getUserMBTI());
-        user.setUserBirth(userDTO.getUserBirth());
+      user.setUserAddress(userDTO.getUserAddress());
+      user.setUserCategory(userDTO.getUserCategory());
+      user.setUserGender(userDTO.getUserGender());
+      user.setUserMBTI(userDTO.getUserMBTI());
+      user.setUserBirth(userDTO.getUserBirth());
+
+        //기본 사진 설정
+        user.setUserPhoto("UserPhoto");
+
+        log.info(user);
+        log.info(user.getRoleSet());
+
+        //0730 YY  social M 지정
+//        if(user.getUserSocial() == null || user.getUserSocial().equals("")){
+//            user.setUserSocial('M');
+//            log.trace("momo social applied 'M' at UserServiceImpl");
+//        }
 
         userRepository.save(user);
     }
 
-    private int calculateAge(LocalDate userBirth) {
-        if (userBirth == null) {
-            throw new IllegalArgumentException("생년월일이 null입니다.");
-        }
-        return Period.between(userBirth, LocalDate.now()).getYears();
+
+    //나이 계산 로직 메소드 s
+  private int calculateAge(LocalDate userBirth) {
+    if (userBirth == null) {
+      throw new IllegalArgumentException("생년월일이 null입니다.");
+    }
+    return Period.between(userBirth, LocalDate.now()).getYears();
+  }
+
+    //가입된 생년월일로 데이터베이스에 age항목에 넣는다.
+    private int calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
 
@@ -292,54 +322,53 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public void deleteAccount(String userId, String userPw) {
-        if (userId == null || userId.isEmpty()) {
-            throw new IllegalArgumentException("User ID cannot be null or empty");
-        }
-
-        User user = userRepository.findByUserId(userId);
-
-        if (user != null) {
-            if (user.getUserSocial() != null && user.getUserSocial() != ' ') {
-                // 소셜 로그인 사용자일 경우 기본 비밀번호와 비교
-                if ("1111".equals(userPw)) {
-                    // 사용자가 가입된 클럽에서 삭제
-                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
-                    for (Club club : clubs) {
-                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
-                    }
-
-                    // 사용자 삭제
-                    userRepository.delete(user);
-                    log.info("Social login user account has been deleted.");
-                } else {
-                    throw new IllegalArgumentException("Invalid password for social login user");
-                }
-            } else {
-                // 일반 사용자일 경우 실제 비밀번호와 비교
-                if (passwordEncoder.matches(userPw, user.getUserPw())) {
-                    // 사용자가 가입된 클럽에서 삭제
-                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
-                    for (Club club : clubs) {
-                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
-                    }
-
-                    // 사용자 삭제
-                    userRepository.delete(user);
-                    log.info("User account has been deleted.");
-                } else {
-                    throw new IllegalArgumentException("Incorrect password");
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("User not found");
-        }
+  @Override
+  public void deleteAccount(String userId, String userPw) {
+    if (userId == null || userId.isEmpty()) {
+      throw new IllegalArgumentException("User ID cannot be null or empty");
     }
 
-    @Override
-    public Optional<User> findByUserNo(Long userNo) {
-        return userRepository.findById(userNo);
-}
+    User user = userRepository.findByUserId(userId);
 
+    if (user != null) {
+      if (user.getUserSocial() != null && user.getUserSocial() != ' ') {
+        // 소셜 로그인 사용자일 경우 기본 비밀번호와 비교
+        if ("1111".equals(userPw)) {
+          // 사용자가 가입된 클럽에서 삭제
+          List<Club> clubs = userAndClubRepository.findMyClubs(user);
+          for (Club club : clubs) {
+            userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+          }
+
+          // 사용자 삭제
+          userRepository.delete(user);
+          log.info("Social login user account has been deleted.");
+        } else {
+          throw new IllegalArgumentException("Invalid password for social login user");
+        }
+      } else {
+        // 일반 사용자일 경우 실제 비밀번호와 비교
+        if (passwordEncoder.matches(userPw, user.getUserPw())) {
+          // 사용자가 가입된 클럽에서 삭제
+          List<Club> clubs = userAndClubRepository.findMyClubs(user);
+          for (Club club : clubs) {
+            userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+          }
+
+          // 사용자 삭제
+          userRepository.delete(user);
+          log.info("User account has been deleted.");
+        } else {
+          throw new IllegalArgumentException("Incorrect password");
+        }
+      }
+    } else {
+      throw new IllegalArgumentException("User not found");
+    }
+  }
+
+  @Override
+  public Optional<User> findByUserNo(Long userNo) {
+    return userRepository.findById(userNo);
+  }
 }

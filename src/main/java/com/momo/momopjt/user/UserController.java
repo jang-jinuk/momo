@@ -1,12 +1,9 @@
 package com.momo.momopjt.user;
 
 
-import com.momo.momopjt.article.ArticleDTO;
-import com.momo.momopjt.article.ArticleService;
-import com.momo.momopjt.club.Club;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportService;
-import com.momo.momopjt.userandclub.UserAndClubService;
+import com.momo.momopjt.user.find.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -26,8 +23,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.momo.momopjt.user.QUser.user;
-
 
 @Controller
 @RequestMapping("/user")
@@ -37,11 +32,16 @@ import static com.momo.momopjt.user.QUser.user;
 public class UserController {
 
 
-  private final UserService userService;
   private final UserRepository userRepository;
+
+  private final UserService userService;
+  private final EmailService emailService;
   private final ReportService reportService;
   private final ArticleService articleService;
   private final UserAndClubService userAndClubService;
+
+  private final ModelMapper modelMapper;
+
 
   @GetMapping("/login")
   public void loginGET(HttpServletRequest request, Model model) {
@@ -92,6 +92,7 @@ public class UserController {
   @PostMapping("/signup")
   public String signupPost(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /signup with data: {}", userDTO);
+
 
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -291,12 +292,7 @@ public class UserController {
         List<Club> userWishClubs = userAndClubService.findMyWishClubs(user);
         model.addAttribute("userWishClub", userWishClubs);
 
-    } else {
-      // 사용자 정보가 없는 경우의 처리
-      log.warn("User not found for ID: {}", userId);
-      return "error/userNotFound"; // 사용자 없음 처리 페이지 (없음)
-    }
-    return "user/profile/dumyprofile"; // 프로필 뷰 페이지 반환
+    return "user/profile/dummyprofile"; // 프로필 페이지 템플릿 반환
   }
 
 }

@@ -30,12 +30,8 @@ public class ClubServiceTests {
 
     PhotoDTO photoDTO = PhotoDTO.builder()
         .photoUUID("test.jpg")
-        .userNo(user)
-        .photoSize(10L)
+        .uploader(user)
         .photoCreateDate(Instant.now())
-        .photoOriginalName("test img")
-        .photoSaveName("test save img")
-        .photoThumbnail("test thumbnail img")
         .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
@@ -49,7 +45,7 @@ public class ClubServiceTests {
         .build();
 
     try {
-      clubService.createClub(clubDTO, photoDTO, userAndClubDTO);
+      clubService.createClub(clubDTO, userAndClubDTO); //PhotoDTO 제거 0729 YY
     } catch (ClubService.ClubNameException e) {
       e.printStackTrace();
     }
@@ -79,24 +75,21 @@ public class ClubServiceTests {
     User user = new User();
     user.setUserNo(1L);
 
-    PhotoDTO photoDTO = PhotoDTO.builder()
-        .photoUUID("00002test")
-        .userNo(user)
-        .photoSize(10L)
-        .photoCreateDate(Instant.now())
-        .photoOriginalName("test img 수정")
-        .photoSaveName("test save img 수정")
-        .photoThumbnail("test thumbnail img 수정")
-        .build();
+//    PhotoDTO photoDTO = PhotoDTO.builder()
+//        .photoUUID("00002test")
+//        .uploader(user)
+//        .photoCreateDate(Instant.now())
+//        .build();
 
     ClubDTO clubDTO = ClubDTO.builder()
         .clubNo(2L)
+        .clubPhotoUUID("testPhoto")
         .clubArea("테스트 지역 수정")
         .clubCategory("테스트 카테고리 수정")
         .clubContent("테스트 모임 소개 수정")
         .clubMax(5)
         .build();
-    clubService.updateClub(clubDTO, photoDTO);
+    clubService.updateClub(clubDTO);
   }
 
   //모인 해산 기능 테스트

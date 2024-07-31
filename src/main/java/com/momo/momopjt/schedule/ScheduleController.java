@@ -1,9 +1,9 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.Reply;
 import com.momo.momopjt.reply.ReplyService;
-import com.momo.momopjt.reply.ReplyServiceImpl;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
@@ -46,6 +46,8 @@ public class ScheduleController {
   private UserAndClubService userAndClubService;
   @Autowired
   private ReplyService replyService;
+  @Autowired
+  private PhotoService photoService;
 
   //일정 생성 페이지 이동
   @GetMapping("/create")
@@ -64,45 +66,16 @@ public class ScheduleController {
   public String scheduleCreatePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
     log.info("------------ [Post schedule create] ------------");
 
-    //이미지 파일 처리
-    //1. form 받은 multipart 파일을 rest controller에 전달
-    //2. rest controller에서 multipart 타입으로 저장 및 썸네일 생성
-    //3. (Local)저장된 이미지 파일, 썸네일 파일을 byte[]파일로 변환해서 photo table에 저장
-    //4. photo 테이블에 저장된 이미지 파일의 uuid 반환
-//    String strUUID = photoService.savePhoto(PhotoDTO.builder().build()).getPhotoUUID();
-
-     /* 주석처리
-
     //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String username = auth.getName();
     User user = userService.findByUserId(username);
 
 
-//    photoService.savePhoto();
-//    이미지 파일 처리 YY
-//    String resultPhotoUUID;
-//    byte[] photoBytes = file.getBytes();
-//    resultPhotoUUID = photoService.savePhoto(
-//        PhotoDTO.builder()
-//            .photoData(photoBytes)
-//            .photoSize(file.getSize())
-//            .photoOriginalName(file.getOriginalFilename())
-//            .userNo(user)
-//            .build())
-//        .getPhotoUUID();
-
-
-    //이미지 처리 후 UUID만 반환
-    String resultPhotoUUID = UUID.randomUUID().toString();
-    scheduleDTO.setSchedulePhoto(resultPhotoUUID);
-    //이미지를 일정 DTO에 전달 끝
-
     UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
     userAndScheduleDTO.setUserNo(user);
 
     log.info("------------ [현재 로그인 중인 정보] ------------");
-
 
 
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -114,34 +87,19 @@ public class ScheduleController {
     Instant instant = zonedDateTime.toInstant();
     scheduleDTO.setScheduleStartDate(instant);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
-    Long scheduleNo;
-    if (resultPhotoUUID != null) {
-      scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
-      return "redirect:/schedule/" + scheduleNo;
+
+
+    if (scheduleDTO.getSchedulePhotoUUID() == null || scheduleDTO.getSchedulePhotoUUID().equals("")) {
+      log.warn("schdule photo uuid is null or empty");
+
+      log.info("----------------- [schduleDTO.getSchedulePhotoUUID : {}]-----------------", scheduleDTO.getSchedulePhotoUUID());
+
+      scheduleDTO.setSchedulePhotoUUID("scheduleDefaultPhoto");
+
     }
-    log.info("------------ [일정 등록 완료] ------------");
-    return "redirect:/schedule";
 
-*/
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
-    UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
-    userAndScheduleDTO.setUserNo(user);
-    log.info("------------ [현재 로그인 중인 정보] ------------");
+    Long scheduleNo = scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
 
-    Long clubNo = (Long) session.getAttribute("clubNo");
-    Club club = new Club();
-    club.setClubNo(clubNo);
-    scheduleDTO.setClubNo(club);
-    LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
-    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-    Instant instant = zonedDateTime.toInstant();
-    scheduleDTO.setScheduleStartDate(instant);
-    log.info("------------ [날짜/시간 포매팅 완료] ------------");
-    scheduleDTO.setSchedulePhoto("baf05b22-434b-4a6f-bafb-1b565b2aad8e");
-
-    Long scheduleNo= scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
     log.info("------------ [일정 등록 완료] ------------");
 
     return "redirect:/schedule/" + scheduleNo;
@@ -150,7 +108,7 @@ public class ScheduleController {
   //일정 상세페이지 이동
   @GetMapping("/{scheduleNo}")
   public String readScheduleGet(@PathVariable("scheduleNo") Long scheduleNo, Model model) {
-    log.info("------------ [Get schedule no: {}] ------------",scheduleNo);
+    log.info("------------ [Get schedule no: {}] ------------", scheduleNo);
     //일정 조회
 
     //출력할 댓글 조회 YY
@@ -181,7 +139,7 @@ public class ScheduleController {
     Long clubNo = (Long) session.getAttribute("clubNo");
 
     model.addAttribute("currentTime", Instant.now());
-    model.addAttribute("clubNo",clubNo);
+    model.addAttribute("clubNo", clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
@@ -189,7 +147,11 @@ public class ScheduleController {
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
 
     //출력할 댓글 추가
-    model.addAttribute("replyList",replyList);
+    model.addAttribute("replyList", replyList);
+
+    String schedulePhoto = photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString();
+    //출력할 일정 사진 추가
+    model.addAttribute("schedulePhoto", schedulePhoto);
 
     return "schedule/view";
   }
@@ -234,7 +196,6 @@ public class ScheduleController {
     redirectAttributes.addFlashAttribute("message", message);
 
 
-
     return "redirect:/schedule/" + scheduleNo;
   }
 
@@ -257,6 +218,13 @@ public class ScheduleController {
     model.addAttribute("countMembers", countMembers);
     model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
+
+    //출력할 일정 사진 추가
+    String schedulePhoto = photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString();
+    model.addAttribute("schedulePhoto", schedulePhoto);
+    log.trace("--------------------------------schedulephoto {}",schedulePhoto);
+
+
     return "schedule/update";
   }
 
@@ -264,14 +232,40 @@ public class ScheduleController {
   @PostMapping("/update")
   public String updateSchedulePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("------------ [Post schedule update] ------------");
-    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
-    scheduleDTO.setScheduleNo(scheduleNo);
+    log.trace("----------------- initial input dto [scheduleDTO {}]-----------------",scheduleDTO);
 
+    Long scheduleNo = (Long) session.getAttribute("scheduleNo");
+    ScheduleDTO oldScheduleDTO = scheduleService.readOneSchedule(scheduleNo);
+
+    scheduleDTO.setScheduleNo(scheduleNo);
+    log.info("----------------- [session get schduleNo]-----------------",scheduleNo);
     //날짜/시간 포매팅
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
     Instant instant = zonedDateTime.toInstant();
     scheduleDTO.setScheduleStartDate(instant);
+
+//    사진 업데이트 준비 로직
+    log.trace("update club photo 조회");
+    String newPhotoUUID = scheduleDTO.getSchedulePhotoUUID();
+    log.trace("newPhotoUUID : {}",newPhotoUUID);
+    ScheduleDTO schedule = scheduleService.readOneSchedule(scheduleNo);
+    String oldPhotoUUID = oldScheduleDTO.getSchedulePhotoUUID();
+    log.trace("oldPhotoUUID : {}",oldPhotoUUID);
+
+//    사진 업데이트 로직
+    if(newPhotoUUID != null && newPhotoUUID.length()>0){
+      if(! newPhotoUUID.equals(oldPhotoUUID) ){
+        log.trace("update club photo 실행, old-> new {} -> {}",oldPhotoUUID,newPhotoUUID);
+        scheduleDTO.setSchedulePhotoUUID(newPhotoUUID);
+        //photo 변경사항이 있을 떄 업데이트 실행
+      }
+    } else {
+      log.trace("update schedule photo 실행 X, old : {}, new : {}", oldPhotoUUID, newPhotoUUID);
+      scheduleDTO.setSchedulePhotoUUID(oldPhotoUUID);
+    }
+
+
 
     Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
 

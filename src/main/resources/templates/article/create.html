@@ -5,303 +5,291 @@
       layout:decorate="layout/layout">
 
 <head>
-    <title>Article Create</title>
+  <title>Article Create</title>
 </head>
 
+<th:block layout:fragment="content"><!-- [] -->
 
-<th:block layout:fragment="content">
+  <div class="row mt-3">
+    <div class="col">
+      <div class="card">
 
-    <div class="row mt-3">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Article Create
-                </div>
-                <div class="card-body">
-                    <!--                    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">-->
-                    <form th:action="@{/article/create}" method="post">
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">제목</span>
-                            <input type="text" name="articleTitle" id="articleTitle" class="form-control"
-                                   th:value="${scheduleDTO?.scheduleTitle ?: ''}" required>
-                        </div>
-
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">내용</span>
-                            <textarea class="form-control col-sm-5" rows="5" name="articleContent" id="articleContent"
-                                      oninput="limitTextarea()"></textarea>
-                        </div>
-
-                        <!-- 이미지 업로드 YY -->
-                        <div class="input-group mb-3">
-
-                            <span class="input-group mb-3">Images</span>
-                            <div class="float-end uploadHidden">
-                                <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
-                            </div>
-                        </div>
-                        <div class="my-4">
-                            <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
-                            <button type="reset" class="btn btn-secondary">Reset</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
+        <div class="card-header">
+          Article Create
         </div>
-    </div>
 
-    <!-- Image Thumbnail display -->
-    <div class="row mt-3">
-        <div class="col ">
-            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
-                uploadResult 자리 // 삭제
+        <div class="card-body">
+
+          <form th:action="@{/article/create}" method="post">
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">제목</span>
+              <input type="text" name="articleTitle" id="articleTitle" class="form-control"
+                     th:value="${scheduleDTO?.scheduleTitle ?: ''}" required>
             </div>
-        </div>
-    </div>
 
-    <!--    upload Modal Part YY -->
-    <div class="modal uploadModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">Upload Files(Modal Title)</div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control" multiple>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close</button>
 
-                </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">내용</span>
+              <textarea class="form-control col-sm-5" rows="5" name="articleContent" id="articleContent"
+                        oninput="limitTextarea()"></textarea>
             </div>
-        </div>
+
+            <!-- 이미지 업로드 YY -->
+            <div class="input-group mb-3">
+
+              <span class="input-group mb-3">Images</span>
+              <div class="float-end uploadHidden">
+                <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+              </div>
+            </div>
+
+            <div class="my-4">
+
+              <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+
+            </div>
+
+            <!-- Image Thumbnail display -->
+            <div class="row mt-3">
+              <div class="col ">
+                <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                  uploadResult 자리 // 삭제
+                </div>
+              </div>
+            </div>
+
+
+
+          </form>
+
+        </div>  <!-- [card body] -->
+
+
+      </div>  <!-- [card] -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </div>
+
+  <!--    upload Modal Part YY -->
+  <div class="modal uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">Upload Files(Modal Title)</div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input type="file" name="files" class="form-control" multiple>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary uploadBtn">Upload</button>
+          <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </th:block>
+<!-- script block ---------------------------------  -->
+
+
 
 <th:block layout:fragment="script">
-    <script th:inline="javascript">
+  <script th:inline="javascript">
 
-        //이미지 업로드 처리 JS  YY
-        async function uploadToServer(formObj) {
+      //이미지 업로드 처리 JS  YY
+      async function uploadToServer(formObj) {
 
-            console.log("upload to server.....................+formObj")
-            console.log(formObj)
+          console.log("upload to server.....................+formObj")
+          console.log(formObj)
 
-            const response = await axios({
-                method: 'post',
-                url: '/upload',
-                data: formObj,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+          const response = await axios({
+              method: 'post',
+              url: '/upload',
+              data: formObj,
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+              },
+          });
 
-            return response.data
-
-
-        }
-
-        async function removeFileToServer(uuid, extension) {
-            const response = await axios.delete(`/remove/${uuid}${extension}`)
-            return response.data
-        }
-
-        //image upload modal event (show / hide)
-        const errors = [[${errors}]]
-        console.log(errors)
-
-        let errorMsg = ''
-        if (errors) {
-            for (let i = 0; i < errors.length; i++) {
-                errorMsg += `${errors[i].field} is ${errors[i].code} \n`
-            }
-            alert(errorMsg) //error message display!
-        }
-
-        //upload modal set
-        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
-            e.stopPropagation()
-            e.preventDefault()
-            uploadModal.show()
-        }, false)
-
-        //file upload for modal and thumb
-        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
-            const formObj = new FormData();
-            const fileInput = document.querySelector("input[name='files']")
-
-            console.log("fileInput.files")
-            console.log(fileInput.files)
-
-            const files = fileInput.files
-
-            for (let i = 0; i < files.length; i++) {
-                formObj.append("files", files[i]);
-            }
-
-            uploadToServer(formObj).then(result => {
-                console.log("result")
-                console.log(result)
-
-                for( const uploadResult of result){
-                    showUploadFile(uploadResult)
-                }
-
-                uploadModal.hide()
-            }).catch(e => {
-                uploadModal.hide()
-            })
-
-        }, false)
+          return response.data
 
 
-        //656p showUploadFile
-        const uploadResult = document.querySelector(".uploadResult")
+      }
 
-        function showUploadFile({uuid, extension, link}) {
+      async function removeFileToServer(uuid, extension) {
+          const response = await axios.delete(`/remove/${uuid}${extension}`)
+          // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
+          return response.data
+      }
 
-            const str = `<div class="card col-4">
-<div class="card-header d-flex justify-content-center">${uuid}${extension}
+      //image upload modal event (show / hide)
+      const errors = [[${errors}]]
+      console.log(errors)
+
+      let errorMsg = ''
+      if (errors) {
+          for (let i = 0; i < errors.length; i++) {
+              errorMsg += `${errors[i].field} is ${errors[i].code} \n`
+          }
+          alert(errorMsg) //error message display!
+      }
+
+      //upload modal set
+      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          uploadModal.show()
+      }, false)
+
+      //file upload for modal and thumb
+      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+          const formObj = new FormData();
+          const fileInput = document.querySelector("input[name='files']")
+
+          console.log("fileInput.files--------")
+          console.log(fileInput.files)
+
+          const files = fileInput.files
+
+          for (let i = 0; i < files.length; i++) {
+              formObj.append("files", files[i]);
+          }
+
+          uploadToServer(formObj).then(result => {
+              console.log("result-------")
+              console.log(result)
+
+              for (const uploadResult of result) {
+                  showUploadFile(uploadResult)
+              }
+
+              uploadModal.hide()
+          }).catch(e => {
+              uploadModal.hide()
+          })
+
+      }, false)
+
+
+      //656p showUploadFile
+      const uploadResult = document.querySelector(".uploadResult")
+
+      function showUploadFile({uuid, extension, link}) {
+
+          const str = `<div class="card col-4">
+<div class="card-header d-flex justify-content-center">
+${uuid}${extension}
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
-<img src="/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
 
 </div>
 </div>`
-            console.log("uploadResult str")
-            console.log(link)
-            console.log(str)
+          console.log("uploadResult link  str --------------------")
+          console.log(link)
+          console.log(str)
 
-            uploadResult.innerHTML += str;
-        }
-
-
-        /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
-
-        //upload remove,, local file and div card all deleted
-        function removeFile(uuid, extension, obj) {
-            console.log("removefile log")
-            console.log(uuid)
-            console.log(extension)
-            console.log(obj)
-
-            const targetDiv = obj.closest(".card")
-            removeFileToServer(uuid, extension).then(data => {
-                targetDiv.remove()
-            })
-
-        }
-
-        // After Image, finally Article Form Submitted !!
-        document.querySelector(".submitBtn").addEventListener("click", function (e) {
-
-            e.preventDefault()
-            e.stopPropagation()
-
-            const target = document.querySelector(".uploadHidden")
-
-            const uploadFiles = uploadResult.querySelectorAll("img")
-
-            let str = ''
-
-            for (let i = 0; i < uploadFiles.length; i++) {
-                const uploadFile = uploadFiles[i]
-                const imgLink = uploadFile.getAttribute("data-src")
-
-                str += `<input type='hidden' name='fileNames' value="${imgLink}">`
-            }
-
-            target.innerHTML = str;
-
-            document.querySelector("form").submit();
-
-            const formObj = document.querySelector("form")
-
-            // formObj.submit();
-            formObj.reset();
-
-        }, false)
+          uploadResult.innerHTML += str;
+      }
 
 
-        /* Thymeleaf의 JavaScript 인라인 사용 */
-        function limitTitleLength() {
-            var maxLength = 50;
-            var title = document.getElementById("articleTitle").value;
-            if (title.length > maxLength) {
-                document.getElementById("articleTitle").value = title.substring(0, maxLength);
-            }
-        }
+      /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
 
-        function limitTextarea() {
-            var maxLength = 500;
-            var text = document.getElementById("articleContent").value;
-            if (text.length > maxLength) {
-                document.getElementById("articleContent").value = text.substring(0, maxLength);
-            }
-        }
+      //upload remove,, local file and div card all deleted
+      function removeFile(uuid, extension, obj) {
+          console.log("remove file log--------------")
+          console.log(uuid)
+          console.log(extension)
+          console.log(obj)
 
-        // close btn
-        document.querySelector(".closeUploadBtn").addEventListener("click", function(e){
+          const targetDiv = obj.closest(".card")
+          removeFileToServer(uuid, extension).then(data => {
+              targetDiv.remove()
+          })
 
-            e.stopPropagation()
-            e.preventDefault()
+      }
 
-            uploadModal.hide();
+      // After Image, finally Article Form Submitted !!
+      document.querySelector(".submitBtn").addEventListener("click", function (e) {
+          console.log("submitBtn start----------------")
 
-        }, false)
+          e.preventDefault()
+          e.stopPropagation()
 
+          const target = document.querySelector(".uploadHidden")
 
-    </script>
-</th:block>
-<!-- 원본
+          const uploadFiles = uploadResult.querySelectorAll("img")
+          console.log("---------uploadFile select img")
 
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
-<th:block layout:fragment="content">
-    <form th:action="@{/article/create}" th:object="${articleDTO}" method="post">
-        <label for="articleTitle">제목:</label>
-        <input th:value="${scheduleDTO?.scheduleTitle ?: ''}" name="articleTitle" type="text" id="articleTitle" required
-               oninput="limitTitleLength()"><br>
-        <label for="articleContent">내용:</label>
-        <textarea name="articleContent" id="articleContent" requiredoninput="limitTextarea()"></textarea><br>
-        <button type="submit">제출하기</button>
-    </form>
-</th:block>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
+          let str = ''
 
-        /* Thymeleaf의 JavaScript 인라인 사용 */
-        function limitTitleLength() {
-            var maxLength = 50;
-            var title = document.getElementById("articleTitle").value;
-            if (title.length > maxLength) {
-                document.getElementById("articleTitle").value = title.substring(0, maxLength);
-            }
-        }
+          for (let i = 0; i < uploadFiles.length; i++) {
+              const uploadFile = uploadFiles[i]
+              console.log("uploadFile in for loop")
+              console.log(uploadFile)
+              const imgLink = uploadFile.getAttribute("data-src")
 
-        function limitTextarea() {
-            var maxLength = 450;
-            var text = document.getElementById("articleContent").value;
-            if (text.length > maxLength) {
-                document.getElementById("articleContent").value = text.substring(0, maxLength);
-            }
-        }
-    </script>
-</th:block>
+              //
+              // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
+
+              const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+              console.log("imgUUID")
+              console.log(imgUUID)
+
+              str += `<input type='hidden' name='articlePhotoUUID' value="${imgUUID}">`
 
 
--->
+          }
+          console.log(str)
+
+          target.innerHTML = str;
+
+          // document.querySelector("form").submit();
+
+          const formObj = document.querySelector("form")
+
+          formObj.submit();
+          formObj.reset();
+
+      }, false)
+
+
+      // upload modal close btn
+      document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
+
+          e.stopPropagation()
+          e.preventDefault()
+
+          uploadModal.hide();
+
+      }, false)
+
+      /* Thymeleaf의 JavaScript 인라인 사용 */
+      function limitTitleLength() {
+          var maxLength = 50;
+          var title = document.getElementById("articleTitle").value;
+          if (title.length > maxLength) {
+              document.getElementById("articleTitle").value = title.substring(0, maxLength);
+          }
+      }
+
+      function limitTextarea() {
+          var maxLength = 500;
+          var text = document.getElementById("articleContent").value;
+          if (text.length > maxLength) {
+              document.getElementById("articleContent").value = text.substring(0, maxLength);
+          }
+      }
+
+
+
+  </script>
+</th:block> <!-- end script block ---------------------------------  -->

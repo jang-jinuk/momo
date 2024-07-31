@@ -1,11 +1,9 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.photo.Photo;
-import java.time.Instant;
-import javax.persistence.*;
-
 import lombok.*;
-import org.springframework.stereotype.Repository;
+
+import javax.persistence.*;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -21,9 +19,9 @@ public class Club {
   @Column(name = "club_no", nullable = false)
   private Long clubNo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "club_photo")
-  private Photo clubPhoto;
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "club_photo")
+//  private Photo clubPhoto;
 
   @Column(name = "club_name", nullable = false, length = 50)
   private String clubName;
@@ -46,14 +44,17 @@ public class Club {
   @Column(name = "club_create_date", nullable = false)
   private Instant clubCreateDate;
 
+  @Column(name = "club_photo")
+  private String clubPhotoUUID;
+
 
 
 //  @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //  private List<Article> articles;
   //모임 정보 수정 메소드
-  public void change(Photo clubPhoto, String clubCategory, String clubContent,
+  public void change(String clubPhotoUUID, String clubCategory, String clubContent,
                      String clubArea, Integer clubMax) {
-    this.clubPhoto = clubPhoto;
+    this.clubPhotoUUID = clubPhotoUUID;
     this.clubCategory = clubCategory;
     this.clubContent = clubContent;
     this.clubArea = clubArea;
