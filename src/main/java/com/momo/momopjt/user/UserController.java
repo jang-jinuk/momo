@@ -4,6 +4,7 @@ package com.momo.momopjt.user;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.userandclub.UserAndClubService;
@@ -29,7 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -46,7 +49,7 @@ public class UserController {
   private final PasswordEncoder passwordEncoder;
   private final ArticleService articleService;
   private final UserAndClubService userAndClubService;
-
+  private final PhotoService photoService;
   private final ModelMapper modelMapper;
 
 
@@ -393,16 +396,30 @@ public class UserController {
         model.addAttribute("isOwnProfile", loggedInUserId.equals(userId)); // 로그인한 사용자의 프로필인지 여부
       }
       // 사용자가 쓴 후기들 조회
-        List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
-        model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
-      // 사용자의 즐겨찾기 모임들 조회
-        List<Club> userWishClubs = userAndClubService.findMyWishClubs(user);
-        model.addAttribute("userWishClub", userWishClubs);
+      List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
+      model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
 
-    } else {
-      // 사용자 정보가 없는 경우의 처리
-      log.warn("User not found for ID: {}", userId);
-      return "error/userNotFound"; // 사용자 없음 처리 페이지 (없음)
+      List<String> articlePhotoList = new ArrayList<>();
+      //YY 후기글 이미지 처리
+      if (!userArticles.isEmpty()) {
+        articlePhotoList = userArticles.stream()
+            .map(articleDTO -> photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString())//YY
+            .collect(Collectors.toList());
+      }
+      model.addAttribute("articlePhotoList", articlePhotoList);
+
+      // 사용자의 즐겨찾기 모임들 조회
+      List<Club> userWishClubs = userAndClubService.findMyWishClubs(user);
+      model.addAttribute("userWishClub", userWishClubs);
+
+      List<String> clubPhotoList = new ArrayList<>();
+      //YY 즐겨찾기 이미지 처리
+      if (!userWishClubs.isEmpty()) {
+        clubPhotoList = userWishClubs.stream()
+            .map(articleDTO -> photoService.getPhoto(articleDTO.getClubPhotoUUID()).toString())//YY
+            .collect(Collectors.toList());
+      }
+      model.addAttribute("clubPhotoList", clubPhotoList);
     }
     return "user/profile/dumyprofile"; // 프로필 뷰 페이지 반환
   }

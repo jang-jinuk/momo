@@ -68,10 +68,30 @@
         }
 
         /*프로필*/
-        .profile-section, .review-section, .favorite-section {
+        .profile-section{
             margin-bottom: 0; /* 섹션 간 간격을 %로 설정 */
             background-color: #fff; /* 섹션 배경색 */
             padding: 2%; /* 내부 여백을 %로 설정 */
+        }
+
+        .img-profile {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-image {
+            width: 100%
+        }
+
+        .uppro-btn {
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            height: 20px;
+            margin-top: 80%;
+            background-color: grey;
+            cursor: pointer;
+
         }
 
         .button-group {
@@ -91,13 +111,11 @@
 <div class="card-group justify-content-center">
     <div class="profile-section col-10 justify-content-center">
         <div class="d-flex align-items-center">
-            <div class="col-2">
-                <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image clubMain"
-                     style="width: 100%; height: auto; max-width: 150px; object-fit: cover;">
-                <input type="file" id="fileInput" accept="image/*" style="display: none;"
-                       onchange="previewImage(event)">
-                <button type="button" onclick="document.getElementById('fileInput').click();"
-                        style="position: absolute; bottom: 10px; right: 10px; background: #007bff; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
+            <div class="img-profile col-2">
+                <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image"
+                     style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
+                <button class="uppro-btn" type="button" onclick="document.getElementById('fileInput').click();"
+                        style="position: absolute; bottom: 5%; right: 5%; background: #007bff; color: white; border: none; border-radius: 50%; width: 10%; height: 10%; max-width: 30px; max-height: 30px; cursor: pointer;">
                     +
                 </button>
             </div>
@@ -115,45 +133,84 @@
 
 
 <div class="card-group justify-content-center">
+
     <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; padding-bottom: 2%;
-            border-top: 1px solid #000000; padding-top: 2%;">
+         style="border-bottom: 1px solid #000000; padding-bottom: 2%; border-top: 1px solid #000000; padding-top: 2%;">
         <h4 class="text-center">작성한 후기</h4>
-        <div class="row">
-            <div class="col-3" th:block th:each="article : ${userArticles}">
-                <div class="card">
-                    <h5>
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}"
-                           th:text="${article.articleTitle}"></a>
-                    </h5>
-                    <p th:text="${article.articleContent}"></p>
-                </div>
-            </div>
+        <div class="d-flex flex-wrap justify-content-center">
             <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
-                <div class="col-12"> <!-- 전체 너비를 차지하는 메시지 -->
+                <div class="col-12">
                     <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
                 </div>
             </th:block>
+            <div class="card-container" th:each="article, iterStat : ${userArticles}"
+                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
+                <div class="card h-100 cardBody"
+                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+
+                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                       style="display: block; text-decoration: none; color: inherit;">
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png"
+                             style="width: 100%; height: 200px; object-fit: cover;">
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index}"
+                             th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover"
+                             th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}"
+                             style="width: 100%; height: 200px; object-fit: cover;">
+                    </a>
+
+                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                        <h4 class="card-title" th:text="${article.articleTitle}"
+                            style="margin: 0; font-size: 1rem;">후기글 제목</h4>
+                    </a>
+
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="favorite-section col-10 justify-content-center"
+
+
+    <div class="review-section col-10 justify-content-center"
          style="border-bottom: 1px solid #000000; padding-bottom: 2%;">
-        <h4 class="text-center">즐겨찾기한 모임</h4>
-        <div class="row">
-            <div class="col-3" th:each="club : ${userWishClub}">
-                <div class="card">
-                    <h5>
-                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:text="${club.clubName}">모임 이름</a>
-                    </h5>
-                    <p th:text="${club.clubCategory}">모임 소개</p>
-                </div>
-            </div>
+        <h4 class="text-center">즐겨찾는 모임</h4>
+        <div class="d-flex flex-wrap justify-content-center">
+
             <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
-                <div class="col-12"> <!-- 전체 너비를 차지하는 메시지 -->
-                    <div class="alert alert-info text-center">즐겨찾기한 모임이 없습니다.</div>
+                <div class="col-12">
+                    <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
                 </div>
             </th:block>
+
+            <div class="card-container" th:each="club, iterStat : ${userWishClub}"
+                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
+                <div class="card h-100 cardBody"
+                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+
+                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                       style="display: block; text-decoration: none; color: inherit;">
+                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png"
+                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
+                             th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover"
+                             th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
+                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                    </a>
+
+                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                        <h4 class="card-title" th:text="${club.clubName}"
+                            style="margin: 0; font-size: 1rem;">모임 이름</h4>
+                    </a>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -231,10 +288,12 @@
         </form>
     </div>
 </div>
+
 <!-- 신고 모달창 끝 -->
 </body>
-<!-- 모달 기능 -->
+
 <script>
+    <!-- 모달 기능 -->
     function openModal() {
         const modal = document.getElementById('myModal');
         modal.style.display = 'block'; // 모달을 표시
@@ -277,14 +336,14 @@
     if (errorCategoryMessage) {
         alert("Error: " + errorCategoryMessage);
         // Set timeout to navigate back after 2 seconds if error message exists
-        setTimeout(function() {
+        setTimeout(function () {
             history.back();
         }, 100);
     }
     if (successMessage) {
         alert("Success: " + successMessage);
         // Set timeout to navigate back after 2 seconds if success message exists
-        setTimeout(function() {
+        setTimeout(function () {
             history.back();
         }, 100);
     }
