@@ -37,6 +37,13 @@ public class UserSecurityService {
     } else {
       // 이미 존재하는 사용자의 경우 해당 정보를 가져옴
       user = result.get();
+
+      // 기존 사용자도 기본 역할 설정
+      if (user.getRoleSet().isEmpty()) {
+        user.addRole(UserRole.USER); // 기본 역할 할당 (USER 역할 예시)
+        userRepository.save(user); // 역할을 추가한 후에 저장
+      }
+
     }
 
     // UserSecurityDTO 객체를 생성하여 반환
