@@ -296,9 +296,26 @@ ${uuid}${extension}
 
           const formObj = document.querySelector("form")
 
+
+        // 필수 항목 입력 검사 로직
+        function validateForm() {
+          const clubName = document.querySelector("input[name='clubName']").value.trim();
+          const clubArea = document.querySelector("input[name='clubArea']").value.trim();
+          const clubContent = document.querySelector("textarea[name='clubContent']").value.trim();
+          const clubCategory = document.querySelector("input[name='clubCategory']").value.trim();
+          const clubMax = document.querySelector("input[name='clubMax']").value.trim();
+
+          if (!clubName || !clubArea || !clubContent || !clubCategory || !clubMax) {
+            alert("모든 내용을 입력 해주세요.");
+            return false;
+          }
+          return true;
+        }
+
+        if (validateForm()){
           formObj.submit();
           formObj.reset();
-
+        }
       }, false)
 
 
