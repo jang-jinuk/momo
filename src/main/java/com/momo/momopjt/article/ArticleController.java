@@ -58,6 +58,9 @@ public class ArticleController {
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----------------- [POST article /create]-----------------");
 
+    //후기글 기본 사진 설정
+
+
     if (bindingResult.hasErrors()) {
       log.info(" article has error -----------------");
       redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());

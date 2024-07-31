@@ -6,12 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +50,31 @@ public class PhotoServiceImpl implements PhotoService {
   @Override
   public Photo getPhoto(String photoUUID) {
     log.info("------------ getPhoto() ----------jinuk");
+
+    // 기본 사진 조회 설정
+    switch (photoUUID) {
+
+      case "ClubDefaultPhoto":
+        log.info("try  get photo-ClubDefaultPhoto");
+        Photo clubDefaultPhoto = new Photo();
+        clubDefaultPhoto.setPhotoUUID("ClubDefaultPhoto");
+        clubDefaultPhoto.setPhotoExtension(".jpg");
+        return clubDefaultPhoto;
+
+      case "UserDefaultPhoto":
+        log.info("try  get photo-UserDefaultPhoto");
+        Photo userDefaultPhoto = new Photo();
+        userDefaultPhoto.setPhotoUUID("UserDefaultPhoto");
+        userDefaultPhoto.setPhotoExtension(".png");
+        return userDefaultPhoto;
+      case "ScheduleDefaultPhoto":
+
+        log.info("try  get photo-ScheduleDefaultPhoto");
+        Photo scheduleDefaultPhoto = new Photo();
+        scheduleDefaultPhoto.setPhotoUUID("ScheduleDefaultPhoto");
+        return scheduleDefaultPhoto;
+    }
+
 
     boolean existCheck = photoRepository.existsById(photoUUID);
     log.info("----------------- [uuid : {}, exist : {}]-----------------",photoUUID, existCheck);
