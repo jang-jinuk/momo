@@ -67,6 +67,8 @@
     <form id="updateForm" th:action="@{/user/update}" method="post">
       <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
 
+
+
       <!-- 닉네임 -->
       <div class="input-group mb-3">
         <label for="userNickname" class="input-group-text">* 닉네임</label>
@@ -94,15 +96,16 @@
       <!-- 이메일 -->
       <div class="mb-3">
         <label for="userEmail" class="form-label">이메일</label>
-        <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control"
-               required>
+        <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" readonly>
+        <small class="form-text text-muted">* 이메일은 변경할 수 없습니다.</small>
       </div>
 
       <!-- 관심사 -->
       <div class="mb-4">
         <label for="userCategory" class="form-label">관심사</label>
-        <input type="text" id="userCategory" name="userCategory" class="form-control" placeholder="관심사를 선택하세요" readonly>
+        <input type="text" id="userCategory" name="userCategory" class="form-control" th:value="${userDTO.userCategory}" placeholder="관심사를 선택하세요" readonly>
       </div>
+
 
       <div class="container mb-4">
         <nav class="navbar bg-body-tertiary">
@@ -149,14 +152,14 @@
       <!-- 주소 -->
       <div class="input-group mb-3">
         <label for="userAddress" class="input-group-text">주소</label>
-        <input type="text" id="userAddress" name="userAddress" class="form-control" placeholder="주소를 입력하세요"/>
+        <input type="text" id="userAddress" name="userAddress" class="form-control" th:value="${userDTO.userAddress}" placeholder="주소를 입력하세요"/>
         <button type="button" class="btn btn-outline-dark" onclick="searchAddress()">주소 검색</button>
       </div>
 
       <!-- MBTI -->
       <div class="input-group mb-3">
         <label for="userMBTI" class="input-group-text">MBTI</label>
-        <input type="text" id="userMBTI" name="userMBTI" class="form-control">
+        <input type="text" id="userMBTI" name="userMBTI" class="form-control" th:value="${userDTO.userMBTI}">
       </div>
 
       <div class="mt-4">
@@ -171,94 +174,81 @@
   </div>
 </div>
 
-
 <script>
-    function resetForm() {
-        document.getElementById('updateForm').reset();
+  function resetForm() {
+    document.getElementById('updateForm').reset();
+  }
+
+  function validateForm() {
+    const userNickname = document.getElementById('userNickname').value;
+    const userGender = document.querySelector('input[name="userGender"]:checked').value;
+
+    const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+
+    if (!NicknamePattern.test(userNickname)) {
+      alert("닉네임은 6글자까지 가능합니다.");
+      return false;
     }
 
+    if (userGender !== "m" && userGender !== "w") {
+      alert("성별이 유효하지 않습니다.");
+      return false;
+    }
+    return true;
+  }
 
-    function validateForm() {
-        const userNickname = document.getElementById('userNickname').value;
-        const userGender = document.querySelector('input[name="userGender"]:checked').value;
+  function checkDuplicateUserNickname() {
+    const userNickname = document.getElementById('userNickname').value;
 
-        const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
-
-        if (!NicknamePattern.test(userNickname)) {
-            alert("닉네임은 6글자까지 가능합니다.");
-            return false;
+    $.ajax({
+      type: "GET",
+      url: "/user/checkUserNicknameDuplicate",
+      data: { userNickname: userNickname },
+      success: function (response) {
+        if (response === true) {
+          $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+          $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+        } else {
+          $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
+          $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
         }
-
-        if (userGender !== "m" && userGender !== "w") {
-            alert("성별이 유효하지 않습니다.");
-            return false;
-        }
-        return true;
-    }
-
-
-    function checkDuplicateUserNickname() {
-        const userNickname = document.getElementById('userNickname').value;
-
-        $.ajax({
-            type: "GET",
-            url: "/user/checkUserNicknameDuplicate",
-            data: { userNickname: userNickname },
-            success: function (response) {
-                if (response === true) {
-                    $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
-                    $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
-                } else {
-                    $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
-                    $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
-                }
-                $('#nicknameCheckResult').show();
-            },
-            error: function () {
-                alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
-            }
-        });
-        return false; // 폼의 기본 동작을 막습니다.
-    }
-
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        const userCategoryInput = document.getElementById('userCategory');
-        let selectedCategories = [];
-
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const category = this.value;
-
-                // 카테고리가 이미 선택되었는지 확인
-                if (selectedCategories.includes(category)) {
-                    // 카테고리 선택 해제
-                    this.classList.remove('btn-success');
-                    this.classList.add('btn-outline-info');
-                    selectedCategories = selectedCategories.filter(item => item !== category);
-                } else {
-                    // 최대 선택 가능한 카테고리 개수 확인
-                    if (selectedCategories.length < 3) {
-                        // 카테고리 선택
-                        this.classList.remove('btn-outline-info');
-                        this.classList.add('btn-success');
-                        selectedCategories.push(category);
-                    } else {
-                        // 최대 개수 초과 시 알림
-                        alert('최대 3개의 카테고리까지 선택할 수 있습니다.');
-                        return;
-                    }
-                }
-
-                // 선택된 카테고리 목록을 입력 필드에 표시
-                userCategoryInput.value = selectedCategories.join(', ');
-            });
-        });
+        $('#nicknameCheckResult').show();
+      },
+      error: function () {
+        alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+      }
     });
+    return false; // 폼의 기본 동작을 막습니다.
+  }
 
+  document.addEventListener('DOMContentLoaded', function () {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const userCategoryInput = document.getElementById('userCategory');
+    let selectedCategories = [];
 
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const category = this.value;
+
+        if (selectedCategories.includes(category)) {
+          this.classList.remove('btn-success');
+          this.classList.add('btn-outline-info');
+          selectedCategories = selectedCategories.filter(item => item !== category);
+        } else {
+          if (selectedCategories.length < 3) {
+            this.classList.remove('btn-outline-info');
+            this.classList.add('btn-success');
+            selectedCategories.push(category);
+          } else {
+            alert('최대 3개의 카테고리까지 선택할 수 있습니다.');
+            return;
+          }
+        }
+
+        userCategoryInput.value = selectedCategories.join(', ');
+      });
+    });
+  });
 </script>
 
 <!-- Bootstrap JavaScript dependencies -->

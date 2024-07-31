@@ -1,8 +1,12 @@
 package com.momo.momopjt.global.security;
 
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserRole;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -10,9 +14,13 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static com.momo.momopjt.user.QUser.user;
 
 
 @Log4j2
@@ -20,10 +28,13 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+
     //TODO 0716 error YY
+
 
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
 
@@ -73,7 +84,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (email == null || id == null) {
             throw new OAuth2AuthenticationException("Email or ID not found from provider: " + provider);
         }
-        
+
+
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.
 
