@@ -2,7 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
+      layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
   <div class="sb-nav-fixed">
     <div id="layoutSidenav">
@@ -141,12 +141,20 @@
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
 
-                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index and #strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
-                           class="card-img schedule" src="/assets/ScheduleDefaultPhoto.jpg">
+                      <div th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index}">
 
-                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
-                           class="card-img schedule" th:src="@{/view/{photo}(photo=${ongoingSchedulePhotoList[iterStat.index]})}">
+                        <img
+                            th:if="${#strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                            class="card-img schedule" src="/assets/ScheduleDefaultPhoto.jpg">
 
+                        <!--                     TODO org.springframework.expression.spel.SpelEvaluationException: EL1025E: The collection has '0' elements, index '1' is invalid
+                        -->
+                        <img
+                            th:unless="${#strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                            class="card-img schedule"
+                            th:src="@{/view/{photo}(photo = ${ongoingSchedulePhotoList[iterStat.index]})}">
+
+                      </div>
 
                     </a>
                     <div class="card-body">
@@ -181,13 +189,13 @@
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
 
+
                       <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index and #strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
                            class="card-img schedule" src="/assets/ScheduleDefaultPhoto.jpg">
 
-                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index}" 
+                           th:unless="${#strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
                            class="card-img schedule" th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
-
-
 
 <!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
                     </a>
@@ -228,6 +236,7 @@
                     <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
 
+<!-- schedule 스타일 적용으로 class = schedule YY -->
                         <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
                              class="card-img schedule" src="/assets/NullPhoto.png">
 
@@ -254,49 +263,49 @@
       </div>
     </div>
   </div>
+</th:block>
 
 
-  <!--
+    <!--
 
- 사진 표기 부분 참고용 0731 YY
+   사진 표기 부분 참고용 0731 YY
 
-       <div class="row">
-      <div th:if="${getOngoingSchedules!=null && getOngoingSchedules.size()>0}"
-           th:with="onMaxIndex=${#lists.size(ongoingSchedulePhotoList) - 1}">
-        <div class="col-4" th:each="i : ${#numbers.sequence(0, onMaxIndex)}">
+         <div class="row">
+        <div th:if="${getOngoingSchedules!=null && getOngoingSchedules.size()>0}"
+             th:with="onMaxIndex=${#lists.size(ongoingSchedulePhotoList) - 1}">
+          <div class="col-4" th:each="i : ${#numbers.sequence(0, onMaxIndex)}">
 
-               <div class="col-4" th:each="schedule : ${getOngoingSchedules}">
-<div class="card mb-3" style="max-width: 415px;">
-  <div class="row g-0">
-    <div class="col-md-4">
+                 <div class="col-4" th:each="schedule : ${getOngoingSchedules}">
+  <div class="card mb-3" style="max-width: 415px;">
+    <div class="row g-0">
+      <div class="col-md-4">
 
-      <img class="card-img-top" th:src="@{/view/{photo}(photo=${ongoingSchedulePhotoList[i]})}">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${getOngoingSchedules[i].scheduleNo})}"
-           th:inline="text">
-          <h3 class="card-title" th:text="${getOngoingSchedules[i].scheduleTitle}"></h3>
-        </a>
-        <p class="card-text"
-           th:text="${#dates.format(getOngoingSchedules[i].scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정
-          시작시간</p>
-        <p class="card-text" th:text="${getOngoingSchedules[i].schedulePlace}">장소</p>
-        <p class="card-text"
-           th:text="|${getOngoingSchedules[i].scheduleParticipants} / ${getOngoingSchedules[i].scheduleMax}|">
-          참가인원</p>
+        <img class="card-img-top" th:src="@{/view/{photo}(photo=${ongoingSchedulePhotoList[i]})}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <a th:href="@{/schedule/{scheduleNo}(scheduleNo = ${getOngoingSchedules[i].scheduleNo})}"
+             th:inline="text">
+            <h3 class="card-title" th:text="${getOngoingSchedules[i].scheduleTitle}"></h3>
+          </a>
+          <p class="card-text"
+             th:text="${#dates.format(getOngoingSchedules[i].scheduleStartDate,'yyyy년 MM월 dd일 HH:mm')}">일정
+            시작시간</p>
+          <p class="card-text" th:text="${getOngoingSchedules[i].schedulePlace}">장소</p>
+          <p class="card-text"
+             th:text="|${getOngoingSchedules[i].scheduleParticipants} / ${getOngoingSchedules[i].scheduleMax}|">
+            참가인원</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-     </div>
-</div>
+       </div>
+  </div>
 
 
 
- -->
+   -->
 
-</th:block>
 
 
 <th:block layout:fragment="script">

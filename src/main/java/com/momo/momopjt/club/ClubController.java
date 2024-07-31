@@ -195,8 +195,7 @@ public class ClubController {
     }
 
     try {
-      clubNo = clubService.createClub(clubDTO, userAndClubDTO); //0729 YY photoDTO 따로 필요 x
-
+      clubNo = clubService.createClub(clubDTO, userAndClubDTO);
     } catch (ClubService.ClubNameException e) {
       redirectAttributes.addFlashAttribute("error", "clubName");
       return "redirect:/club/create";

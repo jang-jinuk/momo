@@ -46,7 +46,6 @@ public class PhotoServiceImpl implements PhotoService {
   }
 
 
-
   @Override
   public Photo getPhoto(String photoUUID) {
     log.info("------------ getPhoto() ----------jinuk");

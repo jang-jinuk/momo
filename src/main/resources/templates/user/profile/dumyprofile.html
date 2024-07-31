@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>프로필 페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -21,6 +22,7 @@
             opacity: 0; /* 초기 투명도 */
             transition: opacity 0.5s ease; /* 부드러운 전환 효과 */
         }
+
         .modal-content {
             background-color: #fefefe;
             margin: auto; /* 중앙 정렬 */
@@ -66,45 +68,36 @@
         }
 
         /*프로필*/
-        .profile-section, .review-section, .favorite-section {
+        .profile-section{
             margin-bottom: 0; /* 섹션 간 간격을 %로 설정 */
             background-color: #fff; /* 섹션 배경색 */
             padding: 2%; /* 내부 여백을 %로 설정 */
         }
+
+        .img-profile {
+            position: relative;
+            overflow: hidden;
+        }
+
         .profile-image {
-            width: 40%; /* 부모 요소에 대한 비율로 크기 설정 */
-            height: auto; /* 비율에 맞춰 자동으로 높이 조정 */
-            max-width: 150px; /* 최대 크기 제한 */
-            object-fit: cover; /* 이미지 비율 유지 */
-            border: 2px solid #ccc; /* 테두리 추가 */
+            width: 100%
         }
 
-        .upload-button {
-            position: absolute; /* 이미지 위에 버튼 위치 */
-            bottom: 5%; /* 이미지 아래쪽에서의 간격 */
-            right: 5%; /* 이미지 오른쪽에서의 간격 */
-            background-color: #007bff; /* 버튼 배경색 */
-            color: white; /* 글자색 */
-            border: none; /* 테두리 없음 */
-            border-radius: 50%; /* 원형 버튼 */
-            width: 10%; /* 버튼 크기 */
-            height: 10%; /* 버튼 크기 */
-            max-width: 40px; /* 최대 버튼 크기 제한 */
-            max-height: 40px; /* 최대 버튼 크기 제한 */
-            font-size: 24px; /* 글자 크기 */
-            display: flex; /* 중앙 정렬을 위한 flexbox */
-            align-items: center; /* 수직 중앙 정렬 */
-            justify-content: center; /* 수평 중앙 정렬 */
-            cursor: pointer; /* 마우스 커서 변경 */
-            transition: background-color 0.3s; /* 호버 효과를 위한 전환 */
+        .uppro-btn {
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            height: 20px;
+            margin-top: 80%;
+            background-color: grey;
+            cursor: pointer;
+
         }
 
-        .upload-button:hover {
-            background-color: #0056b3; /* 버튼 호버 시 색상 변경 */
+        .button-group {
+            margin-top: 2%; /* 위쪽 간격 조정 */
         }
-         .button-group {
-             margin-top: 2%; /* 위쪽 간격 조정 */
-         }
+
         .list-group-item h5 {
             margin: 0; /* 제목의 기본 여백 제거 */
         }
@@ -115,89 +108,136 @@
     </style>
 </head>
 <body>
-<div class="card-group">
+<div class="card-group justify-content-center">
     <div class="profile-section col-10 justify-content-center">
-        <div>
-            <div class="row g-0">
-                <div class="col-4 d-flex flex-column align-items-center position-relative">
-                    <img th:src="@{${user.userPhoto}}" alt="프로필 사진" class="profile-image rounded-circle" id="profileImage"/>
-                    <button class="upload-button" onclick="document.getElementById('uploadInput').click()">+</button>
-                    <input type="file" id="uploadInput" style="display:none" onchange="updateProfileImage(event)"/>
-                </div>
-                <div class="col-8">
-                    <div class="card-body justify-content-right;">
-                        <h2 class="card-title" th:text="${user.userNickname}" style="font-size: 150%;"></h2>
-                        <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
-                        <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
-                                th:text="${user.userGender}"></span></p>
-                        <p class="card-text">주소: <span th:text="${user.userAddress}"></span></p>
-                        <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
-                    </div>
-                </div>
+        <div class="d-flex align-items-center">
+            <div class="img-profile col-2">
+                <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image"
+                     style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
+                <button class="uppro-btn" type="button" onclick="document.getElementById('fileInput').click();"
+                        style="position: absolute; bottom: 5%; right: 5%; background: #007bff; color: white; border: none; border-radius: 50%; width: 10%; height: 10%; max-width: 30px; max-height: 30px; cursor: pointer;">
+                    +
+                </button>
+            </div>
+            <div class="col-10">
+                <h2 class="card-title" th:text="${user.userNickname}"></h2>
+                <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
+                <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
+                        th:text="${user.userGender}"></span></p>
+                <p class="card-text">주소: <span th:text="${user.userAddress}"></span></p>
+                <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
             </div>
         </div>
     </div>
 </div>
 
+
 <div class="card-group justify-content-center">
+
     <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; padding-bottom: 2%;
-            border-top: 1px solid #000000; padding-top: 2%;">
+         style="border-bottom: 1px solid #000000; padding-bottom: 2%; border-top: 1px solid #000000; padding-top: 2%;">
         <h4 class="text-center">작성한 후기</h4>
-        <div class="row">
-            <div class="col-3" th:block th:each="article : ${userArticles}">
-                <div class="card">
-                    <h5>
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}"
-                           th:text="${article.articleTitle}"></a>
-                    </h5>
-                    <p th:text="${article.articleContent}"></p>
-                </div>
-            </div>
+        <div class="d-flex flex-wrap justify-content-center">
             <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
-                <div class="col-12"> <!-- 전체 너비를 차지하는 메시지 -->
+                <div class="col-12">
                     <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
                 </div>
             </th:block>
+            <div class="card-container" th:each="article, iterStat : ${userArticles}"
+                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
+                <div class="card h-100 cardBody"
+                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+
+                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                       style="display: block; text-decoration: none; color: inherit;">
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png"
+                             style="width: 100%; height: 200px; object-fit: cover;">
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index}"
+                             th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover"
+                             th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}"
+                             style="width: 100%; height: 200px; object-fit: cover;">
+                    </a>
+
+                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                        <h4 class="card-title" th:text="${article.articleTitle}"
+                            style="margin: 0; font-size: 1rem;">후기글 제목</h4>
+                    </a>
+
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="favorite-section col-10 justify-content-center"
+
+
+    <div class="review-section col-10 justify-content-center"
          style="border-bottom: 1px solid #000000; padding-bottom: 2%;">
-        <h4 class="text-center">즐겨찾기한 모임</h4>
-        <div class="row">
-            <div class="col-3" th:each="club : ${userWishClub}">
-                <div class="card">
-                    <h5>
-                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:text="${club.clubName}">모임 이름</a>
-                    </h5>
-                    <p th:text="${club.clubCategory}">모임 소개</p>
-                </div>
-            </div>
+        <h4 class="text-center">즐겨찾는 모임</h4>
+        <div class="d-flex flex-wrap justify-content-center">
+
             <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
-                <div class="col-12"> <!-- 전체 너비를 차지하는 메시지 -->
-                    <div class="alert alert-info text-center">즐겨찾기한 모임이 없습니다.</div>
+                <div class="col-12">
+                    <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
                 </div>
             </th:block>
+
+            <div class="card-container" th:each="club, iterStat : ${userWishClub}"
+                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
+                <div class="card h-100 cardBody"
+                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+
+                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                       style="display: block; text-decoration: none; color: inherit;">
+                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png"
+                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
+                             th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover"
+                             th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
+                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                    </a>
+
+                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                        <h4 class="card-title" th:text="${club.clubName}"
+                            style="margin: 0; font-size: 1rem;">모임 이름</h4>
+                    </a>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- 버튼 그룹 -->
-    <div class="button-group d-flex justify-content-center">
-        <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
-        <button th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
-                onclick="location.href='/user/profile/my-report'">내 신고내역
+<div class="button-group d-flex justify-content-center">
+    <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
+    <button th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
+            onclick="location.href='/user/delete-account'">탈퇴하기
+    </button>
+    <a th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
+       th:href="@{/user/update/{userId}(userId=${loggedInUserId})}">개인정보 수정</a>
+    <button th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
+            onclick="location.href='/user/profile/my-report'">내 신고내역
+    </button>
+
+    <div>
+        <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger ms-2"
+                onclick="openModal()">신고하기
         </button>
-        <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger ms-2" onclick="openModal()">신고하기
-        </button>
     </div>
-    <div th:if="${errorCategoryMessage}" style="color: red;">
-        <p th:text="${errorCategoryMessage}"></p> <!-- 에러 메시지 표시 -->
+    <div class="message-area">
+        <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
+        <input type="hidden" id="successMessage" th:value="${successMessage}">
     </div>
-    <div th:if="${successMessage}" style="color: blue;">
-        <p th:text="${successMessage}"></p>
-    </div>
+
+</div>
 
 <!-- 신고 모달창 -->
 <div id="myModal">
@@ -248,10 +288,12 @@
         </form>
     </div>
 </div>
+
 <!-- 신고 모달창 끝 -->
 </body>
-<!-- 모달 기능 -->
+
 <script>
+    <!-- 모달 기능 -->
     function openModal() {
         const modal = document.getElementById('myModal');
         modal.style.display = 'block'; // 모달을 표시
@@ -284,6 +326,37 @@
     window.onkeydown = function (event) {
         if (event.key === "Escape") {
             closeModal();
+        }
+    }
+    //신고 결과 모달창
+    const errorCategoryMessage = document.getElementById('errorCategoryMessage').value;
+    const successMessage = document.getElementById('successMessage').value;
+
+    // 값이 존재하면 alert 창을 표시 후 0.1초후에 이전페이지 이동
+    if (errorCategoryMessage) {
+        alert("Error: " + errorCategoryMessage);
+        // Set timeout to navigate back after 2 seconds if error message exists
+        setTimeout(function () {
+            history.back();
+        }, 100);
+    }
+    if (successMessage) {
+        alert("Success: " + successMessage);
+        // Set timeout to navigate back after 2 seconds if success message exists
+        setTimeout(function () {
+            history.back();
+        }, 100);
+    }
+
+    //이미지
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
     }
 </script>

@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,17 +42,25 @@ public class ReplyServiceImpl implements ReplyService {
   }
 
   @Override
-  public List<Reply> readReplyAll() {
+  public List<ReplyDTO> readReplyAll() {
     log.info("----------------- [readReplyAll]-----------------");
     List<Reply> replyList = replyRepository.findAll();
-    log.info("replyList: {}", replyList);
-    return replyList;
+
+    List<ReplyDTO> replyDTOList = new ArrayList<>();
+    for (Reply reply : replyList) {
+      ReplyDTO replyDTO = modelMapper.map(reply, ReplyDTO.class);
+      replyDTO.setWriter(userService.findByUserNo(reply.getUserNo().getUserNo()).orElseThrow().getUserNickname());
+      replyDTOList.add(replyDTO);
+    }
+
+    log.info("replyDTOList: {}", replyDTOList);
+    return replyDTOList;
   }
 
   @Override
-  public List<Reply> readReplyAllBySchedule(Long scheduleNo){
+  public List<ReplyDTO> readReplyAllBySchedule(Long scheduleNo){
     log.info("----------------- [readReplyAllBySchedule]-----------------");
-    List<Reply> replyByScheduleList = readReplyAll()
+    List<ReplyDTO> replyByScheduleList = readReplyAll()
         .stream()
         .filter(reply -> reply.getScheduleNo() != null && reply.getScheduleNo().getScheduleNo() == scheduleNo)
         .collect(Collectors.toList());
@@ -59,9 +68,9 @@ public class ReplyServiceImpl implements ReplyService {
   }
 
   @Override
-  public List<Reply> readReplyAllByArticle(Long articleNo) {
+  public List<ReplyDTO> readReplyAllByArticle(Long articleNo) {
     log.info("----------------- [readReplyAllByArticle]-----------------");
-    List<Reply> replyByArticleList = readReplyAll()
+    List<ReplyDTO> replyByArticleList = readReplyAll()
         .stream()
         .filter(reply -> reply.getArticleNo() != null && reply.getArticleNo().getArticleNo() == articleNo)
         .collect(Collectors.toList());
