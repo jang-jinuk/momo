@@ -2,6 +2,7 @@ package com.momo.momopjt.global.security;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserRole;
 import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
