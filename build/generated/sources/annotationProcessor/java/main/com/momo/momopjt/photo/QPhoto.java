@@ -24,9 +24,7 @@ public class QPhoto extends EntityPathBase<Photo> {
 
     public final DateTimePath<java.time.Instant> photoCreateDate = createDateTime("photoCreateDate", java.time.Instant.class);
 
-    public final StringPath photoOriginalName = createString("photoOriginalName");
-
-    public final StringPath photoURL = createString("photoURL");
+    public final StringPath photoExtension = createString("photoExtension");
 
     public final StringPath photoUUID = createString("photoUUID");
 
