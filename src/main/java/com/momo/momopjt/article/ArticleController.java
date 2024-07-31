@@ -3,7 +3,7 @@ package com.momo.momopjt.article;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.global.PageRequestDTO;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
@@ -109,7 +109,7 @@ public class ArticleController {
     //출력할 게시글 조회
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     //출력할 댓글 조회 YY
-    List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
+    List<ReplyDTO> replyList = replyService.readReplyAllByArticle(articleNo);
 
 
     model.addAttribute("clubNo", clubNo);

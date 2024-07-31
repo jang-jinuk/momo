@@ -2,7 +2,7 @@ package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
-import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
 import lombok.RequiredArgsConstructor;
@@ -120,10 +120,10 @@ public class ArticleServiceImpl implements ArticleService {
   // 특정 ID의 후기글을 삭제하는 메서드
   @Override
   public void deleteArticle(Long articleNo) {
-    List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
+    List<ReplyDTO> replyDTOList = replyService.readReplyAllByArticle(articleNo);
 
-    for (Reply reply : replyList) { //해당 후기글 댓글 삭제
-      replyService.deleteReply(reply.getReplyNo());
+    for (ReplyDTO replyDTO : replyDTOList) { //해당 후기글 댓글 삭제
+      replyService.deleteReply(replyDTO.getReplyNo());
     }
 
     articleRepository.deleteById(articleNo);

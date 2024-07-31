@@ -18,7 +18,7 @@
             <div class="sticky-sm-top">*모임명은 수정불가</div>
           </div>
           <div class="col">
-            <input name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" required>
+            <input id="clubName" name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" minlength="2" required>
             <div th:if="${error == 'clubName'}" class="alert alert-danger" role="alert">
               모임명이 중복되었습니다. 다른 모임명을 사용해주세요.
             </div>
@@ -264,6 +264,7 @@ ${uuid}${extension}
           e.preventDefault()
           e.stopPropagation()
 
+
           const target = document.querySelector(".uploadHidden")
 
           const uploadFiles = uploadResult.querySelectorAll("img")
@@ -295,6 +296,8 @@ ${uuid}${extension}
           // document.querySelector("form").submit();
 
           const formObj = document.querySelector("form")
+
+          // const inputValue = document.getElementById("clubName")
 
           formObj.submit();
           formObj.reset();

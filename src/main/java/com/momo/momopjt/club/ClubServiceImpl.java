@@ -8,7 +8,7 @@ import com.momo.momopjt.article.ArticleRepository;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleRepository;
@@ -192,9 +192,9 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임의 모든 일정 댓글 삭제
     List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(club);
     for (Schedule schedule : scheduleList) {
-      List<Reply> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
-      for (Reply reply : replyList) {
-        replyService.deleteReply(reply.getReplyNo());
+      List<ReplyDTO> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
+      for (ReplyDTO replyDTO : replyList) {
+        replyService.deleteReply(replyDTO.getReplyNo());
       }
     }
 
@@ -204,9 +204,9 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임의 모든 후기글 댓글 삭제
     List<Article> articleList = articleRepository.findByClubNo(club);
     for (Article article : articleList) {
-      List<Reply> replyList = replyService.readReplyAllByArticle(article.getArticleNo());
-      for (Reply reply : replyList) {
-        replyService.deleteReply(reply.getReplyNo());
+      List<ReplyDTO> replyList = replyService.readReplyAllByArticle(article.getArticleNo());
+      for (ReplyDTO replyDTO : replyList) {
+        replyService.deleteReply(replyDTO.getReplyNo());
       }
     }
 

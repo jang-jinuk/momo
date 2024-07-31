@@ -126,7 +126,7 @@
                 <span th:text="${reply.getReplyContent()}"></span>
                 <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
                 <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-                <span>작성자필요<!--TODO--></span>
+                <span th:text="'작성자 : ' + ${reply.getWriter()}"></span>
                 <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
                 <form id="replyDeleteForm" action="/reply/delete" method="post">
                     <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>

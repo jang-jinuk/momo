@@ -2,7 +2,7 @@ package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserDTO;
@@ -112,7 +112,7 @@ public class ScheduleController {
     //일정 조회
 
     //출력할 댓글 조회 YY
-    List<Reply> replyList = replyService.readReplyAllBySchedule(scheduleNo);
+    List<ReplyDTO> replyList = replyService.readReplyAllBySchedule(scheduleNo);
 
     ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 

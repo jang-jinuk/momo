@@ -3,7 +3,10 @@ package com.momo.momopjt.reply;
 import com.momo.momopjt.article.Article;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
@@ -16,6 +19,8 @@ public class ReplyDTO {
   private Long replyNo;
 
   private User userNo;
+
+  private String writer; // userNickName
 
   private Schedule scheduleNo;
 

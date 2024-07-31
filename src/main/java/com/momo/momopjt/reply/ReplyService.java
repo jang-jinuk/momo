@@ -8,10 +8,10 @@ public interface ReplyService {
 
   Reply readReply(Long replyNo);
 
-  List<Reply> readReplyAll();
+  List<ReplyDTO> readReplyAll();
 
-  List<Reply> readReplyAllBySchedule(Long scheduleNo);
-  List<Reply> readReplyAllByArticle(Long articleNo);
+  List<ReplyDTO> readReplyAllBySchedule(Long scheduleNo);
+  List<ReplyDTO> readReplyAllByArticle(Long articleNo);
 
   void updateReply(ReplyDTO replyDTO);
 
