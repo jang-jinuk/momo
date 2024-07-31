@@ -94,7 +94,7 @@ public class ScheduleController {
 
       log.info("----------------- [schduleDTO.getSchedulePhotoUUID : {}]-----------------", scheduleDTO.getSchedulePhotoUUID());
 
-      scheduleDTO.setSchedulePhotoUUID("scheduleDefaultPhoto");
+      scheduleDTO.setSchedulePhotoUUID("ScheduleDefaultPhoto");
 
     }
 

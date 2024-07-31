@@ -58,6 +58,13 @@ public class ArticleController {
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----------------- [POST article /create]-----------------");
 
+    //후기글 기본 사진 설정
+    if(articleDTO.getArticlePhotoUUID() == null || articleDTO.getArticlePhotoUUID().isEmpty()){
+      articleDTO.setArticlePhotoUUID("ArticleDefaultPhoto");
+    }
+
+
+
     if (bindingResult.hasErrors()) {
       log.info(" article has error -----------------");
       redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
@@ -76,6 +83,11 @@ public class ArticleController {
     club.setClubNo(clubNo);
     articleDTO.setClubNo(club);
 
+    //후기글 기본 사진 설정
+
+
+
+    //실제 후기글 작성 로직
     Long articleNo = articleService.createArticle(articleDTO);
 
     redirectAttributes.addFlashAttribute("result", articleNo);
