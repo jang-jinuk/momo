@@ -18,7 +18,7 @@
             <div class="sticky-sm-top">*모임명은 수정불가</div>
           </div>
           <div class="col">
-            <input name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" >
+            <input name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" required>
             <div th:if="${error == 'clubName'}" class="alert alert-danger" role="alert">
               모임명이 중복되었습니다. 다른 모임명을 사용해주세요.
             </div>
@@ -139,8 +139,8 @@
 </th:block>
 
 <th:block layout:fragment="script">
-  <script th:inline="javascript">
 
+  <script th:inline="javascript">
 
       //이미지 업로드 처리 JS  YY
       async function uploadToServer(formObj) {

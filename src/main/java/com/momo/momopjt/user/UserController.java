@@ -164,7 +164,7 @@ public class UserController {
     } else if (authentication instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
       DefaultOAuth2User oAuth2User = (DefaultOAuth2User) oauth2Token.getPrincipal();
-      currentUsername = oAuth2User.getAttribute("email"); // Get email
+      currentUsername = oAuth2User.getAttribute("email"); // Get email //TODO check 0731 YY
     }
 
     if (currentUsername == null) {
@@ -172,7 +172,7 @@ public class UserController {
     }
 
     // 현재 로그인한 사용자 정보 가져오기
-    User currentUser = userRepository.findByUserId(currentUsername);
+    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY
     if (currentUser == null) {
       throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
     }

@@ -154,6 +154,29 @@ public class FileController {
   @ApiOperation(value = "파일조회")
   @GetMapping("/view/{fileName}") // 원래 view/{fileName}
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
+
+    //Null photo 에러 대신 처리 추가
+//
+//    if("NullPhotonull".equals(fileName)){
+//      log.warn("null photo handle");
+//      Resource resource = new ClassPathResource("assets/NullPhoto.png");
+//      HttpHeaders headers = new HttpHeaders();
+//
+//      try{
+//        headers.add("Content-Type", "image/png");
+//
+//
+//      } catch(Exception e){
+//
+//        log.warn("----------------- [nullphoto- Fail return]-----------------", e);
+//        return ResponseEntity.internalServerError().build();
+//      }
+//
+//      log.trace("----------------- [nullphoto- 정상 return]-----------------");
+//      return ResponseEntity.ok().headers(headers).body(resource);
+//    }
+
+
     log.info("----------------- [GET File  /{}]-----------------",fileName);
 
     Resource resource = new FileSystemResource(uploadPath +File.separator+ fileName);

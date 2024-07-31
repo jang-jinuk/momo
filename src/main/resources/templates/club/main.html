@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
@@ -13,9 +14,12 @@
                 <h5 class="mb-0">모임원</h5>
                 <a class="btn btn-link btn-sm p-0" id="sidebarToggle" href="#!">
                   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                    <path class="cls-1" d="M15.12,15.53,25,5.66a1,1,0,0,1,1.41,1.41l-9.06,9.06,8.8,8.8a1,1,0,0,1,0,1.41h0a1,1,0,0,1-1.42,0l-9.61-9.61A.85.85,0,0,1,15.12,15.53Z"/>
-                    <path class="cls-1" d="M5.54,15.53l9.88-9.87a1,1,0,1,1,1.41,1.41L7.77,16.13l8.8,8.8a1,1,0,0,1,0,1.41h0a1,1,0,0,1-1.41,0L5.54,16.73A.85.85,0,0,1,5.54,15.53Z"/>
+                    <path class="cls-1"
+                          d="M15.12,15.53,25,5.66a1,1,0,0,1,1.41,1.41l-9.06,9.06,8.8,8.8a1,1,0,0,1,0,1.41h0a1,1,0,0,1-1.42,0l-9.61-9.61A.85.85,0,0,1,15.12,15.53Z"/>
+                    <path class="cls-1"
+                          d="M5.54,15.53l9.88-9.87a1,1,0,1,1,1.41,1.41L7.77,16.13l8.8,8.8a1,1,0,0,1,0,1.41h0a1,1,0,0,1-1.41,0L5.54,16.73A.85.85,0,0,1,5.54,15.53Z"/>
                   </svg>
+
                 </a>
               </div>
               <hr>
@@ -82,7 +86,13 @@
           <div class="container-fluid" style="width: 80%">
             <div class="row">
               <div class="col-12 d-flex align-items-center">
-                <img class="club-cover" src="/assets/프로필.png">
+
+                <img th:if="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                     class="club-cover" src="/assets/ClubDefaultPhoto.jpg">
+
+                <img th:unless="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                     class="club-cover" th:src="@{/view/{photo}(photo=${clubProfilePhoto})}">
+
                 <div class="club-info">
                   <h1 class="mt-4" th:text="${clubDTO.clubName}">모임명</h1>
                   <p th:text="${clubDTO.clubContent}">모임 소개</p>
@@ -130,7 +140,14 @@
                   <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
-                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index and #strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" src="/assets/ScheduleDefaultPhoto.jpg">
+
+                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
+
+
                     </a>
                     <div class="card-body">
                       <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
@@ -163,7 +180,16 @@
                   <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
-                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index and #strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" src="/assets/ScheduleDefaultPhoto.jpg">
+
+                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
+
+
+
+<!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
                     </a>
                     <div class="card-body">
                       <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
@@ -201,7 +227,13 @@
                   <div class="col-3" th:each="article, iterStat : ${articles}">
                     <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                        <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png">
+
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index}" th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}">
+
                       </a>
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
                         <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
@@ -314,7 +346,7 @@
           });
       });
       document.addEventListener('DOMContentLoaded', function () {
-          const  sidebarToggle= document.body.querySelector('#sidebarToggle');
+          const sidebarToggle = document.body.querySelector('#sidebarToggle');
           const sidebarToggleHeader = document.body.querySelector('#sidebarToggle-header');
 
           function toggleSidebar() {

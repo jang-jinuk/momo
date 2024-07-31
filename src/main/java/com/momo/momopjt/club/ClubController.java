@@ -103,7 +103,7 @@ public class ClubController {
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
     String clubProfilePhotoStr = clubPhoto.toString();
     log.trace("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
-    model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
+    model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
     // 이미지 html 에서 쓸때 아래 처럼 (예시)
     // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
 
@@ -189,11 +189,15 @@ public class ClubController {
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
     Long clubNo;
-    //TODO 파일 업로드 기능과 연결필요 JW
+
+
+    //모임 기본 사진 설정
+    if(clubDTO.getClubPhotoUUID() == null || clubDTO.getClubPhotoUUID().isEmpty()) {
+      clubDTO.setClubPhotoUUID("ClubDefaultPhoto");
+    }
 
     try {
-      clubNo = clubService.createClub(clubDTO, userAndClubDTO); //0729 YY photoDTO 따로 필요 x
-
+      clubNo = clubService.createClub(clubDTO, userAndClubDTO);
     } catch (ClubService.ClubNameException e) {
       redirectAttributes.addFlashAttribute("error", "clubName");
       return "redirect:/club/create";
