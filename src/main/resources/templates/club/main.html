@@ -85,14 +85,14 @@
               <div class="col-12 d-flex align-items-center">
                 <img class="club-cover" src="/assets/프로필.png">
                 <div class="club-info">
-                  <h1 class="mt-4" th:text="${club.clubName}">모임명</h1>
-                  <p th:text="${club.clubContent}">모임 소개</p>
+                  <h1 class="mt-4" th:text="${clubDTO.clubName}">모임명</h1>
+                  <p th:text="${clubDTO.clubContent}">모임 소개</p>
                 </div>
               </div>
 
               <form th:action="@{/club/update-Wish}" method="post">
 
-                <input type="hidden" name="clubNo" th:value="${club.clubNo}"/>
+                <input type="hidden" name="clubNo" th:value="${clubDTO.clubNo}"/>
                 <input type="hidden" name="isWish" th:value="${isWish}"/>
                 <div th:switch="${isWish}">
                   <button type="submit" style="float: right; border: none; background: none; padding-right: 1rem;"
