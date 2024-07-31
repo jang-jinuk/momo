@@ -23,14 +23,14 @@
                         <input th:value="${clubDTO.clubName}" type="text" class="form-control" readonly>
                     </div>
                 </div>
-
                 <div class="row align-items-center">
                     <div class="col-2 ms-4">
                         <h4>지역</h4>
                     </div>
                     <div class="col">
-                        <input th:value="${clubDTO.clubArea}" name="clubArea" type="text" class="form-control" placeholder="지역을 선택해주세요.">
-                        <button class="btn btn-dark" type="button">찾기</button>
+                        <input th:value="${clubDTO.clubArea}" name="clubArea" type="text" class="form-control" id="sample5_address" placeholder="활동 지역"
+                               th:required="true" readonly>
+                        <input type="button" onclick="sample5_execDaumPostcode()" value="검색"><br>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,6 @@
                                     <div class="col">
                                         <input th:value="${clubDTO.clubCategory}" name="clubCategory" type="text"
                                                class="form-control custom-input" placeholder="맛집탐방, 카페투어">
-                                        <button class="btn btn-dark" type="submit">선택</button>
                                     </div>
                                 </div>
                                 <div class="container mt-5">
@@ -86,9 +85,7 @@
                                         <div class="col-2">
                                             <h4>정원(1-100명)</h4>
                                             <div class="input-group mt-2">
-                                                <button class="btn btn-outline-secondary" type="submit" id="decrement">-</button>
                                                 <input th:value="${clubDTO.clubMax}" name="clubMax" type="number" class="form-control text-center" id="count" min="2" max="100">
-                                                <button class="btn btn-outline-secondary" type="submit" id="increment">+</button>
                                             </div>
                                         </div>
                                     </div>
@@ -301,6 +298,15 @@ ${uuid}${extension}
 
         }, false)
 
+        // 주소 API
+        function sample5_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    var addr = data.address;
+                    document.getElementById("sample5_address").value = addr;
+                }
+            }).open();
+        }
 
         // 0730 YY 불필요해 보여서 주석처리
 
