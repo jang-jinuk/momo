@@ -49,6 +49,11 @@ public class CustomUserDetailService implements UserDetailsService {
     // 비밀번호가 null이거나 비어있으면 소셜 로그인 사용자로 처리
     boolean isSocialUser = user.getUserPw() == null || user.getUserPw().isEmpty();
 
+    // 기본 역할 설정
+    if (user.getRoleSet().isEmpty()) {
+      user.addRole(UserRole.USER); // 기본 역할 할당 (USER 역할 예시)
+      userRepository.save(user); // 역할을 추가한 후에 저장
+    }
 
     UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
         user.getUserId(),
