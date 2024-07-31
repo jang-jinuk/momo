@@ -84,7 +84,13 @@
           <div class="container-fluid" style="width: 80%">
             <div class="row">
               <div class="col-12 d-flex align-items-center">
-                <img class="club-cover" src="/assets/프로필.png">
+
+                <img th:if="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                     class="club-cover" src="/assets/ClubDefaultPhoto.jpg">
+
+                <img th:unless="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                     class="club-cover" th:src="@{/view/{photo}(photo=${clubProfilePhoto})}">
+
                 <div class="club-info">
                   <h1 class="mt-4" th:text="${clubDTO.clubName}">모임명</h1>
                   <p th:text="${clubDTO.clubContent}">모임 소개</p>
@@ -132,7 +138,17 @@
                   <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
-                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+
+<!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
+
+                      <img th:if="${#strings.contains(schedule.getSchedulePhotoUUID(), 'ScheduleDefaultPhoto')}"
+                           class="card-img schedule" src="/assets/ScheduleDefaultPhoto.jpg">
+
+<!--                      <img th:unless="${#strings.contains(schedule.getSchedulePhotoUUID(), 'ScheduleDefaultPhoto')}"-->
+<!--                           class="card-img schedule" th:src="@{/view/{photo}(photo=${})}"> &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+
                     </a>
                     <div class="card-body">
                       <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
@@ -203,7 +219,11 @@
                   <div class="col-3" th:each="article, iterStat : ${articles}">
                     <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+
+
                         <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+
                       </a>
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
                         <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>

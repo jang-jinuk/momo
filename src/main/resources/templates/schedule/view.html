@@ -12,13 +12,21 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-4">
-                <div class="row-cols-4">
-                    이미지 자리
-                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">
+            <div class="col-3">
+                <div class="col-3" > <!-- 일정 이미지 출력 -->
+
+
+
+                    <img th:if="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
+                         src="/assets/ClubDefaultPhoto.jpg"  style="width:300px;" >
+                    <img th:unless="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
+                         th:src="@{/view/{photo}(photo=${schedulePhoto})}"  style="width:300px;" >
+<!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
+<!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
 
                 </div>
             </div>
+
             <div class="col-8">
                 <div class="row g-3">
                     <div class="col-12">
@@ -28,6 +36,7 @@
                         <p th:text="${#dates.format(scheduleDTO.scheduleStartDate, 'yyyy년 MM월 dd일 HH:mm')}"></p>
                     </div>
                     <div class="col-12">
+                        <!-- 지도  -->
                         <div id="map" style="width:500px;height:400px;margin-top:10px;"></div>
                         <p  type="text" id="copyTxt" th:text="${scheduleDTO.schedulePlace}"></p>
                         <button onclick="copyText()">복사하기</button>

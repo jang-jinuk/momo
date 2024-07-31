@@ -56,9 +56,16 @@
               <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
             </div>
 
-            <div class="col">
-              <img class="card-img-top"
-                   th:src="@{/view/{fileName}(fileName=${articlePhoto})}" alt="article image">
+            <div class="col"> <!-- 후기글 사진 출력 -->
+
+              <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                   src="/assets/NullPhoto.png"  style="width:300px;" >
+              <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                   th:src="@{/view/{photo}(photo=${articlePhoto})}"  style="width:300px;" >
+
+
+<!--              <img class="card-img-top"-->
+<!--                   th:src="@{/view/{fileName}(fileName=${articlePhoto})}" alt="article image">-->
 
             </div>
 

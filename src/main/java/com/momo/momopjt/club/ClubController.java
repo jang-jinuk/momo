@@ -103,7 +103,7 @@ public class ClubController {
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
     String clubProfilePhotoStr = clubPhoto.toString();
     log.trace("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
-    model.addAttribute("clubProfilePhoto",clubProfilePhotoStr);
+    model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
     // 이미지 html 에서 쓸때 아래 처럼 (예시)
     // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
 
