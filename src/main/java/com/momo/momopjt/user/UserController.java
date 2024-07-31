@@ -180,7 +180,9 @@ public class UserController {
     }
 
     // 현재 로그인한 사용자 정보 가져오기
-    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY 
+
+    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY
+    
     if (currentUser == null) {
       throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
     }

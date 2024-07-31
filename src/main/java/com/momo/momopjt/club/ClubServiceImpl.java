@@ -66,6 +66,20 @@ public class ClubServiceImpl implements ClubService {
       throw new ClubNameException();
     }
 
+    // 주소를 구,군까지만 저장하는 로직
+    String clubArea =clubDTO.getClubArea();
+    String[] areaParts = clubArea.split(" ");
+
+    String secondPart = areaParts[1];
+    char lastChar = secondPart.charAt(secondPart.length() - 1);
+
+    if (lastChar == '시') {
+      clubArea = areaParts[0] + " " + areaParts[1] + " " + areaParts[2];
+    } else {
+      clubArea = areaParts[0] + " " + areaParts[1];
+    }
+
+    clubDTO.setClubArea(clubArea);
 
     log.info("----------------- [clubphoto UUID : {}]-----------------", clubDTO.getClubPhotoUUID());
     //YY
@@ -142,10 +156,24 @@ public class ClubServiceImpl implements ClubService {
   public Boolean updateClub(ClubDTO clubDTO) {
     log.info("----------------- [updateClub()]-----------------");
 
+    // 주소를 구,군까지만 저장하는 로직
+    String clubArea =clubDTO.getClubArea();
+    String[] areaParts = clubArea.split(" ");
+
+    String secondPart = areaParts[1];
+    char lastChar = secondPart.charAt(secondPart.length() - 1);
+
+    if (lastChar == '시') {
+      clubArea = areaParts[0] + " " + areaParts[1] + " " + areaParts[2];
+    } else {
+      clubArea = areaParts[0] + " " + areaParts[1];
+    }
+
+    clubDTO.setClubArea(clubArea);
+
     //clubNo로 업데이트할 club 불러옴
     Optional<Club> result = clubRepository.findById(clubDTO.getClubNo());
     Club club = result.orElseThrow();
-
 
     log.trace("update club photo 조회");
     String newPhotoUUID = clubDTO.getClubPhotoUUID();

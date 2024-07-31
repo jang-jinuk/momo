@@ -51,8 +51,6 @@ public class ClubController {
   private ArticleService articleService;
   @Autowired
   private UserAndClubRepository userAndClubRepository;
-
-  @Qualifier("modelMapper")
   @Autowired
   private ModelMapper modelMapper;
 
