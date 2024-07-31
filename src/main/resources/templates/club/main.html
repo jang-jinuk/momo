@@ -187,37 +187,38 @@
                   </a>
                 </div>
               </div>
-              <hr>
-              <br>
-              <div class="row">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <h2>후기</h2>
-                  <a th:href="@{/article/create}">
-                    <h5> + 후기작성</h5>
-                  </a>
-                </div>
+            </div>
+            <hr>
+            <br>
+            <div class="row">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h2>후기</h2>
+                <a th:href="@{/article/create}">
+                  <h5> + 후기작성</h5>
+                </a>
+              </div>
+              <div class="row row-cols-1 row-cols-md-4 g-0">
                 <div class="row row-cols-1 row-cols-md-4 g-0">
-                  <div class="row row-cols-1 row-cols-md-4 g-0">
-                    <div class="col-3" th:each="article, iterStat : ${articles}">
-                      <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                          <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
-                        </a>
-                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
-                          <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
-                        </a>
-                        <p class="card-text" th:text="${article.userNo.userNickname}"></p>
-                      </div>
+                  <div class="col-3" th:each="article, iterStat : ${articles}">
+                    <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+                      <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                        <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+                      </a>
+                      <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                        <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+                      </a>
+                      <p class="card-text" th:text="${article.userNo.userNickname}"></p>
                     </div>
                   </div>
-                  <div class="text-center">
-                    <a class="load-more-review" href="#!">
-                      <img src="/assets/더보기.png">
-                    </a>
-                  </div>
+                </div>
+                <div class="text-center">
+                  <a class="load-more-review" href="#!">
+                    <img src="/assets/더보기.png">
+                  </a>
                 </div>
               </div>
-
+            </div>
+          </div>
         </main>
       </div>
     </div>
@@ -287,7 +288,7 @@
           if (hiddenSchedules.length <= 3) {
               button.style.display = 'none';
           }
-          button.addEventListener('click', function() {
+          button.addEventListener('click', function () {
               const hiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.more-schedule.d-none');
               for (let i = 0; i < 3 && i < hiddenSchedules.length; i++) {
                   hiddenSchedules[i].classList.remove('d-none');
@@ -303,7 +304,7 @@
           if (hiddenReviews.length <= 4) {
               button.style.display = 'none';
           }
-          button.addEventListener('click', function() {
+          button.addEventListener('click', function () {
               const hiddenReviews = this.parentElement.previousElementSibling.querySelectorAll('.more-review.d-none');
               for (let i = 0; i < 4 && i < hiddenReviews.length; i++) {
                   hiddenReviews[i].classList.remove('d-none');
@@ -313,7 +314,7 @@
               }
           });
       });
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
           const sidebarToggle = document.body.querySelector('#sidebarToggle');
           const sidebarToggleHeader = document.body.querySelector('#sidebarToggle-header');
 
@@ -329,14 +330,14 @@
           }
 
           if (sidebarToggle) {
-              sidebarToggle.addEventListener('click', function(event) {
+              sidebarToggle.addEventListener('click', function (event) {
                   event.preventDefault();
                   toggleSidebar();
               });
           }
 
           if (sidebarToggleHeader) {
-              sidebarToggleHeader.addEventListener('click', function(event) {
+              sidebarToggleHeader.addEventListener('click', function (event) {
                   event.preventDefault();
                   toggleSidebar();
               });

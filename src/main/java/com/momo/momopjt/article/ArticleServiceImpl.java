@@ -70,18 +70,16 @@ public class ArticleServiceImpl implements ArticleService {
 
     boolean check = articleRepository.existsById(articleNo);
 
-    if(check){
+    if(check) {
       Optional<Article> optionalArticle = articleRepository.findById(articleNo);
 
-//      return optionalArticle.map(article -> {
-//        modelMapper.getConfiguration().setAmbiguityIgnored(true); // 충돌 무시 설정
-//        return modelMapper.map(article, ArticleDTO.class);
-//      }).orElse(null);
-
-      Article article = optionalArticle.orElseThrow();
-      return modelMapper.map(article, ArticleDTO.class);
+      return optionalArticle.map(article -> {
+        modelMapper.getConfiguration().setAmbiguityIgnored(true); // 충돌 무시 설정
+        return modelMapper.map(article, ArticleDTO.class);
+      }).orElse(null);
     }
     return null;
+
   }
 
 
@@ -123,9 +121,11 @@ public class ArticleServiceImpl implements ArticleService {
   @Override
   public void deleteArticle(Long articleNo) {
     List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
+
     for (Reply reply : replyList) { //해당 후기글 댓글 삭제
       replyService.deleteReply(reply.getReplyNo());
     }
+
     articleRepository.deleteById(articleNo);
   }
 

@@ -114,13 +114,7 @@ public class PhotoController {
           Thumbnailator.createThumbnail(savePath.toFile(), thumbFile, 200, 200);
           log.trace("썸네일 파일 생성--");
 
-//          썸네일 DB 저장 x
-//          photoService.savePhoto(PhotoDTO.builder()
-//              .photoUUID(UUID.randomUUID().toString()) // 썸네일 uuid 새로 지정
-//              .photoCreateDate(Instant.now())
-//              .photoExtension(extension)
-//              .uploader(user)
-//              .build());
+
 
 //          log.trace("----------------- [썸네일 파일 저장]-----------------");
 

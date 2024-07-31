@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.user.User;
 
 import java.util.List;
 

@@ -19,6 +19,6 @@ public interface ClubService {
 
   List<ClubDTO> readMyClubs(User userNo);
 
-  class ClubNameException extends Exception{}
+  class ClubNameException extends Exception {}
 
 }

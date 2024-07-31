@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,20 +36,16 @@ public class HomeController {
     User user = userService.findByUserId(username);
 
 
-        List<ClubDTO> myClubDTOList = clubService.readMyClubs(user);
+    List<ClubDTO> myClubDTOList = clubService.readMyClubs(user);
 
-        List<String> myClubPhotoList = myClubDTOList.stream()
-            .map(clubDTO -> photoService.getPhoto(clubDTO.getClubPhotoUUID()).toString())
-            .collect(Collectors.toList());
+    List<String> myClubPhotoList = myClubDTOList.stream()
+        .map(clubDTO -> photoService.getPhoto(clubDTO.getClubPhotoUUID()).toString())
+        .collect(Collectors.toList());
 
-        log.info("----------------- [myclubPhotoList]-----------------{}", myClubPhotoList);
+    log.info("----------------- [myclubPhotoList]-----------------{}", myClubPhotoList);
 
-        model.addAttribute("myClubDTOList", myClubDTOList);
-        model.addAttribute("myClubPhotoList", myClubPhotoList);
-
-
-
-
+    model.addAttribute("myClubDTOList", myClubDTOList);
+    model.addAttribute("myClubPhotoList", myClubPhotoList);
 
 
     List<ClubDTO> clubDTOList = clubService.readAllClub();
@@ -59,11 +56,11 @@ public class HomeController {
 
     model.addAttribute("clubDTOList", clubDTOList);
     model.addAttribute("clubPhotoList", clubPhotoList);
-    log.trace("----------------- [clubdtolist : {}]-----------------",clubDTOList);
-    log.trace("----------------- [clubPhotoList : {}}]-----------------",clubPhotoList);
+    log.trace("----------------- [clubdtolist : {}]-----------------", clubDTOList);
+    log.trace("----------------- [clubPhotoList : {}}]-----------------", clubPhotoList);
 
 
     return "home"; // 홈 페이지의 Thymeleaf 템플릿 이름
 
-}
+  }
 }

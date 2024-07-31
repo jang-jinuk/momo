@@ -4,13 +4,13 @@ import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +28,11 @@ public class ReportController {
   private UserRepository userRepository;
   //모달창으로 바뀌어서 사라짐
 
+
   //신고하기
   @PostMapping("/create")
   public String reportUserPOST(@RequestParam Long reportedUserId, ReportDTO reportDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-    log.info("...... [ReportController/reportCreate/running POST]..........KSW");
+    log.info("...... [report /create POST ]..........KSW");
     reportDTO.setReportResult('0'); // 신고 상태(쓰이진 않음)
     reportDTO.setReportDate(Instant.now()); // 신고 날짜
 

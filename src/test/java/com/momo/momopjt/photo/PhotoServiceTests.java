@@ -18,28 +18,25 @@ public class PhotoServiceTests {
     //CRUD 중 Create test
     @Test
     public void savePhotoTest() {
-        // TODO 수정필요
         User user = new User();
         user.setUserNo(1L);
 
         PhotoDTO photoDTO = PhotoDTO.builder()
-                .photoUUID("test")
-                .uploader(user)
-                .photoCreateDate(Instant.now())
-                .build();
+            .photoUUID("testuuid")
+            .uploader(user)
+            .photoCreateDate(Instant.now())
+            .build();
         photoService.savePhoto(photoDTO);
     }
 
     //CRUD 중 Read-1개 test
     @Test
     public void getPhotoTest() {
-        log.info("----------------- [get Photo Test]-----------------");
-        String photoUUID = "adfb4ebb-d477-49d7-9e10-d8ce5f16fb4e"; // Photo 테이블에 존재하는 UUID 입력
+        String photoUUID = "5b2b26dc-17c3-4ae6-b528-943ef6fa2b44";
         Photo photo = photoService.getPhoto(photoUUID);
         log.info("test ^0^ photo : {}", photo);
-        log.info("test *_* photoUUID : {}",photoUUID);
+        log.info("test *_* photoUUID : {}", photoUUID);
     }
-
 
 
     //CRUD 중 Delete test
@@ -49,15 +46,15 @@ public class PhotoServiceTests {
 
         photoService.deletePhoto(photoUUID);
         Photo photo;
-      try {
-          photo = photoService.getPhoto(photoUUID);
-          log.info("test -_- photo is not deleted");
-      } catch (Exception e) {
-          log.info("test +_+ photo is deleted");
-      }
+        try {
+            photo = photoService.getPhoto(photoUUID);
+            log.info("test -_- photo is not deleted");
+        } catch (Exception e) {
+            log.info("test +_+ photo is deleted");
+        }
     }
-
 }
+
 
 //CRUD 중 update test TODO 확인 후 삭제? 0724 YY
     /*
@@ -90,3 +87,5 @@ public class PhotoServiceTests {
       }
     }
     */
+
+

@@ -1,6 +1,5 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.article.ArticleDTO;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
@@ -11,6 +10,7 @@ import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
+import com.momo.momopjt.userandclub.UserAndClubRepository;
 import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -72,13 +72,9 @@ public class ClubController {
     List<ScheduleDTO> endSchedules = scheduleService.readEndSchedules(club); //마감된 일정
     model.addAttribute("endSchedules", endSchedules);
     List<ScheduleDTO> getOngoingSchedules = scheduleService.readOngoingSchedules(club);//마감되지 않은 일정
-
-    List<ScheduleDTO> getOngoingSchedules= scheduleService.readOngoingSchedules(club);//마감되지 않은 일정
     model.addAttribute("getOngoingSchedules", getOngoingSchedules);
     log.info("------------ [found schedules] ------------");
 
-    List<ArticleDTO> articles = articleService.getAllArticlesByClub(club); //후기 글
-    model.addAttribute("articles", articles);
     List<String> endSchedulePhotoList = new ArrayList<>();
     //일정 끝난 사진 파일들 조회
     if(!endSchedules.isEmpty()) {
@@ -383,8 +379,8 @@ public class ClubController {
 
   //가입 신청 승인
   @GetMapping("/approve-join")
-  public String approveJoinGet(@RequestParam("userNo")Long userNo, HttpSession session,
-                            RedirectAttributes redirectAttributes) {
+  public String approveJoinGet(@RequestParam("userNo") Long userNo, HttpSession session,
+                               RedirectAttributes redirectAttributes) {
     log.info("------------ [Get club approve join] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
@@ -398,7 +394,8 @@ public class ClubController {
     userAndClubDTO.setClubNo(club);
 
     Boolean isSuccess = userAndClubService.approveJoin(userAndClubDTO);
-    if(!isSuccess) {
+
+    if (!isSuccess) {
       redirectAttributes.addFlashAttribute("message", "인원 초과입니다. 최대인원수를 수정해주세요");
       return "redirect:/club/members";
     }
