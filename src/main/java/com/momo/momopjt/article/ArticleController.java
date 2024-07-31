@@ -89,18 +89,11 @@ public class ArticleController {
                                HttpSession session, PageRequestDTO pageRequestDTO) {
     log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
-    // club number 세션에 저장 // TODO model로 저장 ?
-    Long clubNo = (Long) session.getAttribute("clubNo");
-
-
-
     //출력할 게시글 조회
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     //출력할 댓글 조회 YY
     List<Reply> replyList = replyService.readReplyAllByArticle(articleNo);
 
-
-    model.addAttribute("clubNo", clubNo);
     model.addAttribute("articleDTO", articleDTO);
     //출력할 댓글 추가 YY
     model.addAttribute("replyList",replyList);
