@@ -139,14 +139,11 @@
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
 
+                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index and #strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" src="/assets/ScheduleDefaultPhoto.jpg">
 
-<!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
-
-                      <img th:if="${#strings.contains(schedule.getSchedulePhotoUUID(), 'ScheduleDefaultPhoto')}"
-                           class="card-img schedule" src="/assets/ScheduleDefaultPhoto.jpg">
-
-<!--                      <img th:unless="${#strings.contains(schedule.getSchedulePhotoUUID(), 'ScheduleDefaultPhoto')}"-->
-<!--                           class="card-img schedule" th:src="@{/view/{photo}(photo=${})}"> &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+                      <img th:if="${#lists.size(ongoingSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(ongoingSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
 
 
                     </a>
@@ -181,7 +178,16 @@
                   <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
-                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
+
+                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index and #strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" src="/assets/ScheduleDefaultPhoto.jpg">
+
+                      <img th:if="${#lists.size(endSchedulePhotoList) > iterStat.index}" th:unless="${#strings.contains(endSchedulePhotoList[iterStat.index], 'ScheduleDefaultPhoto')}"
+                           class="club-cover" th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
+
+
+
+<!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
                     </a>
                     <div class="card-body">
                       <a class="link" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
@@ -220,9 +226,11 @@
                     <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
 
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" src="/assets/NullPhoto.png">
 
-                        <img src="/assets/일정.jpg" class="card-img schedule" alt="...">
-
+                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index}" th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             class="club-cover" th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}">
 
                       </a>
                       <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
