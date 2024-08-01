@@ -77,7 +77,7 @@
         <td th:text="${report.reporterNo.getUserId()}"></td>
         <td th:text="${report.reportedNo.getUserId()}"></td>
         <td>
-            <a th:href="@{/user/profile/dumyprofile/{userId}(userId=${report.reportedNo.userId})}"
+            <a th:href="@{/user/profile/{userId}(userId=${report.reportedNo.userId})}"
                th:text="${report.reportedNo.getUserNickname()}"></a>
         </td>
         <td th:text="${report.reportCategory}"></td>

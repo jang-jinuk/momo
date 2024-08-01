@@ -332,7 +332,7 @@ public class UserController {
 
 
   //내 신고 페이지 조회/페이징
-  @GetMapping("/profile/my-report")
+  @GetMapping("/my-report")
   public String myReportGet(Model model,
                             @RequestParam(value = "page", defaultValue = "1") int page) {
     log.info("...... [GET profile/my-report]..........KSW");
@@ -370,11 +370,11 @@ public class UserController {
     model.addAttribute("endPage", endPage);
 
     log.info("...... [userIdReport]..........KSW");
-    return "user/profile/my-report";  // 뷰 반환
+    return "user/my-report";  // 뷰 반환
   }
 
   //user 프로필 조회
-  @GetMapping("/profile/dumyprofile/{userId}")
+  @GetMapping("/profile/{userId}")
   public String getUserProfileGET(@PathVariable String userId, Model model) {
     log.info("...... [UserController/getUserProfileGET/running GET]..........KSW");
 
@@ -399,14 +399,14 @@ public class UserController {
       List<ArticleDTO> userArticles = articleService.getAllArticlesByUser(user);
       model.addAttribute("userArticles", userArticles); // 모델에 후기 정보 추가
 
-      List<String> articlePhotoList = new ArrayList<>();
+      List<String> userArticlePhotoList = new ArrayList<>();
       //YY 후기글 이미지 처리
       if (!userArticles.isEmpty()) {
-        articlePhotoList = userArticles.stream()
+        userArticlePhotoList = userArticles.stream()
             .map(articleDTO -> photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString())//YY
             .collect(Collectors.toList());
       }
-      model.addAttribute("articlePhotoList", articlePhotoList);
+      model.addAttribute("userArticlePhotoList", userArticlePhotoList);
 
       // 사용자의 즐겨찾기 모임들 조회
       List<Club> userWishClubs = userAndClubService.findMyWishClubs(user);
@@ -421,7 +421,7 @@ public class UserController {
       }
       model.addAttribute("clubPhotoList", clubPhotoList);
     }
-    return "user/profile/dumyprofile"; // 프로필 뷰 페이지 반환
+    return "user/profile"; // 프로필 뷰 페이지 반환
   }
 
 }
