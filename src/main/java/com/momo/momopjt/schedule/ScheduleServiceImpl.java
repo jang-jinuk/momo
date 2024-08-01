@@ -4,7 +4,7 @@ package com.momo.momopjt.schedule;
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.Reply;
+import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
@@ -198,8 +198,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
 
-    List<Reply> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
-    for (Reply reply : replyList) {
+    List<ReplyDTO> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
+    for (ReplyDTO reply : replyList) {
       replyService.deleteReply(reply.getReplyNo());
     }
     log.info("------------ [일정 댓글 삭제처리 완료] ------------");
