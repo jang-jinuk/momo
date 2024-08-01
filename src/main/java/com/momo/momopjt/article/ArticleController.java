@@ -125,10 +125,6 @@ public class ArticleController {
     model.addAttribute("articleDTO", article);
 
 
-//    //TODO
-//    model.addAttribute("repsonseDTO",responseDTO);
-
-
     return "article/update"; // "article/update.html" 뷰를 반환
   }
 

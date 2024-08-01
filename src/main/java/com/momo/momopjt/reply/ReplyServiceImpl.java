@@ -1,7 +1,6 @@
 package com.momo.momopjt.reply;
 
 import com.momo.momopjt.user.UserService;
-import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -20,8 +19,6 @@ public class ReplyServiceImpl implements ReplyService {
 
   private final UserService userService;
   private final ReplyRepository replyRepository;
-  private final UserAndClubService userAndClubService;
-
   private final ModelMapper modelMapper;
 
   @Override
