@@ -45,11 +45,7 @@ public class ClubController {
   @Autowired
   private PhotoService photoService;
   @Autowired
-  private PhotoRepository photoRepository;
-  @Autowired
   private ArticleService articleService;
-  @Autowired
-  private UserAndClubRepository userAndClubRepository;
   @Autowired
   private ModelMapper modelMapper;
 
@@ -203,9 +199,8 @@ public class ClubController {
   }
 
   @GetMapping("/update/{clubNo}")
-  public String updateClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
+  public String updateClubGet(@PathVariable("clubNo") Long clubNo, Model model) {
     log.info("------------ [Get club update] ------------");
-    clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
 
