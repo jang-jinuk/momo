@@ -1,6 +1,7 @@
 package com.momo.momopjt.reply;
 
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ public class ReplyServiceImpl implements ReplyService {
 
   private final UserService userService;
   private final ReplyRepository replyRepository;
+  private final UserAndClubService userAndClubService;
 
   private final ModelMapper modelMapper;
 
@@ -58,7 +60,7 @@ public class ReplyServiceImpl implements ReplyService {
   }
 
   @Override
-  public List<ReplyDTO> readReplyAllBySchedule(Long scheduleNo){
+  public List<ReplyDTO> readReplyAllBySchedule(Long scheduleNo) {
     log.info("----------------- [readReplyAllBySchedule]-----------------");
     List<ReplyDTO> replyByScheduleList = readReplyAll()
         .stream()
@@ -96,16 +98,25 @@ public class ReplyServiceImpl implements ReplyService {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     String name = auth.getName();
-    if(checkReplyExist(replyNo) && userService.findByUserId(name)==readReply(replyNo).getUserNo()){
-      replyRepository.deleteById(replyNo);}
-    else{
+
+    if (checkReplyExist(replyNo) && userService.findByUserId(name) == readReply(replyNo).getUserNo()) {
+      replyRepository.deleteById(replyNo);
+    } else {
       log.warn("no exist reply or no Auth to delete");
     }
   }
 
   @Override
+  public void forceDeleteReply(Long replyNo) {
+    log.info("----------------- [forceDeleteReply]-----------------");
+
+    replyRepository.deleteById(replyNo);
+  }
+
+
+  @Override
   public boolean checkReplyExist(Long replyNo) {
-    if(replyRepository.existsById(replyNo)){
+    if (replyRepository.existsById(replyNo)) {
       log.info("-------- [reply exist]-------");
       return true;
     }
