@@ -114,10 +114,8 @@ public class ClubController {
     session.setAttribute("clubNo", clubDTO.getClubNo());
     //세션에 모임 clubNo을 저장하고 해당 모임 일정 및 게시글 처리시 사용
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
+    //현재 로그인 회원 정보
+    User user = userService.getCurrentUser();
     UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
@@ -178,10 +176,9 @@ public class ClubController {
   public String createClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes)  { // 0729 YY photoDTO 제거
     log.info("------------ [Post club create] ------------");
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
+    //현재 로그인 회원 정보
+    User user = userService.getCurrentUser();
+
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setJoinDate(Instant.now());
@@ -284,10 +281,8 @@ public class ClubController {
       return "redirect:/club/members";
     }
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    user = userService.findByUserId(username);
+    // 현재 로그인된 사용자 정보를 얻기
+    user = userService.getCurrentUser();
     userAndClubDTO.setUserNo(user);
 
     userAndClubService.leaveClub(userAndClubDTO);
@@ -306,10 +301,8 @@ public class ClubController {
     Club club = new Club();
     club.setClubNo(clubNo);
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = userService.getCurrentUser();
 
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
@@ -337,10 +330,8 @@ public class ClubController {
     Club club = new Club();
     club.setClubNo(clubNo);
 
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = userService.getCurrentUser();
 
     UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setClubNo(club);
