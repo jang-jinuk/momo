@@ -268,9 +268,7 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
 
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
@@ -292,6 +290,10 @@ ${uuid}${extension}
           }
 
           if (validateForm()){
+
+              console.log(str)
+              target.innerHTML = str;
+
             formObj.submit();
             formObj.reset();
           }

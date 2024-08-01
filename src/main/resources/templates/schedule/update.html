@@ -267,9 +267,6 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
-
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
@@ -291,7 +288,12 @@ ${uuid}${extension}
           }
 
           if (validateForm()){
-            formObj.submit();
+
+              console.log(str)
+              target.innerHTML = str;
+
+
+              formObj.submit();
             formObj.reset();
           }
       }, false)
