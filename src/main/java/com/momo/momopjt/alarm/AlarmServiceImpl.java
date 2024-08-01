@@ -5,8 +5,10 @@ import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.alarm.Alarm;
+import com.momo.momopjt.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -15,10 +17,12 @@ import java.util.List;
 public class AlarmServiceImpl implements AlarmService {
 
   private final AlarmRepository alarmRepository;
+  private final UserServiceImpl userServiceImpl;
 
   @Autowired
-  public AlarmServiceImpl(AlarmRepository alarmRepository) {
+  public AlarmServiceImpl(AlarmRepository alarmRepository, UserServiceImpl userServiceImpl) {
     this.alarmRepository = alarmRepository;
+    this.userServiceImpl = userServiceImpl;
   }
 
   @Override
@@ -168,4 +172,14 @@ public class AlarmServiceImpl implements AlarmService {
   public void deleteAlarm(Long alarmNo) {
     alarmRepository.deleteById(alarmNo);
   }
+
+  @Override
+  @Transactional
+  public void deleteAllAlarmsForCurrentUser() {
+    User currentUser = userServiceImpl.getCurrentUser();
+    if (currentUser != null) {
+      alarmRepository.deleteByUserNo(currentUser);
+    }
+  }
+
 }

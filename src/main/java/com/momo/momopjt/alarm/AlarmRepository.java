@@ -12,4 +12,5 @@ import java.util.Optional;
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
   List<Alarm> findByUserNo(User userNo);
+  void deleteByUserNo(User user);
 }

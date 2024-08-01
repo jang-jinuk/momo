@@ -3,6 +3,7 @@ package com.momo.momopjt.alarm;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserSecurityDTO;
+import com.momo.momopjt.user.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class AlarmController {
 
   private final AlarmService alarmService;
   private final UserRepository userRepository;
+  private UserService userService;
 
   @Autowired
   public AlarmController(AlarmService alarmService, UserRepository userRepository) {
@@ -62,4 +64,12 @@ public class AlarmController {
     alarmService.deleteAlarm(alarmNo);
     return ResponseEntity.ok().build();
   }
+
+  // 모든 알림 삭제
+  @DeleteMapping("/deleteAll")
+  public ResponseEntity<Void> deleteAllAlarmsForCurrentUser() {
+    alarmService.deleteAllAlarmsForCurrentUser();
+    return ResponseEntity.ok().build();
+  }
 }
+

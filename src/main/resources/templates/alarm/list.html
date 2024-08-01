@@ -80,6 +80,19 @@
             background-color: #007bff;
             color: #fff;
         }
+        .delete-all-button {
+            padding: 10px 20px;
+            color: #ff4d4d;
+            text-decoration: none;
+            border: 1px solid #ff4d4d;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .delete-all-button:hover {
+            background-color: #ff4d4d;
+            color: #fff;
+        }
     </style>
     <script>
         function deleteAlarm(alarmNo) {
@@ -96,11 +109,28 @@
                     });
             }
         }
+        function deleteAllAlarms() {
+            if (confirm('정말로 모든 알림을 삭제하시겠습니까?')) {
+                fetch('/alarm/deleteAll/', {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('모든 알림 삭제에 실패했습니다.');
+                        }
+                    });
+            }
+        }
     </script>
 </head>
 <body>
 <div class="container">
     <h1>내 알림 목록</h1>
+    <div class="button-container">
+        <button class="delete-all-button" onclick="deleteAllAlarms()">모든 알림 삭제</button>
+    </div>
     <ul class="alert-list" th:each="alarm : ${alarms}">
         <li class="alert-item">
             <div class="alert-content">
@@ -111,6 +141,7 @@
             <button class="delete-button" th:onclick="'deleteAlarm(' + ${alarm.alarmNo} + ')'">삭제</button>
         </li>
     </ul>
+
     <a href="/home" class="back-link">홈으로 돌아가기</a>
 </div>
 </body>
