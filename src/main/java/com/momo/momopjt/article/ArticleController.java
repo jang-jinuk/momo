@@ -90,8 +90,7 @@ public class ArticleController {
 
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
-  public String getArticleById(@PathVariable Long articleNo, Model model,
-                               HttpSession session, PageRequestDTO pageRequestDTO) {
+  public String getArticleById(@PathVariable Long articleNo, Model model) {
     log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
     //출력할 게시글 조회
