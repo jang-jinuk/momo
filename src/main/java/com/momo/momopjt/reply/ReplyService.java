@@ -17,5 +17,7 @@ public interface ReplyService {
 
   void deleteReply(Long replyNo);
 
+  void forceDeleteReply(Long replyNo); // 작성자 외에도 삭제 가능
+
   boolean checkReplyExist(Long replyNo);
 }

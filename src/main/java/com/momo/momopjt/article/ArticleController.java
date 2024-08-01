@@ -124,14 +124,11 @@ public class ArticleController {
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", articleDTO);
 
-
-//    //TODO
-//    model.addAttribute("repsonseDTO",responseDTO);
-
     //출력할 일정 사진 추가
     String articlePhoto = photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString();
     model.addAttribute("articlePhoto", articlePhoto);
     log.trace("--------------------------------articlePhoto {}", articlePhoto);
+
 
     return "article/update"; // "article/update.html" 뷰를 반환
   }

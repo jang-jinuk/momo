@@ -16,10 +16,8 @@
             <div class="col-3">
                 <div class="col-3" > <!-- 일정 이미지 출력 -->
 
-
-
                     <img th:if="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
-                         src="/assets/ClubDefaultPhoto.jpg"  style="width:300px;" >
+                         src="/assets/ScheduleDefaultPhoto.jpg"  style="width:300px;" >
                     <img th:unless="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
                          th:src="@{/view/{photo}(photo=${schedulePhoto})}"  style="width:300px;" >
 <!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->

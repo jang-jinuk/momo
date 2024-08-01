@@ -122,7 +122,6 @@ public class ClubServiceImpl implements ClubService {
 
   // 특정 모임 조회
   @Override
-//  @Transactional TODO 지울지 확인 0724 YY
   public ClubDTO readOneClub(Long clubNo) {
     log.info("----------------- [readOneClub clubNo : {}]-----------------", clubNo);
     Optional<Club> result = clubRepository.findById(clubNo);

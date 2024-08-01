@@ -198,9 +198,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
 
-    List<ReplyDTO> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
-    for (ReplyDTO reply : replyList) {
-      replyService.deleteReply(reply.getReplyNo());
+    List<ReplyDTO> replyDTOList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
+    for (ReplyDTO replyDTO : replyDTOList) {
+      replyService.deleteReply(replyDTO.getReplyNo());
+
     }
     log.info("------------ [일정 댓글 삭제처리 완료] ------------");
     if(!schedule.getSchedulePhotoUUID().equals("ScheduleDefaultPhoto")){

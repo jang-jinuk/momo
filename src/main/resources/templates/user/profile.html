@@ -68,32 +68,6 @@
         }
 
         /*프로필*/
-        .profile-section{
-            margin-bottom: 0; /* 섹션 간 간격을 %로 설정 */
-            background-color: #fff; /* 섹션 배경색 */
-            padding: 2%; /* 내부 여백을 %로 설정 */
-        }
-
-        .img-profile {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .profile-image {
-            width: 100%
-        }
-
-        .uppro-btn {
-            position: absolute;
-            text-align: center;
-            width: 100%;
-            height: 20px;
-            margin-top: 80%;
-            background-color: grey;
-            cursor: pointer;
-
-        }
-
         .button-group {
             margin-top: 2%; /* 위쪽 간격 조정 */
         }
@@ -109,24 +83,23 @@
 </head>
 <body>
 <div class="card-group justify-content-center">
-    <div class="profile-section col-10 justify-content-center">
-        <div class="d-flex align-items-center">
-            <div class="img-profile col-2">
-                <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image"
-                     style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
-                <button class="uppro-btn" type="button" onclick="document.getElementById('fileInput').click();"
-                        style="position: absolute; bottom: 5%; right: 5%; background: #007bff; color: white; border: none; border-radius: 50%; width: 10%; height: 10%; max-width: 30px; max-height: 30px; cursor: pointer;">
-                    +
-                </button>
-            </div>
-            <div class="col-10">
-                <h2 class="card-title" th:text="${user.userNickname}"></h2>
-                <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
-                <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
-                        th:text="${user.userGender}"></span></p>
-                <p class="card-text">주소: <span th:text="${user.userAddress}"></span></p>
-                <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
-            </div>
+
+    <div class="d-flex flex-wrap col-10 justify-content-center" style="padding-bottom: 2%;">
+        <div class="img-profile col-3" style="position: relative;">
+            <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image"
+                 style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
+            <button class="uppro-btn" type="button" onclick="document.getElementById('fileInput').click();"
+                    style="position: absolute; bottom: 5%; right: 5%; background: #007bff; color: white; border: none; border-radius: 50%; width: 10%; height: 10%; max-width: 30px; max-height: 30px; cursor: pointer;">
+                +
+            </button>
+        </div>
+        <div class="col-9">
+            <h2 class="card-title" th:text="${user.userNickname}"></h2>
+            <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
+            <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
+                    th:text="${user.userGender}"></span></p>
+            <p class="card-text">주소: <span th:text="${user.userAddress}"></span></p>
+            <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
         </div>
     </div>
 </div>
@@ -135,30 +108,32 @@
 <div class="card-group justify-content-center">
 
     <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; padding-bottom: 2%; border-top: 1px solid #000000; padding-top: 2%;">
+         style="border-bottom: 1px solid #000000; padding-bottom: 2%; padding-top: 2%;">
         <h4 class="text-center">작성한 후기</h4>
-        <div class="d-flex flex-wrap justify-content-center">
+        <div class="d-flex flex-wrap justify-content-center" id="reviewSection">
+
             <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
                 <div class="col-12">
                     <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
                 </div>
             </th:block>
+
             <div class="card-container" th:each="article, iterStat : ${userArticles}"
                  style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
                 <div class="card h-100 cardBody"
                      style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
-                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+                     th:classappend="${iterStat.index >= 4} ? 'd-none'">
 
                     <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
                        style="display: block; text-decoration: none; color: inherit;">
-                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                        <img th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
                              class="club-cover" src="/assets/NullPhoto.png"
-                             style="width: 100%; height: 200px; object-fit: cover;">
-                        <img th:if="${#lists.size(articlePhotoList) > iterStat.index}"
-                             th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
+                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        <img th:if="${#lists.size(userArticlePhotoList) > iterStat.index}"
+                             th:unless="${#strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
                              class="club-cover"
-                             th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}"
-                             style="width: 100%; height: 200px; object-fit: cover;">
+                             th:src="@{/view/{photo}(photo=${userArticlePhotoList[iterStat.index]})}"
+                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
                     </a>
 
                     <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
@@ -169,15 +144,18 @@
 
                 </div>
             </div>
+            <!-- 버튼을 중앙에 배치 -->
+            <div class="text-center mt-3">
+                <button id="loadMoreReviewsButton" type="button">더 보기</button>
+                <button id="collapseReviewsButton" type="button" style="display: none;">접기</button>
+            </div>
         </div>
     </div>
 
-
-
     <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; padding-bottom: 2%;">
+         style="border-bottom: 1px solid #000000; padding-bottom: 2%; padding-top: 2%;">
         <h4 class="text-center">즐겨찾는 모임</h4>
-        <div class="d-flex flex-wrap justify-content-center">
+        <div class="d-flex flex-wrap justify-content-center" id="clubSection">
 
             <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
                 <div class="col-12">
@@ -189,18 +167,18 @@
                  style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;">
                 <div class="card h-100 cardBody"
                      style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;"
-                     th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
+                     th:classappend="${iterStat.index >= 4} ? 'd-none'">
 
                     <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
                        style="display: block; text-decoration: none; color: inherit;">
-                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
-                             class="club-cover" src="/assets/NullPhoto.png"
-                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                             class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
+                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
                         <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
-                             th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'NullPhoto')}"
+                             th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
                              class="club-cover"
                              th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
-                             style="width: 100%; height: auto; max-height: 200px; object-fit: cover;">
+                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
                     </a>
 
                     <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
@@ -211,8 +189,14 @@
 
                 </div>
             </div>
+            <!-- 버튼을 중앙에 배치 -->
+            <div class="text-center mt-3">
+                <button id="loadMoreClubsButton" type="button">더 보기</button>
+                <button id="collapseClubsButton" type="button" style="display: none;">접기</button>
+            </div>
         </div>
     </div>
+
 </div>
 
 <!-- 버튼 그룹 -->
@@ -224,7 +208,7 @@
     <a th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
        th:href="@{/user/update/{userId}(userId=${loggedInUserId})}">개인정보 수정</a>
     <button th:if="${loggedInUserId == user.userId}" class="btn btn-info ms-2"
-            onclick="location.href='/user/profile/my-report'">내 신고내역
+            onclick="location.href='/user/my-report'">내 신고내역
     </button>
 
     <div>
@@ -348,16 +332,88 @@
         }, 100);
     }
 
-    //이미지
-    function previewImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('profileImage').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+    //더보기 기능 TODO확인필요
+    document.addEventListener('DOMContentLoaded', function() {
+        // '작성한 후기' 섹션
+        const reviewCards = document.querySelectorAll('#reviewSection .cardBody');
+        const loadMoreReviewsButton = document.getElementById('loadMoreReviewsButton');
+        const collapseReviewsButton = document.getElementById('collapseReviewsButton');
+        let visibleReviewCount = 4; // 처음에는 4개의 카드만 표시됩니다.
+
+        function loadMoreReviews() {
+            for (let i = 0; i < reviewCards.length; i++) {
+                if (i < visibleReviewCount) {
+                    reviewCards[i].classList.remove('d-none');
+                } else {
+                    reviewCards[i].classList.add('d-none');
+                }
+            }
+
+            if (visibleReviewCount >= reviewCards.length) {
+                loadMoreReviewsButton.style.display = 'none';
+                collapseReviewsButton.style.display = 'inline-block';
+            } else {
+                visibleReviewCount += 4;
+            }
         }
-    }
+
+        function collapseReviews() {
+            for (let i = 0; i < reviewCards.length; i++) {
+                if (i >= 4) {
+                    reviewCards[i].classList.add('d-none');
+                }
+            }
+
+            loadMoreReviewsButton.style.display = 'inline-block';
+            collapseReviewsButton.style.display = 'none';
+            visibleReviewCount = 4;
+        }
+
+        loadMoreReviewsButton.addEventListener('click', loadMoreReviews);
+        collapseReviewsButton.addEventListener('click', collapseReviews);
+
+        loadMoreReviews(); // 초기 로드 시 4개의 카드만 보이도록 설정
+
+        // '즐겨찾는 모임' 섹션
+        const clubCards = document.querySelectorAll('#clubSection .cardBody');
+        const loadMoreClubsButton = document.getElementById('loadMoreClubsButton');
+        const collapseClubsButton = document.getElementById('collapseClubsButton');
+        let visibleClubCount = 4; // 처음에는 4개의 카드만 표시됩니다.
+
+        function loadMoreClubs() {
+            for (let i = 0; i < clubCards.length; i++) {
+                if (i < visibleClubCount) {
+                    clubCards[i].classList.remove('d-none');
+                } else {
+                    clubCards[i].classList.add('d-none');
+                }
+            }
+
+            if (visibleClubCount >= clubCards.length) {
+                loadMoreClubsButton.style.display = 'none';
+                collapseClubsButton.style.display = 'inline-block';
+            } else {
+                visibleClubCount += 4;
+            }
+        }
+
+        function collapseClubs() {
+            for (let i = 0; i < clubCards.length; i++) {
+                if (i >= 4) {
+                    clubCards[i].classList.add('d-none');
+                }
+            }
+
+            loadMoreClubsButton.style.display = 'inline-block';
+            collapseClubsButton.style.display = 'none';
+            visibleClubCount = 4;
+        }
+
+        loadMoreClubsButton.addEventListener('click', loadMoreClubs);
+        collapseClubsButton.addEventListener('click', collapseClubs);
+
+        loadMoreClubs(); // 초기 로드 시 4개의 카드만 보이도록 설정
+    });
+
 </script>
 </html>
