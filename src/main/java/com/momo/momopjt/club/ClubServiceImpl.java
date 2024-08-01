@@ -8,7 +8,6 @@ import com.momo.momopjt.article.ArticleRepository;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleRepository;
 import com.momo.momopjt.schedule.ScheduleService;
