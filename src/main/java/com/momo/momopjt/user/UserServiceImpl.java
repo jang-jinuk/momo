@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -349,4 +352,17 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByUserNo(Long userNo) {
         return userRepository.findById(userNo); // userNo로 User 찾기
     }
+
+  @Override
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.isAuthenticated()) {
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof UserDetails) {
+        String username = ((UserDetails) principal).getUsername();
+        return userRepository.findByUserId(username); // 사용자 ID로 User 객체를 조회
+      }
+    }
+    return null;
+  }
 }
