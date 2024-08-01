@@ -228,7 +228,7 @@ public class ClubServiceImpl implements ClubService {
     clubRepository.deleteById(clubNo);
 
     //해당 모임 대표사진 삭제
-    if (!clubPhotoStr.equals("ClubDefaultPhoto")) {//TODO 나중에 실제 디폴트 사진으로 변경
+    if (!clubPhotoStr.equals("ClubDefaultPhoto")) {
 
       int lastDotIndex = clubPhotoStr.lastIndexOf('.');
       String clubPhotoUUID = (lastDotIndex != -1) ? clubPhotoStr.substring(0, lastDotIndex) : "";
