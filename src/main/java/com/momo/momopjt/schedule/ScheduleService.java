@@ -23,8 +23,6 @@ public interface ScheduleService {
 
    void deleteSchedule(Long scheduleNo);
 
-   void deleteScheduleByClub(Club clubNo);
-
    Boolean isScheduleFull(Long scheduleNo);
 
 }
