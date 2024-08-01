@@ -15,6 +15,7 @@ import com.momo.momopjt.schedule.ScheduleRepository;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubRepository;
 import com.momo.momopjt.userandclub.UserAndClubService;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ClubServiceImpl implements ClubService {
 
-  private final UserRepository userRepository;
+
   private final ClubRepository clubRepository;
   private final ScheduleRepository scheduleRepository;
   private final ArticleRepository articleRepository;
@@ -54,6 +55,7 @@ public class ClubServiceImpl implements ClubService {
   private final UserAndClubService userAndClubService;
 
   private final ModelMapper modelMapper;
+  private final UserService userService;
 
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
@@ -96,8 +98,9 @@ public class ClubServiceImpl implements ClubService {
     userAndClubDTO.setIsLeader(true);//모임장 표시
 
     userAndClubService.joinClub(userAndClubDTO);//모임장 등록
+
     // 현재 로그인된 사용자 정보를 얻기
-    User user = getCurrentUser(); // 현재 사용자 정보를 반환하는 메서드
+    User user = userService.getCurrentUser();
 
     // 알림 생성
     alarmService.createClubCreatedAlarm(user, club); // User 객체와 Club 객체를 전달
@@ -107,18 +110,6 @@ public class ClubServiceImpl implements ClubService {
     return clubNo;
   }
 
-  // 현재 로그인된 사용자 정보를 반환하는 메서드 예제
-  private User getCurrentUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.isAuthenticated()) {
-      Object principal = authentication.getPrincipal();
-      if (principal instanceof UserDetails) {
-        String username = ((UserDetails) principal).getUsername();
-        return userRepository.findByUserId(username); // 사용자 ID로 User 객체를 조회
-      }
-    }
-    return null;
-  }
 
   // 특정 모임 조회
   @Override
@@ -256,7 +247,8 @@ public class ClubServiceImpl implements ClubService {
     clubRepository.deleteById(clubNo);
 
     // 현재 로그인된 사용자 정보를 얻기
-    User user = getCurrentUser(); // 현재 사용자 정보를 반환하는 메서드
+    User user = userService.getCurrentUser();
+
     //모임 삭제 이벤트
     alarmService.createClubDeletedAlarm(user,club);
     log.info("-------- [모임 삭제시 모임장에게 알람 이벤트 전송]-------you");

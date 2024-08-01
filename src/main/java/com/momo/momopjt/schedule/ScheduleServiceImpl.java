@@ -7,12 +7,18 @@ import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -30,7 +36,9 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final UserAndScheduleService userAndScheduleService;
   private final PhotoService photoService;
   private final AlarmService alarmService;
+  private final UserService userService;
   private final ReplyService replyService;
+
   private final ModelMapper modelMapper;
 
   //일정 생성
@@ -38,8 +46,6 @@ public class ScheduleServiceImpl implements ScheduleService {
   public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) {
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
-
-
 
 
     Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
@@ -52,9 +58,22 @@ public class ScheduleServiceImpl implements ScheduleService {
     userAndScheduleDTO.setIsHost(true);
     userAndScheduleService.addParticipant(userAndScheduleDTO);
     log.info("------------ [주최자 등록 완료] ------------");
+
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = userService.getCurrentUser();
+
+    // 일정 생성 알림 생성
+    alarmService.createScheduleCreatedAlarm(user, schedule);
+    log.info("-------- [일정 생성 알림 이벤트] -------");
+
+
     return scheduleNo;
 
   }
+
+
+
+
 
   //특정 일정 조회
   @Override
@@ -213,6 +232,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     log.info("------------ [일정 참석 인원 처리 완료] ------------");
     scheduleRepository.deleteById(scheduleNo);
     log.info("------------ [일정 삭제 처리 완료] ------------");
+
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = userService.getCurrentUser();
+
+    alarmService.createScheduleDeletedAlarm(user, schedule);
+    log.info("-------- [일정 삭제 알림 이벤트] -------");
+
   }
 
   //해당 모임의 모든 일정 삭제

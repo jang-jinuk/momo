@@ -10,7 +10,8 @@ public enum AlarmType {
   REPORT("신고"),
   KICKOUT("강퇴"),
   PARTICIPATE("참가"),
-  CANCEL_PARTICIPATE("취소");
+  CANCEL_PARTICIPATE("취소"),
+  COMMENT("댓글");
 
 
   private final String message;

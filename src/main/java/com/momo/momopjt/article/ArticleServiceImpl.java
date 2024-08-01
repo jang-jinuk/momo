@@ -1,10 +1,12 @@
 package com.momo.momopjt.article;
 
+import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,18 +30,28 @@ public class ArticleServiceImpl implements ArticleService {
   private final ArticleRepository articleRepository;
   private final ClubRepository clubRepository;
   private final ReplyService replyService;
-
+  private final UserService userService;
+  private final AlarmService alarmService;
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
   @Override
   public Long createArticle(ArticleDTO articleDTO) {
+
     articleDTO.setArticleNo(-1L);
     articleDTO.setArticleCreateDate(Instant.now());
     articleDTO.setArticleState('0');
     articleDTO.setArticleScore(0);
     Article article = modelMapper.map(articleDTO, Article.class);
+    
+    //article 저장
     article = articleRepository.save(article);
+
+    //현재 로그인된 사용자 얻기
+    User user = userService.getCurrentUser();
+    alarmService.createArticleCreatedAlarm(user, article);
+    log.info("-------- [후기글 작성 알림 이벤트] -------");
+
     return article.getArticleNo();
   }
 
@@ -120,16 +134,29 @@ public class ArticleServiceImpl implements ArticleService {
   // 특정 ID의 후기글을 삭제하는 메서드
   @Override
   public void deleteArticle(Long articleNo) {
+
+    // 후기글 조회
+    Article article = articleRepository.findById(articleNo)
+        .orElseThrow(() -> new IllegalArgumentException("후기글을 찾을 수 없습니다."));
+
+    // 후기글의 댓글을 조회하여 삭제
     List<ReplyDTO> replyDTOList = replyService.readReplyAllByArticle(articleNo);
+
 
     for (ReplyDTO replyDTO : replyDTOList) { //해당 후기글 댓글 삭제
       replyService.deleteReply(replyDTO.getReplyNo());
     }
 
     articleRepository.deleteById(articleNo);
+    log.info("-------- [후기글 삭제]-------you");
+
+    // 현재 로그인된 사용자 얻기
+    User user = userService.getCurrentUser();
+    // 삭제된 후기글에 대한 알림 생성
+    alarmService.createArticleDeletedAlarm(user, article);
+    log.info("-------- [후기글 삭제 알림 이벤트]-------you");
+
   }
-
-
 
 }
 
