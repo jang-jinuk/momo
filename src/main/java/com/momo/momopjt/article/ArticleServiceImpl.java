@@ -3,6 +3,7 @@ package com.momo.momopjt.article;
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
@@ -32,6 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
   private final ReplyService replyService;
   private final UserService userService;
   private final AlarmService alarmService;
+  private final PhotoService photoService;
+
   private final ModelMapper modelMapper;
 
   //새로운 후기글을 생성하는 메서드
@@ -142,9 +145,14 @@ public class ArticleServiceImpl implements ArticleService {
     // 후기글의 댓글을 조회하여 삭제
     List<ReplyDTO> replyDTOList = replyService.readReplyAllByArticle(articleNo);
 
+    //후기글 댓글 삭제
+    for (ReplyDTO replyDTO : replyDTOList) {
+      replyService.forceDeleteReply(replyDTO.getReplyNo());
+    }
 
-    for (ReplyDTO replyDTO : replyDTOList) { //해당 후기글 댓글 삭제
-      replyService.deleteReply(replyDTO.getReplyNo());
+    // 후기글 사진 삭제
+    if (!article.getArticlePhotoUUID().equals("ArticleDefaultPhoto")) {
+      photoService.deletePhoto(article.getArticlePhotoUUID());
     }
 
     articleRepository.deleteById(articleNo);

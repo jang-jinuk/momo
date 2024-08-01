@@ -7,16 +7,12 @@ import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
-import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -219,7 +215,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     List<ReplyDTO> replyDTOList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
     for (ReplyDTO replyDTO : replyDTOList) {
-      replyService.deleteReply(replyDTO.getReplyNo());
+      replyService.forceDeleteReply(replyDTO.getReplyNo());
 
     }
     log.info("------------ [일정 댓글 삭제처리 완료] ------------");
@@ -239,21 +235,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     alarmService.createScheduleDeletedAlarm(user, schedule);
     log.info("-------- [일정 삭제 알림 이벤트] -------");
 
-  }
-
-  //해당 모임의 모든 일정 삭제
-  @Override
-  public void deleteScheduleByClub(Club clubNo) {
-    userAndScheduleService.deleteParticipantsByClub(clubNo);//모든 일정 참가자 삭제
-    scheduleRepository.deleteAllSchedulesByClub(clubNo); //모든 일정 삭제
-
-    List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(clubNo);
-
-    for (Schedule schedule : scheduleList) {
-      if(!schedule.getSchedulePhotoUUID().equals("default.jpg")){
-        photoService.deletePhoto(schedule.getSchedulePhotoUUID()); //모든 일정의 사진 삭제
-      }
-    }
   }
 
   //일정 인원 마감 확인

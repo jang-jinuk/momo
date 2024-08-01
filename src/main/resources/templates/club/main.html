@@ -137,7 +137,7 @@
               </div>
               <div class="row row-cols-1 row-cols-md-3 g-0">
                 <div class="col-3" th:each="schedule, iterStat : ${getOngoingSchedules}">
-                  <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
+                  <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule-ongoing'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
 
@@ -173,11 +173,11 @@
                   </div>
                 </div>
               </div>
-              <div class="text-center">
-                <a class="load-more" href="#!">
-                  <img src="/assets/더보기.png">
-                </a>
-              </div>
+            </div>
+            <div class="text-center">
+              <a class="load-more-ongoingSchedule" href="#!">
+                <img src="/assets/더보기.png">
+              </a>
             </div>
             <hr>
             <br>
@@ -185,7 +185,7 @@
               <h2>마감된 일정</h2>
               <div class="row row-cols-1 row-cols-md-3 g-0">
                 <div class="col-3" th:each="schedule, iterStat : ${endSchedules}">
-                  <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule'">
+                  <div class="card h-100 cardBody" th:classappend="${iterStat.index >= 3} ? 'd-none more-schedule-end'">
                     <a class="card-img-wrapper" th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                        th:inline="text">
 
@@ -214,11 +214,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-center">
-                  <a class="load-more" href="#!">
-                    <img src="/assets/더보기.png">
-                  </a>
-                </div>
+              </div>
+              <div class="text-center">
+                <a class="load-more-endSchedule" href="#!">
+                  <img src="/assets/더보기.png">
+                </a>
               </div>
             </div>
             <hr>
@@ -251,11 +251,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-center">
-                  <a class="load-more-review" href="#!">
-                    <img src="/assets/더보기.png">
-                  </a>
-                </div>
+              </div>
+              <div class="text-center">
+                <a class="load-more-review" href="#!">
+                  <img src="/assets/더보기.png">
+                </a>
               </div>
             </div>
           </div>
@@ -322,22 +322,49 @@
 
 
       });
-      // 스케줄 더보기 버튼 기능
-      document.querySelectorAll('.load-more').forEach(button => {
-          const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule');
+
+      // 진행 중인 스케줄 더보기 버튼 기능
+      document.querySelectorAll('.load-more-ongoingSchedule').forEach(button => {
+          const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule-ongoing');
           if (hiddenSchedules.length < 1) {
               button.style.display = 'none';
           }
           button.addEventListener('click', function () {
-              const hiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.more-schedule.d-none');
+              const hiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.more-schedule-ongoing.d-none');
               for (let i = 0; i < 3 && i < hiddenSchedules.length; i++) {
                   hiddenSchedules[i].classList.remove('d-none');
               }
               if (hiddenSchedules.length < 1) {
                   this.style.display = 'none';
               }
+              const remainingHiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.load-more-ongoingSchedule.d-none');
+              if (remainingHiddenSchedules.length < 1) {
+                this.style.display = 'none';
+              }
           });
       });
+
+      // 마감된 일정 더보기 버튼 기능
+      document.querySelectorAll('.load-more-endSchedule').forEach(button => {
+        const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule-end');
+        if (hiddenSchedules.length < 1) {
+          button.style.display = 'none';
+        }
+        button.addEventListener('click', function () {
+          const hiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.more-schedule-end.d-none');
+          for (let i = 0; i < 3 && i < hiddenSchedules.length; i++) {
+            hiddenSchedules[i].classList.remove('d-none');
+          }
+          if (hiddenSchedules.length < 1) {
+            this.style.display = 'none';
+          }
+          const remainingHiddenSchedules = this.parentElement.previousElementSibling.querySelectorAll('.load-more-endSchedule.d-none');
+          if (remainingHiddenSchedules.length < 1) {
+            this.style.display = 'none';
+          }
+        });
+      });
+
       // 후기 더보기 버튼 기능
       document.querySelectorAll('.load-more-review').forEach(button => {
           const hiddenReviews = button.parentElement.previousElementSibling.querySelectorAll('.more-review');
@@ -352,8 +379,15 @@
               if (hiddenReviews.length < 1) {
                   this.style.display = 'none';
               }
+              const remainingHiddenReviews = this.parentElement.previousElementSibling.querySelectorAll('.more-review.d-none');
+              if (remainingHiddenReviews.length < 1) {
+                this.style.display = 'none';
+              }
           });
+
       });
+
+      //사이드 바 토글
       document.addEventListener('DOMContentLoaded', function () {
           const sidebarToggle = document.body.querySelector('#sidebarToggle');
           const sidebarToggleHeader = document.body.querySelector('#sidebarToggle-header');

@@ -11,8 +11,6 @@ import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,19 +61,14 @@ public class ArticleController {
       articleDTO.setArticlePhotoUUID("ArticleDefaultPhoto");
     }
 
-
-
     if (bindingResult.hasErrors()) {
       log.info(" article has error -----------------");
       redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
       return "redirect:/article/create";
     }
 
-
-    //TODO 현재 로그인한 회원 정보 조회하는 로직 메서드로 따로 분리할 건지 생각해보기 JW
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
+    // 현재 로그인 유저 정보
+    User user = userService.getCurrentUser();
     articleDTO.setUserNo(user);
 
     Long clubNo = (Long) session.getAttribute("clubNo");
@@ -97,8 +90,7 @@ public class ArticleController {
 
   // 특정 아이디의 후기글을 보여주는 페이지
   @GetMapping("/{articleNo}")
-  public String getArticleById(@PathVariable Long articleNo, Model model,
-                               HttpSession session, PageRequestDTO pageRequestDTO) {
+  public String getArticleById(@PathVariable Long articleNo, Model model) {
     log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
     //출력할 게시글 조회
