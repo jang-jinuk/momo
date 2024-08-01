@@ -28,7 +28,7 @@ public interface AlarmService {
   void createArticleCreatedAlarm(User user, Article article);
   void createArticleDeletedAlarm(User user, Article article);
   void createCommentAddedAlarm(User user, Article article);
-
+  void createCommentScheduleAlarm(User user, Schedule schedule);
 
   void deleteAlarm(Long alarmNo);
   void deleteAllAlarmsForCurrentUser();

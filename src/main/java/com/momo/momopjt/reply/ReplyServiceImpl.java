@@ -69,7 +69,8 @@ public class ReplyServiceImpl implements ReplyService {
       author = userService.findByUserId((uns.get(0)).getUserId());
       log.info("Schedule author: " + author);
       if (checkLoginUser) {
-// TODO        schedule 댓글 알람 기능 미구현
+        alarmService.createCommentScheduleAlarm(author, schedule);
+        log.info("-------- [스케줄 댓글 작성 알림 이벤트] -------");
       }
 
     } else {

@@ -224,10 +224,12 @@
                         <hr>
                         <br>
                         <div class="row">
-                            <h2>후기</h2>
-                            <a th:href="@{/article/create}">
-                                <h5> + 후기작성</h5>
-                            </a>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <h2>후기</h2>
+                                <a th:href="@{/article/create}">
+                                    <h5> + 후기작성</h5>
+                                </a>
+                            </div>
                             <div class="row row-cols-1 row-cols-md-4 g-0">
                                 <div class="col-3" th:each="article, iterStat : ${articles}">
                                     <div class="card h-100 cardBody"
@@ -255,11 +257,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <a class="load-more-review" href="#!">
-                                        <img src="/assets/더보기.png">
-                                    </a>
-                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a class="load-more-review" href="#!">
+                                    <img src="/assets/더보기.png">
+                                </a>
                             </div>
                         </div>
                     </div>
