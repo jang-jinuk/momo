@@ -36,5 +36,4 @@ public class ReplyDTO {
 
   private Schedule scheduleNo;
 
-
 }

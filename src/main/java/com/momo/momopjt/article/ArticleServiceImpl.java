@@ -125,6 +125,7 @@ public class ArticleServiceImpl implements ArticleService {
     // 업데이트할 필드 설정
     article.setArticleTitle(articleDTO.getArticleTitle());
     article.setArticleContent(articleDTO.getArticleContent());
+    article.setArticlePhotoUUID(articleDTO.getArticlePhotoUUID());
     // 필요한 경우 다른 필드를 업데이트할 수 있습니다.
 
     // 변경된 데이터를 데이터베이스에 저장

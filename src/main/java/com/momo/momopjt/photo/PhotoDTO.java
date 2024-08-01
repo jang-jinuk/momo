@@ -23,6 +23,7 @@ public class PhotoDTO {
   private User uploader;
 
   private Character tag; // 현재사용 x
+
 }
 
 

@@ -1,7 +1,6 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.global.PageRequestDTO;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
@@ -128,26 +127,13 @@ public class ArticleController {
   // 기존 후기글을 업데이트하는 메서드
   @PostMapping("/update")
   public String updateArticle(@Valid @ModelAttribute ArticleDTO articleDTO,
-                              BindingResult bindingResult,
-                              RedirectAttributes redirectAttributes,
-                              PageRequestDTO pageRequestDTO) {
+                              RedirectAttributes redirectAttributes) {
     log.info("-------- [POST article update]-------you");
 
     Long articleNo = articleDTO.getArticleNo();
     log.warn(articleNo);
     log.info("----------------- [08-01 15:04:40]-----------------");
-
-    if(bindingResult.hasErrors()) {
-      log.info("has errors.......");
-
-      String link = pageRequestDTO.getLink();
-
-      redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
-
-      redirectAttributes.addAttribute("articleNo", articleDTO.getArticleNo());
-
-      return "redirect:/board/modify?"+link; }
-
+log.warn(articleDTO.getArticlePhotoUUID());
 
       articleService.updateArticle(articleNo, articleDTO);
 
