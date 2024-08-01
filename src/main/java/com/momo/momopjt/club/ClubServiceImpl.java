@@ -8,13 +8,11 @@ import com.momo.momopjt.article.ArticleRepository;
 import com.momo.momopjt.article.ArticleService;
 import com.momo.momopjt.photo.Photo;
 import com.momo.momopjt.photo.PhotoService;
-import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleRepository;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
-import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubRepository;
@@ -22,9 +20,6 @@ import com.momo.momopjt.userandclub.UserAndClubService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -50,7 +45,6 @@ public class ClubServiceImpl implements ClubService {
   private final ArticleService articleService;
   private final ScheduleService scheduleService;
   private final AlarmService alarmService;
-  private final ReplyService replyService;
   private final PhotoService photoService;
   private final UserAndClubService userAndClubService;
 
