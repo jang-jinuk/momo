@@ -210,31 +210,19 @@ public class ClubServiceImpl implements ClubService {
     //해당 모임의 모든 일정 댓글 삭제
     List<Schedule> scheduleList = scheduleRepository.findSchedulesByClub(club);
     for (Schedule schedule : scheduleList) {
-      List<ReplyDTO> replyList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
-      for (ReplyDTO replyDTO : replyList) {
-        replyService.deleteReply(replyDTO.getReplyNo());
-      }
-    }
-
-    //해당 모임의 모든 일정 삭제
-    scheduleService.deleteScheduleByClub(club);
-
-    //해당 모임의 모든 후기글 댓글 삭제
-    List<Article> articleList = articleRepository.findByClubNo(club);
-    for (Article article : articleList) {
-      List<ReplyDTO> replyList = replyService.readReplyAllByArticle(article.getArticleNo());
-      for (ReplyDTO replyDTO : replyList) {
-        replyService.deleteReply(replyDTO.getReplyNo());
-      }
+      scheduleService.deleteSchedule(schedule.getScheduleNo());
     }
 
     //해당 모임의 모든 후기글 삭제
+    List<Article> articleList = articleRepository.findByClubNo(club);
     for (Article article : articleList) {
       articleService.deleteArticle(article.getArticleNo());
     }
+    log.info("------------ [모든 후기글 삭제] ------------");
 
     //해당 모임 맴버 전체 삭제
     userAndClubService.deleteAllMembers(clubNo);
+
     //해당 모임 대표사진 조회
     Optional<Club> result = clubRepository.findById(clubNo);
     club = result.orElseThrow();
@@ -246,21 +234,21 @@ public class ClubServiceImpl implements ClubService {
     // 모임 삭제
     clubRepository.deleteById(clubNo);
 
-    // 현재 로그인된 사용자 정보를 얻기
-    User user = userService.getCurrentUser();
-
-    //모임 삭제 이벤트
-    alarmService.createClubDeletedAlarm(user,club);
-    log.info("-------- [모임 삭제시 모임장에게 알람 이벤트 전송]-------you");
-
     //해당 모임 대표사진 삭제
-    if (!clubPhotoStr.equals("default.jpg")) {//TODO 나중에 실제 디폴트 사진으로 변경
+    if (!clubPhotoStr.equals("ClubDefaultPhoto")) {//TODO 나중에 실제 디폴트 사진으로 변경
 
       int lastDotIndex = clubPhotoStr.lastIndexOf('.');
       String clubPhotoUUID = (lastDotIndex != -1) ? clubPhotoStr.substring(0, lastDotIndex) : "";
 
       photoService.deletePhoto(clubPhotoUUID);
     }
+
+    // 현재 로그인된 사용자 정보를 얻기
+    User user = userService.getCurrentUser();
+
+    //모임 삭제 이벤트
+    alarmService.createClubDeletedAlarm(user,club);
+    log.info("-------- [모임 삭제시 모임장에게 알람 이벤트 전송]-------you");
   }
 
   // 나의 모임 조회
