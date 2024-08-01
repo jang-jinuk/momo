@@ -22,8 +22,6 @@ public class ReplyDTO {
 
   private String writer; // userNickName
 
-  private Schedule scheduleNo;
-
   private String replyContent;
 
   private Instant replyCreateDate;
@@ -35,5 +33,8 @@ public class ReplyDTO {
   private Integer replyLikeNumber;
 
   private Article articleNo;
+
+  private Schedule scheduleNo;
+
 
 }
