@@ -21,7 +21,13 @@
                         <div class="col-12">
                             <div class="row-cols-4">
                                 <h4>현재 후기글 사진</h4>
-                                <img th:src="@{/view/{fileName}(fileName=${articlePhoto})}" alt="article profile image">
+
+                                <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                                     src="/assets/NullPhoto.png" style="width:300px;">
+
+                                <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                                     th:src="@{/view/{photo}(photo=${articlePhoto})}" style="width:300px;">
+
 
                             </div>
                         </div>
@@ -85,7 +91,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control" multiple>
+                        <input type="file" name="files" accept="image/*" class="form-control" >
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -105,6 +111,24 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+
+        //업로드 파일 확장자 검사 0801 YY
+        function imageCheck(obj) {
+            if(obj){
+                const allowedExtensions = ['jpg', 'png', 'jpeg'];
+                const fileExtension = obj.name.split('.').pop().toLowerCase();
+                console.log(fileExtension)
+
+                if (allowedExtensions.includes(fileExtension)) {
+                    return true;
+                } else {
+                    alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+                    return false;
+                }
+            }
+            return false;
+
+        }
 
         //이미지 업로드 처리 JS  YY
         async function uploadToServer(formObj) {
@@ -161,23 +185,34 @@
             console.log(fileInput.files)
 
             const files = fileInput.files
+            let imageCheckResult = true;
 
             for (let i = 0; i < files.length; i++) {
-                formObj.append("files", files[i]);
-            }
 
-            uploadToServer(formObj).then(result => {
-                console.log("result-------")
-                console.log(result)
-
-                for (const uploadResult of result) {
-                    showUploadFile(uploadResult)
+                // 0801 YY 파일 확인 로직
+                if(imageCheck(files[i])){
+                    formObj.append("files", files[i]); }
+                else {
+                    imageCheckResult = false;
+                    break;
                 }
 
-                uploadModal.hide()
-            }).catch(e => {
-                uploadModal.hide()
-            })
+            }
+            if(imageCheckResult){
+
+                uploadToServer(formObj).then(result => {
+                    console.log("result-------")
+                    console.log(result)
+
+                    for (const uploadResult of result) {
+                        showUploadFile(uploadResult)
+                    }
+
+                    uploadModal.hide()
+                }).catch(e => {
+                    uploadModal.hide()
+                })
+            }
 
         }, false)
 
