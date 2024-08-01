@@ -22,11 +22,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
       "AND s.scheduleStartDate < current_timestamp")
   List<Schedule> findEndSchedules(@Param("clubNo") Club clubNo);
 
-  //해당 모임에 모든 일정 삭제하는 쿼리문
-  @Modifying
-  @Query("DELETE FROM Schedule WHERE clubNo = :clubNo")
-  void deleteAllSchedulesByClub(@Param("clubNo") Club clubNo);
-
   //해당 모임에 모든 일정 조회
   @Query("SELECT s FROM Schedule s WHERE s.clubNo = :clubNo")
   List<Schedule> findSchedulesByClub(@Param("clubNo") Club clubNo);
