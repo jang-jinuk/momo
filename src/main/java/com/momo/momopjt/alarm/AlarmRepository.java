@@ -13,5 +13,6 @@ import java.util.Optional;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
   @Query("SELECT a FROM Alarm a WHERE a.userNo = :userNo ORDER BY a.alarmCreateDate DESC")
   List<Alarm> findByUserNoOrderByAlarmCreateDateDesc(@Param("userNo") User userNo);
+
   void deleteByUserNo(User user);
 }

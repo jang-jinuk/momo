@@ -137,7 +137,6 @@ public class AlarmServiceImpl implements AlarmService {
     Alarm alarm = new Alarm();
     alarm.setUserNo(user);
     alarm.setAlarmType(AlarmType.CREATE);
-    String userName = user.getUserNickname();
     alarm.setAlarmContent(article.getArticleTitle() + "'이(가) 작성되었습니다.");
     alarm.setAlarmCreateDate(Instant.now());
     alarm.setIsRead('0');
@@ -155,7 +154,7 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
-  //누군가 후기글에 댓글을 작성했을때 쓰는 알람
+  //누군가 후기글에 댓글을 작성했을때 뜨는 알람
   @Override
   public void createCommentAddedAlarm(User user, Article article) {
     Alarm alarm = new Alarm();
@@ -167,6 +166,18 @@ public class AlarmServiceImpl implements AlarmService {
     alarmRepository.save(alarm);
   }
 
+  //누군가 스케줄에 댓글을 작성했을때 뜨는 알람
+  @Override
+  public void createCommentScheduleAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.COMMENT);
+    alarm.setAlarmContent("귀하의 일정 \"" + schedule.getScheduleTitle() + "\"에 댓글이 달렸습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+
+  }
 
   //알람 삭제 기능
   @Override
