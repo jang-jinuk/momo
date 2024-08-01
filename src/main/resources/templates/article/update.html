@@ -17,6 +17,8 @@
                 <div class="card-body">
 
                     <form th:action="@{/article/update}" method="post">
+                        <!-- 0801 YY articleNo 넘기기  -->
+                        <input type="hidden" name="articleNo" th:value="${articleDTO.articleNo}">
 
                         <div class="col-12">
                             <div class="row-cols-4">
