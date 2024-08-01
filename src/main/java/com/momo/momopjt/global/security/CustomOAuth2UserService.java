@@ -20,10 +20,13 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+
     //TODO 0716 error YY
+
 
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
 
@@ -73,7 +76,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (email == null || id == null) {
             throw new OAuth2AuthenticationException("Email or ID not found from provider: " + provider);
         }
-        
+
+
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.
 

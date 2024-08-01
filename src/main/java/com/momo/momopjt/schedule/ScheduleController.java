@@ -136,10 +136,7 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipate(userAndScheduleDTO);
 
-    Long clubNo = (Long) session.getAttribute("clubNo");
-
     model.addAttribute("currentTime", Instant.now());
-    model.addAttribute("clubNo", clubNo);
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보

@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,7 +177,9 @@ public class UserController {
     }
 
     // 현재 로그인한 사용자 정보 가져오기
-    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY 
+
+    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY
+    
     if (currentUser == null) {
       throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
     }
@@ -202,12 +206,14 @@ public class UserController {
     return "user/update"; // Thymeleaf 템플릿 경로
   }
 
+  @Transactional // 추가: 트랜잭션 관리를 위해 추가
   @PostMapping("/update")
   public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /update with data: {}", userDTO);
     String userId = userDTO.getUserId();
 
+    // Validation errors 처리
     if (bindingResult.hasErrors()) {
       redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
       log.error(bindingResult.getAllErrors().toString());
@@ -224,21 +230,46 @@ public class UserController {
     // 현재 로그인한 사용자 정보 가져오기
     User currentUser = userRepository.findByUserId(currentUsername);
 
+    // 현재 로그인한 사용자와 업데이트하려는 사용자가 일치하지 않거나 권한이 없는 경우
     if (currentUser == null || !userId.equals(currentUser.getUserId())) {
       redirectAttributes.addFlashAttribute("error", "현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
       return "redirect:/user/update/" + userId;
     }
 
     try {
-      userService.updateUser(userDTO);
+      // 사용자 엔티티를 가져오기
+      User user = userRepository.findByUserId(userId);
+
+      if (user == null) {
+        throw new IllegalArgumentException("userId에 해당하는 사용자를 찾을 수 없습니다: " + userId);
+      }
+
+      // DTO를 엔티티로 변환하여 업데이트
+      user.setUserNickname(userDTO.getUserNickname());
+      user.setUserGender(userDTO.getUserGender());
+      user.setUserCategory(userDTO.getUserCategory());
+      user.setUserEmail(userDTO.getUserEmail());
+      user.setUserCategory(userDTO.getUserCategory());
+      user.setUserAddress(userDTO.getUserAddress());
+      user.setUserMBTI(userDTO.getUserMBTI());
+
+
+      // 소셜 로그인 사용자에 대해 기본 역할 설정 (ROLE_USER) 추가
+      if (user.getRoleSet() == null || user.getRoleSet().isEmpty()) {
+        user.setRoleSet(new HashSet<>(Collections.singletonList(UserRole.USER))); // 기본 역할 설정
+      }
+
+      // 사용자 정보를 저장
+      userRepository.save(user);
+
+      // 성공 메시지 설정 및 리다이렉트
+      redirectAttributes.addFlashAttribute("result", "success");
+      return "redirect:/home";
     } catch (Exception e) {
       log.error("Failed to update user with userId: {}", userId, e);
       redirectAttributes.addFlashAttribute("error", "Failed to update user.");
       return "redirect:/user/update/" + userId;
     }
-
-    redirectAttributes.addFlashAttribute("result", "success");
-    return "redirect:/home";
   }
 
   @GetMapping("/delete-account")

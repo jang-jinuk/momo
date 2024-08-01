@@ -14,8 +14,6 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JS -->
-    <th:block layout:fragment="script"></th:block>
 
     <!--CSS-->
     <link href="/css/style.css" rel="stylesheet">
@@ -29,7 +27,10 @@
     <th:block layout:fragment="content"></th:block>
 
     <th:block th:replace="fragments/footer :: footerFragment"></th:block>
+
 </body>
 
+<!-- JS 0801 YY 위치 수정시 에러 발생으로 하단에 스크립트 위치할 것. -->
+<th:block layout:fragment="script"></th:block>
 </html>
 

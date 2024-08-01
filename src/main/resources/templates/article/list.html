@@ -1,23 +1,23 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Article List</title>
-</head>
-<body>
-<h1>후기 ♡</h1>
-<table>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Article List</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>후기 ♡</h1>-->
+<!--<table>-->
 
-    <tbody>
-    <tr th:each="article : ${article}">
-        <td th:text="${article.articleTitle}">Title</td>
-        <td>
-            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}">자세히보기</a>
-            <a th:href="@{/article/update/{articleNo}(articleNo=${article.articleNo})}">수정하기</a>
+<!--    <tbody>-->
+<!--    <tr th:each="article : ${article}">-->
+<!--        <td th:text="${article.articleTitle}">Title</td>-->
+<!--        <td>-->
+<!--            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}">자세히보기</a>-->
+<!--            <a th:href="@{/article/update/{articleNo}(articleNo=${article.articleNo})}">수정하기</a>-->
 
-        </td>
-    </tr>
-    </tbody>
-</table>
-<a th:href="@{/article/create}">후기글 등록하기</a>
-</body>
-</html>
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<a th:href="@{/article/create}">후기글 등록하기</a>-->
+<!--</body>-->
+<!--</html>-->

@@ -103,7 +103,9 @@
               <input type="password" id="confirmUserPw" name="confirmUserPw" class="form-control" required
                      autocomplete="off">
             </div>
-            <div id="passwordMatchMessage" class="alert" role="alert"></div>
+
+            <div id="passwordPatternMessage" class="alert" role="alert"></div> <!-- 비밀번호 패턴 오류 메시지 -->
+            <div id="passwordMatchMessage" class="alert" role="alert"></div> <!-- 비밀번호 일치 여부 메시지 -->
 
             <!-- 닉네임 -->
             <div class="input-group mb-3">
@@ -226,6 +228,7 @@
         const userId = document.forms["registerForm"]["userId"].value;
         const userNickname = document.forms["registerForm"]["userNickname"].value;
         const userPw = document.forms["registerForm"]["userPw"].value;
+        const confirmUserPw = document.forms["registerForm"]["confirmUserPw"].value;
         const userEmail = document.forms["registerForm"]["userEmail"].value;
         const userGender = document.forms["registerForm"]["userGender"].value;
         const userBirth = document.forms["registerForm"]["userBirth"].value;
@@ -233,7 +236,7 @@
         const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
-        const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+        const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
 
         if (!userIdPattern.test(userId)) {
             alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
@@ -243,7 +246,11 @@
             alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
             return false;
         }
-        if (!NicknamePattern.test(userNickname)) {
+        if (userPw !== confirmUserPw) {
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return false;
+        }
+        if (!nicknamePattern.test(userNickname)) {
             alert("닉네임은 6글자까지 가능합니다.");
             return false;
         }
@@ -259,7 +266,7 @@
             alert("생년월일이 필요합니다.");
             return false;
         }
-        alert("회원가입이 완료되었습니다."); //회원가입 완료 메시지 추가
+        alert("회원가입이 완료되었습니다.");
         return true;
     }
 
@@ -292,6 +299,14 @@
 
     function checkDuplicateUserNickname() {
         const userNickname = document.forms["registerForm"]["userNickname"].value;
+        const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/; // 닉네임 정규 표현식
+
+        if (!nicknamePattern.test(userNickname)) {
+            $('#nicknameCheckResult').text("닉네임은 6글자까지 가능합니다.");
+            $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+            $('#nicknameCheckResult').show();
+            return;
+        }
 
         $.ajax({
             type: "GET",
@@ -311,6 +326,7 @@
                 alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
             }
         });
+
         return false; // 폼의 기본 동작을 막습니다.
     }
 
@@ -344,6 +360,18 @@
         const password = document.getElementById("userPw").value;
         const confirmPassword = document.getElementById("confirmUserPw").value;
 
+        // 비밀번호 패턴 검증
+        const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
+        if (!passwordPattern.test(password)) {
+            $('#passwordPatternMessage').text("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+            $('#passwordPatternMessage').removeClass('alert-success').addClass('alert-danger');
+            $('#passwordPatternMessage').show();
+        } else {
+            $('#passwordPatternMessage').text(""); // 비밀번호 패턴 오류 메시지 초기화
+            $('#passwordPatternMessage').hide();
+        }
+
+        // 비밀번호 일치 여부 검증
         if (password !== confirmPassword) {
             $('#passwordMatchMessage').text("비밀번호가 일치하지 않습니다.");
             $('#passwordMatchMessage').removeClass('alert-success').addClass('alert-danger');
@@ -370,6 +398,8 @@
             validatePassword();
         });
     });
+
+
 </script>
 
 <script>
@@ -409,12 +439,13 @@
     });
 </script>
 
+
 <script>
-  document.getElementById('signupForm').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // 엔터 키로 인한 폼 제출 방지
-    }
-  });
+    document.getElementById('signupForm').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 엔터 키로 인한 폼 제출 방지
+        }
+    });
 </script>
 
 <!-- Bootstrap JavaScript dependencies -->

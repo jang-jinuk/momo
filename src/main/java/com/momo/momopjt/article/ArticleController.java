@@ -101,18 +101,11 @@ public class ArticleController {
                                HttpSession session, PageRequestDTO pageRequestDTO) {
     log.info("-------- [GET ArticleById /{articleNo}]-------you");
 
-    // club number 세션에 저장 // TODO model로 저장 ?
-    Long clubNo = (Long) session.getAttribute("clubNo");
-
-
-
     //출력할 게시글 조회
     ArticleDTO articleDTO = articleService.getArticleById(articleNo);
     //출력할 댓글 조회 YY
     List<ReplyDTO> replyList = replyService.readReplyAllByArticle(articleNo);
 
-
-    model.addAttribute("clubNo", clubNo);
     model.addAttribute("articleDTO", articleDTO);
     //출력할 댓글 추가 YY
     model.addAttribute("replyList",replyList);
@@ -130,10 +123,6 @@ public class ArticleController {
     log.info("-------- [GET article update/ ]-------you");
     ArticleDTO article = articleService.getArticleById(articleNo);
     model.addAttribute("articleDTO", article);
-
-
-//    //TODO
-//    model.addAttribute("repsonseDTO",responseDTO);
 
 
     return "article/update"; // "article/update.html" 뷰를 반환

@@ -18,7 +18,9 @@
             <div class="sticky-sm-top">*모임명은 수정불가</div>
           </div>
           <div class="col">
-            <input id="clubName" name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" minlength="2" required>
+
+            <input name="clubName" type="text" class="form-control custom-input" placeholder="모임명을 입력하세요" required>
+
             <div th:if="${error == 'clubName'}" class="alert alert-danger" role="alert">
               모임명이 중복되었습니다. 다른 모임명을 사용해주세요.
             </div>
@@ -29,8 +31,9 @@
             <h4>지역</h4>
           </div>
           <div class="col">
-            <input name="clubArea" type="text" class="form-control custom-input" placeholder="지역을 선택해주세요.">
-            <button class="btn btn-dark" type="button">찾기</button>
+            <input name="clubArea" type="text" class="form-control" id="sample5_address" placeholder="활동 지역"
+                   th:required="true" readonly>
+            <input type="button" onclick="sample5_execDaumPostcode()" value="검색"><br>
           </div>
         </div>
       </div>
@@ -46,7 +49,7 @@
 
               <span class="input-group mb-3">Images</span>
               <div class="float-end uploadHidden">
-                <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                <button type="button" class="btn btn-primary uploadFileBtn">ADD Image files</button>
               </div>
             </div>
 
@@ -79,7 +82,6 @@
                   <div class="col">
                     <input name="clubCategory" type="text" class="form-control custom-input"
                            placeholder="맛집탐방, 카페투어">
-                    <button class="btn btn-dark" type="submit">선택</button>
                   </div>
                 </div>
                 <div class="container mt-5">
@@ -112,7 +114,7 @@
 
 
   <!--    upload Modal Part YY -->
-  <div class="modal uploadModal" tabindex="-1">
+  <div class="modal uploadModal" tabindex="-1" id="uploadModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -121,7 +123,7 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <input type="file" name="files" class="form-control"> <!-- 모임 대표사진 multipole x  -->
+            <input type="file" name="files" accept="image/*" class="form-control"> <!-- 모임 대표사진 multipole x  -->
           </div>
         </div>
         <div class="modal-footer">
@@ -142,8 +144,78 @@
 
   <script th:inline="javascript">
 
+      //upload modal set
+      /* // const uploadModal = bootstrap.Modal.getOrCreateInstance('#uploadModal');
+
+       */
+      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          uploadModal.show()
+      }, false)
+
+      //file upload for modal and thumb
+      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+          const formObj = new FormData();
+          const fileInput = document.querySelector("input[name='files']")
+
+          console.log("fileInput.files--------")
+          console.log(fileInput.files)
+
+          const files = fileInput.files
+          let imageCheckResult = true;
+
+          for (let i = 0; i < files.length; i++) {
+
+              // 0801 YY 파일 확인 로직
+              if(imageCheck(files[i])){
+                  formObj.append("files", files[i]); }
+              else {
+                  imageCheckResult = false;
+                  break;
+              }
+
+          }
+          if(imageCheckResult){
+
+          uploadToServer(formObj).then(result => {
+              console.log("result-------")
+              console.log(result)
+
+              for (const uploadResult of result) {
+                  showUploadFile(uploadResult)
+              }
+
+              uploadModal.hide()
+          }).catch(e => {
+              uploadModal.hide()
+          })
+          }
+
+      }, false)
+
+      //업로드 파일 확장자 검사 0801 YY
+function imageCheck(obj) {
+   if(obj){
+       const allowedExtensions = ['jpg', 'png', 'jpeg'];
+       const fileExtension = obj.name.split('.').pop().toLowerCase();
+       console.log(fileExtension)
+
+       if (allowedExtensions.includes(fileExtension)) {
+           return true;
+       } else {
+           alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+           return false;
+       }
+   }
+   return false;
+
+}
+
       //이미지 업로드 처리 JS  YY
       async function uploadToServer(formObj) {
+
 
           console.log("upload to server.....................+formObj")
           console.log(formObj)
@@ -180,42 +252,6 @@
           alert(errorMsg) //error message display!
       }
 
-      //upload modal set
-      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
-          e.stopPropagation()
-          e.preventDefault()
-          uploadModal.show()
-      }, false)
-
-      //file upload for modal and thumb
-      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
-          const formObj = new FormData();
-          const fileInput = document.querySelector("input[name='files']")
-
-          console.log("fileInput.files--------")
-          console.log(fileInput.files)
-
-          const files = fileInput.files
-
-          for (let i = 0; i < files.length; i++) {
-              formObj.append("files", files[i]);
-          }
-
-          uploadToServer(formObj).then(result => {
-              console.log("result-------")
-              console.log(result)
-
-              for (const uploadResult of result) {
-                  showUploadFile(uploadResult)
-              }
-
-              uploadModal.hide()
-          }).catch(e => {
-              uploadModal.hide()
-          })
-
-      }, false)
 
 
       //656p showUploadFile
@@ -289,19 +325,38 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
 
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
           const formObj = document.querySelector("form")
 
-          // const inputValue = document.getElementById("clubName")
+        // 필수 항목 입력 검사 로직
+        function validateForm() {
+          const clubName = document.querySelector("input[name='clubName']").value.trim();
+          const clubArea = document.querySelector("input[name='clubArea']").value.trim();
+          const clubContent = document.querySelector("textarea[name='clubContent']").value.trim();
+          const clubCategory = document.querySelector("input[name='clubCategory']").value.trim();
+          const clubMax = document.querySelector("input[name='clubMax']").value.trim();
+
+          if (!clubName || !clubArea || !clubContent || !clubCategory || !clubMax) {
+            alert("모든 내용을 입력 해주세요.");
+            return false;
+          }
+          return true;
+        }
+
+        if (validateForm()){
+
+
+            target.innerHTML = str;
+            console.log(str)
+
 
           formObj.submit();
-          formObj.reset();
 
+        }
+          formObj.reset();
       }, false)
 
 
@@ -314,7 +369,18 @@ ${uuid}${extension}
           uploadModal.hide();
 
       }, false)
+
+      // 주소 API
+      function sample5_execDaumPostcode() {
+        new daum.Postcode({
+          oncomplete: function(data) {
+            var addr = data.address;
+            document.getElementById("sample5_address").value = addr;
+          }
+        }).open();
+      }
   </script>
+
 </th:block>
 
 <!--
