@@ -4,6 +4,8 @@ package com.momo.momopjt.schedule;
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.photo.PhotoService;
+import com.momo.momopjt.reply.ReplyDTO;
+import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
@@ -35,6 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   private final PhotoService photoService;
   private final AlarmService alarmService;
   private final UserService userService;
+  private final ReplyService replyService;
 
   private final ModelMapper modelMapper;
 
@@ -213,7 +216,14 @@ public class ScheduleServiceImpl implements ScheduleService {
   public void deleteSchedule(Long scheduleNo) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
-    if(!schedule.getSchedulePhotoUUID().equals("default.jpg")){
+
+    List<ReplyDTO> replyDTOList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
+    for (ReplyDTO replyDTO : replyDTOList) {
+      replyService.deleteReply(replyDTO.getReplyNo());
+
+    }
+    log.info("------------ [일정 댓글 삭제처리 완료] ------------");
+    if(!schedule.getSchedulePhotoUUID().equals("ScheduleDefaultPhoto")){
       photoService.deletePhoto(schedule.getSchedulePhotoUUID());
     }
     log.info("------------ [일정 사진 삭제 처리 완료] ------------");

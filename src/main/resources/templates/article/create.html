@@ -248,16 +248,32 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
-
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
           const formObj = document.querySelector("form")
 
-          formObj.submit();
-          formObj.reset();
+        // 필수 항목 입력 검사 로직
+          function validateForm() {
+            const articleTitle = document.querySelector("input[name='articleTitle']").value.trim();
+            const articleContent = document.querySelector("textarea[name='articleContent']").value.trim();
+
+            if (!articleTitle || !articleContent) {
+              alert("제목과 내용을 모두 입력해 주세요.");
+              return false;
+            }
+            return true;
+          }
+
+          if (validateForm()){
+
+              console.log(str)
+              target.innerHTML = str;
+
+
+              formObj.submit();
+              formObj.reset();
+          }
 
       }, false)
 

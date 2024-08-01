@@ -100,7 +100,8 @@
             <!-- 비밀번호 확인 -->
             <div class="input-group mb-3">
               <label for="confirmUserPw" class="input-group-text">* 비밀번호 확인</label>
-              <input type="password" id="confirmUserPw" name="confirmUserPw" class="form-control" required autocomplete="off">
+              <input type="password" id="confirmUserPw" name="confirmUserPw" class="form-control" required
+                     autocomplete="off">
             </div>
 
             <div id="passwordPatternMessage" class="alert" role="alert"></div> <!-- 비밀번호 패턴 오류 메시지 -->
@@ -223,51 +224,51 @@
 <!-- JavaScript -->
 <script>
 
-  function validateForm() {
-    const userId = document.forms["registerForm"]["userId"].value;
-    const userNickname = document.forms["registerForm"]["userNickname"].value;
-    const userPw = document.forms["registerForm"]["userPw"].value;
-    const confirmUserPw = document.forms["registerForm"]["confirmUserPw"].value;
-    const userEmail = document.forms["registerForm"]["userEmail"].value;
-    const userGender = document.forms["registerForm"]["userGender"].value;
-    const userBirth = document.forms["registerForm"]["userBirth"].value;
+    function validateForm() {
+        const userId = document.forms["registerForm"]["userId"].value;
+        const userNickname = document.forms["registerForm"]["userNickname"].value;
+        const userPw = document.forms["registerForm"]["userPw"].value;
+        const confirmUserPw = document.forms["registerForm"]["confirmUserPw"].value;
+        const userEmail = document.forms["registerForm"]["userEmail"].value;
+        const userGender = document.forms["registerForm"]["userGender"].value;
+        const userBirth = document.forms["registerForm"]["userBirth"].value;
 
-    const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
-    const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+        const userIdPattern = /^[a-zA-Z0-9]{5,15}$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
+        const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
 
-    if (!userIdPattern.test(userId)) {
-      alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
-      return false;
+        if (!userIdPattern.test(userId)) {
+            alert("사용자 ID는 5~15자의 영문자와 숫자로만 구성되어야 합니다.");
+            return false;
+        }
+        if (!passwordPattern.test(userPw)) {
+            alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+            return false;
+        }
+        if (userPw !== confirmUserPw) {
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return false;
+        }
+        if (!nicknamePattern.test(userNickname)) {
+            alert("닉네임은 6글자까지 가능합니다.");
+            return false;
+        }
+        if (!emailPattern.test(userEmail)) {
+            alert("이메일 형식이 유효하지 않습니다.");
+            return false;
+        }
+        if (userGender !== "m" && userGender !== "w") {
+            alert("성별이 유효하지 않습니다.");
+            return false;
+        }
+        if (userBirth === "") {
+            alert("생년월일이 필요합니다.");
+            return false;
+        }
+        alert("회원가입이 완료되었습니다.");
+        return true;
     }
-    if (!passwordPattern.test(userPw)) {
-      alert("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
-      return false;
-    }
-    if (userPw !== confirmUserPw) {
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return false;
-    }
-    if (!nicknamePattern.test(userNickname)) {
-      alert("닉네임은 6글자까지 가능합니다.");
-      return false;
-    }
-    if (!emailPattern.test(userEmail)) {
-      alert("이메일 형식이 유효하지 않습니다.");
-      return false;
-    }
-    if (userGender !== "m" && userGender !== "w") {
-      alert("성별이 유효하지 않습니다.");
-      return false;
-    }
-    if (userBirth === "") {
-      alert("생년월일이 필요합니다.");
-      return false;
-    }
-    alert("회원가입이 완료되었습니다.");
-    return true;
-  }
 
 
     function checkDuplicateUserId() {
@@ -297,36 +298,36 @@
 
 
     function checkDuplicateUserNickname() {
-      const userNickname = document.forms["registerForm"]["userNickname"].value;
-      const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/; // 닉네임 정규 표현식
+        const userNickname = document.forms["registerForm"]["userNickname"].value;
+        const nicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/; // 닉네임 정규 표현식
 
-      if (!nicknamePattern.test(userNickname)) {
-        $('#nicknameCheckResult').text("닉네임은 6글자까지 가능합니다.");
-        $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
-        $('#nicknameCheckResult').show();
-        return;
-      }
-
-      $.ajax({
-        type: "GET",
-        url: "/user/checkUserNicknameDuplicate",
-        data: {userNickname: userNickname},
-        success: function (response) {
-          if (response === true) {
-            $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+        if (!nicknamePattern.test(userNickname)) {
+            $('#nicknameCheckResult').text("닉네임은 6글자까지 가능합니다.");
             $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
-          } else {
-            $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
-            $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
-          }
-          $('#nicknameCheckResult').show();
-        },
-        error: function () {
-          alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            $('#nicknameCheckResult').show();
+            return;
         }
-      });
 
-      return false; // 폼의 기본 동작을 막습니다.
+        $.ajax({
+            type: "GET",
+            url: "/user/checkUserNicknameDuplicate",
+            data: {userNickname: userNickname},
+            success: function (response) {
+                if (response === true) {
+                    $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+                    $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+                } else {
+                    $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
+                    $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
+                }
+                $('#nicknameCheckResult').show();
+            },
+            error: function () {
+                alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            }
+        });
+
+        return false; // 폼의 기본 동작을 막습니다.
     }
 
     function checkDuplicateUserEmail() {
@@ -356,31 +357,31 @@
 
 
     function validatePassword() {
-      const password = document.getElementById("userPw").value;
-      const confirmPassword = document.getElementById("confirmUserPw").value;
+        const password = document.getElementById("userPw").value;
+        const confirmPassword = document.getElementById("confirmUserPw").value;
 
-      // 비밀번호 패턴 검증
-      const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
-      if (!passwordPattern.test(password)) {
-        $('#passwordPatternMessage').text("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
-        $('#passwordPatternMessage').removeClass('alert-success').addClass('alert-danger');
-        $('#passwordPatternMessage').show();
-      } else {
-        $('#passwordPatternMessage').text(""); // 비밀번호 패턴 오류 메시지 초기화
-        $('#passwordPatternMessage').hide();
-      }
+        // 비밀번호 패턴 검증
+        const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
+        if (!passwordPattern.test(password)) {
+            $('#passwordPatternMessage').text("비밀번호는 8~20자 사이여야 하며, 영문자, 숫자, 특수문자 중 2종류 이상을 포함해야 합니다.");
+            $('#passwordPatternMessage').removeClass('alert-success').addClass('alert-danger');
+            $('#passwordPatternMessage').show();
+        } else {
+            $('#passwordPatternMessage').text(""); // 비밀번호 패턴 오류 메시지 초기화
+            $('#passwordPatternMessage').hide();
+        }
 
-      // 비밀번호 일치 여부 검증
-      if (password !== confirmPassword) {
-        $('#passwordMatchMessage').text("비밀번호가 일치하지 않습니다.");
-        $('#passwordMatchMessage').removeClass('alert-success').addClass('alert-danger');
-        document.getElementById("confirmUserPw").setCustomValidity("비밀번호가 일치하지 않습니다.");
-      } else {
-        $('#passwordMatchMessage').text("비밀번호가 일치합니다.");
-        $('#passwordMatchMessage').removeClass('alert-danger').addClass('alert-success');
-        document.getElementById("confirmUserPw").setCustomValidity("");
-      }
-      $('#passwordMatchMessage').show();
+        // 비밀번호 일치 여부 검증
+        if (password !== confirmPassword) {
+            $('#passwordMatchMessage').text("비밀번호가 일치하지 않습니다.");
+            $('#passwordMatchMessage').removeClass('alert-success').addClass('alert-danger');
+            document.getElementById("confirmUserPw").setCustomValidity("비밀번호가 일치하지 않습니다.");
+        } else {
+            $('#passwordMatchMessage').text("비밀번호가 일치합니다.");
+            $('#passwordMatchMessage').removeClass('alert-danger').addClass('alert-success');
+            document.getElementById("confirmUserPw").setCustomValidity("");
+        }
+        $('#passwordMatchMessage').show();
     }
 
     $(document).ready(function () {
@@ -440,11 +441,11 @@
 
 
 <script>
-  document.getElementById('signupForm').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // 엔터 키로 인한 폼 제출 방지
-    }
-  });
+    document.getElementById('signupForm').addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 엔터 키로 인한 폼 제출 방지
+        }
+    });
 </script>
 
 <!-- Bootstrap JavaScript dependencies -->

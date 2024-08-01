@@ -268,16 +268,35 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
 
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
           const formObj = document.querySelector("form")
 
-          formObj.submit();
-          formObj.reset();
+          // 필수 항목 입력 검사 로직
+          function validateForm() {
+            const scheduleTitle = document.querySelector("input[name='scheduleTitle']").value.trim();
+            const dateTime = document.querySelector("input[name='dateTime']").value.trim();
+            const scheduleMax = document.querySelector("input[name='scheduleMax']").value.trim();
+            const schedulePlace = document.querySelector("input[name='schedulePlace']").value.trim();
+            const scheduleContent = document.querySelector("textarea[name='scheduleContent']").value.trim();
+
+            if (!scheduleTitle || !dateTime || !scheduleMax || !schedulePlace || !scheduleContent) {
+              alert("모든 내용을 입력해 주세요.");
+              return false;
+            }
+            return true;
+          }
+
+          if (validateForm()){
+
+              console.log(str)
+              target.innerHTML = str;
+
+            formObj.submit();
+            formObj.reset();
+          }
 
       }, false)
 
