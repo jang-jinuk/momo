@@ -136,6 +136,7 @@ public class UserServiceImpl implements UserService {
             user.setUserNickname(userDTO.getUserNickname());
         }
 
+
         // 5. 카테고리 업데이트
         if (userDTO.getUserCategory() != null && !userDTO.getUserCategory().isEmpty()) {
             user.setUserCategory(userDTO.getUserCategory());
@@ -151,10 +152,10 @@ public class UserServiceImpl implements UserService {
             user.setUserMBTI(userDTO.getUserMBTI());
         }
 
-        // 8. 소셜 타입 업데이트
-        //if (userDTO.getUserSocial() != null) {
-        //   user.setUserSocial(userDTO.getUserSocial());
-        //}
+        if (userDTO.getUserGender() != null) {
+        user.setUserGender(userDTO.getUserGender());
+        }
+
 
         // 9. 수정일 업데이트
         user.setUserModifyDate(Instant.now());

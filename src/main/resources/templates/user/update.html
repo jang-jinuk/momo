@@ -48,24 +48,13 @@
           border-color: #7fbf9b; /* 버튼 테두리 색상 (호버 상태) */
       }
 
-      body, html {
-        height: 100%;
-        margin: 0;
-      }
-      .full-height {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh; /* 전체 화면 높이 */
-      }
       .form-container {
-        max-width: 800px; /* 최대 너비 설정 */
-        width: 100%; /* 너비 100% */
-        margin: auto; /* 중앙 정렬 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+          max-width: 800px; /* 최대 너비 설정 */
+          margin: 0 auto; /* 중앙 정렬 */
+      }
+
+      .full-height {
+          min-height: 100vh; /* 전체 화면 높이 */
       }
   </style>
 
@@ -94,12 +83,12 @@
         <span class="input-group-text">성별</span>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="userGender" id="male" value="m"
-                 th:checked="${userDTO.userGender == 'm'}" required>
+                 th:checked="${userDTO.getUserGenderAsString() == 'm'}" required>
           <label class="form-check-label" for="male">남성</label>
         </div>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="userGender" id="female" value="w"
-                 th:checked="${userDTO.userGender == 'w'}" required>
+                 th:checked="${userDTO.getUserGenderAsString() == 'w'}" required>
           <label class="form-check-label" for="female">여성</label>
         </div>
       </div>

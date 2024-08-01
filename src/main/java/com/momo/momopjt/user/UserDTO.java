@@ -53,4 +53,8 @@ public class UserDTO {
     private Instant userModifyDate;
 
     private String confirmUserPw;
+
+    public String getUserGenderAsString() {
+        return userGender != null ? userGender.toString() : "";
+    }
 }
