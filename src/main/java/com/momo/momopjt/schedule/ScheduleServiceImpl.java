@@ -7,16 +7,12 @@ import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
 import com.momo.momopjt.user.User;
-import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
