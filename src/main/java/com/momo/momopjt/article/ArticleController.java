@@ -134,13 +134,16 @@ public class ArticleController {
   }
 
   // 기존 후기글을 업데이트하는 메서드
-  @PostMapping("/update/{articleNo}")
-  public String updateArticle(@PathVariable Long articleNo,
-                              @Valid @ModelAttribute ArticleDTO articleDTO,
+  @PostMapping("/update")
+  public String updateArticle(@Valid @ModelAttribute ArticleDTO articleDTO,
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes,
                               PageRequestDTO pageRequestDTO) {
     log.info("-------- [POST article update]-------you");
+
+    Long articleNo = articleDTO.getArticleNo();
+    log.warn(articleNo);
+    log.info("----------------- [08-01 15:04:40]-----------------");
 
     if(bindingResult.hasErrors()) {
       log.info("has errors.......");

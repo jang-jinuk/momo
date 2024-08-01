@@ -29,7 +29,7 @@
               <img th:if="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
                    src="/assets/ClubDefaultPhoto.jpg">
 
-              <img th:unless="${#strings.contains(myClubPhotoList[i], 'Default')}" class="card-img-top"
+              <img th:unless="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
                    th:src="@{/view/{photo}(photo=${myClubPhotoList[i]})}">
 
             </div>
