@@ -325,7 +325,7 @@
       // 스케줄 더보기 버튼 기능
       document.querySelectorAll('.load-more').forEach(button => {
           const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule');
-          if (hiddenSchedules.length <= 3) {
+          if (hiddenSchedules.length < 1) {
               button.style.display = 'none';
           }
           button.addEventListener('click', function () {
@@ -333,7 +333,7 @@
               for (let i = 0; i < 3 && i < hiddenSchedules.length; i++) {
                   hiddenSchedules[i].classList.remove('d-none');
               }
-              if (hiddenSchedules.length <= 3) {
+              if (hiddenSchedules.length < 1) {
                   this.style.display = 'none';
               }
           });
@@ -341,7 +341,7 @@
       // 후기 더보기 버튼 기능
       document.querySelectorAll('.load-more-review').forEach(button => {
           const hiddenReviews = button.parentElement.previousElementSibling.querySelectorAll('.more-review');
-          if (hiddenReviews.length <= 4) {
+          if (hiddenReviews.length < 1) {
               button.style.display = 'none';
           }
           button.addEventListener('click', function () {
@@ -349,7 +349,7 @@
               for (let i = 0; i < 4 && i < hiddenReviews.length; i++) {
                   hiddenReviews[i].classList.remove('d-none');
               }
-              if (hiddenReviews.length <= 4) {
+              if (hiddenReviews.length < 1) {
                   this.style.display = 'none';
               }
           });
