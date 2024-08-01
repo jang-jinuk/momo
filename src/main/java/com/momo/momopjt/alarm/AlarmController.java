@@ -2,9 +2,7 @@ package com.momo.momopjt.alarm;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
-import com.momo.momopjt.user.UserSecurityDTO;
 import com.momo.momopjt.user.UserService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,12 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-
-
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 
@@ -59,17 +57,18 @@ public class AlarmController {
     return null;
   }
 
-  @DeleteMapping("/delete/{alarmNo}")
+  @PostMapping("/delete/{alarmNo}")
   public ResponseEntity<Void> deleteAlarm(@PathVariable Long alarmNo) {
     alarmService.deleteAlarm(alarmNo);
     return ResponseEntity.ok().build();
   }
 
   // 모든 알림 삭제
-  @DeleteMapping("/deleteAll")
+  @PostMapping("/deleteAll")
   public ResponseEntity<Void> deleteAllAlarmsForCurrentUser() {
     alarmService.deleteAllAlarmsForCurrentUser();
     return ResponseEntity.ok().build();
   }
+
 }
 

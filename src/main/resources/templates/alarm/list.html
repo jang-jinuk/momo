@@ -98,7 +98,7 @@
         function deleteAlarm(alarmNo) {
             if (confirm('정말로 이 알림을 삭제하시겠습니까?')) {
                 fetch('/alarm/delete/' + alarmNo, {
-                    method: 'DELETE'
+                    method: 'POST'
                 })
                     .then(response => {
                         if (response.ok) {
@@ -112,7 +112,7 @@
         function deleteAllAlarms() {
             if (confirm('정말로 모든 알림을 삭제하시겠습니까?')) {
                 fetch('/alarm/deleteAll/', {
-                    method: 'DELETE'
+                    method: 'POST'
                 })
                     .then(response => {
                         if (response.ok) {
