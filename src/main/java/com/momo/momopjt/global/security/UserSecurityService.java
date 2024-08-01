@@ -2,15 +2,16 @@ package com.momo.momopjt.global.security;
 
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
+import com.momo.momopjt.user.UserRole;
 import com.momo.momopjt.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
+
 import java.util.Map;
 import java.util.Optional;
-import com.momo.momopjt.user.UserRole;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class UserSecurityService {
           .userId(userId)
           .userPw(passwordEncoder.encode("1111"))
           .userEmail(email)
+          .userPhoto("UserDefaultPhoto")
           .userSocial(userSocial)
           .build();
 
@@ -48,6 +50,7 @@ public class UserSecurityService {
 
     // UserSecurityDTO 객체를 생성하여 반환
     UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
+        user.getUserPhoto(),
         user.getUserId(),
         user.getUserPw(),
         user.getUserEmail(),

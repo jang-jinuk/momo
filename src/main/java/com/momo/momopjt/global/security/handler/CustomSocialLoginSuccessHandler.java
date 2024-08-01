@@ -74,6 +74,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
         user = User.builder()
             .userId(id)
             .userEmail(email)
+            .userPhoto("UserDefaultPhoto")
             .userPw(passwordEncoder.encode("defaultPassword")) // Default password
             .userSocial(social)
             .userRole(UserRole.USER)
@@ -84,7 +85,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
         log.info("New user saved to database: {}", user);
 
         // Set new user in SecurityContext
-        UserSecurityDTO userSecurityDTO = new UserSecurityDTO(id, passwordEncoder.encode("defaultPassword"), email, true, social, oAuth2User.getAuthorities());
+        UserSecurityDTO userSecurityDTO = new UserSecurityDTO(user.getUserPhoto(), id, passwordEncoder.encode("defaultPassword"), email, true, social, oAuth2User.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(
             new UsernamePasswordAuthenticationToken(userSecurityDTO, null, oAuth2User.getAuthorities())
         );
@@ -94,7 +95,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
       }
 
       // Existing user: Update security context and redirect to home
-      UserSecurityDTO userSecurityDTO = new UserSecurityDTO(user.getUserId(), user.getUserPw(), user.getUserEmail(), true, user.getUserSocial(), oAuth2User.getAuthorities());
+      UserSecurityDTO userSecurityDTO = new UserSecurityDTO(user.getUserPhoto(), user.getUserId(), user.getUserPw(), user.getUserEmail(), true, user.getUserSocial(), oAuth2User.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(
           new UsernamePasswordAuthenticationToken(userSecurityDTO, null, oAuth2User.getAuthorities())
       );

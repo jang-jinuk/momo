@@ -16,6 +16,7 @@ import java.util.Map;
 @Log4j2
 public class UserSecurityDTO implements UserDetails {
 
+private String userPhoto;
 
     private String userId;
 
@@ -32,10 +33,11 @@ public class UserSecurityDTO implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
 
-    public UserSecurityDTO(String userId, String password, String email,
+    public UserSecurityDTO(String userPhoto, String userId, String password, String email,
                            boolean enabled, Character social,
                            Collection<? extends GrantedAuthority> authorities) {
         log.info("----------------- [userSecDTO contructor]-----------------");
+        this.userPhoto = userPhoto;
         this.userId = userId;
         this.userPw = password;
         this.userEmail = email;

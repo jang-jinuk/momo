@@ -57,6 +57,7 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     UserSecurityDTO userSecurityDTO = new UserSecurityDTO(
+        user.getUserPhoto(),
         user.getUserId(),
         user.getUserPw(),
         user.getUserEmail(),
