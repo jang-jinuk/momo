@@ -27,7 +27,8 @@ public class AlarmServiceImpl implements AlarmService {
 
   @Override
   public List<Alarm> getAlarmsByUserId(User user) {
-    return alarmRepository.findByUserNo(user);
+    // 최신순으로 알림을 정렬하여 반환
+    return alarmRepository.findByUserNoOrderByAlarmCreateDateDesc(user);
   }
 
   //모임 생성시 모임장이 받는 알람
