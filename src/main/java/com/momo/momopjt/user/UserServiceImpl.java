@@ -2,6 +2,8 @@ package com.momo.momopjt.user;
 
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.report.Report;
+import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.userandclub.UserAndClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Log4j2
@@ -366,5 +369,29 @@ public class UserServiceImpl implements UserService {
       }
     }
     return null;
+  }
+  //User 모두 조회
+  @Override
+  public List<UserDTO> readALLUsers() {
+    // 모든 유저를 조회하여 리스트에 저장
+    List<User> users = userRepository.findAll();
+    // users 리스트를 userDTO 리스트로 변환
+    return users.stream()
+        .map(user -> modelMapper.map(user, UserDTO.class))
+        .collect(Collectors.toList());
+  }
+  //User 검색
+  @Override
+  public List<UserDTO> searchUsers(String query) {
+    List<UserDTO> allUsers = readALLUsers(); // 모든 유저를 조회
+    if (query == null || query.isEmpty()) {
+      return allUsers;
+    }
+    return allUsers.stream() // 각 칼럼이 쿼리를 포함하면 리스트로 수집
+        .filter(user -> user.getUserNo().toString().contains(query) || // userNo
+            user.getUserId().contains(query) || // userId
+            user.getUserNickname().contains(query) || // userNickname
+            user.getUserEmail().contains(query)) // userEmail
+        .collect(Collectors.toList());
   }
 }
