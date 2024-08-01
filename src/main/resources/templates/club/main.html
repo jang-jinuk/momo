@@ -173,11 +173,11 @@
                   </div>
                 </div>
               </div>
-              <div class="text-center">
-                <a class="load-more" href="#!">
-                  <img src="/assets/더보기.png">
-                </a>
-              </div>
+            </div>
+            <div class="text-center">
+              <a class="load-more" href="#!">
+                <img src="/assets/더보기.png">
+              </a>
             </div>
             <hr>
             <br>
@@ -214,11 +214,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-center">
-                  <a class="load-more" href="#!">
-                    <img src="/assets/더보기.png">
-                  </a>
-                </div>
+              </div>
+              <div class="text-center">
+                <a class="load-more" href="#!">
+                  <img src="/assets/더보기.png">
+                </a>
               </div>
             </div>
             <hr>
@@ -251,11 +251,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-center">
-                  <a class="load-more-review" href="#!">
-                    <img src="/assets/더보기.png">
-                  </a>
-                </div>
+              </div>
+              <div class="text-center">
+                <a class="load-more-review" href="#!">
+                  <img src="/assets/더보기.png">
+                </a>
               </div>
             </div>
           </div>
@@ -322,6 +322,7 @@
 
 
       });
+
       // 스케줄 더보기 버튼 기능
       document.querySelectorAll('.load-more').forEach(button => {
           const hiddenSchedules = button.parentElement.previousElementSibling.querySelectorAll('.more-schedule');
@@ -338,6 +339,7 @@
               }
           });
       });
+
       // 후기 더보기 버튼 기능
       document.querySelectorAll('.load-more-review').forEach(button => {
           const hiddenReviews = button.parentElement.previousElementSibling.querySelectorAll('.more-review');
@@ -354,6 +356,8 @@
               }
           });
       });
+
+      //사이드 바 토글
       document.addEventListener('DOMContentLoaded', function () {
           const sidebarToggle = document.body.querySelector('#sidebarToggle');
           const sidebarToggleHeader = document.body.querySelector('#sidebarToggle-header');
