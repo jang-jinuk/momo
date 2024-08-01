@@ -54,7 +54,7 @@ public class ReportController {
         log.info("...... [{}]..........KSW", reportDTO.getReportCategory()); // 카테고리 로그 출력
         reportService.addReport(reportDTO); // 신고 저장
         redirectAttributes.addFlashAttribute("successMessage", "신고가 성공적으로 제출되었습니다.");
-        return "redirect:/user/profile/dumyprofile/" + reported.getUserId(); // 성공 시 이동
+        return "redirect:/user/profile/" + reported.getUserId(); // 성공 시 이동
 
       } catch (RuntimeException e) {
         log.info("...... [카테고리 들어온 값이 없음!]..........KSW");
