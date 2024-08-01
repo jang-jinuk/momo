@@ -121,8 +121,13 @@ public class ArticleController {
   @GetMapping("/update/{articleNo}")
   public String showEditForm(@PathVariable Long articleNo, Model model) {
     log.info("-------- [GET article update/ ]-------you");
-    ArticleDTO article = articleService.getArticleById(articleNo);
-    model.addAttribute("articleDTO", article);
+    ArticleDTO articleDTO = articleService.getArticleById(articleNo);
+    model.addAttribute("articleDTO", articleDTO);
+
+    //출력할 일정 사진 추가
+    String articlePhoto = photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString();
+    model.addAttribute("articlePhoto", articlePhoto);
+    log.trace("--------------------------------articlePhoto {}", articlePhoto);
 
 
     return "article/update"; // "article/update.html" 뷰를 반환

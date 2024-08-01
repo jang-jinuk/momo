@@ -201,6 +201,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     List<ReplyDTO> replyDTOList = replyService.readReplyAllBySchedule(schedule.getScheduleNo());
     for (ReplyDTO replyDTO : replyDTOList) {
       replyService.deleteReply(replyDTO.getReplyNo());
+
     }
     log.info("------------ [일정 댓글 삭제처리 완료] ------------");
     if(!schedule.getSchedulePhotoUUID().equals("ScheduleDefaultPhoto")){

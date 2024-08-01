@@ -311,13 +311,17 @@ ${uuid}${extension}
 
             const formObj = document.querySelector("form")
 
+
             // 필수 항목 입력 검사 로직 - 모임명, 모임인원 부분 제외
+
             function validateForm() {
                 const clubArea = document.querySelector("input[name='clubArea']").value.trim();
                 const clubContent = document.querySelector("textarea[name='clubContent']").value.trim();
                 const clubCategory = document.querySelector("input[name='clubCategory']").value.trim();
+                const clubMax = document.querySelector("input[name='clubMax']").value.trim();
 
-                if (!clubArea || !clubContent || !clubCategory) {
+                if (!clubArea || !clubContent || !clubCategory || !clubMax) {
+
                     alert("모든 내용을 입력 해주세요.");
                     return false;
                 }
@@ -327,14 +331,12 @@ ${uuid}${extension}
             if (validateForm()){
 
 
-                target.innerHTML = str;
+                  target.innerHTML = str;
                 console.log(str)
 
-
                 formObj.submit();
-
+                formObj.reset();
             }
-            formObj.reset();
 
         }, false)
 
