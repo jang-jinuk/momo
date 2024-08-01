@@ -86,6 +86,7 @@ public class UserServiceImpl implements UserService {
         // 기본 값 설정
         user.setUserState('0');
         user.setUserLikeNumber(0);
+        user.setUserPhoto("UserDefaultPhoto");
 
 
         user.setUserAddress(userDTO.getUserAddress());
