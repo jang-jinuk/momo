@@ -164,12 +164,12 @@ public class UserController {
       Object principal = authentication.getPrincipal();
       if (principal instanceof UserSecurityDTO) {
         UserSecurityDTO userSecurityDTO = (UserSecurityDTO) principal;
-        currentUsername = userSecurityDTO.getUsername(); // Get user ID
+        currentUsername = userSecurityDTO.getUsername();
       }
     } else if (authentication instanceof OAuth2AuthenticationToken) {
       OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
       DefaultOAuth2User oAuth2User = (DefaultOAuth2User) oauth2Token.getPrincipal();
-      currentUsername = oAuth2User.getAttribute("email"); // Get email //TODO check 0731 YY
+      currentUsername = oAuth2User.getAttribute("email");
     }
 
     if (currentUsername == null) {
@@ -177,9 +177,8 @@ public class UserController {
     }
 
     // 현재 로그인한 사용자 정보 가져오기
+    User currentUser = userRepository.findByUserId(currentUsername);
 
-    User currentUser = userRepository.findByUserId(currentUsername); // TODO check 0731 YY
-    
     if (currentUser == null) {
       throw new SecurityException("현재 사용자 정보를 찾을 수 없습니다.");
     }
@@ -203,6 +202,7 @@ public class UserController {
     // DTO를 모델에 추가
     model.addAttribute("userDTO", userDTO);
 
+
     return "user/update"; // Thymeleaf 템플릿 경로
   }
 
@@ -211,6 +211,8 @@ public class UserController {
   public String updatePost(@ModelAttribute("userDTO") @Valid UserDTO userDTO,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
     log.info("----Processing POST request for /update with data: {}", userDTO);
+
+    // 사용자 ID와 현재 사용자 확인
     String userId = userDTO.getUserId();
 
     // Validation errors 처리
@@ -249,10 +251,8 @@ public class UserController {
       user.setUserGender(userDTO.getUserGender());
       user.setUserCategory(userDTO.getUserCategory());
       user.setUserEmail(userDTO.getUserEmail());
-      user.setUserCategory(userDTO.getUserCategory());
       user.setUserAddress(userDTO.getUserAddress());
       user.setUserMBTI(userDTO.getUserMBTI());
-
 
       // 소셜 로그인 사용자에 대해 기본 역할 설정 (ROLE_USER) 추가
       if (user.getRoleSet() == null || user.getRoleSet().isEmpty()) {

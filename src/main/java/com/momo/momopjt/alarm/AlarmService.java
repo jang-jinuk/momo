@@ -31,5 +31,6 @@ public interface AlarmService {
 
 
   void deleteAlarm(Long alarmNo);
+  void deleteAllAlarmsForCurrentUser();
 
 }
