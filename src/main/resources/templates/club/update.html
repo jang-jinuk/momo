@@ -120,7 +120,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control"> <!-- 모임 대표사진 multipole x  -->
+                        <input type="file" name="files" accept="image/*" class="form-control"> <!-- 모임 대표사진 multipole x  -->
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -137,6 +137,24 @@
 </th:block>
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+
+        //업로드 파일 확장자 검사 0801 YY
+        function imageCheck(obj) {
+            if(obj){
+                const allowedExtensions = ['jpg', 'png', 'jpeg'];
+                const fileExtension = obj.name.split('.').pop().toLowerCase();
+                console.log(fileExtension)
+
+                if (allowedExtensions.includes(fileExtension)) {
+                    return true;
+                } else {
+                    alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+                    return false;
+                }
+            }
+            return false;
+
+        }
 
         //이미지 업로드 처리 JS  YY
         async function uploadToServer(formObj) {
@@ -189,26 +207,35 @@
             const fileInput = document.querySelector("input[name='files']")
 
             console.log("fileInput.files--------")
-            console.log(fileInput.files)
-
             const files = fileInput.files
+            let imageCheckResult = true;
 
             for (let i = 0; i < files.length; i++) {
-                formObj.append("files", files[i]);
-            }
 
-            uploadToServer(formObj).then(result => {
-                console.log("result-------")
-                console.log(result)
-
-                for (const uploadResult of result) {
-                    showUploadFile(uploadResult)
+                // 0801 YY 파일 확인 로직
+                if(imageCheck(files[i])){
+                    formObj.append("files", files[i]); }
+                else {
+                    imageCheckResult = false;
+                    break;
                 }
 
-                uploadModal.hide()
-            }).catch(e => {
-                uploadModal.hide()
-            })
+            }
+            if(imageCheckResult){
+
+                uploadToServer(formObj).then(result => {
+                    console.log("result-------")
+                    console.log(result)
+
+                    for (const uploadResult of result) {
+                        showUploadFile(uploadResult)
+                    }
+
+                    uploadModal.hide()
+                }).catch(e => {
+                    uploadModal.hide()
+                })
+            }
 
         }, false)
 
@@ -280,15 +307,33 @@ ${uuid}${extension}
 
 
             }
-            console.log(str)
 
-            target.innerHTML = str;
-
-            // document.querySelector("form").submit();
 
             const formObj = document.querySelector("form")
 
-            formObj.submit();
+            // 필수 항목 입력 검사 로직 - 모임명, 모임인원 부분 제외
+            function validateForm() {
+                const clubArea = document.querySelector("input[name='clubArea']").value.trim();
+                const clubContent = document.querySelector("textarea[name='clubContent']").value.trim();
+                const clubCategory = document.querySelector("input[name='clubCategory']").value.trim();
+
+                if (!clubArea || !clubContent || !clubCategory) {
+                    alert("모든 내용을 입력 해주세요.");
+                    return false;
+                }
+                return true;
+            }
+
+            if (validateForm()){
+
+
+                target.innerHTML = str;
+                console.log(str)
+
+
+                formObj.submit();
+
+            }
             formObj.reset();
 
         }, false)

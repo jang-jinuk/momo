@@ -49,7 +49,7 @@
 
               <span class="input-group mb-3">Images</span>
               <div class="float-end uploadHidden">
-                <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                <button type="button" class="btn btn-primary uploadFileBtn">ADD Image files</button>
               </div>
             </div>
 
@@ -114,7 +114,7 @@
 
 
   <!--    upload Modal Part YY -->
-  <div class="modal uploadModal" tabindex="-1">
+  <div class="modal uploadModal" tabindex="-1" id="uploadModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -123,7 +123,7 @@
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <input type="file" name="files" class="form-control"> <!-- 모임 대표사진 multipole x  -->
+            <input type="file" name="files" accept="image/*" class="form-control"> <!-- 모임 대표사진 multipole x  -->
           </div>
         </div>
         <div class="modal-footer">
@@ -144,8 +144,78 @@
 
   <script th:inline="javascript">
 
+      //upload modal set
+      /* // const uploadModal = bootstrap.Modal.getOrCreateInstance('#uploadModal');
+
+       */
+      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          uploadModal.show()
+      }, false)
+
+      //file upload for modal and thumb
+      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+          const formObj = new FormData();
+          const fileInput = document.querySelector("input[name='files']")
+
+          console.log("fileInput.files--------")
+          console.log(fileInput.files)
+
+          const files = fileInput.files
+          let imageCheckResult = true;
+
+          for (let i = 0; i < files.length; i++) {
+
+              // 0801 YY 파일 확인 로직
+              if(imageCheck(files[i])){
+                  formObj.append("files", files[i]); }
+              else {
+                  imageCheckResult = false;
+                  break;
+              }
+
+          }
+          if(imageCheckResult){
+
+          uploadToServer(formObj).then(result => {
+              console.log("result-------")
+              console.log(result)
+
+              for (const uploadResult of result) {
+                  showUploadFile(uploadResult)
+              }
+
+              uploadModal.hide()
+          }).catch(e => {
+              uploadModal.hide()
+          })
+          }
+
+      }, false)
+
+      //업로드 파일 확장자 검사 0801 YY
+function imageCheck(obj) {
+   if(obj){
+       const allowedExtensions = ['jpg', 'png', 'jpeg'];
+       const fileExtension = obj.name.split('.').pop().toLowerCase();
+       console.log(fileExtension)
+
+       if (allowedExtensions.includes(fileExtension)) {
+           return true;
+       } else {
+           alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+           return false;
+       }
+   }
+   return false;
+
+}
+
       //이미지 업로드 처리 JS  YY
       async function uploadToServer(formObj) {
+
 
           console.log("upload to server.....................+formObj")
           console.log(formObj)
@@ -182,42 +252,6 @@
           alert(errorMsg) //error message display!
       }
 
-      //upload modal set
-      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
-          e.stopPropagation()
-          e.preventDefault()
-          uploadModal.show()
-      }, false)
-
-      //file upload for modal and thumb
-      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
-          const formObj = new FormData();
-          const fileInput = document.querySelector("input[name='files']")
-
-          console.log("fileInput.files--------")
-          console.log(fileInput.files)
-
-          const files = fileInput.files
-
-          for (let i = 0; i < files.length; i++) {
-              formObj.append("files", files[i]);
-          }
-
-          uploadToServer(formObj).then(result => {
-              console.log("result-------")
-              console.log(result)
-
-              for (const uploadResult of result) {
-                  showUploadFile(uploadResult)
-              }
-
-              uploadModal.hide()
-          }).catch(e => {
-              uploadModal.hide()
-          })
-
-      }, false)
 
 
       //656p showUploadFile
@@ -291,9 +325,7 @@ ${uuid}${extension}
 
 
           }
-          console.log(str)
 
-          target.innerHTML = str;
 
           // document.querySelector("form").submit();
 
@@ -316,11 +348,15 @@ ${uuid}${extension}
 
         if (validateForm()){
 
-          // const inputValue = document.getElementById("clubName")
+
+            target.innerHTML = str;
+            console.log(str)
+
 
           formObj.submit();
-          formObj.reset();
+
         }
+          formObj.reset();
       }, false)
 
 

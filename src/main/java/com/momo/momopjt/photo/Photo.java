@@ -1,6 +1,5 @@
 package com.momo.momopjt.photo;
 
-import com.momo.momopjt.article.Article;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
