@@ -135,8 +135,15 @@
     <div class="d-flex flex-wrap col-10 justify-content-start">
 
         <div class="img-profile col-3" style="position: relative;">
-            <img th:src="${user.userPhoto}" alt="회원 프로필 사진" class="profile-image"
-                 style="width: 100%; height: 100%; max-width: 100%; object-fit: cover;">
+
+            <img th:if="${#strings.contains(user.userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                 src="/assets/UserDefaultPhoto.png"
+                 style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
+
+            <img th:unless="${#strings.contains(user.userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                 th:src="@{/view/{photo}(photo=${user.userPhoto})}"
+                 style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
+
         </div>
 
         <div class="col-7 user-info justify-content-start">
@@ -193,9 +200,10 @@
 
                     <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
                        style="display: block; text-decoration: none; color: inherit;">
-                        <img th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
-                             class="club-cover" src="/assets/NullPhoto.png"
-                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        <img
+                                th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
+                                class="club-cover" src="/assets/NullPhoto.png"
+                                style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
                         <img th:if="${#lists.size(userArticlePhotoList) > iterStat.index}"
                              th:unless="${#strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
                              class="club-cover"
@@ -237,9 +245,10 @@
 
                     <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
                        style="display: block; text-decoration: none; color: inherit;">
-                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
-                             class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
-                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        <img
+                                th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                                class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
+                                style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
                         <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
                              th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
                              class="club-cover"

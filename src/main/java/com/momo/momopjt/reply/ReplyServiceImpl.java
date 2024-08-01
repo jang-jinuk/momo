@@ -2,8 +2,10 @@ package com.momo.momopjt.reply;
 
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.article.Article;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -22,7 +24,7 @@ public class ReplyServiceImpl implements ReplyService {
 
   private final UserService userService;
   private final ReplyRepository replyRepository;
-
+  private final UserAndScheduleService userAndScheduleService;
   private final AlarmService alarmService;
 
   private final ModelMapper modelMapper;
@@ -37,25 +39,54 @@ public class ReplyServiceImpl implements ReplyService {
 
     // 댓글 저장
     Reply savedReply = replyRepository.save(reply);
+    User author;
 
-    // 저장된 댓글의 후기글 가져오기
-    Article article = savedReply.getArticleNo(); // articleNo는 Article 타입
-    log.info("Saved reply's article: " + article);
 
-    // 후기글의 작성자 조회
-    User articleAuthor = article.getUserNo(); // 후기글 작성자
-    log.info("Article author: " + articleAuthor);
+
 
     // 현재 로그인된 사용자 얻기
-    User currentUser = userService.getCurrentUser();
-    if (currentUser == null) {
+    boolean checkLoginUser = false;
+    if (userService.getCurrentUser() != null) {
+      checkLoginUser = true;
+    } else {
       log.error("-------- [댓글 알림] 로그인된 사용자가 없습니다. -------");
-      return; // 로그인된 사용자가 없는 경우 알림을 생성하지 않음
     }
 
-    // 후기글 작성자에게 알림 생성
-    alarmService.createCommentAddedAlarm(articleAuthor, article);
-    log.info("-------- [댓글 작성 알림 이벤트] -------");
+
+
+    // 저장된 댓글의 후기글 또는 일정 확인
+    if (replyDTO.getArticleNo() == null) {
+      // 일정 댓글인 경우
+      Schedule schedule = savedReply.getScheduleNo();
+      log.info("Saved reply's schedule: " + schedule);
+
+
+      List<User> uns = schedule.getUserAndSchedules().stream()
+          .filter(userAndSchedule -> userAndSchedule.getIsHost())
+          .map(userAndSchedule -> userAndSchedule.getUserNo())
+          .collect(Collectors.toList());
+
+      author = userService.findByUserId((uns.get(0)).getUserId());
+      log.info("Schedule author: " + author);
+      if (checkLoginUser) {
+// TODO        schedule 댓글 알람 기능 미구현
+      }
+
+    } else {
+      // 후기글 댓글인 경우
+      Article article = savedReply.getArticleNo(); // articleNo는 Article 타입
+      log.info("Saved reply's article: " + article);
+
+      author = article.getUserNo(); // 후기글 작성자
+      log.info("Article author: " + author);
+
+      // 후기글 작성자에게 알림 생성
+      if (checkLoginUser) {
+        alarmService.createCommentAddedAlarm(author, article);
+        log.info("-------- [댓글 작성 알림 이벤트] -------");
+      }
+    }
+
 
   }
 

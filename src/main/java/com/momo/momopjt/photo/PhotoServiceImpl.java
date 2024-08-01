@@ -57,14 +57,12 @@ public class PhotoServiceImpl implements PhotoService {
         log.info("try  get photo-ClubDefaultPhoto");
         Photo clubDefaultPhoto = new Photo();
         clubDefaultPhoto.setPhotoUUID("ClubDefaultPhoto");
-        clubDefaultPhoto.setPhotoExtension(".jpg");
         return clubDefaultPhoto;
 
       case "UserDefaultPhoto":
         log.info("try  get photo-UserDefaultPhoto");
         Photo userDefaultPhoto = new Photo();
         userDefaultPhoto.setPhotoUUID("UserDefaultPhoto");
-        userDefaultPhoto.setPhotoExtension(".png");
         return userDefaultPhoto;
       case "ScheduleDefaultPhoto":
 
