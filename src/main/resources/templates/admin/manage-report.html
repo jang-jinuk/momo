@@ -28,7 +28,7 @@
         th:nth-child(3), td:nth-child(3) { width: 15%; } /* 피신고자 */
         th:nth-child(4), td:nth-child(4) { width: 20%; } /* 피신고자 닉네임 */
         th:nth-child(5), td:nth-child(5) { width: 15%; } /* 죄목 */
-        th:nth-child(6), td:nth-child(6) { width: 15%; } /* 날짜 */
+        th:nth-child(6), td:nth-child(6) { width: 20%; } /* 날짜 */
         th:nth-child(7), td:nth-child(7) { width: 10%; } /* 상태 */
         th:nth-child(8), td:nth-child(8) { width: 10%; } /* 제제 */
         th:nth-child(9), td:nth-child(9) { width: 10%; } /* 지우기 */
@@ -41,7 +41,7 @@
         <h6 th:text="${logoText}">momo</h6>
         <div class="btn-group" role="group" aria-label="Basic example">
             <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
-            <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
+            <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-user'">회원관리</button>
         </div>
     </div>
 </header>

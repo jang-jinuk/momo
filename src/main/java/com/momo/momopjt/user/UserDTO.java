@@ -58,4 +58,6 @@ public class UserDTO {
     public String getUserGenderAsString() {
         return userGender != null ? userGender.toString() : "";
     }
+
+    public UserRole userRole;
 }

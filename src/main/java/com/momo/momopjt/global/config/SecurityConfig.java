@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -50,7 +49,7 @@ public class SecurityConfig {
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
         .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
-//        .antMatchers("/admin/**").hasRole("ADMIN")
+        //.antMatchers("/admin/**").hasRole("ADMIN") todo 0802 안돼요 SW
         .and()
         .formLogin().loginPage("/user/login")
         .defaultSuccessUrl("/home")

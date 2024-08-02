@@ -102,6 +102,7 @@ public class ReportServiceImpl implements ReportService {
   public void deleteReport(Long reportNo) {
         reportRepository.deleteById(reportNo);
     }
+
   //페이징 검색
   @Override
   public List<ReportDTO> searchReports(String query) {

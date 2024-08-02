@@ -1,8 +1,10 @@
 package com.momo.momopjt.report;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +18,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 @Log4j2
+@Transactional
 public class AdminController {
 
   @Autowired
   private ReportService reportService;
+
 
   //조회와 페이징 검색
   @GetMapping("/manage-report")
@@ -59,7 +64,7 @@ public class AdminController {
     model.addAttribute("query", query); // 검색어를 모델에 추가
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
-    log.trace("...... [AdminController/manage-report/ END]..........KSW");
+    log.trace("...... [AdminRtportController/manage-report/ END]..........KSW");
     return "admin/manage-report";
   }
 

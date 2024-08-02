@@ -1,6 +1,7 @@
 package com.momo.momopjt.user;
 
 
+import java.util.List;
 import java.util.Optional;
 public interface UserService {
 
@@ -36,5 +37,11 @@ public interface UserService {
   class UserIdException extends Exception {}
 
   class UserNicknameException extends Exception {}
+  //관리자 유저 전체 조회
+  List<UserDTO> readALLUsers();
+  //관리자 유저 검색
+  List<UserDTO> searchUsers(String query);
+
+  void chageRoleUser(UserDTO userDTO);
 
 }
