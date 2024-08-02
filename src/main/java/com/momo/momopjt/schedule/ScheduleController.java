@@ -64,20 +64,15 @@ public class ScheduleController {
 
   //일정 생성하기
   @PostMapping("/create")
-  public String scheduleCreatePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session) {
+  public String scheduleCreatePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("------------ [Post schedule create] ------------");
 
-    //photo 저장에 필요한 user 정보 받아오는 공통 로직 앞으로 뺌
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUserId(username);
-
+    User user = userService.getCurrentUser();
 
     UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
     userAndScheduleDTO.setUserNo(user);
 
     log.info("------------ [현재 로그인 중인 정보] ------------");
-
 
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
@@ -91,19 +86,23 @@ public class ScheduleController {
 
 
     if (scheduleDTO.getSchedulePhotoUUID() == null || scheduleDTO.getSchedulePhotoUUID().equals("")) {
-      log.warn("schdule photo uuid is null or empty");
+      log.warn("schedule photo uuid is null or empty");
 
-      log.info("----------------- [schduleDTO.getSchedulePhotoUUID : {}]-----------------", scheduleDTO.getSchedulePhotoUUID());
+      log.info("----------------- [scheduleDTO.getSchedulePhotoUUID : {}]-----------------", scheduleDTO.getSchedulePhotoUUID());
 
       scheduleDTO.setSchedulePhotoUUID("ScheduleDefaultPhoto");
 
     }
 
-    Long scheduleNo = scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
-
-    log.info("------------ [일정 등록 완료] ------------");
-
-    return "redirect:/schedule/" + scheduleNo;
+    try {
+      Long scheduleNo = scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
+      log.info("------------ [일정 등록 완료] ------------");
+      return "redirect:/schedule/" + scheduleNo;
+    } catch (Exception e) {
+      e.printStackTrace();
+      redirectAttributes.addFlashAttribute("message", "참가 인원수는 0보다 적게 설정할 수 없습니다.");
+      return "redirect:/schedule/create";
+    }
   }
 
   //일정 상세페이지 이동
