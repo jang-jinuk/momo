@@ -24,7 +24,7 @@
         }
         th:nth-child(1), td:nth-child(1) { width: 5%; }
         th:nth-child(2), td:nth-child(2) { width: 15%; }
-        th:nth-child(3), td:nth-child(3) { width: 20%; }
+        th:nth-child(3), td:nth-child(3) { width: 10%; }
         th:nth-child(4), td:nth-child(4) { width: 20%; }
         th:nth-child(5), td:nth-child(5) { width: 10%; }
         th:nth-child(6), td:nth-child(6) { width: 10%; }
@@ -38,18 +38,13 @@
         <h6 th:text="${logoText}">momo</h6>
         <div class="btn-group" role="group" aria-label="Basic example">
             <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
-            <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-user'">유저관리</button>
+            <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
         </div>
     </div>
 </header>
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
-        <a class="navbar-brand">회원 관리</a>
-        <form class="d-flex" th:action="@{/admin/manage-user}" method="get">
-            <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search" name="query"
-                   th:value="${query}">
-            <button class="btn btn-outline-success" type="submit">검색</button>
-        </form>
+        <a class="navbar-brand">회원 목록</a>
     </div>
 </nav>
 <table class="table table-bordered table-striped container">
@@ -60,7 +55,7 @@
         <th>닉네임</th>
         <th>이메일</th>
         <th>상태</th>
-        <th>제제</th>
+<!--        <th>권한</th>-->
     </tr>
     </thead>
     <tbody id="userTableBody">
@@ -79,22 +74,14 @@
                 <span th:case="*">알 수 없음</span>
             </span>
         </td>
-        <td th:if="${user.userState == '0'}">
-            <form th:action="@{/admin/deactivate-user}" method="post">
-                <input type="hidden" name="userNo" th:value="${user.userNo}">
-                <input type="hidden" name="currentPage" th:value="${page}">
-                <input type="hidden" name="query" th:value="${query}">
-                <button class="btn btn-danger btn-custom" type="submit" onclick="ban()">유저정지</button>
-            </form>
-        </td>
-        <td th:if="${user.userState == '1'}">
-            <form th:action="@{/admin/reactivate-user}" method="post">
-                <input type="hidden" name="userNo" th:value="${user.userNo}">
-                <input type="hidden" name="currentPage" th:value="${page}">
-                <input type="hidden" name="query" th:value="${query}">
-                <button class="btn btn-success btn-custom" type="submit" onclick="free()">정지해제</button>
-            </form>
-        </td>
+<!--        <td>-->
+<!--            <form th:action="@{/admin/change-userRole}" method="post">-->
+<!--                <input type="hidden" name="userNo" th:value="${user.userNo}">-->
+<!--                <input type="hidden" name="currentPage" th:value="${page}">-->
+<!--                <input type="hidden" name="query" th:value="${query}">-->
+<!--                <button class="btn btn-danger btn-custom" type="submit" th:onclick="changing()">부여</button>-->
+<!--            </form>-->
+<!--        </td>-->
     </tr>
     <tr th:if="${#lists.isEmpty(UserDTO)}">
         <td colspan="7" class="text-center">유저가 없습니다</td>
@@ -120,8 +107,8 @@
 </div>
 
 <script>
-    function ban() {
-        alert('회원이 제제됐습니다.');
+    function changing() {
+        alert('ADMIN 권한 부여.');
     }
 
     function free() {

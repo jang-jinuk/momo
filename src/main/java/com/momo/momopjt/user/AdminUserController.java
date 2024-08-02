@@ -6,9 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -53,7 +57,21 @@ public class AdminUserController {
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
 
-    log.trace("AdminController manage-User END");
+    log.trace("AdminUserController manage-User END");
     return "admin/manage-User";
+  }
+
+  @PostMapping("/change-userRole")
+  public String changeUserrolePost(@RequestParam("userNo") Long userNo,
+                                   @RequestParam("currentPage") int currentPage,
+                                   @RequestParam("query") String query) throws UnsupportedEncodingException {
+    log.info("...... [POST /change-userRole]..........KSW");
+    UserDTO userDTO = new UserDTO(); // 타입에 맞게 객체를 생성하여
+    userDTO.setUserNo(userNo);
+    userService.chageRoleUser(userDTO); //기능으로 넘겨준다
+    log.info("...... [권한부여]..........KSW");
+    log.info("...... [{}]..........KSW",query);
+    String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8); //쿼리를 인코더에 담아준다
+    return "redirect:/admin/manage-user?page=" + currentPage + "&query=" + encodedQuery;
   }
 }

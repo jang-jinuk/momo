@@ -2,8 +2,6 @@ package com.momo.momopjt.user;
 
 
 import com.momo.momopjt.club.Club;
-import com.momo.momopjt.report.Report;
-import com.momo.momopjt.report.ReportDTO;
 import com.momo.momopjt.userandclub.UserAndClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -158,7 +156,6 @@ public class UserServiceImpl implements UserService {
         if (userDTO.getUserGender() != null) {
         user.setUserGender(userDTO.getUserGender());
         }
-
 
         // 9. 수정일 업데이트
         user.setUserModifyDate(Instant.now());
@@ -393,5 +390,36 @@ public class UserServiceImpl implements UserService {
             user.getUserNickname().contains(query) || // userNickname
             user.getUserEmail().contains(query)) // userEmail
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void chageRoleUser(UserDTO userDTO) {
+    // 메서드 시작 로그
+    log.info("권한 부여 시작: {}", userDTO.getUserNo());
+
+    // userDTO 에서 userNo를 가져옵니다.
+    Long userNo = userDTO.getUserNo();
+
+    // userNo를 사용해 사용자 정보를 조회합니다.
+    User user = userRepository.findById(userNo)
+        .orElseThrow(() -> {
+          log.error("찾을 수 없음: {}", userNo);
+          return new IllegalArgumentException("없는 유저: " + userNo);
+        });
+
+    // 현재 역할을 가져옵니다.
+    UserRole currentRole = user.getUserRole();
+    log.info("현재 유저 권한 {}: {}", userNo, currentRole);
+
+    // 역할을 전환합니다.
+    UserRole newRole = (currentRole == UserRole.ADMIN) ? UserRole.USER : UserRole.ADMIN;
+    log.info("새 유저 권한 {}: {}", userNo, newRole);
+
+    // 새로운 역할을 설정합니다.
+    user.setUserRole(newRole);
+
+    // 변경된 사용자 정보를 저장합니다.
+    userRepository.save(user);
+    log.info("권한 설정 완료: {}", userNo);
   }
 }

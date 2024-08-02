@@ -41,4 +41,7 @@ public interface UserService {
   List<UserDTO> readALLUsers();
   //관리자 유저 검색
   List<UserDTO> searchUsers(String query);
+
+  void chageRoleUser(UserDTO userDTO);
+
 }
