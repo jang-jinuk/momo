@@ -48,8 +48,8 @@ public class FileCheckTask {
 //    log.info("File Check Task run.................");
     log.info("오늘은 {} ", LocalDateTime.now().format(formatter) + " 입니다.");
 
-     List<String> uuids = photoRepository.findAll().stream().map(Photo::toString).collect(Collectors.toList());
-     log.info("----------------- [uuids in DB : {}]-----------------",uuids);
+     List<String> photos = photoRepository.findAll().stream().map(Photo::toString).collect(Collectors.toList());
+     log.info("----------------- [uuids in DB : {}]-----------------",photos);
 
      String delUUID ="";
 

@@ -21,6 +21,7 @@ public class ReplyDTO {
   private User userNo;
 
   private String writer; // userNickName
+  private String writerPhotoStr;
 
   private String replyContent;
 
@@ -35,5 +36,6 @@ public class ReplyDTO {
   private Article articleNo;
 
   private Schedule scheduleNo;
+
 
 }

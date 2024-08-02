@@ -136,12 +136,12 @@
 
         <div class="img-profile col-3" style="position: relative;">
 
-            <img th:if="${#strings.contains(user.userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+            <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
                  src="/assets/UserDefaultPhoto.png"
                  style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
 
-            <img th:unless="${#strings.contains(user.userPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                 th:src="@{/view/{photo}(photo=${user.userPhoto})}"
+            <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                 th:src="@{/view/{photo}(photo=${userPhoto})}"
                  style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
 
         </div>

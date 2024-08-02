@@ -46,7 +46,26 @@
             </div>
         </div>
         <h2 style="display: inline">참여 중인 맴버</h2>
-        <span th:text="|${scheduleDTO.scheduleParticipants} / ${scheduleDTO.scheduleMax}|"></span>
+        <span th:text="|${scheduleDTO.scheduleParticipants} / ${scheduleDTO.scheduleMax}|">
+        </span>
+
+        참여 멤버 이미지 출력
+        <span th:each="participantPhoto : ${scheduleParticipantPhotoList}">
+            <img th:if="${#strings.contains(participantPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                  src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
+            <img th:unless="${#strings.contains(participantPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                           th:src="@{/view/{photo}(photo=${participantPhoto})}" style="width: 20px; height:20px">
+
+        </span>
+
+
+        <!--          <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"-->
+        <!--               src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">-->
+        <!--          <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"-->
+        <!--               th:src="@{/view/{photo}(photo=${userPhoto})}" style="width: 20px; height:20px">-->
+        <!--        -->
+
+
         <div class="row">
             <table>
                 <tr>
@@ -61,13 +80,21 @@
                     </th>
                 </tr>
                 <tr th:each="user : ${userDTOList}">
-                    <td>사진 자리</td>
+                    <td>
+
+            <img th:if="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
+                 src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
+            <img th:unless="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
+                 th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 20px; height:20px">
+                    </td>
+
                     <td th:text="${user.userNickname}"></td>
                     <td th:text="${user.userAddress}"></td>
                 </tr>
             </table>
         </div>
         <div class="row" th:unless="${currentTime} > ${scheduleDTO.scheduleStartDate}">
+
             <div th:if="${isScheduleFull} and ${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
                 <button class="btn btn-dark">마감</button>
             </div>

@@ -277,7 +277,6 @@ ${uuid}${extension}
       }
 
 
-      /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
 
       //upload remove,, local file and div card all deleted
       function removeFile(uuid, extension, obj) {
@@ -314,7 +313,6 @@ ${uuid}${extension}
               console.log(uploadFile)
               const imgLink = uploadFile.getAttribute("data-src")
 
-              //
               // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
 
               const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
@@ -382,24 +380,3 @@ ${uuid}${extension}
   </script>
 
 </th:block>
-
-<!--
-document.querySelector(".submitBtn").addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const target = document.querySelector(".uploadHidden");
-    const uploadFiles = uploadResult.querySelectorAll("img");
-    let str = '';
-
-    uploadFiles.forEach(function(uploadFile) {
-        const imguuid = uploadFile.getAttribute("uuid-src");
-        str += `<input type='hidden' name='clubPhotoUUID' value="${imguuid}">`;
-    });
-
-    target.innerHTML = str;
-
-    const formObj = document.querySelector("form");
-    formObj.submit();
-}, false);
--->

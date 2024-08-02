@@ -1,6 +1,10 @@
 package com.momo.momopjt.photo;
 
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.reply.ReplyDTO;
+import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserDTO;
+import com.momo.momopjt.user.UserService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +25,7 @@ public class PhotoServiceImpl implements PhotoService {
   private final ClubRepository clubRepository;
 
   private final ModelMapper modelMapper;
+  private final UserService userService;
 
   @Override
   public Photo savePhoto(PhotoDTO photoDTO) {
@@ -111,6 +116,23 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
 
+  }
+
+  @Override
+  public UserDTO addPhotoStr(UserDTO userDTO) {
+    userDTO.setUserPhotoStr(
+        getPhoto(userDTO.getUserPhoto()).toString()
+    );
+    return userDTO;
+  }
+
+  @Override
+  public ReplyDTO addPhotoStr(ReplyDTO replyDTO) {
+    User author = userService.findByUserNo(replyDTO.getUserNo().getUserNo()).get();
+    replyDTO.setWriterPhotoStr(
+        getPhoto(author.getUserPhoto()).toString()
+    );
+    return replyDTO;
   }
 
 }

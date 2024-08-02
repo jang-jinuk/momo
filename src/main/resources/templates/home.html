@@ -18,13 +18,13 @@
 
     <div th:if="${myClubDTOList!=null && myClubDTOList.size()>0}"
          th:with="myMaxIndex=${#lists.size(myClubDTOList) - 1}">
-      <div class="col-3" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">
+      <div>
 
-        <div class="card mb-3" style="max-width: 415px;">
+        <div class="card mb-3" style="max-width: 415px;" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">
           <div class="row g-0">
 
 
-            <div class="col-md-4">
+            <div class="col-md-3">
 
               <img th:if="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
                    src="/assets/ClubDefaultPhoto.jpg">
