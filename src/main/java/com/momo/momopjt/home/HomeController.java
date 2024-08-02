@@ -2,6 +2,8 @@ package com.momo.momopjt.home;
 
 import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubService;
+import com.momo.momopjt.news.News;
+import com.momo.momopjt.news.NewsService;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,8 @@ public class HomeController {
   private UserService userService;
   @Autowired
   private PhotoService photoService;
+  @Autowired
+  private NewsService newsService;
 
   @GetMapping("/home")
   public String home(Model model) {
@@ -55,8 +60,16 @@ public class HomeController {
     log.trace("----------------- [clubPhotoList : {}}]-----------------", clubPhotoList);
 
     //프사 추가 (비활성화) aop?
-    String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
-    model.addAttribute("userPhoto",userPhoto);
+    if(user != null ) {
+      String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
+      model.addAttribute("userPhoto", userPhoto);
+    }
+    //공지사항 추가
+
+
+    List<News> newsList = newsService.readAllNews();
+    Collections.reverse(newsList); // 최신순 정렬
+    model.addAttribute("newsList", newsList);
 
     return "home"; // 홈 페이지의 Thymeleaf 템플릿 이름
 

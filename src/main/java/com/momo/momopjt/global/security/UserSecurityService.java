@@ -60,7 +60,9 @@ public class UserSecurityService {
             .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.name()))
             .collect(Collectors.toList())
     );
+
     userSecurityDTO.setProps(params);
+
     return userSecurityDTO;
   }
 }

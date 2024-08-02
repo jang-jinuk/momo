@@ -36,7 +36,7 @@ private String userPhoto;
     public UserSecurityDTO(String userPhoto, String userId, String password, String email,
                            boolean enabled, Character social,
                            Collection<? extends GrantedAuthority> authorities) {
-        log.info("----------------- [userSecDTO contructor]-----------------");
+        log.info("----------------- [userSecDTO constructor]-----------------");
         this.userPhoto = userPhoto;
         this.userId = userId;
         this.userPw = password;

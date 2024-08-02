@@ -55,6 +55,15 @@ public class PhotoServiceImpl implements PhotoService {
   public Photo getPhoto(String photoUUID) {
     log.info("------------ getPhoto() ----------jinuk");
 
+    if (photoUUID == null) { // TODO 너무 Rough 한 처리 0802 YY 
+      log.warn("No existing Photo...... null photo return");
+
+      Photo NullPhoto = new Photo();
+      NullPhoto.setPhotoUUID("NullPhoto");
+      return NullPhoto;
+    }
+
+
     // 기본 사진 조회 설정
     switch (photoUUID) {
 
