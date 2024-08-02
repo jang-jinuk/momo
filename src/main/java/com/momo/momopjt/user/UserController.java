@@ -195,6 +195,13 @@ public class UserController {
       throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
     }
 
+
+    //프사 추가
+    String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
+    model.addAttribute("userPhoto",userPhoto);
+
+
+
     // 사용자 정보를 DTO로 변환
     ModelMapper modelMapper = new ModelMapper();
     UserDTO userDTO = modelMapper.map(user, UserDTO.class);
@@ -253,6 +260,7 @@ public class UserController {
       user.setUserEmail(userDTO.getUserEmail());
       user.setUserAddress(userDTO.getUserAddress());
       user.setUserMBTI(userDTO.getUserMBTI());
+      user.setUserPhoto(userDTO.getUserPhoto());
 
       // 소셜 로그인 사용자에 대해 기본 역할 설정 (ROLE_USER) 추가
       if (user.getRoleSet() == null || user.getRoleSet().isEmpty()) {
@@ -450,6 +458,10 @@ public class UserController {
             .map(articleDTO -> photoService.getPhoto(articleDTO.getClubPhotoUUID()).toString())//YY
             .collect(Collectors.toList());
       }
+
+      //프사 표시 추가
+      String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
+      model.addAttribute("userPhoto",userPhoto);
       model.addAttribute("clubPhotoList", clubPhotoList);
     }
     return "user/profile"; // 프로필 뷰 페이지 반환

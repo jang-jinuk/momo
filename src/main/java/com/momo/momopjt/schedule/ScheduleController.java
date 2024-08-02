@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
@@ -122,7 +123,11 @@ public class ScheduleController {
     //참가인원 조회
     Schedule schedule = new Schedule();
     schedule.setScheduleNo(scheduleNo);
-    List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
+List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
+userDTOList = userDTOList.stream()
+                          .peek(userDTO -> userDTO.setUserPhotoStr(photoService.getPhoto(userDTO.getUserPhoto()).toString()))
+                          .collect(Collectors.toList());
+
 
     //현재 로그인된 회원이 일정에 참석했는지 확인
     UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
@@ -149,6 +154,14 @@ public class ScheduleController {
     String schedulePhoto = photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString();
     //출력할 일정 사진 추가
     model.addAttribute("schedulePhoto", schedulePhoto);
+
+    //일정 참가자 사진 추가
+
+    List<UserDTO> scheduleParticipantList = userAndScheduleService.readAllParticipants(schedule);
+    List<String> scheduleParticipantPhotoList = scheduleParticipantList.stream().map(userDTO ->
+        photoService.getPhoto(userDTO.getUserPhoto()).toString())
+        .collect(Collectors.toList());
+    model.addAttribute("scheduleParticipantPhotoList", scheduleParticipantPhotoList);
 
     return "schedule/view";
   }
