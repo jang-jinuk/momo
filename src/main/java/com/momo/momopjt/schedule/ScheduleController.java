@@ -99,11 +99,11 @@ public class ScheduleController {
       log.info("------------ [일정 등록 완료] ------------");
       return "redirect:/schedule/" + scheduleNo;
     } catch (ScheduleService.ScheduleDateException e) {
-      e.printStackTrace();
+      log.trace("------------ [Failed to set schedule date] ------------");
       redirectAttributes.addFlashAttribute("message", "현재 시간보다 과거의 시간을 설정할 수 없습니다.");
       return "redirect:/schedule/create";
     } catch (ScheduleService.ScheduleMaxException e) {
-      e.printStackTrace();
+      log.trace("------------ [Failed to set schedule max] ------------");
       redirectAttributes.addFlashAttribute("message", "참가 인원수는 0보다 적게 설정할 수 없습니다.");
       return "redirect:/schedule/create";
     }
@@ -251,7 +251,7 @@ public class ScheduleController {
     ScheduleDTO oldScheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     scheduleDTO.setScheduleNo(scheduleNo);
-    log.info("----------------- [session get schduleNo]-----------------", scheduleNo);
+    log.info("----------------- [session get scheduleNo]-----------------", scheduleNo);
     //날짜/시간 포매팅
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
