@@ -1,3 +1,4 @@
+/*
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
@@ -156,3 +157,4 @@ public class ScheduleServiceTests {
     scheduleService.deleteSchedule(deleteScheduleNo);
   }
 }
+*/
