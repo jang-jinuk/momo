@@ -95,10 +95,14 @@ public class ScheduleController {
     }
 
     try {
-      Long scheduleNo = scheduleService.createSchedule(scheduleDTO,userAndScheduleDTO);
+      Long scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
       log.info("------------ [일정 등록 완료] ------------");
       return "redirect:/schedule/" + scheduleNo;
-    } catch (Exception e) {
+    } catch (ScheduleService.ScheduleDateException e) {
+      e.printStackTrace();
+      redirectAttributes.addFlashAttribute("message", "현재 시간보다 과거의 시간을 설정할 수 없습니다.");
+      return "redirect:/schedule/create";
+    } catch (ScheduleService.ScheduleMaxException e) {
       e.printStackTrace();
       redirectAttributes.addFlashAttribute("message", "참가 인원수는 0보다 적게 설정할 수 없습니다.");
       return "redirect:/schedule/create";
@@ -122,10 +126,10 @@ public class ScheduleController {
     //참가인원 조회
     Schedule schedule = new Schedule();
     schedule.setScheduleNo(scheduleNo);
-List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
-userDTOList = userDTOList.stream()
-                          .peek(userDTO -> userDTO.setUserPhotoStr(photoService.getPhoto(userDTO.getUserPhoto()).toString()))
-                          .collect(Collectors.toList());
+    List<UserDTO> userDTOList = userAndScheduleService.readAllParticipants(schedule);
+    userDTOList = userDTOList.stream()
+        .peek(userDTO -> userDTO.setUserPhotoStr(photoService.getPhoto(userDTO.getUserPhoto()).toString()))
+        .collect(Collectors.toList());
 
 
     //현재 로그인된 회원이 일정에 참석했는지 확인
@@ -158,7 +162,7 @@ userDTOList = userDTOList.stream()
 
     List<UserDTO> scheduleParticipantList = userAndScheduleService.readAllParticipants(schedule);
     List<String> scheduleParticipantPhotoList = scheduleParticipantList.stream().map(userDTO ->
-        photoService.getPhoto(userDTO.getUserPhoto()).toString())
+            photoService.getPhoto(userDTO.getUserPhoto()).toString())
         .collect(Collectors.toList());
     model.addAttribute("scheduleParticipantPhotoList", scheduleParticipantPhotoList);
 
@@ -231,7 +235,7 @@ userDTOList = userDTOList.stream()
     //출력할 일정 사진 추가
     String schedulePhoto = photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString();
     model.addAttribute("schedulePhoto", schedulePhoto);
-    log.trace("--------------------------------schedulephoto {}",schedulePhoto);
+    log.trace("--------------------------------schedulephoto {}", schedulePhoto);
 
 
     return "schedule/update";
@@ -241,13 +245,13 @@ userDTOList = userDTOList.stream()
   @PostMapping("/update")
   public String updateSchedulePost(ScheduleDTO scheduleDTO, String dateTime, HttpSession session, RedirectAttributes redirectAttributes) {
     log.info("------------ [Post schedule update] ------------");
-    log.trace("----------------- initial input dto [scheduleDTO {}]-----------------",scheduleDTO);
+    log.trace("----------------- initial input dto [scheduleDTO {}]-----------------", scheduleDTO);
 
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     ScheduleDTO oldScheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     scheduleDTO.setScheduleNo(scheduleNo);
-    log.info("----------------- [session get schduleNo]-----------------",scheduleNo);
+    log.info("----------------- [session get schduleNo]-----------------", scheduleNo);
     //날짜/시간 포매팅
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
     ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
@@ -257,15 +261,15 @@ userDTOList = userDTOList.stream()
 //    사진 업데이트 준비 로직
     log.trace("update club photo 조회");
     String newPhotoUUID = scheduleDTO.getSchedulePhotoUUID();
-    log.trace("newPhotoUUID : {}",newPhotoUUID);
+    log.trace("newPhotoUUID : {}", newPhotoUUID);
     ScheduleDTO schedule = scheduleService.readOneSchedule(scheduleNo);
     String oldPhotoUUID = oldScheduleDTO.getSchedulePhotoUUID();
-    log.trace("oldPhotoUUID : {}",oldPhotoUUID);
+    log.trace("oldPhotoUUID : {}", oldPhotoUUID);
 
 //    사진 업데이트 로직
-    if(newPhotoUUID != null && newPhotoUUID.length()>0){
-      if(! newPhotoUUID.equals(oldPhotoUUID) ){
-        log.trace("update club photo 실행, old-> new {} -> {}",oldPhotoUUID,newPhotoUUID);
+    if (newPhotoUUID != null && newPhotoUUID.length() > 0) {
+      if (!newPhotoUUID.equals(oldPhotoUUID)) {
+        log.trace("update club photo 실행, old-> new {} -> {}", oldPhotoUUID, newPhotoUUID);
         scheduleDTO.setSchedulePhotoUUID(newPhotoUUID);
         //photo 변경사항이 있을 떄 업데이트 실행
       }
@@ -273,7 +277,6 @@ userDTOList = userDTOList.stream()
       log.trace("update schedule photo 실행 X, old : {}, new : {}", oldPhotoUUID, newPhotoUUID);
       scheduleDTO.setSchedulePhotoUUID(oldPhotoUUID);
     }
-
 
 
     Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
