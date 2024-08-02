@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,10 +40,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 생성
   @Override
-  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) {
+  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws createScheduleException{
+
+    //일정 참가 수 검사 로직
+    if(scheduleDTO.getScheduleMax() <= 0) {
+      throw new createScheduleException();
+    }
+
+//    if(scheduleDTO.getScheduleStartDate() <= Instant.now()) {
+//      throw new createScheduleException();
+//    }
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
-
 
     Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
     log.info("------------ [일정 생성 완료] ------------");

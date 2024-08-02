@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO);
+   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws createScheduleException;
 
    ScheduleDTO readOneSchedule(Long scheduleNo);
 
@@ -25,4 +25,5 @@ public interface ScheduleService {
 
    Boolean isScheduleFull(Long scheduleNo);
 
+   class createScheduleException extends Exception {}
 }
