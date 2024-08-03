@@ -21,31 +21,27 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
         }
-        .container {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            justify-content: center;
-        }
         .content {
             display: flex;
-            align-items: flex-start;
-            width: 100%;
-            max-width: 1200px;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 20px; /* 로그인 박스와 광고 이미지 사이의 간격 */
         }
         .login-box {
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
+            border: 1px solid #ddd; /* 테두리 추가 */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 336.8px; /* 로그인 박스 너비 */
             height: 505.2px; /* 로그인 박스 높이 */
-            margin-right: 20px;
             box-sizing: border-box;
+            text-align: center;
         }
         .login-box h2 {
             margin-bottom: 20px;
-            text-align: center;
+            color: #007bff;
         }
         .form-group {
             margin-bottom: 15px;
@@ -53,11 +49,20 @@
         .form-control {
             height: 45px;
             font-size: 16px;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         .btn-primary {
             width: 100%;
             height: 45px;
             font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
         .options {
             display: flex;
@@ -101,6 +106,7 @@
             margin: 20px 0;
             text-align: center;
             position: relative;
+            color: #6c757d;
         }
         .separator::before, .separator::after {
             content: '';
@@ -118,7 +124,7 @@
             right: 0;
         }
         .separator span {
-            background: #fff;
+            background: #f8f9fa;
             padding: 0 10px;
             position: relative;
             z-index: 1;
@@ -137,71 +143,49 @@
             width: 100%;
             height: 100%;
             object-fit: cover; /* 이미지 비율 유지 */
+            border-radius: 10px; /* 모서리 둥글게 */
         }
-        .main_tit_box {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .main_tit_box .main_tit {
-            display: inline-block;
-            margin-right: 20px;
-        }
-        .main_tit_box .btn {
-            display: inline-block;
-            margin-left: auto;
-        }
-        .underline {
-            margin-top: 10px;
-            border-bottom: 2px solid #007bff;
-            width: 100px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
     </style>
 </head>
 
 <body>
-<div class="container">
-    <div class="content">
-
-        <div class="login-box">
-            <h2>MoMo 로그인</h2>
-            <form id="loginForm" action="/user/login" method="post">
-                <div class="form-group">
-                    <input type="text" name="username" class="form-control" placeholder="사용자 아이디" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">로그인</button>
-            </form>
-            <div class="separator"><span>또는</span></div>
-            <div class="social-login">
-                <a href="/oauth2/authorization/kakao" class="btn-social btn-kakao">
-                    <i class="fa-solid fa-comment"></i>
-                </a>
-                <a href="/oauth2/authorization/google" class="btn-social btn-google">
-                    <i class="fa-brands fa-google"></i>
-                </a>
-                <a href="/oauth2/authorization/naver" class="btn-social btn-naver">
-                    <i class="fa-solid fa-n"></i>
-                </a>
+<div class="content">
+    <div class="login-box">
+        <h2>MoMo 로그인</h2>
+        <form id="loginForm" action="/user/login" method="post">
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="사용자 아이디" required>
             </div>
-            <a href="/user/signup" class="link">회원가입</a>
-            <div class="options mt-2">
-                <a href="/user/find/id" class="link">아이디 찾기</a>
-                <span>ㅣ</span>
-                <a href="/user/find/pw" class="link">비밀번호 찾기</a>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
             </div>
+            <button type="submit" class="btn btn-primary mt-3">로그인</button>
+        </form>
+        <div class="separator"><span>또는</span></div>
+        <div class="social-login">
+            <a href="/oauth2/authorization/kakao" class="btn-social btn-kakao">
+                <i class="fa-solid fa-comment"></i>
+            </a>
+            <a href="/oauth2/authorization/google" class="btn-social btn-google">
+                <i class="fa-brands fa-google"></i>
+            </a>
+            <a href="/oauth2/authorization/naver" class="btn-social btn-naver">
+                <i class="fa-solid fa-n"></i>
+            </a>
         </div>
-        <!-- Advertisement -->
-        <div class="member_login_right">
-            <div class="member_login_ad">
-                <a href="/home">
-                    <img th:src="@{/assets/momo6.jpg}" alt="momo">
-                </a>
-            </div>
+        <a href="/user/signup" class="link">회원가입</a>
+        <div class="options mt-2">
+            <a href="/user/find/id" class="link">아이디 찾기</a>
+            <span>ㅣ</span>
+            <a href="/user/find/pw" class="link">비밀번호 찾기</a>
+        </div>
+    </div>
+    <!-- Advertisement -->
+    <div class="member_login_right">
+        <div class="member_login_ad">
+            <a href="/home">
+                <img th:src="@{/assets/momo6.jpg}" alt="momo">
+            </a>
         </div>
     </div>
 </div>
