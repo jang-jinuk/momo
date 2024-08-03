@@ -38,7 +38,7 @@ public class FindController  {
       model.addAttribute("userId", maskedUserId);
       log.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
     } else {
-      model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
+      model.addAttribute("errorMessageUserId", "가입된 내역이 없습니다.");
       log.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
     }
     return "user/find/id";
@@ -76,19 +76,19 @@ public class FindController  {
         log.info("----------------- [0716 YY 임시비번 ]-----------------{}",temporaryPassword);
         userService.updateUserPassword(user, temporaryPassword);
         emailService.sendTemporaryPasswordEmail(userEmail, temporaryPassword);
-        redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다.");
         log.info("Temporary password sent to email: {}", userEmail);
-
-        return "redirect:/home";
+        return "redirect:/user/login";
       } else {
-        redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
+        redirectAttributes.addFlashAttribute("message", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
         log.warn("User not found for username: {} and email: {}", userId, userEmail);
+        return "redirect:/user/find/pw";
       }
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      redirectAttributes.addFlashAttribute("message", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
       log.error("Error during password reset request processing", e);
+      return "redirect:/user/find/pw";
     }
-    return "redirect:/pw"; // 오류 발생 시 올바른 경로로 리디렉트
   }
 
   // 비밀번호 재설정 처리 (토큰 없이)
