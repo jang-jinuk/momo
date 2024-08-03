@@ -1,50 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>회원페이지</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        table {
-            margin-top: 20px;
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #dee2e6;
-            text-align: center;
-            vertical-align: middle;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            max-width: 150px;
-            word-wrap: break-word;
-        }
-        th:nth-child(1), td:nth-child(1) { width: 5%; }
-        th:nth-child(2), td:nth-child(2) { width: 15%; }
-        th:nth-child(3), td:nth-child(3) { width: 10%; }
-        th:nth-child(4), td:nth-child(4) { width: 20%; }
-        th:nth-child(5), td:nth-child(5) { width: 10%; }
-        th:nth-child(6), td:nth-child(6) { width: 10%; }
-        th:nth-child(7), td:nth-child(7) { width: 10%; }
-    </style>
-</head>
-<body>
-
-<header class="bg-light py-2">
-    <div class="container d-flex justify-content-between align-items-center">
-        <h6 th:text="${logoText}">momo</h6>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
-            <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
-        </div>
-    </div>
-</header>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<th:block layout:fragment="content">
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">회원 목록</a>
+    </div>
+    <div th:class="ui-button">
+        <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
     </div>
 </nav>
 <table class="table table-bordered table-striped container">
@@ -57,7 +21,6 @@
         <th>상태</th>
         <th>등급</th>
         <th>권한</th>
-
     </tr>
     </thead>
     <tbody id="userTableBody">
@@ -126,5 +89,5 @@
         alert('ADMIN 권한 해제.');
     }
 </script>
-</body>
+</th:block>
 </html>

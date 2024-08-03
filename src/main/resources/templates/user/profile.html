@@ -292,11 +292,11 @@
             <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
                     onclick="openModal()">신고하기
             </button>
-
-                <div class="message-area">
+            <button th:if="${user.userRole == T(com.momo.momopjt.user.UserRole).ADMIN}"
+                    onclick="location.href='/admin/manage-user'">관리자 페이지
+            </button>
                     <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
                     <input type="hidden" id="successMessage" th:value="${successMessage}">
-                </div>
             </div>
         </div>
 
@@ -383,8 +383,12 @@
         <div id="myModal">
             <div class="modal-content">
                 <div class="container-fluid d-flex flex-column align-items-center">
+
+               
+
                     <h2>신고하기</h2>
                     <p>신고 사유를 선택해 주세요</p>
+
                 </div>
 
                 <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
@@ -399,26 +403,26 @@
                             <label class="form-check-label" for="porn">음란성</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="불법" id="illegal">
-                            <label class="form-check-label" for="illegal">법규 위반</label>
+                            <input class="form-check-input" type="radio" name="reportCategory" value="사칭" id="illegal">
+                            <label class="form-check-label" for="illegal">사칭</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="유해물" id="harmful">
-                            <label class="form-check-label" for="harmful">청소년 유해물</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 용어"
+                            <input class="form-check-input" type="radio" name="reportCategory" value="닉네임"
                                    id="political">
-                            <label class="form-check-label" for="political">부적절한 단어 사용</label>
+                            <label class="form-check-label" for="political">부적절한 닉네임</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="사생활" id="privacy">
-                            <label class="form-check-label" for="privacy">개인정보 침해</label>
+                            <input class="form-check-input" type="radio" name="reportCategory" value="게시물" id="privacy">
+                            <label class="form-check-label" for="privacy">부적절한 게시물 활동</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="불쾌한 표현"
+                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 모임 활동"
                                    id="unpleasant">
-                            <label class="form-check-label" for="unpleasant">불쾌한 표현 사용</label>
+                            <label class="form-check-label" for="unpleasant">부적절한 모임 활동</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="기타" id="harmful">
+                            <label class="form-check-label" for="harmful">기타</label>
                         </div>
                     </div>
                     <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
@@ -431,7 +435,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     <!-- 모달 기능 -->
