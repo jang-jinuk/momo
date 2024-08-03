@@ -50,11 +50,12 @@
   <br>
 
   <div class="container">
+
     <!-- 로그인한 사용자에게만 보이는 부분 -->
     <div class="row" th:if="${userNickname}">
       <p th:text="${userNickname + '님 어서오세요!'}">userNickname님 어서오세요!</p>
     </div>
-  </div>
+    </div>
 
   <br>
 
