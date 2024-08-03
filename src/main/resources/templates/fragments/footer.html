@@ -2,14 +2,108 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="footerFragment">
+<head>
+    <style>
+        /* 전체 푸터 컨테이너 스타일 */
+        .footer-container {
+            display: flex; /* 플렉스 박스 레이아웃 사용 */
+            justify-content: space-between; /* 섹션들을 양 끝으로 배치 */
+            align-items: flex-end; /* 세로 정렬을 하단으로 맞추기 */
+            padding: 20px; /* 푸터 내부 여백 */
+            background-color: #222; /* 배경색 설정 */
+            color: #ffffff; /* 텍스트 색상 설정 */
+            font-family: Arial, sans-serif; /* 폰트 설정 */
+            box-sizing: border-box; /* 박스 모델 설정 */
+            position: relative; /* 자식 요소를 절대 위치로 배치하기 위해 부모 요소를 상대 위치로 설정 */
+        }
 
-    <footer class="py-4 bg-light mt-auto" style="bottom: 0; width: 100%;">
+        /* 푸터 리스트 스타일 */
+        .footer-list {
+            font-size: 14px; /* 폰트 크기 설정 */
+        }
 
-        <div class="container-fluid px-4">
-            <div class="text-center">Copyright &copy; MOMO 2024</div>
-        </div>
+        /* 푸터 섹션 스타일 */
+        .footer-section {
+            flex: 1; /* 섹션이 가로 공간을 동일하게 차지하도록 설정 */
+            margin: 10px; /* 섹션 간의 여백 설정 */
+        }
 
-    </footer>
-</th:block>
+        /* '모모주식회사' 섹션 스타일 */
+        .footer-section.about {
+            text-align: left; /* 좌측 정렬 */
+        }
+
+        /* 면책 조항 스타일 */
+        .disclaimer {
+            font-size: 12px; /* 폰트 크기 줄이기 */
+            color: #b0b0b0; /* 텍스트 색상 설정 */
+            text-align: right; /* 오른쪽 정렬 */
+        }
+
+        /* 섹션 제목 스타일 */
+        .footer-section h6 {
+            margin-bottom: 10px; /* 제목 하단 여백 설정 */
+        }
+
+        /* 섹션 내 문단과 리스트 스타일 */
+        .footer-section p,
+        .footer-section ul {
+            margin: 0; /* 여백 제거 */
+            padding: 0; /* 패딩 제거 */
+            list-style: none; /* 리스트 스타일 제거 */
+        }
+
+        /* 리스트 항목 스타일 */
+        .footer-section ul li {
+            margin-bottom: 10px; /* 리스트 항목 하단 여백 설정 */
+        }
+
+        /* 리스트 링크 스타일 */
+        .footer-section ul li a {
+            color: #ffffff; /* 링크 색상 설정 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+        }
+
+        /* 링크 호버 스타일 */
+        .footer-section ul li a:hover {
+            text-decoration: underline; /* 링크 호버 시 밑줄 추가 */
+        }
+
+        /* 푸터 하단 스타일 */
+        .footer-bottom {
+            text-align: center; /* 텍스트 중앙 정렬 */
+            padding: 10px; /* 여백 설정 */
+            background-color: #222; /* 배경색 설정 */
+            color: #ffffff; /* 텍스트 색상 설정 */
+            font-size: 14px; /* 폰트 크기 설정 */
+        }
+    </style>
+</head>
+
+<body>
+<footer class="footer-container">
+    <div class="footer-section about">
+        <h6>모모 주식회사</h6>
+        <ul class="footer-list">
+            <li>이메일: momo@gmail.com</li>
+            <li>전화: 02-837-9922</li>
+            <li>주소: 서울특별시 구로구 시흥대로163길 33 주호타워 2층, 3층</li>
+        </ul>
+    </div>
+    <div class="footer-section disclaimer">
+        <p>위치정보서비스 기반: 본 서비스는 사용자의 위치정보를 활용하여 최적의 서비스를 제공합니다.</p>
+        <br>
+        <p>서비스의 품질을 높이기 위해 고객님의 행동과 선호를 기반으로 맞춤형 서비스를 제공합니다. 이를 통해 더욱 유용하고 개인화된 정보를 제공할 수 있습니다.</p>
+        <br>
+        <p>고객님의 사용 패턴과 선호를 분석하여 개인 맞춤형 서비스를 제공합니다. 보다 유용한 정보와 기능을 제공하기 위해 지속적으로 노력합니다.</p>
+
+    </div>
+
+</footer>
+
+<div class="footer-bottom">
+    <p>&copy; 2024 MOMO All rights reserved</p>
+</div>
+</body>
 
 </html>
