@@ -17,7 +17,10 @@
             <table th:unless="${#lists.isEmpty(joinList)}">
                 <tbody>
                 <tr th:each="join : ${joinList}">
-                    <td th:text="${join.userNo.userNickname}"></td>
+                    <td>
+                        <a th:href="@{/user/profile/{userId}(userId=${join.userNo.userId})}"
+                           th:text="${join.userNo.userNickname}"></a>
+                    </td>
                     <td><button th:onclick="|location.href='@{/club/approve-join(userNo=${join.userNo.userNo})}'|">승인</button></td>
                 </tr>
                 </tbody>
@@ -29,7 +32,10 @@
                 <table>
                     <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
                         <tr th:each="member : ${userAndClubDTOS}">
-                            <td th:text="${member.userNo.userNickname}"></td>
+                            <td>
+                                <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}"
+                                   th:text="${member.userNo.userNickname}"></a>
+                            </td>
                             <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
                         </tr>
                     </tbody>

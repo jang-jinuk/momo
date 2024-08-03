@@ -3,10 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
-
-
-<head>Article Detail</head>
-
 <th:block layout:fragment="content">
 
   <div class="container" style="width: 850px">
@@ -24,7 +20,10 @@
       <div class="member-container"> <!-- 작성자 정보 -->
         <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image">
         <div class="member-info">
-          <h5 th:text="${articleDTO.userNo.userNickname}"></h5>
+          <h5>
+              <a th:href="@{/user/profile/{userId}(userId=${articleDTO.userNo.userId})}"
+                 th:text="${articleDTO.userNo.userNickname}"></a>
+            </h5>
           <p th:text="${articleDTO.userNo.userAddress}"></p>
         </div>
       </div>
@@ -124,7 +123,10 @@
           <span th:text="${reply.getReplyContent()}"></span>
           <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
           <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-          <span th:text="'작성자 : ' + ${reply.getWriter()}"></span>
+          <span> 작성자 :
+          <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"
+                   th:text="${reply.getWriter}"></a>
+          </span>
 
           <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
           <form id="replyDeleteForm" action="/reply/delete" method="post">

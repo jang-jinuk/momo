@@ -26,7 +26,7 @@
 
                             <div th:each="member : ${userAndClubDTOS}" class="member-container">
                                 <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image clubMain">
-                                <a th:href="@{/user/profile/dumyprofile/{userId}(userId=${member.userNo.userId})}">
+                                <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
                                     <div class="member-info">
                                         <h6 class="sb-sidenav-menu" th:text="${member.userNo.userNickname}"></h6>
                                     </div>
