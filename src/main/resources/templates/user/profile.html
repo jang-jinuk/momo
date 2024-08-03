@@ -375,7 +375,9 @@
             <div class="modal-content">
                 <div class="container-fluid d-flex flex-column align-items-center">
                     <h2>신고하기</h2>
+                    <p>신고 사유를 선택해 주세요</p>
                 </div>
+
                 <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
                       class="form-container">
                     <div class="category-container">
@@ -413,8 +415,8 @@
                     <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
                         <input type="hidden" name="reporterId" th:value="${#authentication.name}">
                         <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
-                        <button type="button" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
-                        <button type="button" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
+                        <button type="button" class="btn btn-primary" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
                     </div>
                 </form>
             </div>

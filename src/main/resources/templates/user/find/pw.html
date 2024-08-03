@@ -3,32 +3,41 @@
       layout:decorate="layout/layout.html">
 <th:block layout:fragment="content">
     <div class="container" style="max-width: 30rem; margin-top: 5rem;">
-        <form id="passwordResetForm" action="/user/find/pw" method="post" th:object="${findPasswordRequest}">
-            <h3 class="mb-4">비밀번호 찾기</h3>
-            <div class="mb-3">
-                <label for="userId">아이디</label>
-                <input type="text" id="userId" name="userId" th:field="*{userId}" class="form-control py-3" required placeholder="아이디를 입력해주세요.">
-            </div>
-            <div class="mb-3">
-                <label for="userEmail">이메일</label>
-                <input type="email" id="userEmail" name="userEmail" th:field="*{userEmail}" class="form-control py-3"
-                       required placeholder="momo@email.com">
-            </div>
-            <div class="mb-3" th:if="${userId}">
-                <label for="inputPassword3" class="form-label">가입된 아이디</label>
-                <input th:value="${userId}" type="text" class="form-control py-3" id="inputPassword3" readonly>
-            </div>
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary py-3" th:unless="${userId} or ${errorMessage}">임시 비밀번호 받기
-                </button>
-                <button type="button" class="btn btn-primary py-3" th:if="${userId}"
-                        th:onclick="|location.href='@{/user/login}'|">로그인 하러가기
-                </button>
-                <button type="submit" class="btn btn-primary py-3" th:if="${errorMessage}">재확인</button>
-            </div>
-        </form>
+        <div class="row">
+
+            <form id="passwordResetForm" action="/user/find/pw" method="post" th:object="${findPasswordRequest}">
+                <h3 class="mb-4">비밀번호 찾기</h3>
+                <div class="mb-3">
+                    <label for="userId">아이디</label>
+                    <input type="text" id="userId" name="userId" th:field="*{userId}" class="form-control py-3" required placeholder="아이디를 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <label for="userEmail">이메일</label>
+                    <input type="email" id="userEmail" name="userEmail" th:field="*{userEmail}" class="form-control py-3"
+                           required placeholder="momo@email.com">
+                </div>
+                <div class="mb-3" th:if="${userId}">
+                    <label for="inputPassword3" class="form-label">가입된 아이디</label>
+                    <input th:value="${userId}" type="text" class="form-control py-3" id="inputPassword3" readonly>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary py-3" th:unless="${userId} or ${errorMessage}">임시 비밀번호 받기
+                    </button>
+                    <button type="button" class="btn btn-primary py-3" th:if="${userId}"
+                            th:onclick="|location.href='@{/user/login}'|">로그인 하러가기
+                    </button>
+                    <button type="submit" class="btn btn-primary py-3" th:if="${errorMessage}">재확인</button>
+                </div>
+            </form>
+
+
+
+        </div>
     </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br>    <br>
 </th:block>
+
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         /*<![CDATA[*/
