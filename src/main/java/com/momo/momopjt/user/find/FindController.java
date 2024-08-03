@@ -48,7 +48,10 @@ public class FindController  {
     if (userId.length() > 4) {
       String prefix = userId.substring(0, 2); // 앞부분 두 자리를 보이게
       String suffix = userId.substring(userId.length() - 2); // 끝부분 두 자리를 보이게
-      return prefix + "**" + suffix; // 가운데 부분을 **로 마스킹
+      String middle = userId.substring(2, userId.length()-2);
+      middle = middle.replaceAll(".", "*");
+
+      return prefix + middle + suffix; // 가운데 부분을 **로 마스킹
     }
     return userId; // 아이디가 4자리 이하일 경우 마스킹하지 않음
   }
