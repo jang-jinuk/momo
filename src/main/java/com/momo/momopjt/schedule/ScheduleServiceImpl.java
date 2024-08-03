@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,10 +40,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 생성
   @Override
-  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) {
+  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws ScheduleMaxException, ScheduleDateException {
+
+    //일정 참가 수 검사 로직
+    if (scheduleDTO.getScheduleMax() <= 0) {
+      throw new ScheduleMaxException();
+    }
+
+    //일정 시작 날짜 검사 로직
+    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
+      throw new ScheduleDateException();
+    }
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
-
 
     Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
     log.info("------------ [일정 생성 완료] ------------");
@@ -68,18 +78,16 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
 
-
-
-
   //특정 일정 조회
   @Override
   public ScheduleDTO readOneSchedule(Long scheduleNo) {
     // 0724 YY
     boolean checkExist = scheduleRepository.existsById(scheduleNo);
-    if(checkExist){
-    Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
-    Schedule schedule = result.orElseThrow();
-    return modelMapper.map(schedule, ScheduleDTO.class); }
+    if (checkExist) {
+      Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
+      Schedule schedule = result.orElseThrow();
+      return modelMapper.map(schedule, ScheduleDTO.class);
+    }
 //    return null;
     ScheduleDTO scheduleDTO = new ScheduleDTO();
     return scheduleDTO;
@@ -87,7 +95,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 정보 수정
   @Override
-  public Boolean updateSchedule(ScheduleDTO scheduleDTO)  {
+  public Boolean updateSchedule(ScheduleDTO scheduleDTO) {
     Optional<Schedule> result = scheduleRepository.findById(scheduleDTO.getScheduleNo());
     Schedule schedule = result.orElseThrow();
     log.info("------------ [수정할 일정 조회 완료] ------------");
@@ -167,13 +175,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     if (userAndScheduleService.isParticipate(userAndScheduleDTO) != 2) {
       return "참석하지 않은 일정입니다.";
     } else {
-    userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
-    userAndScheduleService.subtractParticipant(userAndScheduleDTO);
+      userAndScheduleDTO.setScheduleNo(schedule); //일정 번호 전달
+      userAndScheduleService.subtractParticipant(userAndScheduleDTO);
 
-    Integer participants = schedule.getScheduleParticipants();
-    schedule.setScheduleParticipants(participants - 1);
-    scheduleRepository.save(schedule);
-    log.info("------------ [참가 취소 완료] ------------");
+      Integer participants = schedule.getScheduleParticipants();
+      schedule.setScheduleParticipants(participants - 1);
+      scheduleRepository.save(schedule);
+      log.info("------------ [참가 취소 완료] ------------");
 
       // 참가 취소 알람 생성
       User user = userAndScheduleDTO.getUserNo();
@@ -193,7 +201,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
         .collect(Collectors.toList());
 
-     return scheduleDTOList;
+    return scheduleDTOList;
   }
 
   //마감된 일정 조회
@@ -219,7 +227,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     }
     log.info("------------ [일정 댓글 삭제처리 완료] ------------");
-    if(!schedule.getSchedulePhotoUUID().equals("ScheduleDefaultPhoto")){
+    if (!schedule.getSchedulePhotoUUID().equals("ScheduleDefaultPhoto")) {
       photoService.deletePhoto(schedule.getSchedulePhotoUUID());
     }
     log.info("------------ [일정 사진 삭제 처리 완료] ------------");
@@ -240,7 +248,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   //일정 인원 마감 확인
   @Override
   public Boolean isScheduleFull(Long scheduleNo) {
-    Optional<Schedule> result  = scheduleRepository.findById(scheduleNo);
+    Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
 
     if (schedule.getScheduleMax() == schedule.getScheduleParticipants()) {
