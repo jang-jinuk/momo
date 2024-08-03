@@ -53,12 +53,16 @@ public class ClubServiceImpl implements ClubService {
   //모임 생성
   //모임 생성 후 생성된 모임으로 이동할 수 있게 clubNo 반환
   @Override
-  public Long createClub(ClubDTO clubDTO, UserAndClubDTO userAndClubDTO) throws ClubNameException { // 0729 YY photoDTO 제거
+  public Long createClub(ClubDTO clubDTO, UserAndClubDTO userAndClubDTO) throws ClubNameException, ClubMaxException { // 0729 YY photoDTO 제거
 
     Boolean existClubName = clubRepository.existsByClubName(clubDTO.getClubName());
 
     if (existClubName) {
       throw new ClubNameException();
+    }
+
+    if (clubDTO.getClubMax() <= 2) {
+      throw new ClubMaxException();
     }
 
     // 주소를 구,군까지만 저장하는 로직
@@ -136,8 +140,14 @@ public class ClubServiceImpl implements ClubService {
   //모임 정보 수정
   //수정 가능 정보 : 사진, 카테고리, 소개글, 지역, 정원
   @Override
-  public Boolean updateClub(ClubDTO clubDTO) {
+  public Boolean updateClub(ClubDTO clubDTO) throws ClubMaxException {
     log.info("----------------- [updateClub()]-----------------");
+
+    Boolean existClubName = clubRepository.existsByClubName(clubDTO.getClubName());
+
+    if (clubDTO.getClubMax() <= 2) {
+      throw new ClubMaxException();
+    }
 
     // 주소를 구,군까지만 저장하는 로직
     String clubArea =clubDTO.getClubArea();
