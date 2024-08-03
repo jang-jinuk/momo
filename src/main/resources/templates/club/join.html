@@ -49,8 +49,9 @@
             </table>
         </div>
         <div>
-            <button th:onclick="|location.href='/club/join'|" th:if="${isMember == 0}">가입 신청</button>
-            <button th:unless="${isMember == 0}">이미 가입된 모임입니다</button>
+            <button th:onclick="|location.href='/club/join'|" th:if="${isMember == 0} and not ${#authentication.name == 'anonymousUser'}">가입 신청</button>
+            <button th:onclick="|location.href='/user/login'|" th:if="${#authentication.name == 'anonymousUser'}">가입 신청</button>
+            <button th:unless="${isMember == 0}">가입 신청이 완료 되었습니다.</button>
         <div/>
      </div>
     </div>

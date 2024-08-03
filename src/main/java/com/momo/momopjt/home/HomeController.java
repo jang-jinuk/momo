@@ -60,18 +60,20 @@ public class HomeController {
     log.trace("----------------- [clubPhotoList : {}}]-----------------", clubPhotoList);
 
     //프사 추가 (비활성화) aop?
+
     if(user != null ) {
       String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
       model.addAttribute("userPhoto", userPhoto);
     }
     //공지사항 추가
 
-
     List<News> newsList = newsService.readAllNews();
     Collections.reverse(newsList); // 최신순 정렬
     model.addAttribute("newsList", newsList);
 
-    return "home"; // 홈 페이지의 Thymeleaf 템플릿 이름
 
+      return "home"; // 홈 페이지의 Thymeleaf 템플릿 이름
+    }
+    return "home";
   }
 }

@@ -1,10 +1,11 @@
 package com.momo.momopjt.report;
 
-import com.momo.momopjt.user.UserDTO;
-import com.momo.momopjt.user.UserService;
+import com.momo.momopjt.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -31,6 +32,9 @@ public class AdminController {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private UserRepository userRepository;
+
 
 
   //조회와 페이징 검색
@@ -39,7 +43,15 @@ public class AdminController {
                              @RequestParam(value = "page", defaultValue = "1") int page,
                              @RequestParam(value = "query", defaultValue = "") String query) {
     log.info(".......... [GET /manage-report]..........KSW");
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = authentication.getName();
 
+    // 사용자 정보 조회
+    User user = userRepository.findByUserId(currentUsername);
+
+    if (user.getUserRole().getValue() != 1) { //
+      return "redirect:/home"; // 잘못된 접근 시 리다이렉트
+    }
     // 검색어를 사용하여 리포트 조회
     List<ReportDTO> findReports;
 
@@ -122,6 +134,16 @@ public class AdminController {
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "query", defaultValue = "") String query) {
     log.info("GET /manage-user");
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = authentication.getName();
+
+    // 사용자 정보 조회
+    User user = userRepository.findByUserId(currentUsername);
+
+    if (user.getUserRole().getValue() != 1) {
+      return "redirect:/home"; // 잘못된 접근 시 리다이렉트
+    }
 
     List<UserDTO> findUsers;
     if (query.isEmpty()) {

@@ -189,6 +189,15 @@
         </div>
     </div>
 </div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var message = /*[[${message}]]*/ null;
+  if (message) {
+    alert(message);
+  }
+</script>
+
 </body>
 <th:block th:replace="fragments/footer :: footerFragment"></th:block>
 </html>

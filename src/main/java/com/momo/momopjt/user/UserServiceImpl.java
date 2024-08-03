@@ -417,7 +417,6 @@ public class UserServiceImpl implements UserService {
 
     // 새로운 역할을 설정합니다.
     user.setUserRole(newRole);
-
     // 변경된 사용자 정보를 저장합니다.
     userRepository.save(user);
     log.info("권한 설정 완료: {}", userNo);
