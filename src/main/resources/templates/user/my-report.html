@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <meta charset="UTF-8">
     <title>나의 신고 페이지</title>
@@ -11,6 +15,7 @@
     <span th:text="${#authentication.name}"></span>
 </header>
 
+<th:block layout:fragment="content">
 <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">내가 신고한 내역</a>
@@ -88,4 +93,4 @@
     // 버튼 알림 메세지 끝
 </script>
 </body>
-</html>
+<th:block th:replace="fragments/footer :: footerFragment"></th:block>
