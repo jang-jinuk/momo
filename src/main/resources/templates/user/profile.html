@@ -1,330 +1,426 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<th:block th:replace="fragments/header :: headerFragment"></th:block>
 <head>
     <title>프로필 페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <style>
-        /*모달*/
+        /* 모달 */
         #myModal {
-            display: none; /* 기본적으로 모달을 숨김 */
-            position: fixed; /* 화면에 고정 */
-            z-index: 1; /* 다른 요소 위에 표시 */
+            display: none;
+            position: fixed;
+            z-index: 1;
             left: 0;
             top: 0;
             right: 0;
             bottom: 0;
-            height: 100%; /* 전체 높이 */
-            overflow: auto; /* 필요시 스크롤 가능 */
-            background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
-            padding-top: 60px; /* 상단 여백 */
-            opacity: 0; /* 초기 투명도 */
-            transition: opacity 0.5s ease; /* 부드러운 전환 효과 */
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding-top: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         .modal-content {
             background-color: #fefefe;
-            margin: auto; /* 중앙 정렬 */
+            margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; /* 너비 */
-            max-width: 600px; /* 최대 너비 설정 (필요시 조정) */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
-            border-radius: 8px; /* 모서리 둥글게 */
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
         }
 
+        /* 카테고리 컨테이너 */
         .category-container {
-            margin: 20px; /* 카테고리 영역 여백 */
-            padding: 15px; /* 카테고리 영역 내부 여백 */
-            border: 1px solid #ccc; /* 경계선 */
-            border-radius: 5px; /* 둥근 모서리 */
-            background-color: #f9f9f9; /* 배경색 */
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
 
-        /*신고 버튼*/
+        /* 신고 버튼 */
         .report-button-container {
-            display: flex; /* Flexbox 사용 */
-            justify-content: space-between; /* 좌우 정렬 */
-            align-items: center; /* 세로 중앙 정렬 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /*신고 모달 버튼*/
         button {
-            cursor: pointer; /* 마우스 포인터 */
-            padding: 5% 10%; /* 버튼 패딩 */
-            border: none; /* 경계선 제거 */
-            background-color: #007bff; /* 버튼 배경색 */
-            color: white; /* 글자 색상 */
-            border-radius: 10%; /* 둥근 모서리 */
-            transition: background-color 0.3s;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         button:hover {
-            background-color: #0056b3; /* 호버 시 배경색 변경 */
+            background-color: #0056b3;
         }
 
         .report-button-container button:hover {
-            background-color: #808080; /* 호버 시 색상 변경 */
+            background-color: #808080;
         }
 
-        /*프로필 정보*/
+        /* 프로필 이미지 스타일 */
+        .profile-image {
+            width: 100%;
+            height: auto;
+            max-width: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+
+        /* 프로필 정보 스타일 */
         .user-info {
-            margin: 5%; /* 좌우 여백을 % 단위로 설정 */
+            margin: 2% 0;
         }
 
         .card-title {
-            margin-bottom: 3%; /* h2와 다음 요소 간의 여백을 % 단위로 설정 */
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
         }
 
         .card-text {
-            margin-bottom: 2%; /* 각 p 요소 간의 여백을 % 단위로 설정 */
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
         }
 
-        /*버튼 그룹*/
-        .Btns {
-            width: fit-content; /* 버튼의 너비에 맞게 조정 */
-            margin: auto; /* 중앙 정렬 */
-        }
-        .btn-secondary {
-            background-color: #6c757d; /* 색상 변경 가능 */
+        .profile-container {
+            padding: 2%;
         }
 
+        /* 버튼 스타일 */
+        .btn-info, .btn-danger {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-bottom: 0.5rem;
+        }
+
+
+        /* btn-info 스타일 */
         .btn-info {
-            background-color: #9dd84b; /* 색상 변경 가능 */
+            background-color: #92d5e3;
+            color: white;
         }
 
+        .btn-info:hover {
+            background-color: #92d5e3;
+            transform: scale(1.05);
+        }
+
+        /* btn-danger 스타일 */
         .btn-danger {
-            background-color: #dc3545; /* 색상 변경 가능 */
+            background-color: #dc3545;
+            color: white;
         }
 
-        /*여백 제거*/
-        .list-group-item h5 {
-            margin: 0; /* 제목의 기본 여백 제거 */
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
         }
 
-        .list-group-item p {
-            margin: 0; /* 문단의 기본 여백 제거 */
+        /* 버튼 그룹 위치 조정 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 1rem;
         }
 
-        /* 더보기 접기 */
+        /* 후기 섹션 */
+        .review-section, .club-section {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 2% 5%;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .review-section h4, .club-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        /* 후기 및 모임 카드 컨테이너 */
+        .card-container {
+            flex: 1 0 21%;
+            max-width: 21%;
+            margin: 1%;
+            box-sizing: border-box;
+        }
+
+        /* 카드 스타일 */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* 더 보기 버튼 스타일 */
         .moreBtn {
-            background-color: #000000; /* 검은색 배경 */
-            color: #ffffff; /* 흰색 글씨 */
-            border: none; /* 테두리 없음 */
-            padding: 10px 20px; /* 적당한 여백 */
-            border-radius: 5px; /* 둥근 모서리 */
-            font-size: 16px; /* 적당한 폰트 크기 */
-            cursor: pointer; /* 포인터 커서 */
-            transition: background-color 0.3s; /* 배경색 전환 효과 */
+            background-color: #92d5e3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .moreBtn:hover {
-            background-color: #333333; /* 다소 밝은 회색으로 변화 */
+            background-color: #f6feff;
+            transform: scale(1.05);
         }
 
-        /* 작동함 */
+        /* 숨기기용 클래스 */
         .d-none-custom {
-            display: none; /* 숨김 */
+            display: none;
+        }
+
+        /* 버튼 레이아웃 조정 */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        /* 프로필과 후기 섹션을 포함한 컨테이너의 수직 정렬을 위한 스타일 */
+        .container.profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container.profile-container .row {
+            width: 100%;
+        }
+
+        .container.profile-container .col-md-3,
+        .container.profile-container .col-md-7,
+        .container.profile-container .col-md-2 {
+            flex: 1;
         }
     </style>
 </head>
 <body>
 
-<div class="card-group justify-content-center">
-    <div class="d-flex flex-wrap col-10 justify-content-start">
-
-        <div class="img-profile col-3" style="position: relative;">
-
-            <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                 src="/assets/UserDefaultPhoto.png"
-                 style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
-
-            <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                 th:src="@{/view/{photo}(photo=${userPhoto})}"
-                 style="width: 100%; height: auto; max-width: 100%; object-fit: cover;">
-
+<div class="container profile-container">
+    <div class="row justify-content-center">
+        <div class="col-md-3 text-center">
+            <div class="img-profile">
+                <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                     src="/assets/UserDefaultPhoto.png">
+                <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                     th:src="@{/view/{photo}(photo=${userPhoto})}">
+            </div>
         </div>
-
-        <div class="col-7 user-info justify-content-start">
+        <div class="col-md-7 user-info">
             <h2 class="card-title" th:text="${user.userNickname}"></h2>
             <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
-            <p class="card-text">나이: <span th:text="${user.userAge}"></span>
-                / 성별: <span th:text="${user.userGender}"></span></p>
+            <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
+                    th:text="${user.userGender}"></span></p>
             <p class="card-text">주소: <span th:text="${user.userAddress}"></span></p>
             <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
         </div>
-    </div>
-</div>
-<!-- 버튼 그룹 -->
-<div class="card-group Btns justify-content-center col-10" style="padding-bottom: 1%;">
-    <div class="button-group">
-        <button th:if="${loggedInUserId == user.userId}" class="btn btn-info"
-                onclick="location.href='/user/delete-account'">탈퇴하기
-        </button>
-        <a th:if="${loggedInUserId == user.userId}" class="btn btn-info"
-           th:href="@{/user/update/{userId}(userId=${loggedInUserId})}">정보 수정</a>
-        <button th:if="${loggedInUserId == user.userId}" class="btn btn-info"
-                onclick="location.href='/user/my-report'">신고내역
-        </button>
-        <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
-                onclick="openModal()">신고하기
-        </button>
 
-        <div class="message-area">
-            <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
-            <input type="hidden" id="successMessage" th:value="${successMessage}">
-        </div>
-    </div>
-</div>
+        <!-- 버튼 그룹 -->
+        <div class="col-md-2 d-flex flex-column align-items-center button-group" style="padding-bottom: 1%;">
+            <button th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+                    onclick="location.href='/user/delete-account'">탈퇴하기
+            </button>
+            <a th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+               th:href="@{/user/update/{userId}(userId=${loggedInUserId})}">정보수정</a>
+            <button th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+                    onclick="location.href='/user/my-report'">신고내역
+            </button>
+            <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
+                    onclick="openModal()">신고하기
+            </button>
 
-
-<div class="card-group justify-content-center">
-
-    <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; border-top: 1px solid #000000; padding-bottom: 2%; padding-top: 2%;">
-        <h4 class="text-center">작성한 후기</h4>
-        <div class="d-flex flex-wrap justify-content-center" id="reviewSection">
-
-            <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
-                <div class="col-12">
-                    <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
-                </div>
-            </th:block>
-
-            <div class="card-container" th:each="article, iterStat : ${userArticles}"
-                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;"
-                 th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
-                <div class="card h-100 cardBody"
-                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;">
-
-                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
-                       style="display: block; text-decoration: none; color: inherit;">
-                        <img
-                                th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
-                                class="club-cover" src="/assets/NullPhoto.png"
-                                style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
-                        <img th:if="${#lists.size(userArticlePhotoList) > iterStat.index}"
-                             th:unless="${#strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
-                             class="club-cover"
-                             th:src="@{/view/{photo}(photo=${userArticlePhotoList[iterStat.index]})}"
-                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
-                    </a>
-
-                    <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
-                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
-                        <h4 class="card-title" th:text="${article.articleTitle}"
-                            style="margin: 0; font-size: 1rem;">후기글 제목</h4>
-                    </a>
-
+                <div class="message-area">
+                    <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
+                    <input type="hidden" id="successMessage" th:value="${successMessage}">
                 </div>
             </div>
         </div>
-        <div class="text-center mt-3">
-            <button id="loadMoreReviewsButton" class="moreBtn" type="button" style="display: none;">더 보기</button>
-            <button id="collapseReviewsButton" class="moreBtn" type="button" style="display: none;">접기</button>
-        </div>
-    </div>
 
-    <div class="review-section col-10 justify-content-center"
-         style="border-bottom: 1px solid #000000; padding-bottom: 2%; padding-top: 2%;">
-        <h4 class="text-center">즐겨찾는 모임</h4>
-        <div class="d-flex flex-wrap justify-content-center" id="clubSection">
+        <!-- 작성한 후기 섹션 -->
+        <div class="review-section col-10">
+            <h4 class="text-center">작성한 후기</h4>
+            <div class="d-flex flex-wrap justify-content-center" id="reviewSection">
+                <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
+                    </div>
+                </th:block>
 
-            <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
-                <div class="col-12">
-                    <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
-                </div>
-            </th:block>
+                <div class="card-container" th:each="article, iterStat : ${userArticles}"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
+                    <div class="card">
+                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                            <img
+                                    th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
+                                    src="/assets/NullPhoto.png"
+                                    class="club-cover"
+                                    style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                            <img
+                                    th:unless="${#strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
+                                    th:src="@{/view/{photo}(photo=${userArticlePhotoList[iterStat.index]})}"
+                                    class="club-cover"
+                                    style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        </a>
 
-            <div class="card-container" th:each="club, iterStat : ${userWishClub}"
-                 style="flex: 1 0 20%; max-width: 20%; margin: 1%; box-sizing: border-box;"
-                 th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
-                <div class="card h-100 cardBody"
-                     style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; position: relative;">
-
-                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
-                       style="display: block; text-decoration: none; color: inherit;">
-                        <img
-                                th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
-                                class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
-                                style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
-                        <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
-                             th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
-                             class="club-cover"
-                             th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
-                             style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
-                    </a>
-
-                    <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
-                       style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
-                        <h4 class="card-title" th:text="${club.clubName}"
-                            style="margin: 0; font-size: 1rem;">모임 이름</h4>
-                    </a>
-
+                        <div class="card-body">
+                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="text-center mt-3">
+                <button id="loadMoreReviewsButton" class="moreBtn" type="button">더 보기</button>
+                <button id="collapseReviewsButton" class="moreBtn d-none-custom" type="button">접기</button>
+            </div>
         </div>
-        <div class="text-center mt-3">
-            <button id="loadMoreClubsButton" class="moreBtn" type="button" style="display: none;">더 보기</button>
-            <button id="collapseClubsButton" class="moreBtn" type="button" style="display: none;">접기</button>
+
+
+        <!-- 즐겨찾는 모임 섹션 -->
+        <div class="club-section col-10">
+            <h4 class="text-center">즐겨찾는 모임</h4>
+            <div class="d-flex flex-wrap justify-content-center" id="clubSection">
+                <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
+                    </div>
+                </th:block>
+
+                <div class="card-container" th:each="club, iterStat : ${userWishClub}"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
+                    <div class="card h-100 cardBody">
+                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text">
+                            <img
+                                    th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                                    class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
+                                    style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                            <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
+                                 th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                                 class="club-cover"
+                                 th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
+                                 style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        </a>
+                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                           style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                            <h4 class="card-title" th:text="${club.clubName}">모임 이름</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button id="loadMoreClubsButton" class="moreBtn" type="button">더 보기</button>
+                <button id="collapseClubsButton" class="moreBtn d-none-custom" type="button">접기</button>
+            </div>
+        </div>
+
+
+        <!-- 신고 모달창 -->
+        <div id="myModal">
+            <div class="modal-content">
+                <div class="container-fluid d-flex flex-column align-items-center">
+                    <h2>신고하기</h2>
+                </div>
+                <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
+                      class="form-container">
+                    <div class="category-container">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="스팸/도배" id="spam">
+                            <label class="form-check-label" for="spam">스팸/도배</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="음란물" id="porn">
+                            <label class="form-check-label" for="porn">음란성</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="불법" id="illegal">
+                            <label class="form-check-label" for="illegal">법규 위반</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="유해물" id="harmful">
+                            <label class="form-check-label" for="harmful">청소년 유해물</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 용어"
+                                   id="political">
+                            <label class="form-check-label" for="political">부적절한 단어 사용</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="사생활" id="privacy">
+                            <label class="form-check-label" for="privacy">개인정보 침해</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="불쾌한 표현"
+                                   id="unpleasant">
+                            <label class="form-check-label" for="unpleasant">불쾌한 표현 사용</label>
+                        </div>
+                    </div>
+                    <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
+                        <input type="hidden" name="reporterId" th:value="${#authentication.name}">
+                        <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
+                        <button type="button" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
+                        <button type="button" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
-
-<!-- 신고 모달창 -->
-<div id="myModal">
-    <div class="modal-content">
-        <div class="container-fluid d-flex flex-column align-items-center">
-            <h2>신고하기</h2>
-        </div>
-        <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
-              class="form-container">
-            <div class="category-container">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="스팸/도배" id="spam">
-                    <label class="form-check-label" for="spam">스팸/도배</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="음란물" id="porn">
-                    <label class="form-check-label" for="porn">음란성</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="불법" id="illegal">
-                    <label class="form-check-label" for="illegal">법규 위반</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="유해물" id="harmful">
-                    <label class="form-check-label" for="harmful">청소년 유해물</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 용어"
-                           id="political">
-                    <label class="form-check-label" for="political">부적절한 단어 사용</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="사생활" id="privacy">
-                    <label class="form-check-label" for="privacy">개인정보 침해</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="reportCategory" value="불쾌한 표현"
-                           id="unpleasant">
-                    <label class="form-check-label" for="unpleasant">불쾌한 표현 사용</label>
-                </div>
-            </div>
-            <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
-                <input type="hidden" name="reporterId" th:value="${#authentication.name}">
-                <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
-                <button type="button" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
-                <button type="button" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- 신고 모달창 끝 -->
-</body>
 
 <script>
     <!-- 모달 기능 -->
@@ -382,54 +478,69 @@
         }, 100);
     }
 
-    //더보기 기능 TODO 확인필요
-    document.addEventListener('DOMContentLoaded', function () {
-        function setupCardSection(sectionId, loadMoreButtonId, collapseButtonId) {
-            const loadMoreButton = document.getElementById(loadMoreButtonId);
-            const collapseButton = document.getElementById(collapseButtonId);
-            const section = document.getElementById(sectionId);
-            const cards = section.querySelectorAll('.card-container');
+    document.addEventListener('DOMContentLoaded', () => {
+        // 작성한 후기 섹션 처리
+        const loadMoreReviewsButton = document.getElementById('loadMoreReviewsButton');
+        const collapseReviewsButton = document.getElementById('collapseReviewsButton');
+        const reviewCards = document.querySelectorAll('#reviewSection .card-container');
 
-            let cardIndex = 4; // 시작 인덱스
-
-            // 초기 설정: 카드가 5개 이상일 때만 버튼 표시
-            if (cards.length > 4) {
-                loadMoreButton.style.display = 'inline-block';
+        // Initially hide extra reviews
+        reviewCards.forEach((card, index) => {
+            if (index >= 4) {
+                card.classList.add('d-none-custom');
             }
+        });
 
-            // 처음 4개 카드는 항상 표시
-            for (let i = 0; i < 4 && i < cards.length; i++) {
-                cards[i].classList.remove('d-none-custom');
+        loadMoreReviewsButton.addEventListener('click', () => {
+            reviewCards.forEach((card) => {
+                card.classList.remove('d-none-custom');
+            });
+            loadMoreReviewsButton.classList.add('d-none-custom');
+            collapseReviewsButton.classList.remove('d-none-custom');
+        });
+
+        collapseReviewsButton.addEventListener('click', () => {
+            reviewCards.forEach((card, index) => {
+                if (index >= 4) {
+                    card.classList.add('d-none-custom');
+                }
+            });
+            collapseReviewsButton.classList.add('d-none-custom');
+            loadMoreReviewsButton.classList.remove('d-none-custom');
+        });
+
+        // 즐겨찾는 모임 섹션 처리
+        const loadMoreClubsButton = document.getElementById('loadMoreClubsButton');
+        const collapseClubsButton = document.getElementById('collapseClubsButton');
+        const clubCards = document.querySelectorAll('#clubSection .card-container');
+
+        // Initially show only a limited number of clubs
+        clubCards.forEach((card, index) => {
+            if (index >= 4) {
+                card.classList.add('d-none-custom');
             }
+        });
 
-            // '더 보기' 버튼 클릭 시
-            loadMoreButton.addEventListener('click', function () {
-                for (let i = cardIndex; i < cardIndex + 4 && i < cards.length; i++) {
-                    cards[i].classList.remove('d-none-custom');
-                }
-                cardIndex += 4;
-
-                if (cardIndex >= cards.length) {
-                    loadMoreButton.style.display = 'none';
-                }
-                collapseButton.style.display = 'inline-block';
+        loadMoreClubsButton.addEventListener('click', () => {
+            clubCards.forEach((card) => {
+                card.classList.remove('d-none-custom');
             });
+            loadMoreClubsButton.classList.add('d-none-custom');
+            collapseClubsButton.classList.remove('d-none-custom');
+        });
 
-            // '접기' 버튼 클릭 시
-            collapseButton.addEventListener('click', function () {
-                for (let i = 4; i < cards.length; i++) {
-                    cards[i].classList.add('d-none-custom');
+        collapseClubsButton.addEventListener('click', () => {
+            clubCards.forEach((card, index) => {
+                if (index >= 4) {
+                    card.classList.add('d-none-custom');
                 }
-                cardIndex = 4;
-                loadMoreButton.style.display = 'inline-block';
-                collapseButton.style.display = 'none';
             });
-        }
-
-        // 각 섹션에 대해 카드 설정 초기화
-        setupCardSection('reviewSection', 'loadMoreReviewsButton', 'collapseReviewsButton');
-        setupCardSection('clubSection', 'loadMoreClubsButton', 'collapseClubsButton');
+            collapseClubsButton.classList.add('d-none-custom');
+            loadMoreClubsButton.classList.remove('d-none-custom');
+        });
     });
 
 </script>
+</body>
+<th:block th:replace="fragments/footer :: footerFragment"></th:block>
 </html>

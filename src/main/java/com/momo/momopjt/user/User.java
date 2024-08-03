@@ -41,10 +41,8 @@ public class User {
     private Instant userCreateDate;
     private Instant userModifyDate;
 
-
     @Enumerated(EnumType.ORDINAL)
     private UserRole userRole = UserRole.USER; // 기본값 설정
-
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default

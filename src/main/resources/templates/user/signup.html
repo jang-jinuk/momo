@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
+<th:block th:replace="fragments/header :: headerFragment"></th:block>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +75,7 @@
     <div class="col-12 col-md-8 col-lg-6">
       <div class="card">
 
-        <div class="card-header bg-success text-white">
+        <div class="card-header" style="background-color: #007bff; color: #ffffff;">
           MOMO 회원가입
         </div>
 
@@ -456,4 +457,5 @@
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
 </body>
+<th:block th:replace="fragments/footer :: footerFragment"></th:block>
 </html>

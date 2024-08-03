@@ -23,9 +23,23 @@
             </div>
         </form>
     </div>
-</th:block>
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-    </script>
-</th:block>
+
+    <button type="submit">아이디 찾기</button>
+</form>
+
+<!-- 아이디 찾기 결과 -->
+<div th:if="${userId}">
+    <p class="result">Your User ID is: <span th:text="${userId}"></span></p>
+</div>
+<div th:if="${errorMessageUserId}">
+    <p class="error" th:text="${errorMessageUserId}"></p>
+</div>
+
+<!-- 비밀번호 찾기 바로가기 -->
+<a href="/user/find/pw" class="btn-link ms-2">비밀번호 찾기</a>
+
+<a href="/user/login" class="btn btn-return">로그인 화면으로</a>
+
+</body>
 </html>
+
