@@ -234,9 +234,207 @@
 </body>
 
 <script>
-  function resetForm() {
-    document.getElementById('updateForm').reset();
-  }
+    window.addEventListener('DOMContentLoaded', function()
+    {
+
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.show()
+        }, false)
+
+
+
+        //업로드 파일 확장자 검사 0801 YY
+        function imageCheck(obj) {
+            if(obj){
+                const allowedExtensions = ['jpg', 'png', 'jpeg'];
+                const fileExtension = obj.name.split('.').pop().toLowerCase();
+                console.log(fileExtension)
+
+                if (allowedExtensions.includes(fileExtension)) {
+                    return true;
+                } else {
+                    alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+                    return false;
+                }
+            }
+            return false;
+
+        }
+
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+            const formObj = new FormData();
+            const fileInput = document.querySelector("input[name='files']")
+
+            console.log("fileInput.files--------")
+            console.log(fileInput.files)
+
+            const files = fileInput.files
+            let imageCheckResult = true;
+
+            for (let i = 0; i < files.length; i++) {
+
+                // 0801 YY 파일 확인 로직
+                if(imageCheck(files[i])){
+                    formObj.append("files", files[i]); }
+                else {
+                    imageCheckResult = false;
+                    break;
+                }
+
+            }
+            if(imageCheckResult){
+
+                uploadToServer(formObj).then(result => {
+                    console.log("result-------")
+                    console.log(result)
+
+                    for (const uploadResult of result) {
+                        showUploadFile(uploadResult)
+                    }
+
+                    uploadModal.hide()
+                }).catch(e => {
+                    uploadModal.hide()
+                })
+            }
+
+        }, false)
+
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
+
+
+            console.log("upload to server.....................+formObj")
+            console.log(formObj)
+
+            const response = await axios({
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            return response.data
+
+
+        }
+
+        async function removeFileToServer(uuid, extension) {
+            const response = await axios.delete(`/remove/${uuid}${extension}`)
+            // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
+            return response.data
+        }
+
+
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
+
+        function showUploadFile({uuid, extension, link}) {
+
+            const str = `<div class="card col-4">
+<div class="card-header d-flex justify-content-center">
+${uuid}${extension}
+<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+</div>
+<div class="card-body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+
+</div>
+</div>`
+            console.log("uploadResult link  str --------------------")
+            console.log(link)
+            console.log(str)
+
+            uploadResult.innerHTML += str;
+        }
+
+
+
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log("remove file log--------------")
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
+
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
+                targetDiv.remove()
+            })
+
+        }
+
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
+
+            e.preventDefault()
+            e.stopPropagation()
+
+
+            const target = document.querySelector(".uploadHidden")
+
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
+
+            let str = ''
+
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
+                console.log(uploadFile)
+                const imgLink = uploadFile.getAttribute("data-src")
+
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
+
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+                console.log("imgUUID")
+                console.log(imgUUID)
+
+                str += `<input type='hidden' name='userPhoto' value="${imgUUID}">`
+
+
+            }
+
+
+            const formObj = document.querySelector("form")
+
+                target.innerHTML = str;
+                console.log(str)
+
+
+                formObj.submit();
+                formObj.reset();
+        }, false)
+
+
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
+
+            e.stopPropagation()
+            e.preventDefault()
+
+            uploadModal.hide();
+
+        }, false)
+
+
+
+    });
+
+
+
+
+    function resetForm() {
+        document.getElementById('updateForm').reset();
+    }
 
     function validateForm() {
         const userNickname = document.getElementById('userNickname').value;
