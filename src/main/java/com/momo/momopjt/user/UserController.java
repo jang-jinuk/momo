@@ -173,7 +173,8 @@ public class UserController {
     }
 
     if (currentUsername == null) {
-      throw new SecurityException("사용자가 인증되지 않았습니다.");
+      return "redirect:/home"; // TODO 0802 YY rough 에러 처리
+//      throw new SecurityException("사용자가 인증되지 않았습니다.");
     }
 
     // 현재 로그인한 사용자 정보 가져오기

@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Controller
@@ -23,7 +21,7 @@ public class NewsController {
 
   private final NewsService newsService;
 
-  @GetMapping("/main")
+  @GetMapping("/main") // 배포용 페이지 아님 (테스트용) 0802 YY
   public String newsMainGet(Model model) {
     log.info("----------------- [news/main getMapping]-----------------");
     List<News> newsList = newsService.readAllNews();
@@ -40,12 +38,6 @@ public class NewsController {
     model.addAttribute("news", news);
     return "news/read";
   }
-
-/*  @GetMapping("/update/{newsNo}")
-  public String NewsUpdateGet(@PathVariable("newsNo") Long newsNo, Model model) {
-    log.info("--------------- [news/update getMapping]---------------");
-    return "news/read;
-  }*/
 
   //공지사항 신규 생성
   @GetMapping("/create")
@@ -69,7 +61,6 @@ public class NewsController {
     return "redirect:/news/main";
   }
 
-  
   @PostMapping("/update")
   public String newsUpdatePost(NewsDTO newsDTO){
     log.info("----------------- [news/update PostMapping]-----------------");

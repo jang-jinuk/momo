@@ -71,25 +71,21 @@
             </div>
             <!--YY-->
             <div class="d-grid gap-4 col-2 mx-auto">
-                <button class="btn btn-primary" type="submit">등록/수정</button>
-                <!--onclick="submitNewsForm('/news/create')"-->
-                <!--        <button class="btn btn-primary" type="button">돌아가기</button>-->
-                <button class="btn btn-primary" type="button" th:onclick="'window.location.href\'=\'/news/main\'">돌아가기
-                </button>
+                <button class="btn btn-primary" type="submit" th:onclick="submitNewsForm()">등록/수정</button>
+                <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/home/}'|">돌아가기</button>
 
             </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <!--활성화된 신고하기 버튼-->
-                <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
-                <!--YY-->
-                <button class="btn btn-danger"
-                        th:onclick="'window.location.href=\''../../report/create\'"
-                        type="button">신고하기
+<!--            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                &lt;!&ndash;활성화된 신고하기 버튼&ndash;&gt;
+                &lt;!&ndash;        <button type="button" class="btn btn-danger">신고하기</button>&ndash;&gt;
+                &lt;!&ndash;YY&ndash;&gt;
+                <button class="btn btn-danger" type="button"
+                        th:onclick="|location.href='@{/home/}'|">신고하기
                 </button>
-                <!--YY-->
-                <!--비활성화 신고하기 버튼-->
+                &lt;!&ndash;YY&ndash;&gt;
+                &lt;!&ndash;비활성화 신고하기 버튼&ndash;&gt;
                 <button type="button" class="btn btn-outline-primary" disabled>신고하기</button>
-            </div>
+            </div>-->
         </div>
 </form>
 <script>
