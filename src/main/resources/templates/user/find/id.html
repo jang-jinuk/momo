@@ -1,51 +1,31 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모모 아이디 찾기</title>
-    <style>
-        .result {
-            font-weight: bold;
-            color: #007bff; /* 파란색으로 강조 */
-        }
-        .error {
-            color: #dc3545; /* 빨간색으로 오류 강조 */
-            font-weight: bold;
-        }
-        .btn-link {
-            text-decoration: none;
-            color: #007bff;
-        }
-        .btn-return {
-            text-decoration: none;
-            color: #6c757d;
-        }
-    </style>
-</head>
-<body>
-<h1>아이디 찾기</h1>
-
-<!-- 아이디 찾기 폼 -->
-<form action="/user/find/id" method="post" th:object="${findUserIdRequest}">
-    <div>
-        <label for="findUserEmail">이메일:</label>
-        <input type="email" id="findUserEmail" name="findUserEmail" th:field="*{findUserEmail}" required />
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+<th:block layout:fragment="content">
+    <div class="container" style="max-width: 30rem; margin-top: 5rem;">
+        <form action="/user/find/id" method="post" th:object="${findUserIdRequest}">
+            <h3 class="mb-4">아이디 찾기</h3>
+            <div class="mb-3">
+                <label for="inputEmail3" class="form-label">이메일</label>
+                <input type="email" class="form-control py-3" id="inputEmail3" th:field="*{findUserEmail}" required placeholder="momo@email.com">
+            </div>
+            <div class="mb-3" th:if="${userId}">
+                <label for="inputPassword3" class="form-label">가입된 아이디</label>
+                <input th:value="${userId}" type="text" class="form-control py-3" id="inputPassword3" readonly>
+            </div>
+            <div class="mb-3" th:if="${errorMessageUserId}">
+                <p class="error" th:text="${errorMessageUserId}" style="color: red"></p>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary py-3" th:unless="${userId} or ${errorMessageUserId}">가입 내역 확인</button>
+                <button type="button" class="btn btn-primary py-3" th:if="${userId}" th:onclick="|location.href='@{/user/login}'|">로그인 하러가기</button>
+                <button type="submit" class="btn btn-primary py-3" th:if="${errorMessageUserId}">재확인</button>
+            </div>
+        </form>
     </div>
-    <button type="submit">아이디 찾기</button>
-</form>
-
-<!-- 아이디 찾기 결과 -->
-<div th:if="${userId}">
-    <p class="result">Your User ID is: <span th:text="${userId}"></span></p>
-</div>
-<div th:if="${errorMessageUserId}">
-    <p class="error" th:text="${errorMessageUserId}"></p>
-</div>
-
-<!-- 비밀번호 찾기 바로가기 -->
-<a href="/user/find/pw" class="btn-link ms-2">비밀번호 찾기</a>
-<a href="/user/login" class="btn btn-return">로그인 화면으로</a>
-</body>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
 </html>
-

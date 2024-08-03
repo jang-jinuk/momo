@@ -187,7 +187,10 @@ public class ClubController {
     try {
       clubNo = clubService.createClub(clubDTO, userAndClubDTO);
     } catch (ClubService.ClubNameException e) {
-      redirectAttributes.addFlashAttribute("error", "clubName");
+      redirectAttributes.addFlashAttribute("message", "모임명이 중복됩니다.");
+      return "redirect:/club/create";
+    } catch (ClubService.ClubMaxException e) {
+      redirectAttributes.addFlashAttribute("message", "모임정원은 3명 이상 설정해주세요.");
       return "redirect:/club/create";
     }
 
@@ -220,14 +223,28 @@ public class ClubController {
 
     clubDTO.setClubNo(clubNo);
 
-    Boolean isSuccess = clubService.updateClub(clubDTO);
+    try {
+      Boolean isSuccess = clubService.updateClub(clubDTO);
 
-    if (isSuccess) {
-      redirectAttributes.addFlashAttribute("message", "모임 수정이 완료되었습니다.");
-      return "redirect:/club/main/" + clubNo;
+      if (isSuccess) {
+        log.trace("------------ [모임 수정 성공] ------------");
+        redirectAttributes.addFlashAttribute("message", "모임 수정이 완료되었습니다.");
+        return "redirect:/club/main/" + clubNo;
+      }
+      log.trace("------------ [모임 구성원 수보다 적게 수정할 수 없습니다.] ------------");
+      redirectAttributes.addFlashAttribute("message", "모임 구성원 수보다 적게 수정할 수 없습니다.");
+      return "redirect:/club/update/" + clubNo;
+
+    } catch (ClubService.ClubMaxException e) {
+
+      log.trace("------------ [모임인원을 3보다 적게 설정하지 못합니다.] ------------");
+      redirectAttributes.addFlashAttribute("message", "모임정원은 3명 이상 설정해주세요.");
+      return "redirect:/club/update/" + clubNo;
+
     }
-    redirectAttributes.addFlashAttribute("message", "모임 구성원 수보다 적게 수정할 수 없습니다.");
-    return "redirect:/club/update";
+
+
+
   }
 
   @GetMapping("/disband-page")
