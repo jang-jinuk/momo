@@ -371,8 +371,7 @@
         function showUploadFile({uuid, extension, link}) {
             const str = `<div class="card col-4">
 <div class="card-header d-flex justify-content-center">
-${uuid}${extension}
-<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+<button class="btn btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
 <img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
