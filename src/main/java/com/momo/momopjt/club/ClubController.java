@@ -425,7 +425,7 @@ public class ClubController {
     redirectAttributes.addFlashAttribute("message", "승인이 완료되었습니다.");
     return "redirect:/club/members";
   }
-
+  //즐겨 찾기
   @PostMapping("/update-Wish")
   public String updateWishClub(@RequestParam("clubNo") Long clubNo,
                                @RequestParam("isWish") char isWish) {

@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
-<th:block th:replace="fragments/header :: headerFragment"></th:block>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html"
+>
 <head>
     <title>프로필 페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
+
+        body, html {
+
+            font-family: 'CookieRun', sans-serif;
+        }
+
         /* 모달 */
         #myModal {
             display: none;
@@ -149,7 +156,7 @@
 
         /* 후기 섹션 */
         .review-section, .club-section {
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #ffffff;
             border-bottom: 1px solid #ddd;
             padding: 2% 5%;
             background-color: #f9f9f9;
@@ -201,6 +208,7 @@
             color: #333;
         }
 
+
         /* 더 보기 버튼 스타일 */
         .moreBtn {
             background-color: #92d5e3;
@@ -210,12 +218,16 @@
             padding: 0.5rem 1rem;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
+
         }
 
         .moreBtn:hover {
-            background-color: #f6feff;
+            background-color: #92d5e3;
             transform: scale(1.05);
+
         }
+
+
 
         /* 숨기기용 클래스 */
         .d-none-custom {
@@ -249,7 +261,9 @@
         }
     </style>
 </head>
+<th:block layout:fragment="content">
 <body>
+
 
 <div class="container profile-container">
     <div class="row justify-content-center">
@@ -283,11 +297,11 @@
             <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
                     onclick="openModal()">신고하기
             </button>
-
-                <div class="message-area">
+            <button th:if="${user.userRole == T(com.momo.momopjt.user.UserRole).ADMIN}"
+                    onclick="location.href='/admin/manage-user'">관리자 페이지
+            </button>
                     <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
                     <input type="hidden" id="successMessage" th:value="${successMessage}">
-                </div>
             </div>
         </div>
 
@@ -297,6 +311,7 @@
             <div class="d-flex flex-wrap justify-content-center" id="reviewSection">
                 <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
                     <div class="col-12">
+                        <hr>
                         <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
                     </div>
                 </th:block>
@@ -318,8 +333,11 @@
                         </a>
 
                         <div class="card-body">
-                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                               style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
                                 <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+
+
                             </a>
                         </div>
                     </div>
@@ -374,8 +392,14 @@
         <div id="myModal">
             <div class="modal-content">
                 <div class="container-fluid d-flex flex-column align-items-center">
+
+               
+
                     <h2>신고하기</h2>
+                    <p>신고 사유를 선택해 주세요</p>
+
                 </div>
+
                 <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
                       class="form-container">
                     <div class="category-container">
@@ -388,39 +412,38 @@
                             <label class="form-check-label" for="porn">음란성</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="불법" id="illegal">
-                            <label class="form-check-label" for="illegal">법규 위반</label>
+                            <input class="form-check-input" type="radio" name="reportCategory" value="사칭" id="illegal">
+                            <label class="form-check-label" for="illegal">사칭</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="유해물" id="harmful">
-                            <label class="form-check-label" for="harmful">청소년 유해물</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 용어"
+                            <input class="form-check-input" type="radio" name="reportCategory" value="닉네임"
                                    id="political">
-                            <label class="form-check-label" for="political">부적절한 단어 사용</label>
+                            <label class="form-check-label" for="political">부적절한 닉네임</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="사생활" id="privacy">
-                            <label class="form-check-label" for="privacy">개인정보 침해</label>
+                            <input class="form-check-input" type="radio" name="reportCategory" value="게시물" id="privacy">
+                            <label class="form-check-label" for="privacy">부적절한 게시물 활동</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="reportCategory" value="불쾌한 표현"
+                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 모임 활동"
                                    id="unpleasant">
-                            <label class="form-check-label" for="unpleasant">불쾌한 표현 사용</label>
+                            <label class="form-check-label" for="unpleasant">부적절한 모임 활동</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="기타" id="harmful">
+                            <label class="form-check-label" for="harmful">기타</label>
                         </div>
                     </div>
                     <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
                         <input type="hidden" name="reporterId" th:value="${#authentication.name}">
                         <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
-                        <button type="button" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
-                        <button type="button" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
+                        <button type="button" class="btn btn-primary" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
 
 <script>
     <!-- 모달 기능 -->
@@ -542,5 +565,5 @@
 
 </script>
 </body>
-<th:block th:replace="fragments/footer :: footerFragment"></th:block>
+
 </html>

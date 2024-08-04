@@ -149,7 +149,8 @@ public class UserController {
       log.info("User logged out...");
     }
 
-    redirectAttributes.addFlashAttribute("message", "You have been logged out successfully.");
+    redirectAttributes.addFlashAttribute("message",
+        "You have been logged out successfully.");
     return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 리다이렉트
   }
 
@@ -173,8 +174,7 @@ public class UserController {
     }
 
     if (currentUsername == null) {
-      return "redirect:/home"; // TODO 0802 YY rough 에러 처리
-//      throw new SecurityException("사용자가 인증되지 않았습니다.");
+      return "redirect:/home";
     }
 
     // 현재 로그인한 사용자 정보 가져오기
@@ -196,11 +196,9 @@ public class UserController {
       throw new SecurityException("현재 사용자에게는 해당 사용자의 정보를 업데이트할 권한이 없습니다.");
     }
 
-
     //프사 추가
     String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
     model.addAttribute("userPhoto",userPhoto);
-
 
 
     // 사용자 정보를 DTO로 변환
@@ -211,7 +209,7 @@ public class UserController {
     model.addAttribute("userDTO", userDTO);
 
 
-    return "user/update"; // Thymeleaf 템플릿 경로
+    return "user/update"; //
   }
 
   @Transactional // 추가: 트랜잭션 관리를 위해 추가

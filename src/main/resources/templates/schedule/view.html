@@ -88,7 +88,10 @@
                  th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 20px; height:20px">
                     </td>
 
-                    <td th:text="${user.userNickname}"></td>
+                    <td>
+                        <a th:href="@{/user/profile/{userId}(userId=${user.userId})}"
+                           th:text="${user.userNickname}"></a>
+                    </td>
                     <td th:text="${user.userAddress}"></td>
                 </tr>
             </table>
@@ -151,7 +154,10 @@
                 <span th:text="${reply.getReplyContent()}"></span>
                 <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
                 <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-                <span th:text="'작성자 : ' + ${reply.getWriter()}"></span>
+                <span>
+                    작성자 : <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"
+                        th:text="${reply.getWriter}"></a>
+                    </span>
                 <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
                 <form id="replyDeleteForm" action="/reply/delete" method="post">
                     <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
