@@ -3,6 +3,31 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
+<head>
+    <style>
+        .input-group-text {
+            display: flex;
+            align-items: center;
+        }
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin: 0 5px;
+        }
+        #replyContent {
+            margin-right: 10px;
+        }
+        .btn-outline-primary {
+            margin-left: 10px;
+        }
+        .input-group-text img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px; /* Space between icon and text */
+        }
+
+    </style>
+</head>
 <th:block layout:fragment="content">
 
     <div class="container" style="width: 850px">
@@ -55,12 +80,16 @@
                     <div class="card-body">
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">글 번호</span>
+                            <span class="input-group-text">
+                                <img src="https://img.icons8.com/?size=100&id=LSiA0D7qJ1zr&format=png&color=000000" alt="Icon">
+                                글 번호</span>
                             <input type="text" class="form-control" th:value="${articleDTO.articleNo}" readonly>
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">글 제목</span>
+                            <span class="input-group-text">
+                                <img src="https://img.icons8.com/?size=100&id=rlfTrmk-CXB3&format=png&color=000000" alt="Icon">
+                                글 제목</span>
                             <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
                         </div>
 
@@ -75,14 +104,19 @@
                         </div>
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">내용</span>
+                            <span class="input-group-text">
+                                <img src="https://img.icons8.com/?size=100&id=39459&format=png&color=000000" alt="Icon">
+                                내용
+                            </span>
                             <textarea class="form-control col-sm-5" rows="5"
                                       readonly>[[${articleDTO.articleContent}]]</textarea>
                         </div>
 
 
                         <div class="input-group mb-3">
-                            <span class="input-group-text">작성일</span>
+                             <span class="input-group-text">
+            <img src="https://img.icons8.com/?size=100&id=TzKV-85aqBDJ&format=png&color=000000" alt="Icon">
+            작성일</span>
                             <input type="datetime-local" class="form-control"
                                    th:value="${#dates.format(articleDTO.articleCreateDate, 'yyyy-MM-dd HH:mm')}"
                                    readonly>
@@ -112,13 +146,19 @@
 
 
                 <form id="articleReplyForm" action="/reply/create" method="post">
-                    <div class="col input-group mb-3">
-                        <label for="replyContent">댓글 내용 입력 : </label>
-                        <input id="replyContent" name="replyContent" maxlength="50" required>
-                      <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="replyContent">
+                                <img src="https://img.icons8.com/?size=100&id=ncVupLQ_3azP&format=png&color=000000" alt="Icon 1" class="icon" width="20" height="20">
+                                  댓글 내용 입력
+                                <img src="https://img.icons8.com/?size=100&id=v2Yg7p5PLAXO&format=png&color=000000" alt="Icon 2" class="icon" width="20" height="20">
+                            </label>
+                        </div>
+                        <textarea id="replyContent" name="replyContent" rows="1" class="form-control"></textarea>
+                        <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+                        </div>
                     </div>
                 </form>
 
