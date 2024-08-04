@@ -324,11 +324,31 @@ public class ClubController {
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     int countMembers = userAndClubService.countMembers(club);
 
+    log.info("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
+    Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
+    String clubProfilePhotoStr = clubPhoto.toString();
+    log.info("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
+
+    log.info("------------ [leader photo uuid : {}] ------------", isLeader.getUserNo().getUserPhoto());
+    Photo leaderPhoto = photoService.getPhoto(isLeader.getUserNo().getUserPhoto());
+    String leaderProfilePhotoStr = leaderPhoto.toString();
+    log.info("------------ [leader photo str : {}] ------------", isLeader.getUserNo().getUserPhoto());
+
+    // 모임 맴버 사진
+    List<String> memberPhotoList = userAndClubDTOS.stream().map(userDTO ->
+            photoService.getPhoto(userDTO.getUserNo().getUserPhoto()).toString())
+        .collect(Collectors.toList());
+
+
+
     model.addAttribute("isLeader", isLeader); //모임장 정보
+    model.addAttribute("leaderProfilePhoto", leaderProfilePhotoStr); //모임장 사진
     model.addAttribute("clubDTO", clubDTO); //모임 정보
     model.addAttribute("userAndClubDTOS", userAndClubDTOS); // 모임 맴버 정보
+    model.addAttribute("memberPhotoList", memberPhotoList); // 모임 맴버 사진
     model.addAttribute("countMembers", countMembers);//모임 맴버 인원 수
     model.addAttribute("isMember", isMember); //가입 신청 여부
+    model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
     return "club/join";
   }
 
