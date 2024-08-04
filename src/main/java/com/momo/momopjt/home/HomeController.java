@@ -32,6 +32,7 @@ public class HomeController {
 
   @GetMapping("/home")
   public String home(Model model) {
+    log.info("----------------- [homeController]-----------------");
 
     // 현재 로그인된 사용자 정보를 얻기
     User user = userService.getCurrentUser();
@@ -42,7 +43,7 @@ public class HomeController {
         .map(clubDTO -> photoService.getPhoto(clubDTO.getClubPhotoUUID()).toString())
         .collect(Collectors.toList());
 
-    log.info("----------------- [myclubPhotoList]-----------------{}", myClubPhotoList);
+    log.trace("----------------- [myclubPhotoList]-----------------{}", myClubPhotoList);
 
     model.addAttribute("myClubDTOList", myClubDTOList);
     model.addAttribute("myClubPhotoList", myClubPhotoList);
@@ -70,6 +71,9 @@ public class HomeController {
     List<News> newsList = newsService.readAllNews();
     Collections.reverse(newsList); // 최신순 정렬
     model.addAttribute("newsList", newsList);
+
+    //user nickname 표시를 위해 모델에 추가 0804 YY
+    model.addAttribute("user", user);
 
 
     return "home"; // 홈 페이지의 Thymeleaf 템플릿 이름
