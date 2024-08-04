@@ -1,144 +1,272 @@
-
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout.html"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
->
 
 <th:block layout:fragment="content">
 
-  <!--  news / 공지사항 출력 부분 -->
-  <br>
-  <table class="table" style="width: 50%; margin: auto" >
-    <thead>
-    <tr class="card-title">
-      <th colspan="5" style="margin: auto; text-align: center">모모 공지사항</th>
-      <th sec:authorize="hasRole('ADMIN')"></th>
-    </tr>
-    <tr>
-      <th scope="col">체크</th>
-      <th scope="col">말머리</th>
-      <th scope="col">제목</th>
-      <th scope="col">등록일</th>
-      <th scope="col">수정</th>
-      <th scope="col" sec:authorize="hasRole('ADMIN')">delete</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="news, rowStat : ${newsList}" th:scope="row">
-      <td><input type="checkbox" name="select"></td>
-      <td th:text="${news.newsTag}"></td>
-      <td>
-        <a style="text-decoration: none; color: black"
-           th:href="@{/news/read/{newsNo}(newsNo=${news.newsNo})}"
-           th:text="${news.newsTitle}">
-        </a>
-      </td>
-      <td th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
-      <td>수정칸</td>
-      <td sec:authorize="hasRole('ADMIN')">
-        <form action="/news/delete/" method="post">
-          <input type="hidden" name="newsNo" th:value="${news.newsNo}">
-          <button type="submit" class="btn btn-danger">삭제하기</button>
-        </form>
-      </td>
-    </tr>
+  <div class="container">
+    <div class="row">
+      <br>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
 
-    </tbody>
-  </table>
+        <!--공지사항 출력-->
+        <table class="table" style="margin: auto">
+          <thead>
+          <tr class="card-title">
+            <th colspan="5" style="margin: auto; text-align: center">모모 공지사항</th>
+            <th sec:authorize="hasRole('ADMIN')"></th>
+          </tr>
+          <tr>
+            <!--      <th scope="col">체크</th>-->
+            <th scope="col">말머리</th>
+            <th scope="col">제목</th>
+            <th scope="col">등록일</th>
+            <th scope="col">수정</th>
+            <th scope="col" sec:authorize="hasRole('ADMIN')">delete</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="news, rowStat : ${newsList}" th:scope="row">
+            <!--      <td><input type="checkbox" name="select"></td>-->
+            <td th:text="${news.newsTag}"></td>
+            <td>
+              <a style="text-decoration: none; color: black"
+                 th:href="@{/news/read/{newsNo}(newsNo=${news.newsNo})}"
+                 th:text="${news.newsTitle}">
+              </a>
+            </td>
+            <td th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
+            <td>수정칸</td>
+            <td sec:authorize="hasRole('ADMIN')">
+              <form action="/news/delete/" method="post">
+                <input type="hidden" name="newsNo" th:value="${news.newsNo}">
+                <button type="submit" class="btn btn-danger" style="width: 50%; height: auto">삭제하기</button>
+              </form>
+            </td>
+          </tr>
 
-  <br>
+          </tbody>
+        </table>
+        <br>
+
+      </div>
+      <div class="col-2"></div>
+    </div>
+
+  </div>
+
 
   <div class="container">
-
     <!-- 로그인한 사용자에게만 보이는 부분 -->
-    <div class="row" th:if="${userNickname}">
-      <p th:text="${userNickname + '님 어서오세요!'}">userNickname님 어서오세요!</p>
-    </div>
-    </div>
+    <div class="row" th:if="${user?.userNickname}">
+      <br>
+      <div class="col" style="float: left">
+        <p th:text="${user?.userNickname} ? ${#strings.concat(user.userNickname, ' 님 환영합니다')} : ''"></p>
 
-  <br>
-
-  <h2>나의 모임</h2>
-  <div class="row">
-
-    <div th:if="${myClubDTOList!=null && myClubDTOList.size()>0}"
-         th:with="myMaxIndex=${#lists.size(myClubDTOList) - 1}">
-      <div>
-
-        <div class="card mb-3" style="max-width: 415px;" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">
-          <div class="row g-0">
-
-
-            <div class="col-md-3">
-
-              <img th:if="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
-                   src="/assets/ClubDefaultPhoto.jpg">
-
-              <img th:unless="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
-                   th:src="@{/view/{photo}(photo=${myClubPhotoList[i]})}">
-
-            </div>
-
-
-            <div class="col-md-8">
-              <div class="card-body">
-                <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTOList[i].clubNo})}"
-                   th:inline="text">
-                  <h3 class="card-title" th:text="${myClubDTOList[i].clubName}"></h3>
-                </a>
-                <p class="card-text" th:text="${myClubDTOList[i].clubContent}"></p>
-              </div>
-            </div>
-
-          </div>
-        </div>
       </div>
+      <div class="col"></div>
+      <div class="col" style="text-align: right">
+        <button class="btn btn-primary" th:unless="${#authentication.name == 'anonymousUser'}"
+                th:onclick="|location.href='@{/club/create}'|">새 모임 생성
+        </button>
+      </div>
+
     </div>
+
+    <div class="row">
+      <br>
+    </div>
+
   </div>
 
   <hr>
 
-  <div class="row">
-    <div>
-      <button class="btn btn-primary" th:unless="${#authentication.name == 'anonymousUser'}"
-              th:onclick="|location.href='@{/club/create}'|">생성
-      </button>
+
+
+  <div class="container">
+
+    <div class="row">
+      <h2>나의 모임</h2>
     </div>
-  </div>
+    <div class="row" th:if="${myClubDTOList!=null && myClubDTOList.size()>0}"
+         th:with="myMaxIndex=${#lists.size(myClubDTOList) - 1}">
 
-  <div class="row-cols-auto">
+      <div class="col-4" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">
 
-    <div th:if="${ clubDTOList.size()>0}" th:with="maxIndex=${#lists.size(clubDTOList) - 1}">
-      <div th:each="i : ${#numbers.sequence(0, maxIndex)}">
-        <div class="card mb-3" style="max-width: 415px;">
-          <div class="row g-0">
+        <div class="col-6 photo-wrap" style="float: left;">
 
-            <div class="col-md-4">
+          <img class="photo" th:if="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}"
+               src="/assets/ClubDefaultPhoto.jpg">
 
-              <img th:if="${#strings.contains(clubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"
-                   src="/assets/ClubDefaultPhoto.jpg">
+          <img class="photo" th:unless="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}"
+               th:src="@{/view/{photo}(photo=${myClubPhotoList[i]})}">
 
-              <img th:unless="${#strings.contains(clubPhotoList[i], 'Default')}" class="card-img-top"
-                   th:src="@{/view/{photo}(photo=${clubPhotoList[i]})}">
+        </div>
 
-            </div>
 
-            <div class="col-md-8">
-              <div class="card-body">
-                <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTOList[i].clubNo})}" th:inline="text">
-                  <h3 class="card-title" th:text="${clubDTOList[i].clubName}"></h3>
-                </a>
-                <p th:text="${clubDTOList[i].clubContent}"></p>
-              </div>
-            </div>
+        <div class="col-6" style="max-width: 200px; max-height: 200px; float: left">
+          <div>
+            <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTOList[i].clubNo})}"
+               th:inline="text">
+              <h3 style="text-align: center" class="card-title" th:text="${myClubDTOList[i].clubName}"></h3>
+            </a>
 
+            <p class="card-text" style="text-align: center; max-height: 50px; overflow: hidden" th:text="${myClubDTOList[i].clubContent}"></p>
           </div>
         </div>
+
+      </div>
     </div>
-    </div>
+
+
+    <br>
   </div>
 
-<br>
+  <hr>
+
+
+  <div class="container">
+
+    <div class="row">
+      <h2>전체 모임</h2>
+    </div>
+
+    <div class="row" th:if="${ clubDTOList.size()>0}" th:with="maxIndex=${#lists.size(clubDTOList) - 1}">
+
+      <div class="col-4" th:each="i : ${#numbers.sequence(0, maxIndex)}">
+
+        <div class="col-6 photo-wrap" style="float: left;">
+          <img th:if="${#strings.contains(clubPhotoList[i], 'ClubDefaultPhoto')}" class="photo"
+               src="/assets/ClubDefaultPhoto.jpg">
+
+          <img th:unless="${#strings.contains(clubPhotoList[i], 'Default')}" class="photo"
+               th:src="@{/view/{photo}(photo=${clubPhotoList[i]})}">
+
+        </div>
+
+        <div class="col-6" style="max-width: 200px; max-height: 200px;  float: left">
+          <div>
+            <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTOList[i].clubNo})}" th:inline="text">
+              <h3 style="text-align: center" class="card-title" th:text="${clubDTOList[i].clubName}"></h3>
+            </a>
+            <p class="card-text" style="text-align: center; max-height: 50px; overflow: hidden" th:text="${clubDTOList[i].clubContent}"></p>
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+    <br>
+  </div>
+
+
+  <!--    <div class="row-cols-auto">-->
+
+  <!--        <div th:if="${ clubDTOList.size()>0}" th:with="maxIndex=${#lists.size(clubDTOList) - 1}">-->
+  <!--            <div th:each="i : ${#numbers.sequence(0, maxIndex)}">-->
+  <!--                <div class="card mb-3" style="max-width: 415px;">-->
+  <!--                    <div class="row g-0">-->
+
+  <!--                        <div class="col-md-4">-->
+
+  <!--                            <img th:if="${#strings.contains(clubPhotoList[i], 'ClubDefaultPhoto')}" class="card-img-top"-->
+  <!--                                 src="/assets/ClubDefaultPhoto.jpg">-->
+
+  <!--                            <img th:unless="${#strings.contains(clubPhotoList[i], 'Default')}" class="card-img-top"-->
+  <!--                                 th:src="@{/view/{photo}(photo=${clubPhotoList[i]})}">-->
+
+  <!--                        </div>-->
+
+  <!--                        <div class="col-md-8">-->
+  <!--                            <div class="card-body">-->
+  <!--                                <a th:href="@{/club/main/{clubNo}(clubNo = ${clubDTOList[i].clubNo})}" th:inline="text">-->
+  <!--                                    <h3 class="card-title" th:text="${clubDTOList[i].clubName}"></h3>-->
+  <!--                                </a>-->
+  <!--                                <p th:text="${clubDTOList[i].clubContent}"></p>-->
+  <!--                            </div>-->
+  <!--                        </div>-->
+
+  <!--                    </div>-->
+  <!--                </div>-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--    </div>-->
+
+
+
+
+
+
+  <!--        <div class="col"></div>-->
+  <!--        <div class="col"></div>-->
+
+  <!--        <div class="col">01-->
+  <!--            <div class="box" style="width: 100px; height: 100px; background-color: red">-->
+  <!--                box-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--        <div class="col">02-->
+  <!--            <div class="box" style="width: 100px; height: 100px; background-color: peru">-->
+  <!--                box-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--        <div class="col">03-->
+  <!--            <div class="box" style="width: 100px; height: 100px; background-color: aqua">-->
+  <!--                box-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--        <div class="col">04-->
+  <!--            <div class="box" style="width: 100px; height: 100px; background-color: bisque">-->
+  <!--                box-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--        <div class="col"></div>-->
+  <!--        <div class="col"></div>-->
+
+
+  <!--    <h2>나의 모임</h2>-->
+  <!--    <div class="row row-cols-3">-->
+
+  <!--        <div th:if="${myClubDTOList!=null && myClubDTOList.size()>0}"-->
+  <!--             th:with="myMaxIndex=${#lists.size(myClubDTOList) - 1}">-->
+  <!--            <div>-->
+
+  <!--                <div class="col" th:each="i : ${#numbers.sequence(0, myMaxIndex)}">-->
+  <!--                    <div>-->
+
+
+  <!--                        <div>-->
+
+  <!--                            <img th:if="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}"-->
+  <!--                                 src="/assets/ClubDefaultPhoto.jpg">-->
+
+  <!--                            <img th:unless="${#strings.contains(myClubPhotoList[i], 'ClubDefaultPhoto')}"-->
+  <!--                                 th:src="@{/view/{photo}(photo=${myClubPhotoList[i]})}">-->
+
+  <!--                        </div>-->
+
+
+  <!--                        <div>-->
+  <!--                            <div class="card-body">-->
+  <!--                                <a th:href="@{/club/main/{clubNo}(clubNo = ${myClubDTOList[i].clubNo})}"-->
+  <!--                                   th:inline="text">-->
+  <!--                                    <h3 class="card-title" th:text="${myClubDTOList[i].clubName}"></h3>-->
+  <!--                                </a>-->
+  <!--                                <p class="card-text" th:text="${myClubDTOList[i].clubContent}"></p>-->
+  <!--                            </div>-->
+  <!--                        </div>-->
+
+  <!--                    </div>-->
+  <!--                </div>-->
+  <!--            </div>-->
+  <!--        </div>-->
+  <!--    </div>-->
 
 </th:block>
