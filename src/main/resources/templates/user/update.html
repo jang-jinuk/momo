@@ -142,9 +142,8 @@
 
 <div class="form-container">
 
-    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image">
-
-
+    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+         src="/assets/UserDefaultPhoto.png">>
 
     <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
          th:src="@{/view/{photo}(photo=${userPhoto})}"
@@ -371,8 +370,7 @@
         function showUploadFile({uuid, extension, link}) {
             const str = `<div class="card col-4">
 <div class="card-header d-flex justify-content-center">
-${uuid}${extension}
-<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+<button class="btn btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
 <img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">

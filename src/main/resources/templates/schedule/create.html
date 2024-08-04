@@ -19,9 +19,9 @@
                     <!-- 이미지 업로드 YY -->
                     <div class="input-group d-grid gap-2 d-md-flex">
 
-                        <span class="input-group mb-3">Images</span>
+                        <span class="input-group mb-3"></span>
                         <div class="float-end uploadHidden">
-                            <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                            <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
                         </div>
                     </div>
 
@@ -30,7 +30,7 @@
 
                     <div class="col ">
                         <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
-                            uploadResult 자리 // 삭제
+
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title">Upload Files(Modal Title)</div>
+                    <div class="modal-title"></div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <div class="modal-body">
@@ -92,8 +92,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close
+                    <button type="button" class="btn btn-primary uploadBtn">등록하기</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">닫기
                     </button>
 
                 </div>
@@ -244,8 +244,7 @@
 
             const str = `<div class="card col-4">
 <div class="card-header d-flex justify-content-center">
-${uuid}${extension}
-<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+<button class="btn btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
 <div class="card-body">
 <img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">

@@ -4,10 +4,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
 
-<head>
-  <title>후기글 작성하기</title>
-</head>
-
 <th:block layout:fragment="content"><!-- [] -->
 
   <div class="row mt-3">
@@ -15,7 +11,9 @@
       <div class="card">
 
         <div class="card-header">
-     후기글 작성하기
+
+     후기 글 작성
+
         </div>
 
         <div class="card-body">
@@ -38,7 +36,7 @@
             <!-- 이미지 업로드 YY -->
             <div class="input-group mb-3">
 
-              <span class="input-group mb-3">Images</span>
+<!--              <span class="input-group mb-3">Images</span>-->
               <div class="float-end uploadHidden">
                 <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
               </div>
@@ -47,7 +45,7 @@
             <div class="my-4">
 
               <button type="submit" class="btn btn-primary submitBtn">제출하기</button>
-              <button type="reset" class="btn btn-secondary">Reset</button>
+              <button type="reset" class="btn btn-secondary">리셋</button>
 
             </div>
 
@@ -76,7 +74,9 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title">사진 등록하기</div>
+
+          <div class="modal-title"></div>
+
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
         </div>
         <div class="modal-body">

@@ -48,7 +48,9 @@
                         <!-- 이미지 업로드 YY -->
                         <div class="input-group d-grid gap-2 d-md-flex">
 
+
 <!--                            <span class="input-group mb-3"></span>-->
+
                             <div class="float-end uploadHidden">
                                 <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
                             </div>
@@ -119,7 +121,9 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title">사진 등록하기</div>
+
+                    <div class="modal-title"></div>
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <div class="modal-body">
@@ -268,7 +272,9 @@
 
             const str = `<div class="card col-4">
 <div class="card-header d-flex justify-content-center">
-<button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+
+<button class="btn btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+
 </div>
 <div class="card-body">
 <img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">

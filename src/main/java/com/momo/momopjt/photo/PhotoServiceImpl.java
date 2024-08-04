@@ -71,19 +71,24 @@ public class PhotoServiceImpl implements PhotoService {
         log.info("try  get photo-ClubDefaultPhoto");
         Photo clubDefaultPhoto = new Photo();
         clubDefaultPhoto.setPhotoUUID("ClubDefaultPhoto");
+        clubDefaultPhoto.setPhotoExtension("");
         return clubDefaultPhoto;
 
       case "UserDefaultPhoto":
         log.info("try  get photo-UserDefaultPhoto");
         Photo userDefaultPhoto = new Photo();
         userDefaultPhoto.setPhotoUUID("UserDefaultPhoto");
+        userDefaultPhoto.setPhotoExtension("");
         return userDefaultPhoto;
-      case "ScheduleDefaultPhoto":
 
+
+      case "ScheduleDefaultPhoto":
         log.info("try  get photo-ScheduleDefaultPhoto");
         Photo scheduleDefaultPhoto = new Photo();
         scheduleDefaultPhoto.setPhotoUUID("ScheduleDefaultPhoto");
+        scheduleDefaultPhoto.setPhotoExtension("");
         return scheduleDefaultPhoto;
+
     }
 
     boolean existCheck = photoRepository.existsById(photoUUID);
@@ -93,6 +98,7 @@ public class PhotoServiceImpl implements PhotoService {
 
       Photo NullPhoto = new Photo();
       NullPhoto.setPhotoUUID("NullPhoto");
+      NullPhoto.setPhotoExtension("");
       return NullPhoto;
     }
 
@@ -137,9 +143,9 @@ public class PhotoServiceImpl implements PhotoService {
 
   @Override
   public ReplyDTO addPhotoStr(ReplyDTO replyDTO) {
-    User author = userService.findByUserNo(replyDTO.getUserNo().getUserNo()).get();
+    User author = userService.findByUserNo(replyDTO.getUserNo().getUserNo()).orElseThrow();
     replyDTO.setWriterPhotoStr(
-        getPhoto(author.getUserPhoto()).toString()
+        "t_"+getPhoto(author.getUserPhoto()).toString()
     );
     return replyDTO;
   }
