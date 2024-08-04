@@ -2,6 +2,7 @@
 <html lang="ko"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="layout/layout.html"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
@@ -10,6 +11,12 @@
 
     <!--DY-->
     <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #f8f9fa;
+            font-family: 'CookieRun', sans-serif;
+        }
         .navbar {
             display: flex;
             flex-direction: column;
@@ -55,7 +62,7 @@
 </nav>
 <!--YY-->
 <!--<form id="newsForm" method="post"></form>-->
-
+<th:block layout:fragment="content">
 <form id="newsForm" name="newsForm" action="/news/update" method="post">
     <ul class="nav justify-content-center">
         <input type="hidden" name="newsNo" th:value="${news.newsNo}">
@@ -67,6 +74,7 @@
             <span class="input-group-text">공지사항 제목</span>
             <input type="text" name="newsTitle" class="form-control" th:value="${news.newsTitle}">
         </li>
+
         <li class="nav-item input-group">
             <span class="input-group-text">공지사항 작성일</span>
             <input type="date" class="form-control"
@@ -74,15 +82,16 @@
                    >
             <input type="hidden"  value="${news.newsCreateDate}">
         </li>
-        <li class="nav-item input-group mb-3">
-            <span class="input-group-text">공지사항 수정일</span>
-            <input type="text" name="newsModifyDate" class="form-control"
-                   th:placeholder="${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')}"
-                   readonly>
-            <input type="hidden"  value="${news.newsModifyDate}">
+<!--        <li class="nav-item input-group mb-3">-->
+<!--            <span class="input-group-text">공지사항 수정일</span>-->
+<!--            <input type="text" name="newsModifyDate" class="form-control"-->
+<!--                   th:placeholder="${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')}"-->
+<!--                   readonly>-->
+<!--            <input type="hidden"  value="${news.newsModifyDate}">-->
 
-        </li>
+<!--        </li>-->
     </ul>
+</form>
 
     <div class="container">
         <div class="input-group mb-6">
@@ -101,21 +110,8 @@
             <button class="btn btn-primary" type="button" th:onclick="|location.href='/news/main/'|">돌아가기</button>
 
         </div>
-        <!-- TODO 수정필요 이거 왜있지?? -->
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <!--활성화된 신고하기 버튼-->
-            <!--        <button type="button" class="btn btn-danger">신고하기</button>-->
-            <!--YY-->
-            <button class="btn btn-danger"
-                    th:onclick="|window.location.href='../../report/create'|"
-                    type="button">신고하기
-            </button>
-            <!--YY-->
-            <!--비활성화 신고하기 버튼-->
-            <button type="button" class="btn btn-outline-primary" disabled>신고하기</button>
-        </div>
     </div>
-</form>
+
 <script>
     /*newsForm 제출*/
     function submitNewsForm(action){
@@ -168,6 +164,9 @@
 
     </ul>
 -->
+
 </body>
+
 </html>
+
 <!---->

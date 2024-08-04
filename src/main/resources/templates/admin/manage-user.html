@@ -2,14 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout">
+<style>
+    .navbar .btn {
+        margin-right: 10px; /* 버튼 간의 여백 조정 */
+    }
+
+    </style>
 <th:block layout:fragment="content">
 <nav class="navbar bg-body-tertiary">
+
+    <div th:class="ui-button">
+        <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='/news/create'">공지사항생성</button>
+    </div>
+
+
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">회원 목록</a>
     </div>
-    <div th:class="ui-button">
-        <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-report'">신고관리</button>
-    </div>
+
 </nav>
 <table class="table table-bordered table-striped container">
     <thead>
