@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://webfontworld.github.io/cookierun/CookieRun.css" rel="stylesheet">
   <title>비밀번호 변경</title>
   <style>
       body {
-          font-family: Arial, sans-serif;
+          font-family: 'CookieRun', sans-serif;
           background-color: #f4f4f9;
           color: #333;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          /*display: flex;*/
+
           height: 100vh;
           margin: 0;
       }
@@ -74,12 +78,23 @@
       button:hover {
           background-color: #4cae4c;
       }
+
+      .form-container {
+        max-width: 800px; /* 최대 너비 설정 */
+        margin: 0 auto; /* 중앙 정렬 */
+      }
   </style>
 </head>
+<th:block layout:fragment="content">
 <body>
-<div class="container">
+
+<br>
+<br>
+<br>
+<div class="form-container">
   <h1>비밀번호 바꾸기</h1>
   <!-- Action URL을 컨트롤러의 /reset-pw와 일치시키기 -->
+
   <form th:action="@{/user/find/reset-pw}" th:object="${resetPasswordRequest}" method="post">
     <div class="form-group">
       <label for="userId">User ID:</label>
@@ -100,7 +115,13 @@
     <div class="form-group">
       <button type="submit">비밀번호 변경</button>
     </div>
+    <br>
+    <br>
+    <br>
+
   </form>
 </div>
 </body>
+
+
 </html>
