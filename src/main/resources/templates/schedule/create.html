@@ -11,7 +11,7 @@
                 <!--사진등록-->
                 <div class="col-4">
                     <div class="row-cols-4">
-                        <h4>기본 일정 사진</h4>
+                        <h4>일정 사진</h4>
                         <img th:src="@{/assets/ScheduleDefaultPhoto.jpg}" alt="schedule default image">
 
                     </div>
@@ -69,9 +69,14 @@
                           id="content" maxlength="500"></textarea>
             </div>
             <div class="row">
-                <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-primary submitBtn">만들기
-                </button>
-                <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
+                <div class="col">
+                    <button style="float: right; margin-top: 10px;" type="submit" class="btn btn-primary submitBtn">만들기
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
+
+                </div>
             </div>
         </form>
     </div>
