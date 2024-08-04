@@ -4,7 +4,13 @@
       layout:decorate="layout/layout">
 <th:block layout:fragment="content">
 
-<nav class="navbar bg-body-tertiary">
+    <div th:class="ui-button">
+
+    <button type="button" class="btn btn-danger" onclick="location.href='/admin/manage-user'">회원관리</button>
+    </div>
+
+
+    <nav class="navbar bg-body-tertiary">
     <div class="container-fluid d-flex flex-column align-items-center">
         <a class="navbar-brand">신고된 회원 관리</a>
         <form class="d-flex" th:action="@{/admin/manage-report}" method="get">

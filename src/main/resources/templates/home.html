@@ -1,64 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/layout.html"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+>
 
 <th:block layout:fragment="content">
-
-  <div class="container">
-    <div class="row">
-      <br>
-    </div>
-    <div class="row">
-      <div class="col-2"></div>
-      <div class="col-8">
-
-        <!--공지사항 출력-->
-        <table class="table" style="margin: auto">
-          <thead>
-          <tr class="card-title">
-            <th colspan="5" style="margin: auto; text-align: center; font-size: 28px;">모모 공지사항</th>
-            <th sec:authorize="hasRole('ADMIN')"></th>
-          </tr>
-          <tr>
-            <!--      <th scope="col">체크</th>-->
-            <th scope="col">말머리</th>
-            <th scope="col">제목</th>
-            <th scope="col">등록일</th>
-            <th scope="col">수정</th>
-            <th scope="col" sec:authorize="hasRole('ADMIN')">delete</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="news, rowStat : ${newsList}" th:scope="row">
-            <!--      <td><input type="checkbox" name="select"></td>-->
-            <td th:text="${news.newsTag}"></td>
-            <td>
-              <a style="text-decoration: none; color: black"
-                 th:href="@{/news/read/{newsNo}(newsNo=${news.newsNo})}"
-                 th:text="${news.newsTitle}">
-              </a>
-            </td>
-            <td th:text="${news.newsModifyDate != null} ? ${#dates.format(news.newsModifyDate, 'yyyy-MM-dd HH:mm')} : ${#dates.format(news.newsCreateDate, 'yyyy-MM-dd HH:mm')}">
-            <td>수정칸</td>
-            <td sec:authorize="hasRole('ADMIN')">
-              <form action="/news/delete/" method="post">
-                <input type="hidden" name="newsNo" th:value="${news.newsNo}">
-                <button type="submit" class="btn btn-danger" style="width: 50%; height: auto">삭제하기</button>
-              </form>
-            </td>
-          </tr>
-
-          </tbody>
-        </table>
-        <br>
-
-      </div>
-      <div class="col-2"></div>
-    </div>
-
-  </div>
-
 
   <div class="container">
     <!-- 로그인한 사용자에게만 보이는 부분 -->
