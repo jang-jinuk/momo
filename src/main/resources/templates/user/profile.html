@@ -156,7 +156,7 @@
 
         /* 후기 섹션 */
         .review-section, .club-section {
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #ffffff;
             border-bottom: 1px solid #ddd;
             padding: 2% 5%;
             background-color: #f9f9f9;
@@ -208,6 +208,7 @@
             color: #333;
         }
 
+
         /* 더 보기 버튼 스타일 */
         .moreBtn {
             background-color: #92d5e3;
@@ -217,12 +218,16 @@
             padding: 0.5rem 1rem;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.3s;
+
         }
 
         .moreBtn:hover {
-            background-color: #f6feff;
+            background-color: #92d5e3;
             transform: scale(1.05);
+
         }
+
+
 
         /* 숨기기용 클래스 */
         .d-none-custom {
@@ -327,8 +332,11 @@
                         </a>
 
                         <div class="card-body">
-                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                               style="display: block; padding: 10px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
                                 <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+
+
                             </a>
                         </div>
                     </div>
