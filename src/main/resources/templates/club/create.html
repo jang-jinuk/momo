@@ -34,7 +34,7 @@
                     <div class="col">
                         <input name="clubArea" type="text" class="form-control" id="sample5_address" placeholder="활동 지역"
                                th:required="true" readonly>
-                        <input type="button" onclick="sample5_execDaumPostcode()" value="검색"><br>
+                        <input type="button" class="btn btn-outline-secondary" onclick="sample5_execDaumPostcode()" value="검색"><br>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
 
                                 <div class="d-grid my-4 d-md-flex justify-content-md-end">
                                     <div class="me-10">
-                                        <button type="submit" class="btn btn-dark submitBtn">만들기</button>
+                                        <button type="submit" class="btn btn-primary submitBtn">만들기</button>
                                         <button type="button" class="btn btn-dark" th:onclick="history.back()">취소
                                         </button>
                                     </div>

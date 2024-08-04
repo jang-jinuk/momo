@@ -12,7 +12,7 @@
                 <div class="col-4">
                     <div class="row-cols-4">
                         <h4>일정 사진</h4>
-                        <img th:src="@{/assets/ScheduleDefaultPhoto.jpg}" alt="schedule default image">
+                        <img style="width: 200px; height: auto; object-fit: cover" th:src="@{/assets/ScheduleDefaultPhoto.jpg}" alt="schedule default image">
 
                     </div>
 
@@ -28,7 +28,7 @@
 
                     <!-- Image Thumbnail display -->
 
-                    <div class="col ">
+                    <div class="col">
                         <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
 
                         </div>
@@ -57,7 +57,7 @@
                             <input name="schedulePlace" type="text" class="form-control" id="sample5_address"
                                    placeholder="장소"
                                    th:required="true">
-                            <input type="button" onclick="sample5_execDaumPostcode()" value="장소 검색"><br>
+                            <input type="button" class="btn btn-outline-secondary" onclick="sample5_execDaumPostcode()" value="장소 검색"><br>
                             <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
                         </div>
                     </div>
