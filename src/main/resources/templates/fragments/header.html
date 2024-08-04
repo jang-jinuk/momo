@@ -39,9 +39,9 @@
 <!--        -->
         </a>
 
-        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/logout}">Logout</a>
+        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/logout}">로그아웃</a>
 
-        <a class="nav-menu" th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/user/login}">Login</a>
+        <a class="nav-menu" th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/user/login}">로그인</a>
 
       </div>
     </nav>
