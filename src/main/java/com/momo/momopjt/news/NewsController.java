@@ -58,7 +58,7 @@ public class NewsController {
 
     newsService.createNews(newsDTO);
 
-    return "redirect:/news/main";
+    return "redirect:/home";
   }
 
   @PostMapping("/update")

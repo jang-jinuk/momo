@@ -9,7 +9,9 @@
         <div class="row">
             <div class="col-10"></div>
             <div class="col-2">
-                <button type="button" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${scheduleDTO.clubNo.clubNo})}'|">모임 홈</button>
+                <button type="button"
+                        th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${scheduleDTO.clubNo.clubNo})}'|">모임 홈
+                </button>
             </div>
         </div>
         <div class="row">
@@ -37,7 +39,7 @@
                     <div class="col-12">
                         <!-- 지도  -->
                         <div id="map" style="width:500px;height:400px;margin-top:10px;"></div>
-                        <p  type="text" id="copyTxt" th:text="${scheduleDTO.schedulePlace}"></p>
+                        <p type="text" id="copyTxt" th:text="${scheduleDTO.schedulePlace}"></p>
                         <button onclick="copyText()">복사하기</button>
                     </div>
                     <div class="col-12">
@@ -52,9 +54,9 @@
         참여 멤버 이미지 출력
         <span th:each="participantPhoto : ${scheduleParticipantPhotoList}">
             <img th:if="${#strings.contains(participantPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                  src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
+                 src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
             <img th:unless="${#strings.contains(participantPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                           th:src="@{/view/{photo}(photo=${participantPhoto})}" style="width: 20px; height:20px">
+                 th:src="@{/view/{photo}(photo=${participantPhoto})}" style="width: 20px; height:20px">
 
         </span>
 
@@ -67,19 +69,21 @@
 
 
         <div class="row">
+
             <table>
                 <tr>
                     <th>사진</th>
                     <th>닉네임</th>
                     <th>거주지</th>
                 </tr>
+
                 <tr th:each="user : ${userDTOList}">
                     <td>
-
-            <img th:if="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
-                 src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
-            <img th:unless="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
-                 th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 20px; height:20px">
+                        <img th:if="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
+                             src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">
+                        <img th:unless="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}"
+                             class="profile-image"
+                             th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 20px; height:20px">
                     </td>
 
                     <td>
@@ -89,6 +93,7 @@
                     <td th:text="${user.userAddress}"></td>
                 </tr>
             </table>
+
         </div>
         <div class="row" th:unless="${currentTime} > ${scheduleDTO.scheduleStartDate}">
 
@@ -102,18 +107,23 @@
                 <button class="btn btn-danger leave" th:onclick="|location.href='@{/schedule/leave}'|">취소</button>
             </div>
         </div>
+
         <div class="row" th:if="${currentTime} > ${scheduleDTO.scheduleStartDate}">
             <div th:if="${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
                 <button class="btn btn-dark">마감</button>
             </div>
             <div th:if="${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
-                <button class="btn btn-dark" th:onclick="|location.href='@{/article/create(scheduleNo=${scheduleDTO.scheduleNo})}'|">후기 작성</button>
+                <button class="btn btn-dark"
+                        th:onclick="|location.href='@{/article/create(scheduleNo=${scheduleDTO.scheduleNo})}'|">후기 작성
+                </button>
             </div>
         </div>
+
         <div class="row">
             <textarea th:text="${scheduleDTO.scheduleContent}" style="width: 100%; height: 400px; resize: none"
                       class="form-control" id="content" readonly></textarea>
         </div>
+
         <div class="row" th:if="${isParticipant == 1}"> <!--일정 주최자일 때-->
             <div class="col-10">
             </div>
@@ -122,6 +132,7 @@
                 <button class="btn btn-danger delete" th:onclick="|location.href='@{/schedule/delete}'|">삭제</button>
             </div>
         </div>
+
     </div>
 
     <!--    reply 댓글 작성 폼 부분-->
@@ -226,52 +237,52 @@
 
 </th:block>
 <th:block layout:fragment="script">
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    var message = /*[[${message}]]*/ null;
-    if (message) {
-    alert(message);
-    }
-
-    var address = /*[[${scheduleDTO.schedulePlace}]]*/ '';
-    /*]]>*/
-
-
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 5 // 지도의 확대 레벨
-        };
-
-    // 지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-
-    // 주소-좌표 변환 객체를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-
-    // 주소로 좌표를 검색합니다
-    geocoder.addressSearch(address, function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
-
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-    // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var message = /*[[${message}]]*/ null;
+        if (message) {
+            alert(message);
         }
-    });
 
-    function copyText() {
-        var copyTxt = document.getElementById("copyTxt").innerText;
-        navigator.clipboard.writeText(copyTxt).then(function() {
-            alert('주소가 복사되었습니다.');
+        var address = /*[[${scheduleDTO.schedulePlace}]]*/ '';
+        /*]]>*/
+
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 5 // 지도의 확대 레벨
+            };
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(address, function (result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
         });
-    }
-</script>
+
+        function copyText() {
+            var copyTxt = document.getElementById("copyTxt").innerText;
+            navigator.clipboard.writeText(copyTxt).then(function () {
+                alert('주소가 복사되었습니다.');
+            });
+        }
+    </script>
 </th:block>
