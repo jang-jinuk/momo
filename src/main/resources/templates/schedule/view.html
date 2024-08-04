@@ -14,14 +14,14 @@
         </div>
         <div class="row">
             <div class="col-3">
-                <div class="col-3" > <!-- 일정 이미지 출력 -->
+                <div class="col-3"> <!-- 일정 이미지 출력 -->
 
                     <img th:if="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
-                         src="/assets/ScheduleDefaultPhoto.jpg"  style="width:300px;" >
+                         src="/assets/ScheduleDefaultPhoto.jpg" style="width:300px;">
                     <img th:unless="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
-                         th:src="@{/view/{photo}(photo=${schedulePhoto})}"  style="width:300px;" >
-<!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
-<!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
+                         th:src="@{/view/{photo}(photo=${schedulePhoto})}" style="width:300px;">
+                    <!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
+                    <!--                    <img th:src="@{/view/{fileName}(fileName=${schedulePhoto})}" alt="schedule image">-->
 
                 </div>
             </div>
@@ -69,15 +69,9 @@
         <div class="row">
             <table>
                 <tr>
-                    <th>
-                        사진
-                    </th>
-                    <th>
-                        닉네임
-                    </th>
-                    <th>
-                        거주지
-                    </th>
+                    <th>사진</th>
+                    <th>닉네임</th>
+                    <th>거주지</th>
                 </tr>
                 <tr th:each="user : ${userDTOList}">
                     <td>
@@ -132,40 +126,104 @@
 
     <!--    reply 댓글 작성 폼 부분-->
     <div class="container">
-        <div class="row">
-            <form id="scheduleReplyForm" action="/reply/create" method="post">
-                <div>
-                    <label for="replyContent">Reply Content:</label>
-                    <textarea id="replyContent" name="replyContent" required></textarea>
+
+
+        <div class="row"> <!-- 댓글 입력창 부분 -->
+
+
+            <form id="articleReplyForm" action="/reply/create" method="post">
+                <div class="col input-group mb-3">
+                    <label for="replyContent">댓글 내용 입력 : </label>
+                    <input id="replyContent" name="replyContent" maxlength="50" required>
+                                    <input type="hidden" name="scheduleNo.scheduleNo" th:value="${scheduleDTO.scheduleNo}">
                 </div>
-                <div>
+                <div class="col">
                     <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
                 </div>
-                <input type="hidden" name="scheduleNo.scheduleNo" th:value="${scheduleDTO.scheduleNo}">
-
-
             </form>
+
+
         </div>
-    </div>
-    <div class="container"> <!-- 댓글 출력 부분 YY -->
-        <div class="row">
-            <div class="reply" th:each="reply : ${replyList}">
+
+        <!-- 댓글 표시 부분 -->
+        <div class="reply" th:each="reply : ${replyList}">
+            <div class="row">
                 <hr>
-                <span th:text="${reply.getReplyContent()}"></span>
-                <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
-                <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>
-                <span>
-                    작성자 : <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"
-                        th:text="${reply.getWriter}"></a>
-                    </span>
-                <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
-                <form id="replyDeleteForm" action="/reply/delete" method="post">
-                    <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
-                    <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
-                </form>
+                <!--                    <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>-->
+                <span> <!-- 댓글 작성자 이미지 -->
+          <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"
+             th:text="${reply.getWriter}"></a>
+
+    <img style="width: 30px; height: auto" th:if="${#strings.contains(reply.getWriterPhotoStr(), 'UserDefaultPhoto')}"
+         class="profile-image"
+         src="/assets/UserDefaultPhoto.png">
+
+
+    <img style="width: 30px; height: auto"
+         th:unless="${#strings.contains(reply.getWriterPhotoStr(), 'UserDefaultPhoto')}" class="profile-image"
+         th:src="@{/view/{photo}(photo=${reply.getWriterPhotoStr()})}">
+                <span style="font-size: 14px; color: #4d5154"
+                      th:text="${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
+          </span>
+            </div>
+
+            <div class="row">
+                <div class="col left" style="text-align: left">
+                    <span th:text="${reply.getReplyContent()}"></span>
+
+                </div>
+                <div class="col right" style="text-align: right">
+                    <form id="replyDeleteForm" action="/reply/delete" method="post">
+                        <input type="hidden" name="scheduleNo.scheduleNo" th:value="${scheduleDTO.scheduleNo}">
+                        <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
+                        <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
+
+                    </form>
+                </div>
+
             </div>
         </div>
+
     </div>
+
+
+    <!--    &lt;!&ndash;    reply 댓글 작성 폼 부분&ndash;&gt;-->
+    <!--    <div class="container">-->
+    <!--        <div class="row">-->
+    <!--            <form id="scheduleReplyForm" action="/reply/create" method="post">-->
+    <!--                <div>-->
+    <!--                    <label for="replyContent">Reply Content:</label>-->
+    <!--                    <textarea id="replyContent" name="replyContent" required></textarea>-->
+    <!--                </div>-->
+    <!--                <div>-->
+    <!--                    <button class="btn btn-outline-primary" type="submit">댓글 등록</button>-->
+    <!--                </div>-->
+    <!--                <input type="hidden" name="scheduleNo.scheduleNo" th:value="${scheduleDTO.scheduleNo}">-->
+
+
+    <!--            </form>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    <div class="container"> &lt;!&ndash; 댓글 출력 부분 YY &ndash;&gt;-->
+    <!--        <div class="row">-->
+    <!--            <div class="reply" th:each="reply : ${replyList}">-->
+    <!--                <hr>-->
+    <!--                <span th:text="${reply.getReplyContent()}"></span>-->
+    <!--                <span th:text="'작성일 : ' + ${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>-->
+    <!--                <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>-->
+    <!--                <span>-->
+    <!--                    작성자 : <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"-->
+    <!--                        th:text="${reply.getWriter}"></a>-->
+    <!--                    </span>-->
+    <!--                &lt;!&ndash; <button class="btn btn-outline-success modifyBtn">수정하기</button> &ndash;&gt;-->
+    <!--                <form id="replyDeleteForm" action="/reply/delete" method="post">-->
+    <!--                    <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>-->
+    <!--                    <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>-->
+    <!--                </form>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
 </th:block>
 <th:block layout:fragment="script">
 <script th:inline="javascript">

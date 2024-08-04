@@ -71,7 +71,7 @@
             </div>
             <!--YY-->
             <div class="d-grid gap-4 col-2 mx-auto">
-                <button class="btn btn-primary" type="submit" th:onclick="submitNewsForm()">등록/수정</button>
+                <button class="btn btn-primary" type="submit">등록/수정</button>
                 <button class="btn btn-secondary" type="button" th:onclick="|location.href='@{/home/}'|">돌아가기</button>
 
             </div>
@@ -89,14 +89,7 @@
         </div>
 </form>
 <script>
-    /*newsForm 제출*/
-    function submitNewsForm(action) {
-        console.log("js-------------submitNewsForm start")
-        const form = document.getElementById('newsForm');
-        form.action = action;
-        form.submit();
-        console.log("js-------------submitNewsForm end")
-    }
+
 </script>
 <!--<script>
     // 오늘 날짜를 YYYY-MM-DD 형식으로 포맷팅하는 함수
