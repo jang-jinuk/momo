@@ -1,58 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/layout">
+      layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-2">
-                <button th:text="${clubDTO.clubArea}"></button>
+    <style>
+        .scrollable-content {
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .scrollable-content::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-info p {
+            margin-left: 1rem;
+            margin-bottom: 0;
+        }
+
+        .tag {
+            border: solid 0.5px;
+        }
+    </style>
+    <div class="container" style="width: 60rem; height: 100vh; align-items: center;">
+        <div class="row h-100">
+            <div class="col-5 d-flex flex-column" style="padding: 2rem;">
+                <div class="mb-3"
+                     style="width: 100%; padding-top: 75%; position: relative; overflow: hidden; margin-top: 9rem;">
+                    <img th:if="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                         src="/assets/ClubDefaultPhoto.jpg"
+                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 5%;">
+
+                    <img th:unless="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
+                         th:src="@{/view/{photo}(photo=${clubProfilePhoto})}"
+                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 5%;">
+                </div>
+                <div class="mb-3">
+                    <h4>맴버 소개</h4>
+                    <div class="user-info">
+                        <img th:if="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
+                             class="profile-image" src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem;">
+                        <img th:unless="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
+                             class="profile-image" th:src="@{/view/{photo}(photo=${leaderProfilePhoto})}"
+                             style="width: 3rem; height:3rem;">
+                        <a th:href="@{/user/profile/{userId}(userId=${isLeader.userNo.userId})}">
+                            <p th:text="${isLeader.userNo.userNickname}">닉네임</p>
+                        </a>
+                    </div>
+                    <div class="user-info">
+                        <div th:unless="${#lists.isEmpty(userAndClubDTOS)}">
+                            <div th:each="memberPhoto, iterStat : ${memberPhotoList}" th:if="${iterStat.count <= 3}">
+                                <img th:if="${#strings.contains(memberPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                                     src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem">
+                                <img th:unless="${#strings.contains(memberPhoto, 'UserDefaultPhoto')}"
+                                     class="profile-image" th:src="@{/view/{photo}(photo=${memberPhoto})}"
+                                     style="width: 3rem; height:3rem;">
+                            </div>
+                            <div th:each="member, iterStat : ${userAndClubDTOS}" class="user-info"
+                                 th:if="${iterStat.count <= 3}">
+                                <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
+                                    <p th:text="${member.userNo.userNickname}"></p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2" style="margin-top: 1rem">
+                    <button class="btn btn-primary py-3" th:onclick="|location.href='/club/join'|"
+                            th:if="${isMember == 0} and not ${#authentication.name == 'anonymousUser'}">가입 신청
+                    </button>
+                    <button class="btn btn-primary py-3" th:onclick="|location.href='/user/login'|"
+                            th:if="${#authentication.name == 'anonymousUser'}">가입 신청
+                    </button>
+                    <button class="btn btn-primary py-3" th:unless="${isMember == 0}">가입 신청이 완료 되었습니다.</button>
+                </div>
             </div>
-            <div class="col-2">
-                <button th:text="${clubDTO.clubCategory}"></button>
-            </div>
-            <div class="col-2">
-                <button th:text="${countMembers} + 명"></button>
+            <div class="col-7 scrollable-content" style="padding: 2rem;">
+                <div style="display: flex; flex-wrap: nowrap; overflow-x: auto; margin: 9rem 0 0.5rem 0;">
+                    <div>
+                        <button class="btn rounded-pill py-0 tag" th:text="${clubDTO.clubArea}"></button>
+                    </div>
+                    <div>
+                        <button class="btn rounded-pill py-0 tag" th:text="${clubDTO.clubCategory}"
+                                style="margin-left: 0.5rem"></button>
+                    </div>
+                    <div>
+                        <button class="btn rounded-pill py-0 tag" th:text="${countMembers} + 명"
+                                style="margin-left: 0.5rem"></button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h1 th:text="${clubDTO.clubName}" style="font-size: 2rem;"></h1>
+                </div>
+                <div class="mb-3">
+                    <div th:text="${clubDTO.clubContent}" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div>
-                <h1 th:text="${clubDTO.clubName}"></h1>
-            </div>
-        </div>
-        <div class="row">
-            <div>
-                <h2>소개</h2>
-                <textarea th:text="${clubDTO.clubContent}" style="width: 100%; height: 400px; resize: none" readonly></textarea>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <h2>모임장</h2>
-            <table>
-                <tr>
-                    <td>사진 자리</td>
-                    <td><h4 th:text="${isLeader.userNo.userNickname}">닉네임</h4></td>
-                    <td th:text="${isLeader.userNo.userMBTI}"></td>
-                </tr>
-            </table>
-        </div>
-        <div class="row">
-            <h2>맴버</h2>
-            <p th:if="${#lists.isEmpty(userAndClubDTOS)}">등록된 모임원이 없습니다.</p>
-            <table>
-                <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
-                <tr th:each="member : ${userAndClubDTOS}">
-                    <td th:text="${member.userNo.userNickname}"></td>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <button th:onclick="|location.href='/club/join'|" th:if="${isMember == 0} and not ${#authentication.name == 'anonymousUser'}">가입 신청</button>
-            <button th:onclick="|location.href='/user/login'|" th:if="${#authentication.name == 'anonymousUser'}">가입 신청</button>
-            <button th:unless="${isMember == 0}">가입 신청이 완료 되었습니다.</button>
-        <div/>
-     </div>
     </div>
 </th:block>
+</html>
