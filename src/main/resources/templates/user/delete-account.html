@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="kr">
-<th:block th:replace="fragments/header :: headerFragment"></th:block>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,7 +100,7 @@
 <body>
 <!-- 헤더 삽입 -->
 
-
+<th:block layout:fragment="content">
 <div class="container">
     <header>
         <h1>회원 탈퇴</h1>
@@ -124,5 +126,5 @@
 </div>
 
 </body>
-<th:block th:replace="fragments/footer :: footerFragment"></th:block>
-</html>
+
+
