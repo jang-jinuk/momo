@@ -21,7 +21,7 @@ public class ReplyDTO {
   private User userNo;
 
   private String writer; // userNickName
-  private String writerPhotoStr;
+  private String writerPhotoStr; 
 
   private String replyContent;
 

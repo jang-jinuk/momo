@@ -180,8 +180,10 @@
 <body>
 <div class="container">
     <h1>내 알림 목록</h1>
+
     <div class="button-container">
         <button class="delete-all-button" onclick="deleteAllAlarms()"></button>
+
     </div>
     <br>
     <ul class="alert-list" th:each="alarm : ${alarms}">
@@ -194,6 +196,7 @@
             <button class="delete-button" th:onclick="'deleteAlarm(' + ${alarm.alarmNo} + ')'">삭제</button>
         </li>
     </ul>
+
 
 
     <br>

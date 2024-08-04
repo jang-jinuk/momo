@@ -101,9 +101,11 @@ public class ArticleController {
     //출력할 댓글 추가 YY
     model.addAttribute("replyList",replyList);
     //출력할 사진 조회 YY
+    String articleUserPhoto = photoService.getPhoto(articleDTO.getUserNo().getUserPhoto()).toString();
     //출력할 사진 추가 YY
     String articlePhoto = photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString();
     model.addAttribute("articlePhoto",articlePhoto);
+    model.addAttribute("userPhoto",articleUserPhoto);
     
     return "article/detail"; // "articles/detail.html" 뷰를 반환
   }
