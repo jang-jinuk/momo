@@ -2,7 +2,6 @@ package com.momo.momopjt.home;
 
 import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubService;
-import com.momo.momopjt.news.NewsService;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
@@ -25,8 +24,6 @@ public class HomeController {
   private UserService userService;
   @Autowired
   private PhotoService photoService;
-  @Autowired
-  private NewsService newsService;
 
   @GetMapping("/home")
   public String home(Model model) {
