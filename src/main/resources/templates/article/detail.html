@@ -93,12 +93,12 @@
                             <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
                         </div>
 
-                        <div class="col"> <!-- 후기글 사진 출력 -->
+                        <div class="col" style="text-align: center"> <!-- 후기글 사진 출력 -->
 
                             <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
-                                 src="/assets/NullPhoto.png" style="width:300px;">
+                                 src="/assets/NullPhoto.png" style="width:100%; height: auto; max-width: 800px;">
                             <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
-                                 th:src="@{/view/{photo}(photo=${articlePhoto})}" style="width:300px;">
+                                 th:src="@{/view/{photo}(photo=${articlePhoto})}" style="width:100%; height: auto; max-width: 800px;">
 
 
                         </div>
@@ -139,6 +139,7 @@
                 </div>
 
             </div>
+            <br>
             <hr>
             <br>
 
@@ -155,7 +156,7 @@
                             </label>
                         </div>
                         <textarea id="replyContent" name="replyContent" rows="1" class="form-control"></textarea>
-                        <input type="hidden" name="articleNo.articleNo" value="${articleDTO.articleNo}">
+                        <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
                         <div class="input-group-append">
                             <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
                         </div>
