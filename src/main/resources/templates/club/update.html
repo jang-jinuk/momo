@@ -14,7 +14,7 @@
                     <h4>현재 모임 대표 사진</h4>
                     <div class="col-3">
                         <img th:if="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
-                             class="club-cover" src="/assets/ClubDefaultPhoto.jpg" alt="club photo" >
+                             class="club-cover" src="/assets/ClubDefaultPhoto.jpg" alt="club photo">
 
                         <img th:unless="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
                              class="club-cover" th:src="@{/view/{photo}(photo=${clubProfilePhoto})}" alt="club photo">
@@ -34,7 +34,8 @@
                         <h4>지역</h4>
                     </div>
                     <div class="col">
-                        <input th:value="${clubDTO.clubArea}" name="clubArea" type="text" class="form-control" id="sample5_address" placeholder="활동 지역"
+                        <input th:value="${clubDTO.clubArea}" name="clubArea" type="text" class="form-control"
+                               id="sample5_address" placeholder="활동 지역"
                                th:required="true" readonly>
                         <input type="button" onclick="sample5_execDaumPostcode()" value="검색"><br>
                     </div>
@@ -43,27 +44,29 @@
             <div class="container mt-5">
                 <div class="row align-items-center text-container">
                     <div class="col-2 ms-4">
-                        <h4>변경할 사진 등록</h4>
+                        <h4>대표사진 변경</h4>
+                    </div>
 
-                        <!--사진등록-->
+                    <!--사진등록-->
+                    <div class="col">
+                        <!-- 이미지 업로드 YY -->
+                        <div class="input-group d-grid gap-2 d-md-flex">
 
-                      <!-- 이미지 업로드 YY -->
-                      <div class="input-group d-grid gap-2 d-md-flex">
-
-                        <span class="input-group mb-3">Images</span>
-                        <div class="float-end uploadHidden">
-                          <button type="button" class="btn btn-primary uploadFileBtn">ADD files</button>
+                            <!--                        <span class="input-group mb-3">Images</span>-->
+                            <div class="float-end uploadHidden">
+                                <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
+                            </div>
                         </div>
-                      </div>
 
 
-                      <!-- Image Thumbnail display -->
+                        <!-- Image Thumbnail display -->
 
                         <div class="col">
                             <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
                             </div>
                         </div>
                     </div>
+
                     <div class="container mt-5">
                         <div class="row align-items-center text-container">
                             <div class="col-2 ms-4">
@@ -90,7 +93,8 @@
                                         <div class="col-2">
                                             <h4>정원(1-100명)</h4>
                                             <div class="input-group mt-2">
-                                                <input th:value="${clubDTO.clubMax}" name="clubMax" type="number" class="form-control text-center" id="count" min="2" max="100">
+                                                <input th:value="${clubDTO.clubMax}" name="clubMax" type="number"
+                                                       class="form-control text-center" id="count" min="2" max="100">
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +102,8 @@
                                 <div class="d-grid my-4 d-md-flex justify-content-md-end">
                                     <div class="me-10">
                                         <button type="submit" class="btn btn-success submitBtn">수정하기</button>
-                                        <button type="button" class="btn btn-dark" th:onclick="history.back()">취소</button>
+                                        <button type="button" class="btn btn-dark" th:onclick="history.back()">취소
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -114,17 +119,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="modal-title">Upload Files(Modal Title)</div>
+                    <div class="modal-title"></div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <input type="file" name="files" accept="image/*" class="form-control"> <!-- 모임 대표사진 multipole x  -->
+                        <input type="file" name="files" accept="image/*" class="form-control">
+                        <!-- 모임 대표사진 multipole x  -->
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close
+                    <button type="button" class="btn btn-primary uploadBtn">업로드</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">닫기
                     </button>
 
                 </div>
@@ -145,7 +151,7 @@
 
         //업로드 파일 확장자 검사 0801 YY
         function imageCheck(obj) {
-            if(obj){
+            if (obj) {
                 const allowedExtensions = ['jpg', 'png', 'jpeg'];
                 const fileExtension = obj.name.split('.').pop().toLowerCase();
                 console.log(fileExtension)
@@ -218,15 +224,15 @@
             for (let i = 0; i < files.length; i++) {
 
                 // 0801 YY 파일 확인 로직
-                if(imageCheck(files[i])){
-                    formObj.append("files", files[i]); }
-                else {
+                if (imageCheck(files[i])) {
+                    formObj.append("files", files[i]);
+                } else {
                     imageCheckResult = false;
                     break;
                 }
 
             }
-            if(imageCheckResult){
+            if (imageCheckResult) {
 
                 uploadToServer(formObj).then(result => {
                     console.log("result-------")
@@ -332,10 +338,10 @@
                 return true;
             }
 
-            if (validateForm()){
+            if (validateForm()) {
 
 
-                  target.innerHTML = str;
+                target.innerHTML = str;
                 console.log(str)
 
                 formObj.submit();
@@ -358,7 +364,7 @@
         // 주소 API
         function sample5_execDaumPostcode() {
             new daum.Postcode({
-                oncomplete: function(data) {
+                oncomplete: function (data) {
                     var addr = data.address;
                     document.getElementById("sample5_address").value = addr;
                 }

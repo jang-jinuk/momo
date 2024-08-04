@@ -142,9 +142,8 @@
 
 <div class="form-container">
 
-    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image">
-
-
+    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+         src="/assets/UserDefaultPhoto.png">>
 
     <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
          th:src="@{/view/{photo}(photo=${userPhoto})}"

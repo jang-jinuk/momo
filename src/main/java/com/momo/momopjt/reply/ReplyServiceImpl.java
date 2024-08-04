@@ -2,6 +2,8 @@ package com.momo.momopjt.reply;
 
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.article.Article;
+import com.momo.momopjt.photo.PhotoService;
+import com.momo.momopjt.photo.PhotoServiceImpl;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
@@ -26,8 +28,10 @@ public class ReplyServiceImpl implements ReplyService {
   private final ReplyRepository replyRepository;
   private final UserAndScheduleService userAndScheduleService;
   private final AlarmService alarmService;
+  private final PhotoService photoService;
 
   private final ModelMapper modelMapper;
+  private final PhotoServiceImpl photoServiceImpl;
 
   @Override
   public void createReply(ReplyDTO replyDTO) {
@@ -107,7 +111,11 @@ public class ReplyServiceImpl implements ReplyService {
     List<ReplyDTO> replyDTOList = new ArrayList<>();
     for (Reply reply : replyList) {
       ReplyDTO replyDTO = modelMapper.map(reply, ReplyDTO.class);
-      replyDTO.setWriter(userService.findByUserNo(reply.getUserNo().getUserNo()).orElseThrow().getUserNickname());
+      User writer = userService.findByUserNo(reply.getUserNo().getUserNo()).orElseThrow();
+      replyDTO.setWriter(writer.getUserNickname());
+//      log.info("----------------- [replylist photo add{}]-----------------",userService.findByUserNo(reply.getUserNo().getUserNo()).orElseThrow().getUserPhoto());
+      replyDTO = photoService.addPhotoStr(replyDTO);
+//      log.info("----------------- [replyDTO addphtoSTR]-----------------{}",replyDTO.getWriterPhotoStr());
       replyDTOList.add(replyDTO);
     }
 
@@ -132,6 +140,8 @@ public class ReplyServiceImpl implements ReplyService {
         .stream()
         .filter(reply -> reply.getArticleNo() != null && reply.getArticleNo().getArticleNo() == articleNo)
         .collect(Collectors.toList());
+
+
     return replyByArticleList;
   }
 
