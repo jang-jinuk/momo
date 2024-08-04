@@ -2,9 +2,11 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="layout/layout.html">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://webfontworld.github.io/cookierun/CookieRun.css" rel="stylesheet">
+    <meta charset="UTF-8">
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
     <style>
         .club-photo {
             width: 30rem;
@@ -48,6 +50,9 @@
             <div class="button-container">
                 <a href="#" th:onclick="|location.href='@{/home}'|"
                    class="btn btn-primary rounded-pill py-3 px-5">다른 모임 둘러보기</a>
+                <br>
+                <br>
+                <br>
             </div>
         </div>
     </div>
