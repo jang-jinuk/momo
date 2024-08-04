@@ -47,32 +47,47 @@
                 </div>
                 <div class="mb-3">
                     <h4>맴버 소개</h4>
-                    <div class="user-info">
-                        <img th:if="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
-                             class="profile-image" src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem;">
-                        <img th:unless="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
-                             class="profile-image" th:src="@{/view/{photo}(photo=${leaderProfilePhoto})}"
-                             style="width: 3rem; height:3rem;">
-                        <a th:href="@{/user/profile/{userId}(userId=${isLeader.userNo.userId})}">
-                            <p th:text="${isLeader.userNo.userNickname}">닉네임</p>
-                        </a>
+                    <br>
+                    <div class="row">
+                        <div class="col-2">
+                            <div>
+                                <img th:if="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
+                                     class="profile-image" src="/assets/UserDefaultPhoto.png"
+                                     style="width: 3rem; height:3rem; margin-bottom: 0.5rem;">
+                                <img th:unless="${#strings.contains(leaderProfilePhoto, 'UserDefaultPhoto')}"
+                                     class="profile-image" th:src="@{/view/{photo}(photo=${leaderProfilePhoto})}"
+                                     style="width: 3rem; height:3rem; margin-bottom: 0.5rem;">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div style="align-content: center; margin: 1rem 0 0 1rem;">
+                                <a th:href="@{/user/profile/{userId}(userId=${isLeader.userNo.userId})}">
+                                    <p th:text="${isLeader.userNo.userNickname}">닉네임</p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-4"></div>
                     </div>
-                    <div class="user-info">
-                        <div th:unless="${#lists.isEmpty(userAndClubDTOS)}">
+                    <div class="row">
+                        <div class="col-2">
                             <div th:each="memberPhoto, iterStat : ${memberPhotoList}" th:if="${iterStat.count <= 3}">
                                 <img th:if="${#strings.contains(memberPhoto, 'UserDefaultPhoto')}" class="profile-image"
-                                     src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem">
+                                     src="/assets/UserDefaultPhoto.png"
+                                     style="width: 3rem; height:3rem; margin-bottom: 0.5rem;">
                                 <img th:unless="${#strings.contains(memberPhoto, 'UserDefaultPhoto')}"
                                      class="profile-image" th:src="@{/view/{photo}(photo=${memberPhoto})}"
-                                     style="width: 3rem; height:3rem;">
+                                     style="width: 3rem; height:3rem; margin-bottom: 0.5rem;">
                             </div>
-                            <div th:each="member, iterStat : ${userAndClubDTOS}" class="user-info"
-                                 th:if="${iterStat.count <= 3}">
+                        </div>
+                        <div class="col-6">
+                            <div th:each="member, iterStat : ${userAndClubDTOS}" th:if="${iterStat.count <= 3}"
+                                 style="align-content: center; margin: 1rem 0 0 1rem;">
                                 <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
                                     <p th:text="${member.userNo.userNickname}"></p>
                                 </a>
                             </div>
                         </div>
+                        <div class="col-4"></div>
                     </div>
                 </div>
                 <div class="d-grid gap-2" style="margin-top: 1rem">

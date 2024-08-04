@@ -378,7 +378,13 @@ public class ClubController {
     log.info("------------ [Get club Join complete] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
+
+    Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
+    String clubProfilePhotoStr = clubPhoto.toString();
+    log.info("----------------- [club photo str 결과 : {}]-----------------",clubProfilePhotoStr);
+
     model.addAttribute("clubDTO", clubDTO);
+    model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
     return "club/join-complete";
   }
 
