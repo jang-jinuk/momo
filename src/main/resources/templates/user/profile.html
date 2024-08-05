@@ -296,10 +296,12 @@
             <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
                     onclick="openModal()">신고하기
             </button>
-            <button th:if="${user.userRole == T(com.momo.momopjt.user.UserRole).ADMIN}"
+            <button th:if="${user.userRole == T(com.momo.momopjt.user.UserRole).ADMIN
+                and loggedInUserId == user.userId}"
                     onclick="location.href='/admin/manage-user'">관리자 페이지
             </button>
-                    <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
+
+            <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
                     <input type="hidden" id="successMessage" th:value="${successMessage}">
             </div>
         </div>
@@ -564,5 +566,5 @@
 
 </script>
 </body>
-
+</th:block>
 </html>

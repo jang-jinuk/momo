@@ -29,8 +29,12 @@ public class HomeController {
   public String home(Model model) {
     log.info("----------------- [homeController]-----------------");
 
+
     // 현재 로그인된 사용자 정보를 얻기
     User user = userService.getCurrentUser();
+    log.info("----------------- [정지유저 확인로직]-----------------{}",user.getUserState());
+    model.addAttribute("state",user.getUserState());
+
 
     List<ClubDTO> myClubDTOList = clubService.readMyClubs(user);
 

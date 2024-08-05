@@ -38,28 +38,29 @@
                 <div class="col-8">
                     <div class="row g-3">
                         <div class="col-12">
-                            <label for="title" class="form-label">일정 제목</label>
+                            <label for="title" class="form-label" style="width: 80px">일정 제목</label>
                             <input name="scheduleTitle" type="text" class="form-control" id="title" th:required="true">
                         </div>
                         <div class="col-12">
-                            <label for="datetime" class="form-label">날짜/시간</label>
+                            <label for="datetime" class="form-label" style="width: 80px">날짜/시간</label>
                             <input name="dateTime" type="datetime-local" class="form-control" id="datetime"
                                    th:required="true">
                         </div>
                         <div class="col-12">
-                            <label for="max" class="form-label">정원</label>
+                            <label for="max" class="form-label" style="width: 80px">정원</label>
                             <input name="scheduleMax" type="number" class="form-control" id="max" min="1"
                                    th:max="${countMembers}"
                                    th:required="true">
                         </div>
                         <div class="col-12">
-                            <label for="sample5_address" class="form-label">장소</label>
+                            <label for="sample5_address" class="form-label" style="width: 90px">장소</label>
                             <input name="schedulePlace" type="text" class="form-control" id="sample5_address"
                                    placeholder="장소"
                                    th:required="true">
                             <input type="button" class="btn btn-outline-secondary" onclick="sample5_execDaumPostcode()" value="장소 검색"><br>
-                            <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+
                         </div>
+                        <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
                     </div>
                 </div>
             </div>
