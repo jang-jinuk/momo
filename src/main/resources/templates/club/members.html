@@ -8,11 +8,12 @@
         <div class="row">
             <div class="col-10"></div>
             <div class="col-2">
-                <button type="button" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${clubNo})}'|">모임 홈</button>
+                <button type="button" class="btn btn-dark" th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${clubNo})}'|">모임 홈</button>
             </div>
         </div>
         <div class="row">
             <h2>가입 신청 내역</h2>
+            <br>
             <p th:if="${#lists.isEmpty(joinList)}">신청 내역이 없습니다.</p>
             <table th:unless="${#lists.isEmpty(joinList)}">
                 <tbody>
@@ -21,13 +22,16 @@
                         <a th:href="@{/user/profile/{userId}(userId=${join.userNo.userId})}"
                            th:text="${join.userNo.userNickname}"></a>
                     </td>
-                    <td><button th:onclick="|location.href='@{/club/approve-join(userNo=${join.userNo.userNo})}'|">승인</button></td>
+                    <td><button class="btn btn-primary" th:onclick="|location.href='@{/club/approve-join(userNo=${join.userNo.userNo})}'|">승인</button></td>
                 </tr>
                 </tbody>
             </table>
 
+            <div class="row" style="height: 30px"></div>
             <div class="row">
-                <h2>맴버</h2>
+
+                <h2>멤버</h2>
+
                 <p th:if="${#lists.isEmpty(userAndClubDTOS)}">등록된 모임원이 없습니다.</p>
                 <table>
                     <tbody th:unless="${#lists.isEmpty(userAndClubDTOS)}">
@@ -36,13 +40,16 @@
                                 <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}"
                                    th:text="${member.userNo.userNickname}"></a>
                             </td>
-                            <td><button th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
+                            <td><button class="btn btn-danger" th:onclick="|location.href='@{/club/leave(userNo=${member.userNo.userNo})}'|">탈퇴</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="row" style="height: 20px"></div>
+
 </th:block>
 <script layout:fragment="script" th:inline="javascript">
 
