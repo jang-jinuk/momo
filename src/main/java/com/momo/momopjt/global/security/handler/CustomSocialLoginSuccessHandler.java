@@ -107,7 +107,7 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     }
 
     // Redirect to home for all users
-    response.sendRedirect(request.getContextPath() + "/home");
+    response.sendRedirect(request.getContextPath() + "/");
   }
 
   private String getKakaoEmail(Map<String, Object> paramMap) {

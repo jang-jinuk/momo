@@ -25,7 +25,7 @@ public class HomeController {
   @Autowired
   private PhotoService photoService;
 
-  @GetMapping("/home")
+  @GetMapping("/")
   public String home(Model model) {
     log.info("----------------- [homeController]-----------------");
 

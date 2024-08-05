@@ -3,95 +3,34 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<head>
-    <style>
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .add-schedule {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: black; /* 텍스트 색상 조정 */
-        }
-        .add-schedule img {
-            width: 30px; /* 아이콘 크기 조정 */
-            height: 30px; /* 아이콘 크기 조정 */
-            margin-right: 8px; /* 아이콘과 텍스트 사이 여백 */
-        }
-        .add-schedule h5 {
-            margin: 0; /* 기본 여백 제거 */
-        }
-        .align-right {
-            display: flex;
-            justify-content: flex-end; /* 오른쪽 정렬 */
-            align-items: center; /* 수직 가운데 정렬 */
-        }
-        .heart-button {
-            border: none;
-            background: none;
-            padding: 0;
-            cursor: pointer;
-        }
-        .heart-button svg {
-            width: 24px;
-            height: 24px;
-        }
-        .animated-heart {
-            animation: heartbeat 1s infinite;
-        }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        .filled-heart {
-            fill: red; /* 하트 내부 색상 */
-        }
-        .empty-heart {
-            fill: none; /* 하트 내부 색상 없애기 */
-            stroke: black; /* 하트 테두리 색상 */
-            stroke-width: 2; /* 하트 테두리 두께 */
-        }
-        #heartLabel {
-            margin-left: 10px; /* 아이콘과 텍스트 사이의 간격 */
-        }
 
-        .title-container {
-            display: flex;
-            align-items: center; /* 아이콘과 제목을 수직으로 가운데 정렬 */
-            gap: 10px; /* 아이콘과 제목 사이의 간격 */
-        }
-        .title-container h2 {
-            margin: 0; /* 제목의 기본 여백 제거 */
-        }
-        .add-schedule {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: inherit; /* 링크 색상 상속 */
-            font-size: 16px;
-        }
-        .add-schedule img {
-            margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
-        }
-        .add-review-link {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            text-decoration: none; /* 링크의 밑줄 제거 */
-            color: inherit; /* 링크 색상 상속 */
-        }
-        .add-review-link h5 {
-            margin: 0; /* h5의 기본 여백 제거 */
-        }
-
-    </style>
-
-</head>
 <th:block layout:fragment="content">
+    <style>
+        .bi-gear,
+        .bi-person-circle,
+        .bi-ban {
+            transition: transform 0.2s;
+        }
+
+        .bi-ban {
+            fill: red;
+        }
+
+        .bi-gear:hover,
+        .bi-person-circle:hover,
+        .bi-ban:hover {
+            animation: scaleAnimation 0.5s forwards;
+        }
+
+        @keyframes scaleAnimation {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.5);
+            }
+        }
+    </style>
     <div class="sb-nav-fixed">
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -113,7 +52,11 @@
                             <hr>
 
                             <div th:each="member : ${userAndClubDTOS}" class="member-container">
-                                <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image clubMain">
+                                <img th:if="${#strings.contains(member.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image clubMain"
+                                     src="/assets/UserDefaultPhoto.png">
+                                <img th:unless="${#strings.contains(member.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image clubMain"
+                                     th:src="@{/view/{photo}(photo=${member.userPhotoStr})}">
+
                                 <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
                                     <div class="member-info">
                                         <h6 class="sb-sidenav-menu" th:text="${member.userNo.userNickname}"></h6>
@@ -263,11 +206,8 @@
                                                th:inline="text">
                                                 <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
                                             </a>
-                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
-                         (${ampm == 'AM'} ? '오전' : '오후') +
-                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
-                                                일정 시작시간
+                                            <p class="card-text"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
                                             </p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
                                         </div>
@@ -308,10 +248,8 @@
                                                th:inline="text">
                                                 <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
                                             </a>
-                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
-                         (${ampm == 'AM'} ? '오전' : '오후') +
-                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
+                                            <p class="card-text"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
                                                 일정 시작시간
                                             </p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
