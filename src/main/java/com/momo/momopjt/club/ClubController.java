@@ -7,6 +7,7 @@ import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.schedule.ScheduleDTO;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
@@ -50,11 +51,11 @@ public class ClubController {
   //모임 메인페이지 조회
   @GetMapping("/main/{clubNo}")
   public String readClubGet(@PathVariable("clubNo") Long clubNo, Model model, HttpSession session) {
-    log.info("------------ [Get club main no: {}] ------------",clubNo);
+    log.info("------------ [Get club main no: {}] ------------", clubNo);
 
     ClubDTO clubDTO = clubService.readOneClub(clubNo);
     model.addAttribute("clubDTO", clubDTO);
-    log.info("----------------- [clubDTO : {}]-----------------",clubDTO);
+    log.info("----------------- [clubDTO : {}]-----------------", clubDTO);
 
     Club club = new Club();
     club.setClubNo(clubNo);
@@ -68,41 +69,38 @@ public class ClubController {
 
     List<String> endSchedulePhotoList = new ArrayList<>();
     //일정 끝난 사진 파일들 조회
-    if(!endSchedules.isEmpty()) {
+    if (!endSchedules.isEmpty()) {
       endSchedulePhotoList = endSchedules.stream()
           .map(scheduleDTO -> photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString())
           .collect(Collectors.toList());
     }
     //일정 끝난 사진 파일들 view로 데이터 넘김
     model.addAttribute("endSchedulePhotoList", endSchedulePhotoList);
-    log.trace("----------------- [endSchedulePhotoList : {}]-----------------",endSchedulePhotoList);
+    log.trace("----------------- [endSchedulePhotoList : {}]-----------------", endSchedulePhotoList);
 
     //일정 진행중 사진 파일들 조회
     List<String> ongoingSchedulePhotoList = new ArrayList<>();
-    if(!getOngoingSchedules.isEmpty()){
+    if (!getOngoingSchedules.isEmpty()) {
       ongoingSchedulePhotoList = getOngoingSchedules.stream()
           .map(scheduleDTO -> photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString())
           .collect(Collectors.toList());
     }
     //일정 진행중 사진 파일들 view로 데이터 넘김
     model.addAttribute("ongoingSchedulePhotoList", ongoingSchedulePhotoList);
-    log.trace("----------------- [ongoingSchedulePhotoList : {}]-----------------",ongoingSchedulePhotoList);
+    log.trace("----------------- [ongoingSchedulePhotoList : {}]-----------------", ongoingSchedulePhotoList);
 
 
     log.info("----------------- [club photo 처리]-----------------");
-    log.trace("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
+    log.trace("----------------- [club photo uuid : {}]-----------------", clubDTO.getClubPhotoUUID());
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
     String clubProfilePhotoStr = clubPhoto.toString();
-    log.trace("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
+    log.trace("----------------- [clubPhoto str 결과 : {}]-----------------", clubProfilePhotoStr);
     model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
     // 이미지 html 에서 쓸때 아래 처럼 (예시)
     // <img th:src="@{/{fileName}(fileName=${clubProfilePhoto})}" alt="club profile image">
 
 
-
-
-    log.info("----------------- [clubphoto str {}]-----------------",clubProfilePhotoStr);
-
+    log.info("----------------- [clubphoto str {}]-----------------", clubProfilePhotoStr);
 
 
     session.setAttribute("clubNo", clubDTO.getClubNo());
@@ -110,7 +108,7 @@ public class ClubController {
 
     //현재 로그인 회원 정보
     User user = userService.getCurrentUser();
-    UserAndClubDTO userAndClubDTO =  new UserAndClubDTO();
+    UserAndClubDTO userAndClubDTO = new UserAndClubDTO();
     userAndClubDTO.setUserNo(user);
     userAndClubDTO.setClubNo(club);
 
@@ -125,7 +123,7 @@ public class ClubController {
     model.addAttribute("articles", articles);
     List<String> articlePhotoList = new ArrayList<>();
     //YY 후기글 이미지 처리
-    if(!articles.isEmpty()) {
+    if (!articles.isEmpty()) {
       articlePhotoList = articles.stream()
           .map(articleDTO -> photoService.getPhoto(articleDTO.getArticlePhotoUUID()).toString())//YY
           .collect(Collectors.toList());
@@ -133,8 +131,6 @@ public class ClubController {
     //일정 끝난 사진 파일들 view로 데이터 넘김
     model.addAttribute("articlePhotoList", articlePhotoList);
     log.trace("----------------- [endSchedulePhotoList : {}]-----------------", articlePhotoList);
-
-
 
 
     // 사용자 즐겨찾기 클럽 목록을 가져옵니다.
@@ -153,6 +149,19 @@ public class ClubController {
 
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
 
+    if (!userAndClubDTOS.isEmpty()) {
+      List<User> userList = userAndClubDTOS.stream().map(userAndClub -> userAndClub.getUserNo()).collect(Collectors.toList());
+
+      for (int i =0; i < userList.toArray().length; i++) {
+        String photoStr = photoService.getPhoto(userList.get(i).getUserPhoto()).toString();
+        UserAndClubDTO dto = userAndClubDTOS.get(i);
+
+        dto.setUserPhotoStr(photoStr);
+
+        userAndClubDTOS.set(i, dto);
+
+      }
+    }
     model.addAttribute("userAndClubDTOS", userAndClubDTOS);
 
     return "club/main";
@@ -167,7 +176,7 @@ public class ClubController {
 
   //모임 생성
   @PostMapping("/create")
-  public String createClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes)  { // 0729 YY photoDTO 제거
+  public String createClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes) { // 0729 YY photoDTO 제거
     log.info("------------ [Post club create] ------------");
 
     //현재 로그인 회원 정보
@@ -180,7 +189,7 @@ public class ClubController {
 
 
     //모임 기본 사진 설정
-    if(clubDTO.getClubPhotoUUID() == null || clubDTO.getClubPhotoUUID().isEmpty()) {
+    if (clubDTO.getClubPhotoUUID() == null || clubDTO.getClubPhotoUUID().isEmpty()) {
       clubDTO.setClubPhotoUUID("ClubDefaultPhoto");
     }
 
@@ -219,7 +228,7 @@ public class ClubController {
   public String updateClubPost(ClubDTO clubDTO, RedirectAttributes redirectAttributes, HttpSession session) {
     log.info("------------ [Post club update] ------------");
     Long clubNo = (Long) session.getAttribute("clubNo");
-    log.trace("clubNo : {}",clubNo);
+    log.trace("clubNo : {}", clubNo);
 
     clubDTO.setClubNo(clubNo);
 
@@ -244,7 +253,6 @@ public class ClubController {
     }
 
 
-
   }
 
   @GetMapping("/disband-page")
@@ -261,7 +269,7 @@ public class ClubController {
     clubService.deleteClub(clubNo);
     session.removeAttribute("clubNo");
     redirectAttributes.addFlashAttribute("message", "모임이 해산되었습니다.");
-    return "redirect:/home";
+    return "redirect:/";
   }
 
   @GetMapping("/leave-page")
@@ -301,7 +309,7 @@ public class ClubController {
 
     redirectAttributes.addFlashAttribute("message", "모임에서 정상적으로 탈퇴되었습니다.");
 
-    return "redirect:/home";
+    return "redirect:/";
   }
 
   @GetMapping("/join-page")
@@ -324,10 +332,10 @@ public class ClubController {
     List<UserAndClubDTO> userAndClubDTOS = userAndClubService.readAllMembers(club);
     int countMembers = userAndClubService.countMembers(club);
 
-    log.info("----------------- [club photo uuid : {}]-----------------",clubDTO.getClubPhotoUUID());
+    log.info("----------------- [club photo uuid : {}]-----------------", clubDTO.getClubPhotoUUID());
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
     String clubProfilePhotoStr = clubPhoto.toString();
-    log.info("----------------- [clubPhoto str 결과 : {}]-----------------",clubProfilePhotoStr);
+    log.info("----------------- [clubPhoto str 결과 : {}]-----------------", clubProfilePhotoStr);
 
     log.info("------------ [leader photo uuid : {}] ------------", isLeader.getUserNo().getUserPhoto());
     Photo leaderPhoto = photoService.getPhoto(isLeader.getUserNo().getUserPhoto());
@@ -338,7 +346,6 @@ public class ClubController {
     List<String> memberPhotoList = userAndClubDTOS.stream().map(userDTO ->
             photoService.getPhoto(userDTO.getUserNo().getUserPhoto()).toString())
         .collect(Collectors.toList());
-
 
 
     model.addAttribute("isLeader", isLeader); //모임장 정보
@@ -381,7 +388,7 @@ public class ClubController {
 
     Photo clubPhoto = photoService.getPhoto(clubDTO.getClubPhotoUUID());
     String clubProfilePhotoStr = clubPhoto.toString();
-    log.info("----------------- [club photo str 결과 : {}]-----------------",clubProfilePhotoStr);
+    log.info("----------------- [club photo str 결과 : {}]-----------------", clubProfilePhotoStr);
 
     model.addAttribute("clubDTO", clubDTO);
     model.addAttribute("clubProfilePhoto", clubProfilePhotoStr);
@@ -431,6 +438,7 @@ public class ClubController {
     redirectAttributes.addFlashAttribute("message", "승인이 완료되었습니다.");
     return "redirect:/club/members";
   }
+
   //즐겨 찾기
   @PostMapping("/update-Wish")
   public String updateWishClub(@RequestParam("clubNo") Long clubNo,
@@ -471,3 +479,8 @@ public class ClubController {
   }
 
 }
+
+
+//    [UserAndClubDTO(id=11, isLeader=false, joinDate=2024-08-03T06:47:27Z, isWish=N, userNo=User(userNo=4, userId=wlsdnr3, userPw=$2a$10$cyc1dTL4i038Zy.AroUMh.Ff/pQipHqfkbkddU0WC.2X1ondHK2yq, userEmail=dlsndifn@codo.co, userNickname=진욱3, userGender=w, userAge=21, userBirth=2002-09-02, userCategory=또래친구, 성별모임, userAddress=서울 광진구 능동로 315, userMBTI=INTJ, userState=0, userSocial=M, userPhoto=UserDefaultPhoto, userLikeNumber=0, userCreateDate=2024-08-03T06:46:46Z, userModifyDate=2024-08-03T06:46:46Z, userRole=USER, alarms=[com.momo.momopjt.alarm.Alarm@2d6dda22, com.momo.momopjt.alarm.Alarm@656a9831, com.momo.momopjt.alarm.Alarm@75572576, com.momo.momopjt.alarm.Alarm@56397779, com.momo.momopjt.alarm.Alarm@15c60b56, com.momo.momopjt.alarm.Alarm@24dcb2cf, com.momo.momopjt.alarm.Alarm@68ec4fb7, com.momo.momopjt.alarm.Alarm@75f36f6c, com.momo.momopjt.alarm.Alarm@504a463f, com.momo.momopjt.alarm.Alarm@1141cc33, com.momo.momopjt.alarm.Alarm@1b5aa85b, com.momo.momopjt.alarm.Alarm@753c3c53, com.momo.momopjt.alarm.Alarm@7745f775, com.momo.momopjt.alarm.Alarm@687a8dfa, com.momo.momopjt.alarm.Alarm@6ac0218a, com.momo.momopjt.alarm.Alarm@56697475, com.momo.momopjt.alarm.Alarm@17420c7e, com.momo.momopjt.alarm.Alarm@1115298c]), clubNo=com.momo.momopjt.club.Club@26030166, userPhotoStr=null),
+//    2024-08-05 12:18:20.945 ERROR 71130 --- [nio-8080-exec-3] com.momo.momopjt.club.ClubController     :
+//UserAndClubDTO(id=9, isLeader=false, joinDate=2024-08-03T06:37:49Z, isWish=N, userNo=User(userNo=2, userId=wlsdnr, userPw=$2a$10$mEbD/NdfAt4btOlQFoYG6eea6FygmFI/.MBtE4IF/oMKvptlZ0.Xy, userEmail=dlsndifn98@dd.ocm, userNickname=진욱아아, userGender=m, userAge=33, userBirth=1990-11-30, userCategory=운동, userAddress=경기 용인시 처인구 모현읍 능원로85번길 26, userMBTI=ISFJ, userState=0, userSocial=M, userPhoto=c73e295c-5986-4da7-b0be-c34af5b9b9d1, userLikeNumber=0, userCreateDate=2024-08-01T06:45:29Z, userModifyDate=2024-08-01T06:45:29Z, userRole=USER, alarms=[com.momo.momopjt.alarm.Alarm@4da84a3a, com.momo.momopjt.alarm.Alarm@188a633e, com.momo.momopjt.alarm.Alarm@1c23ab03, com.momo.momopjt.alarm.Alarm@1c61002e, com.momo.momopjt.alarm.Alarm@13176002, com.momo.momopjt.alarm.Alarm@58cf72cd, com.momo.momopjt.alarm.Alarm@59b5a164, com.momo.momopjt.alarm.Alarm@4dc1aa0c, com.momo.momopjt.alarm.Alarm@65fed4c6, com.momo.momopjt.alarm.Alarm@46048bae, com.momo.momopjt.alarm.Alarm@32cebc8b]), clubNo=com.momo.momopjt.club.Club@26030166, userPhotoStr=null)]

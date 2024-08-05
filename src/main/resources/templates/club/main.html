@@ -3,7 +3,34 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+
 <th:block layout:fragment="content">
+    <style>
+        .bi-gear,
+        .bi-person-circle,
+        .bi-ban {
+            transition: transform 0.2s;
+        }
+
+        .bi-ban {
+            fill: red;
+        }
+
+        .bi-gear:hover,
+        .bi-person-circle:hover,
+        .bi-ban:hover {
+            animation: scaleAnimation 0.5s forwards;
+        }
+
+        @keyframes scaleAnimation {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.5);
+            }
+        }
+    </style>
     <div class="sb-nav-fixed">
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
@@ -25,7 +52,11 @@
                             <hr>
 
                             <div th:each="member : ${userAndClubDTOS}" class="member-container">
-                                <img src="/assets/프로필.png" alt="회원 프로필 사진" class="profile-image clubMain">
+                                <img th:if="${#strings.contains(member.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image clubMain"
+                                     src="/assets/UserDefaultPhoto.png">
+                                <img th:unless="${#strings.contains(member.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image clubMain"
+                                     th:src="@{/view/{photo}(photo=${member.userPhotoStr})}">
+
                                 <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
                                     <div class="member-info">
                                         <h6 class="sb-sidenav-menu" th:text="${member.userNo.userNickname}"></h6>
