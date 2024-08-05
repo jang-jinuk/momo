@@ -5,6 +5,7 @@
 
 <th:block layout:fragment="content">
 
+
   <div class="container">
     <!-- 로그인한 사용자에게만 보이는 부분 -->
     <div class="row" th:if="${user?.userNickname}">
@@ -110,6 +111,31 @@
 
     <br>
   </div>
+  <div id="deactivatecheck" th:text="${state}"></div>
+  <script th:inline="javascript">
+    window.onload = function() {
+      const statecheck = document.querySelector("#deactivatecheck").textContent;
+
+      if (statecheck.includes('1')) {
+        alert("정지된 아이디입니다. 관리자에게 문의하세요");
+        submitLogoutForm();
+        window.location.replace("user/login")
+      }
+    }
+
+    function submitLogoutForm() {
+      // Create a form element
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "@{/user/logout}";
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+
+
+
 
 
   <!--    <div class="row-cols-auto">-->
