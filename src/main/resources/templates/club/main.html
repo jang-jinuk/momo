@@ -162,11 +162,8 @@
                                                th:inline="text">
                                                 <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
                                             </a>
-                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
-                         (${ampm == 'AM'} ? '오전' : '오후') +
-                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
-                                                일정 시작시간
+                                            <p class="card-text"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
                                             </p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
                                         </div>
@@ -204,10 +201,8 @@
                                                th:inline="text">
                                                 <h3 class="card-title truncate-title" th:text="${schedule.scheduleTitle}"></h3>
                                             </a>
-                                            <p class="card-text" th:with="ampm=${#dates.format(schedule.scheduleStartDate, 'a')}"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, ')} +
-                         (${ampm == 'AM'} ? '오전' : '오후') +
-                         ${#dates.format(schedule.scheduleStartDate, ' hh:mm')}">
+                                            <p class="card-text"
+                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
                                                 일정 시작시간
                                             </p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
