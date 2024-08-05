@@ -174,7 +174,7 @@ public class UserController {
     }
 
     if (currentUsername == null) {
-      return "redirect:/home";
+      return "redirect:/";
     }
 
     // 현재 로그인한 사용자 정보 가져오기
@@ -271,7 +271,7 @@ public class UserController {
 
       // 성공 메시지 설정 및 리다이렉트
       redirectAttributes.addFlashAttribute("result", "success");
-      return "redirect:/home";
+      return "redirect:/";
     } catch (Exception e) {
       log.error("Failed to update user with userId: {}", userId, e);
       redirectAttributes.addFlashAttribute("error", "Failed to update user.");
@@ -318,7 +318,7 @@ public class UserController {
           }
 
           redirectAttributes.addFlashAttribute("message", "Your account has been deleted successfully.");
-          return "redirect:/home";
+          return "redirect:/";
 
         } else {
           throw new IllegalArgumentException("Invalid password for social login user");
@@ -337,7 +337,7 @@ public class UserController {
           }
 
           redirectAttributes.addFlashAttribute("message", "Your account has been deleted successfully.");
-          return "redirect:/home";
+          return "redirect:/";
 
         } else {
           throw new IllegalArgumentException("Incorrect password");
@@ -365,7 +365,7 @@ public class UserController {
     // 여기서 userDTO를 사용하여 필요한 작업을 수행합니다 (예: 데이터베이스 저장)
 
     redirectAttributes.addFlashAttribute("result", "success");
-    return "redirect:/home"; // 성공 시 홈으로 리다이렉트
+    return "redirect:/"; // 성공 시 홈으로 리다이렉트
   }
 
 

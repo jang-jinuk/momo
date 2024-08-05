@@ -27,4 +27,5 @@ public class UserAndClubDTO {
 
   private Club clubNo;
 
+  private String userPhotoStr;
 }

@@ -50,7 +50,7 @@ public class AdminController {
     User user = userRepository.findByUserId(currentUsername);
 
     if (user.getUserRole().getValue() != 1) { //
-      return "redirect:/home"; // 잘못된 접근 시 리다이렉트
+      return "redirect:/"; // 잘못된 접근 시 리다이렉트
     }
     // 검색어를 사용하여 리포트 조회
     List<ReportDTO> findReports;
@@ -142,7 +142,7 @@ public class AdminController {
     User user = userRepository.findByUserId(currentUsername);
 
     if (user.getUserRole().getValue() != 1) {
-      return "redirect:/home"; // 잘못된 접근 시 리다이렉트
+      return "redirect:/"; // 잘못된 접근 시 리다이렉트
     }
 
     List<UserDTO> findUsers;
