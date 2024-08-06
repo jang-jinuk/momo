@@ -58,8 +58,9 @@
                                      th:src="@{/view/{photo}(photo=${member.userPhotoStr})}">
 
                                 <a th:href="@{/user/profile/{userId}(userId=${member.userNo.userId})}">
+
                                     <div class="member-info">
-                                        <h6 class="sb-sidenav-menu" th:text="${member.userNo.userNickname}"></h6>
+                                        <h6 th:text="${member.userNo.userNickname}"></h6>
                                     </div>
                                 </a>
                             </div>
