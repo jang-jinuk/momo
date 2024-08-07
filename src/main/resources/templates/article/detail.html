@@ -35,13 +35,13 @@
 <th:block layout:fragment="content">
 
     <div class="container" style="width: 850px">
-        <div class="row">
-            <div class="col-10"></div>
+        <div class="row" style="margin: 1.5rem 0;">
             <div class="col-2">
-                <button type="button" class="btn btn-outline-primary"
-                        th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${articleDTO.clubNo.clubNo})}'|">모임 홈
-                </button>
+                <a th:href="@{/club/main/{clubNo}(clubNo =${articleDTO.clubNo.clubNo})}">
+                    <img src="/assets/모임홈.png" style="width: 1.2rem; margin-left: 0.5rem">
+                </a>
             </div>
+            <div class="col-10"></div>
         </div>
 
         <!-- article 조회 부분 -->
