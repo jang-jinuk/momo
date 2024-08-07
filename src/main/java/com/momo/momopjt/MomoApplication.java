@@ -10,5 +10,4 @@ public class MomoApplication {
         SpringApplication.run(MomoApplication.class, args);
     }
 
-
 }
