@@ -309,7 +309,7 @@
         <!-- 작성한 후기 섹션 -->
         <div class="review-section col-10">
             <h4 class="text-center">작성한 후기</h4>
-            <div class="d-flex flex-wrap justify-content-center" id="reviewSection">
+            <div class="d-flex flex-wrap justify-content-start" id="reviewSection">
                 <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
                         <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
                 </th:block>
@@ -351,7 +351,7 @@
         <!-- 즐겨찾는 모임 섹션 -->
         <div class="club-section col-10">
             <h4 class="text-center">즐겨찾는 모임</h4>
-            <div class="d-flex flex-wrap justify-content-center" id="clubSection">
+            <div class="d-flex flex-wrap justify-content-start" id="clubSection">
                 <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
                         <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
                 </th:block>
@@ -377,6 +377,7 @@
                 </div>
             </div>
             <div class="text-center mt-3">
+
                 <button id="loadMoreClubsButton" class="moreBtn" type="button"
                         th:if="${#lists.size(userWishClub) > 4}">더 보기</button>
                 <button id="collapseClubsButton" class="moreBtn d-none-custom" type="button"

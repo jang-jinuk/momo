@@ -59,13 +59,13 @@
     </style>
 
     <div class="container" style="width: 60rem; height: 100vh; align-items: center;">
-        <div class="row">
-            <div class="col-10"></div>
+        <div class="row" style="margin-top: 1.5rem;">
             <div class="col-2">
-                <button type="button" class="btn btn-outline-primary"
-                        th:onclick="|location.href='@{/club/main/{clubNo}(clubNo =${scheduleDTO.clubNo.clubNo})}'|">모임 홈
-                </button>
+                <a th:href="@{/club/main/{clubNo}(clubNo =${scheduleDTO.clubNo.clubNo})}">
+                    <img src="/assets/모임홈.png" style="width: 1.2rem; margin-left: 0.5rem">
+                </a>
             </div>
+            <div class="col-10"></div>
         </div>
         <div class="row" th:each="userDTO, iterStat : ${userDTOList}" th:if="${iterStat.count <= 1}"
              style="margin-top: 2rem;">
@@ -92,7 +92,7 @@
         </div>
         <hr>
         <div class="row" style="height: 50rem;">
-            <div class="col-5 d-flex flex-column" style="padding: 2rem;">
+            <div class="col-5 d-flex flex-column" style="padding: 2rem; height: 50rem;">
                 <div class="mb-3">
                     <div class="row" style="margin-top: 1rem;">
                         <h4>일정시간</h4>
@@ -138,12 +138,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-7 scrollable-content" style="padding: 2rem;">
-                <div class="row">
+            <div class="col-7 scrollable-content" style="padding: 2rem; height: 50rem;">
+                <div class="row" style="margin: 0 0.5rem;">
                     <h1 th:text="${scheduleDTO.scheduleTitle}" style="font-size: 2rem;"></h1>
                 </div>
                 <div class="row"
-                     style="width: 100%; padding-top: 75%; position: relative; overflow: hidden;">
+                     style="width: 100%; padding-top: 75%; position: relative; overflow: hidden; margin: 0;">
                     <img th:if="${#strings.contains(schedulePhoto, 'ScheduleDefaultPhoto')}"
                          src="/assets/ScheduleDefaultPhoto.jpg"
                          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 5%;">
@@ -152,24 +152,36 @@
                          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 5%;">
                 </div>
                 <div class="row">
-                    <p th:text="${scheduleDTO.scheduleContent}" class="form-control" id="content"
-                       style="border: none;">
-                    </p>
+                    <div style="width: 100%;">
+                        <p th:text="${scheduleDTO.scheduleContent}" class="form-control" id="content"
+                            style="border: none;">
+                        </p>
+                    </div>
                 </div>
                 <hr>
                 <div class="row">
-
-                    <h2 style="display: inline-block">참여 중인 맴버</h2>
-                    <p th:text="|${scheduleDTO.scheduleParticipants} / ${scheduleDTO.scheduleMax}|"></p>
+                    <div class="col-5">
+                        <h2 style="display: inline-block">참여 중인 맴버</h2>
+                    </div>
+                    <div class="col-3 d-flex align-items-center">
+                        <p style="margin-top: 0.5rem;" th:text="|${scheduleDTO.scheduleParticipants} / ${scheduleDTO.scheduleMax}|"></p>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row" style="padding: 0 1rem">
                     <div class="col-2" th:each="user : ${userDTOList}">
-                        <img th:if="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
-                             src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem;">
-                        <img th:unless="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}"
-                             class="profile-image"
-                             th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 3rem; height:3rem;">
-                        <a th:href="@{/user/profile/{userId}(userId=${user.userId})}">
-                            <p th:text="${user.userNickname}" style="margin-left: 0.6rem;">닉네임</p>
-                        </a>
+                        <div style="margin: 0 0.3rem;">
+                            <img th:if="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}" class="profile-image"
+                                 src="/assets/UserDefaultPhoto.png" style="width: 3rem; height:3rem;">
+                            <img th:unless="${#strings.contains(user.userPhotoStr, 'UserDefaultPhoto')}"
+                                 class="profile-image"
+                                 th:src="@{/view/{photo}(photo=${user.userPhotoStr})}" style="width: 3rem; height:3rem;">
+                        </div>
+                        <div style="margin: auto">
+                            <a th:href="@{/user/profile/{userId}(userId=${user.userId})}">
+                                <p class="text-center" th:text="${user.userNickname}">닉네임</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
