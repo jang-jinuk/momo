@@ -71,9 +71,6 @@
     <br>
   </div>
 
-
-
-
   <div class="container">
 
     <div class="row">
@@ -101,22 +98,19 @@
             <p class="card-text" style="text-align: center; max-height: 50px; overflow: hidden" th:text="${clubDTOList[i].clubContent}"></p>
           </div>
         </div>
-
       </div>
-
-
 
     </div>
 
     <br>
   </div>
-  <div id="deactivatecheck" th:text="${state}"></div>
+  <div id="deactivatecheck" th:text="${state}"> </div>
   <script th:inline="javascript">
     window.onload = function() {
       const statecheck = document.querySelector("#deactivatecheck").textContent;
 
       if (statecheck.includes('1')) {
-        alert("정지된 아이디입니다. 관리자에게 문의하세요");
+        alert("정지된 아이디입니다. 관리자에게서 문의하세요" );
         submitLogoutForm();
         window.location.replace("user/login")
       }
@@ -238,5 +232,18 @@
   <!--            </div>-->
   <!--        </div>-->
   <!--    </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </th:block>
