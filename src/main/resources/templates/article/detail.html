@@ -66,12 +66,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2" th:if="${articleDTO.userNo.userId} == ${#authentication.name}" style="float: right; margin-top: 3rem;">
+            <div class="col-2" th:if="${articleDTO.userNo.userId} == ${#authentication.name}"
+                 style="float: right; margin-top: 3rem;">
                 <button type="button" class="btn btn-success"
                         th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
                     수정
                 </button>
-                <button class="btn btn-danger" type="button" th:onclick="|location.href='@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}'|">삭제</button>
+                <button class="btn btn-danger" type="button"
+                        th:onclick="|location.href='@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
+                    삭제
+                </button>
             </div>
         </div>
 
@@ -104,6 +108,14 @@
                                      alt="Icon">
                                 글 제목</span>
                             <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
+                        </div>
+
+                        <div class="input-group mb-3" th:if="${articleDTO.scheduleNo}">
+                            <span class="input-group-text">일정</span>
+                            <a class="form-control"
+                               th:href="@{/schedule/{scheduleNo}(scheduleNo = ${articleDTO.scheduleNo.scheduleNo})}"
+                               th:text="${articleDTO.scheduleNo.scheduleTitle}">
+                            </a>
                         </div>
 
                         <div class="col" style="text-align: center"> <!-- 후기글 사진 출력 -->
