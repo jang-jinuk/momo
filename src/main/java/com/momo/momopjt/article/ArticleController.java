@@ -39,12 +39,24 @@ public class ArticleController {
 
   // 새로운 후기글 작성 폼을 보여주는 페이지
   @GetMapping("/create")
-  public String createArticleGet(@RequestParam(value = "scheduleNo", required = false)Long scheduleNo, Model model) {
+  public String createArticleGet(@RequestParam(value = "scheduleNo", required = false)Long scheduleNo, Model model, HttpSession session) {
     log.info("----------------- [GET article /create]-----------------");
+
+    //마감된 일정에서 '후기작성'을 통해 넘어온 경우
     if (scheduleNo != null) {
       ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
       model.addAttribute("scheduleDTO", scheduleDTO);
     }
+
+    //후기글 작성자가 참가했던 일정 조회
+    Long club = (Long) session.getAttribute("clubNo");
+    Club clubNo = new Club();
+    clubNo.setClubNo(club);
+    User userNo = userService.getCurrentUser();
+
+    List<ScheduleDTO> participatedSchedules = scheduleService.readMyParticipatedSchedules(clubNo, userNo);
+    model.addAttribute("participatedSchedules",participatedSchedules);
+
     log.info("-------- [Article Create]-------you");
     return "article/create";
   }
