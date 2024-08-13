@@ -1,6 +1,7 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public interface ScheduleService {
    void deleteSchedule(Long scheduleNo);
 
    Boolean isScheduleFull(Long scheduleNo);
+
+   List<ScheduleDTO> readMyParticipatedSchedules(Club clubNo, User userNo);
 
    class ScheduleMaxException extends Exception {}
 
