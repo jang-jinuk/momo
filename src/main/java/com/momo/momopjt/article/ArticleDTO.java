@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +31,8 @@ public class ArticleDTO {
   private Club clubNo;
 
   private User userNo;
+
+  private Schedule scheduleNo;
 
   private String articlePhotoUUID;
 
