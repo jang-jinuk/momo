@@ -126,10 +126,10 @@
                     </div>
 
                     <div class="row" th:if="${currentTime} > ${scheduleDTO.scheduleStartDate}">
-                        <!--                        <div th:if="${isParticipant != 2}"> &lt;!&ndash;일정 인원이 마감이고 이미 참가한 회원이 아닐 때&ndash;&gt;-->
-                        <!--                            <button class="btn btn-dark py-3" style="width: 100%">마감</button>-->
-                        <!--                        </div>-->
-                        <div th:if="${isParticipant != 2}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
+                        <div th:if="${isParticipant == 0}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
+                            <button class="btn btn-dark py-3" style="width: 100%">마감</button>
+                        </div>
+                        <div th:if="${isParticipant != 0}"> <!--일정 인원이 마감이고 이미 참가한 회원이 아닐 때-->
                             <button class="btn btn-dark py-3" style="width: 100%"
                                     th:onclick="|location.href='@{/article/create(scheduleNo=${scheduleDTO.scheduleNo})}'|">
                                 후기 작성
