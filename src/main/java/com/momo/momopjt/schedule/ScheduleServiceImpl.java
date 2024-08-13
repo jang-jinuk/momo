@@ -276,7 +276,7 @@ public class ScheduleServiceImpl implements ScheduleService {
       scheduleNo.setScheduleNo(schedule.getScheduleNo());
       userAndScheduleDTO.setScheduleNo(scheduleNo);
 
-      if (2 != userAndScheduleService.isParticipate(userAndScheduleDTO)) { //일정에 참석했는지 확인(2:알정에 참석하지 않은 인원)
+      if (0 != userAndScheduleService.isParticipate(userAndScheduleDTO)) { //일정에 참석했는지 확인(0:알정에 참석하지 않은 인원)
         participatedSchedules.add(schedule);
       }
 
