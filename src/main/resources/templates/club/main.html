@@ -175,16 +175,12 @@
                             <br><br>
                             <hr>
                             <br>
-                            <div class="container">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
                                 <div class="title-container">
-                                    <img width="40" height="40"
-                                         src="https://img.icons8.com/office/40/000000/flash-on.png" alt="flash-on"/>
                                     <h2>진행 중인 일정</h2>
                                 </div>
-                                <a class="add-schedule" th:href="@{/schedule/create}">
-                                    <img src="https://img.icons8.com/?size=100&id=7b1jIVJeJvbI&format=png&color=000000"
-                                         alt="Add Icon">
-                                    <h5> 일정추가</h5>
+                                <a th:href="@{/schedule/create}" class="add-schedule">
+                                    <h4>+</h4>
                                 </a>
                             </div>
                             <div class="row row-cols-1 row-cols-md-3 g-0">
@@ -236,8 +232,6 @@
                         <br>
                         <div class="row">
                             <div class="title-container">
-                                <img width="40" height="40" src="https://img.icons8.com/ios-filled/50/flash-on.png"
-                                     alt="flash-on"/>
                                 <h2>마감된 일정</h2>
                             </div>
                             <div class="row row-cols-1 row-cols-md-3 g-0">
@@ -286,14 +280,10 @@
                         <div class="row">
                             <div style="display: flex; align-items: center; justify-content: space-between;">
                                 <div class="title-container">
-                                    <img src="https://img.icons8.com/?size=100&id=24422&format=png&color=000000"
-                                         alt="Icon" width="30" height="30">
                                     <h2>후기</h2>
                                 </div>
                                 <a th:href="@{/article/create}" class="add-review-link">
-                                    <img src="https://img.icons8.com/?size=100&id=37996&format=png&color=000000"
-                                         alt="Add Review Icon" width="30" height="30">
-                                    <h5> 후기작성</h5>
+                                    <h4>+</h4>
                                 </a>
                             </div>
                             <div class="row row-cols-1 row-cols-md-4 g-0">
