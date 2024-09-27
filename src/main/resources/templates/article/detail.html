@@ -62,16 +62,20 @@
                             <a th:href="@{/user/profile/{userId}(userId=${articleDTO.userNo.userId})}"
                                th:text="${articleDTO.userNo.userNickname}"></a>
                         </h5>
-                        <p th:text="${articleDTO.userNo.userAddress}"></p>
+                        <p th:text="${#dates.format(articleDTO.articleCreateDate, 'yyyy.MM.dd HH:mm')}"></p>
                     </div>
                 </div>
             </div>
-            <div class="col-2" th:if="${articleDTO.userNo.userId} == ${#authentication.name}" style="float: right; margin-top: 3rem;">
+            <div class="col-2" th:if="${articleDTO.userNo.userId} == ${#authentication.name}"
+                 style="float: right; margin-top: 3rem;">
                 <button type="button" class="btn btn-success"
                         th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
                     수정
                 </button>
-                <button class="btn btn-danger" type="button" th:onclick="|location.href='@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}'|">삭제</button>
+                <button class="btn btn-danger" type="button"
+                        th:onclick="|location.href='@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
+                    삭제
+                </button>
             </div>
         </div>
 
@@ -82,21 +86,7 @@
 
             <div class="col">
                 <div class="card">
-
-                    <!-- article 조회 부분 -->
-                    <div class="card-header">
-                        후기 글 조회
-                    </div>
-
                     <div class="card-body">
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <img src="https://img.icons8.com/?size=100&id=LSiA0D7qJ1zr&format=png&color=000000"
-                                     alt="Icon">
-                                글 번호</span>
-                            <input type="text" class="form-control" th:value="${articleDTO.articleNo}" readonly>
-                        </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">
@@ -106,6 +96,14 @@
                             <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
                         </div>
 
+                        <div class="input-group mb-3" th:if="${articleDTO.scheduleNo}">
+                            <span class="input-group-text">일정</span>
+                            <a class="form-control"
+                               th:href="@{/schedule/{scheduleNo}(scheduleNo = ${articleDTO.scheduleNo.scheduleNo})}"
+                               th:text="${articleDTO.scheduleNo.scheduleTitle}">
+                            </a>
+                        </div>
+
                         <div class="col" style="text-align: center"> <!-- 후기글 사진 출력 -->
 
                             <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
@@ -113,8 +111,6 @@
                             <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
                                  th:src="@{/view/{photo}(photo=${articlePhoto})}"
                                  style="width:100%; height: auto; max-width: 800px;">
-
-
                         </div>
 
                         <div class="input-group mb-3">
@@ -125,17 +121,6 @@
                             <textarea class="form-control col-sm-5" rows="5"
                                       readonly>[[${articleDTO.articleContent}]]</textarea>
                         </div>
-
-
-                        <div class="input-group mb-3">
-                             <span class="input-group-text">
-            <img src="https://img.icons8.com/?size=100&id=TzKV-85aqBDJ&format=png&color=000000" alt="Icon">
-            작성일</span>
-                            <input type="datetime-local" class="form-control"
-                                   th:value="${#dates.format(articleDTO.articleCreateDate, 'yyyy-MM-dd HH:mm')}"
-                                   readonly>
-                        </div>
-
                     </div>
                 </div>
 
