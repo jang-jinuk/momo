@@ -1,6 +1,7 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import lombok.*;
 
@@ -44,6 +45,10 @@ public class Article {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_no")
   private User userNo;
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "schedule_no")
+  private Schedule scheduleNo;
 
   @Column(name = "article_photo")
   private String articlePhotoUUID;
