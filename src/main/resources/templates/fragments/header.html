@@ -10,9 +10,7 @@
 
       <!-- Navbar Brand-->
       <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle-header" href="#!" style="display: none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-          <path d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z"></path>
-        </svg>
+          <img src="/assets/menu.png" style="height: 16px; width: 16px">
       </a>
 
       <a class="navbar-brand ps-3" href="/">MOMO</a>
@@ -20,26 +18,22 @@
       <div class="col-md-8"></div>
       <div class="col-md-3 text-end">
 
+<!--        <button class="btn btn-primary" th:unless="${#authentication.name == 'anonymousUser'}"-->
+<!--                th:onclick="|location.href='@{/club/create}'|">+-->
+<!--        </button>-->
+      <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/club/create}">
+        <img src="/assets/club_add.png" style="width: 24px; height: 24px">
+      </a>
+<!--   알림   -->
         <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/alarm/list}">
-          <img src="https://img.icons8.com/?size=100&id=rOnwYYXRvxmQ&format=png&color=000000" alt="알림 아이콘" width="24" height="24">
+          <img src="/assets/alarm.png" style="width: 24px; height: 24px">
         </a>
-<!--        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/alarm/list}">-->
-<!--          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">-->
-<!--            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>-->
-<!--          </svg>-->
-<!--        </a>-->
-
         <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/profile/{userId}(userId=${#authentication.principal.userId})}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-          </svg>
-<!--   프사를 대신 표시    -->
-<!--          <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"-->
-<!--               src="/assets/UserDefaultPhoto.png" style="width: 20px; height:20px">-->
-<!--          <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"-->
-<!--               th:src="@{/view/{photo}(photo=${userPhoto})}" style="width: 20px; height:20px">-->
-<!--        -->
+<!--   프로필 사진   -->
+          <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+               src="/assets/UserDefaultPhoto.png" style="width: 30px; height:30px">
+          <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+               th:src="@{/view/{photo}(photo=${userPhoto})}" style="width: 30px; height:30px">
         </a>
 
         <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/logout}">로그아웃</a>
