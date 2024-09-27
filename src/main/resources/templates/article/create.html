@@ -6,213 +6,236 @@
 
 <th:block layout:fragment="content"><!-- [] -->
 
-  <div class="row mt-3">
-    <div class="col">
-      <div class="card">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
 
-        <div class="card-header">
+                <div class="card-header">
 
-     후기 글 작성
-
-        </div>
-
-        <div class="card-body">
-
-          <form th:action="@{/article/create}" method="post">
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">제목</span>
-              <input type="text" name="articleTitle" id="articleTitle" class="form-control"
-                     th:value="${scheduleDTO?.scheduleTitle ?: ''}" required>
-            </div>
-
-
-            <div class="input-group mb-3">
-              <span class="input-group-text">내용</span>
-              <textarea class="form-control col-sm-5" rows="5" name="articleContent" id="articleContent"
-                        oninput="limitTextarea()"></textarea>
-            </div>
-
-            <!-- 이미지 업로드 YY -->
-            <div class="input-group mb-3">
-
-<!--              <span class="input-group mb-3">Images</span>-->
-              <div class="float-end uploadHidden">
-                <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
-              </div>
-            </div>
-
-            <div class="my-4">
-
-              <button type="submit" class="btn btn-primary submitBtn">글 등록하기</button>
-              <button type="reset" class="btn btn-secondary">리셋</button>
-
-            </div>
-
-            <!-- Image Thumbnail display -->
-            <div class="row mt-3">
-              <div class="col ">
-                <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                    후기 글 작성
 
                 </div>
-              </div>
+
+                <div class="card-body">
+
+                    <form th:action="@{/article/create}" method="post">
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" name="articleTitle" id="articleTitle" class="form-control" required>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">일정</span>
+                            <!-- 마감된 일정에서 후기 작성을 넘어온 경우 -->
+                            <div class="form-control" th:if="${scheduleDTO}">
+                                <input name="scheduleNo" type="hidden"
+                                       th:value="${scheduleDTO.scheduleNo}">
+                                <input th:value="${scheduleDTO.scheduleTitle}" readonly style="border: none;"></input>
+                            </div>
+
+                            <!-- 후기 작성으로 바로 넘어온 경우 -->
+
+                            <select name="scheduleNo" class="form-control"
+                                    th:if="${scheduleDTO == null} and ${!#lists.isEmpty(participatedSchedules)}">
+                                <option th:each="schedule : ${participatedSchedules}"
+                                        th:value="${schedule.scheduleNo}"
+                                        th:text="${schedule.scheduleTitle}">
+                                </option>
+                            </select>
+
+                            <!-- 참가한 일정이 없는 경우 -->
+                            <input class="form-control"
+                                   th:if="${scheduleDTO == null} and ${#lists.isEmpty(participatedSchedules)}" readonly
+                                   placeholder="참가한 일정이 없습니다."></input>
+
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="articleContent" id="articleContent"
+                                      oninput="limitTextarea()"></textarea>
+                        </div>
+
+                        <!-- 이미지 업로드 YY -->
+                        <div class="input-group mb-3">
+
+                            <!--              <span class="input-group mb-3">Images</span>-->
+                            <div class="float-end uploadHidden">
+                                <button type="button" class="btn btn-primary uploadFileBtn">사진 등록하기</button>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+
+                            <button type="submit" class="btn btn-primary submitBtn">글 등록하기</button>
+                            <button type="reset" class="btn btn-secondary">리셋</button>
+
+                        </div>
+
+                        <!-- Image Thumbnail display -->
+                        <div class="row mt-3">
+                            <div class="col ">
+                                <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>  <!-- [card body] -->
+
+
+            </div>  <!-- [card] -->
+        </div>
+    </div>
+
+    <!--    upload Modal Part YY -->
+    <div class="modal uploadModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <div class="modal-title"></div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="file" name="files" accept="image/*" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary uploadBtn">업로드</button>
+                    <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">닫기
+                    </button>
+
+                </div>
             </div>
-
-
-
-          </form>
-
-        </div>  <!-- [card body] -->
-
-
-      </div>  <!-- [card] -->
+        </div>
     </div>
-  </div>
-
-  <!--    upload Modal Part YY -->
-  <div class="modal uploadModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-
-          <div class="modal-title"></div>
-
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <input type="file" name="files" accept="image/*" class="form-control" >
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary uploadBtn">업로드</button>
-          <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">닫기</button>
-
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </th:block>
 <!-- script block ---------------------------------  -->
 
 
-
 <th:block layout:fragment="script">
-  <script th:inline="javascript">
+    <script th:inline="javascript">
 
-      //업로드 파일 확장자 검사 0801 YY
-      function imageCheck(obj) {
-          if(obj){
-              const allowedExtensions = ['jpg', 'png', 'jpeg'];
-              const fileExtension = obj.name.split('.').pop().toLowerCase();
-              console.log(fileExtension)
+        //업로드 파일 확장자 검사 0801 YY
+        function imageCheck(obj) {
+            if (obj) {
+                const allowedExtensions = ['jpg', 'png', 'jpeg'];
+                const fileExtension = obj.name.split('.').pop().toLowerCase();
+                console.log(fileExtension)
 
-              if (allowedExtensions.includes(fileExtension)) {
-                  return true;
-              } else {
-                  alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
-                  return false;
-              }
-          }
-          return false;
+                if (allowedExtensions.includes(fileExtension)) {
+                    return true;
+                } else {
+                    alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+                    return false;
+                }
+            }
+            return false;
 
-      }
+        }
 
-      //이미지 업로드 처리 JS  YY
-      async function uploadToServer(formObj) {
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
 
-          console.log("upload to server.....................+formObj")
-          console.log(formObj)
+            console.log("upload to server.....................+formObj")
+            console.log(formObj)
 
-          const response = await axios({
-              method: 'post',
-              url: '/upload',
-              data: formObj,
-              headers: {
-                  'Content-Type': 'multipart/form-data',
-              },
-          });
+            const response = await axios({
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
-          return response.data
-
-
-      }
-
-      async function removeFileToServer(uuid, extension) {
-          const response = await axios.delete(`/remove/${uuid}${extension}`)
-          // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
-          return response.data
-      }
-
-      //image upload modal event (show / hide)
-      const errors = [[${errors}]]
-      console.log(errors)
-
-      let errorMsg = ''
-      if (errors) {
-          for (let i = 0; i < errors.length; i++) {
-              errorMsg += `${errors[i].field} is ${errors[i].code} \n`
-          }
-          alert(errorMsg) //error message display!
-      }
-
-      //upload modal set
-      const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-      document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
-          e.stopPropagation()
-          e.preventDefault()
-          uploadModal.show()
-      }, false)
-
-      //file upload for modal and thumb
-      document.querySelector(".uploadBtn").addEventListener("click", function (e) {
-          const formObj = new FormData();
-          const fileInput = document.querySelector("input[name='files']")
-
-          console.log("fileInput.files--------")
-          console.log(fileInput.files)
-
-          const files = fileInput.files
-          let imageCheckResult = true;
-
-          for (let i = 0; i < files.length; i++) {
-
-              // 0801 YY 파일 확인 로직
-              if(imageCheck(files[i])){
-                  formObj.append("files", files[i]); }
-              else {
-                  imageCheckResult = false;
-                  break;
-              }
-
-          }
-          if(imageCheckResult){
-
-              uploadToServer(formObj).then(result => {
-                  console.log("result-------")
-                  console.log(result)
-
-                  for (const uploadResult of result) {
-                      showUploadFile(uploadResult)
-                  }
-
-                  uploadModal.hide()
-              }).catch(e => {
-                  uploadModal.hide()
-              })
-          }
-
-      }, false)
+            return response.data
 
 
-      //656p showUploadFile
-      const uploadResult = document.querySelector(".uploadResult")
+        }
 
-      function showUploadFile({uuid, extension, link}) {
+        async function removeFileToServer(uuid, extension) {
+            const response = await axios.delete(`/remove/${uuid}${extension}`)
+            // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
+            return response.data
+        }
 
-          const str = `<div class="card col-4">
+        //image upload modal event (show / hide)
+        const errors = [[${errors}]]
+        console.log(errors)
+
+        let errorMsg = ''
+        if (errors) {
+            for (let i = 0; i < errors.length; i++) {
+                errorMsg += `${errors[i].field} is ${errors[i].code} \n`
+            }
+            alert(errorMsg) //error message display!
+        }
+
+        //upload modal set
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.show()
+        }, false)
+
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+            const formObj = new FormData();
+            const fileInput = document.querySelector("input[name='files']")
+
+            console.log("fileInput.files--------")
+            console.log(fileInput.files)
+
+            const files = fileInput.files
+            let imageCheckResult = true;
+
+            for (let i = 0; i < files.length; i++) {
+
+                // 0801 YY 파일 확인 로직
+                if (imageCheck(files[i])) {
+                    formObj.append("files", files[i]);
+                } else {
+                    imageCheckResult = false;
+                    break;
+                }
+
+            }
+            if (imageCheckResult) {
+
+                uploadToServer(formObj).then(result => {
+                    console.log("result-------")
+                    console.log(result)
+
+                    for (const uploadResult of result) {
+                        showUploadFile(uploadResult)
+                    }
+
+                    uploadModal.hide()
+                }).catch(e => {
+                    uploadModal.hide()
+                })
+            }
+
+        }, false)
+
+
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
+
+        function showUploadFile({uuid, extension, link}) {
+
+            const str = `<div class="card col-4">
 <div class="card-header d-flex justify-content-center">
 <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
 </div>
@@ -221,119 +244,118 @@
 
 </div>
 </div>`
-          console.log("uploadResult link  str --------------------")
-          console.log(link)
-          console.log(str)
+            console.log("uploadResult link  str --------------------")
+            console.log(link)
+            console.log(str)
 
-          uploadResult.innerHTML += str;
-      }
-
-
-      /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
-
-      //upload remove,, local file and div card all deleted
-      function removeFile(uuid, extension, obj) {
-          console.log("remove file log--------------")
-          console.log(uuid)
-          console.log(extension)
-          console.log(obj)
-
-          const targetDiv = obj.closest(".card")
-          removeFileToServer(uuid, extension).then(data => {
-              targetDiv.remove()
-          })
-
-      }
-
-      // After Image, finally Article Form Submitted !!
-      document.querySelector(".submitBtn").addEventListener("click", function (e) {
-          console.log("submitBtn start----------------")
-
-          e.preventDefault()
-          e.stopPropagation()
-
-          const target = document.querySelector(".uploadHidden")
-
-          const uploadFiles = uploadResult.querySelectorAll("img")
-          console.log("---------uploadFile select img")
-
-          let str = ''
-
-          for (let i = 0; i < uploadFiles.length; i++) {
-              const uploadFile = uploadFiles[i]
-              console.log("uploadFile in for loop")
-              console.log(uploadFile)
-              const imgLink = uploadFile.getAttribute("data-src")
-
-              //
-              // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
-
-              const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
-              console.log("imgUUID")
-              console.log(imgUUID)
-
-              str += `<input type='hidden' name='articlePhotoUUID' value="${imgUUID}">`
+            uploadResult.innerHTML += str;
+        }
 
 
-          }
+        /*<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">*/
 
-          // document.querySelector("form").submit();
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log("remove file log--------------")
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
 
-          const formObj = document.querySelector("form")
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
+                targetDiv.remove()
+            })
 
-        // 필수 항목 입력 검사 로직
-          function validateForm() {
-            const articleTitle = document.querySelector("input[name='articleTitle']").value.trim();
-            const articleContent = document.querySelector("textarea[name='articleContent']").value.trim();
+        }
 
-            if (!articleTitle || !articleContent) {
-              alert("제목과 내용을 모두 입력해 주세요.");
-              return false;
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
+
+            e.preventDefault()
+            e.stopPropagation()
+
+            const target = document.querySelector(".uploadHidden")
+
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
+
+            let str = ''
+
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
+                console.log(uploadFile)
+                const imgLink = uploadFile.getAttribute("data-src")
+
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
+
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+                console.log("imgUUID")
+                console.log(imgUUID)
+
+                str += `<input type='hidden' name='articlePhotoUUID' value="${imgUUID}">`
+
+
             }
-            return true;
-          }
 
-          if (validateForm()){
+            // document.querySelector("form").submit();
 
-              console.log(str)
-              target.innerHTML = str;
+            const formObj = document.querySelector("form")
 
+            // 필수 항목 입력 검사 로직
+            function validateForm() {
+                const articleTitle = document.querySelector("input[name='articleTitle']").value.trim();
+                const articleContent = document.querySelector("textarea[name='articleContent']").value.trim();
 
-              formObj.submit();
-              formObj.reset();
-          }
+                if (!articleTitle || !articleContent) {
+                    alert("제목과 내용을 모두 입력해 주세요.");
+                    return false;
+                }
+                return true;
+            }
 
-      }, false)
+            if (validateForm()) {
 
-
-      // upload modal close btn
-      document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
-
-          e.stopPropagation()
-          e.preventDefault()
-
-          uploadModal.hide();
-
-      }, false)
-
-      /* Thymeleaf의 JavaScript 인라인 사용 */
-      function limitTitleLength() {
-          var maxLength = 50;
-          var title = document.getElementById("articleTitle").value;
-          if (title.length > maxLength) {
-              document.getElementById("articleTitle").value = title.substring(0, maxLength);
-          }
-      }
-
-      function limitTextarea() {
-          var maxLength = 500;
-          var text = document.getElementById("articleContent").value;
-          if (text.length > maxLength) {
-              document.getElementById("articleContent").value = text.substring(0, maxLength);
-          }
-      }
+                console.log(str)
+                target.innerHTML = str;
 
 
+                formObj.submit();
+                formObj.reset();
+            }
 
-  </script>
+        }, false)
+
+
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
+
+            e.stopPropagation()
+            e.preventDefault()
+
+            uploadModal.hide();
+
+        }, false)
+
+        /* Thymeleaf의 JavaScript 인라인 사용 */
+        function limitTitleLength() {
+            var maxLength = 50;
+            var title = document.getElementById("articleTitle").value;
+            if (title.length > maxLength) {
+                document.getElementById("articleTitle").value = title.substring(0, maxLength);
+            }
+        }
+
+        function limitTextarea() {
+            var maxLength = 500;
+            var text = document.getElementById("articleContent").value;
+            if (text.length > maxLength) {
+                document.getElementById("articleContent").value = text.substring(0, maxLength);
+            }
+        }
+
+
+    </script>
 </th:block> <!-- end script block ---------------------------------  -->
