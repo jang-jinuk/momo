@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -256,5 +257,31 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     return false;
+  }
+
+  @Override
+  public List<ScheduleDTO> readMyParticipatedSchedules(Club clubNo, User userNo) {
+    List<Schedule> schedules = scheduleRepository.findEndSchedules(clubNo); //마감된 일정 조회
+
+    List<ScheduleDTO> scheduleDTOList = schedules.stream()
+        .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
+        .collect(Collectors.toList());
+
+    List<ScheduleDTO> participatedSchedules = new ArrayList<>();
+
+    for (ScheduleDTO schedule : scheduleDTOList) {
+      UserAndScheduleDTO userAndScheduleDTO = new UserAndScheduleDTO();
+      userAndScheduleDTO.setUserNo(userNo);
+      Schedule scheduleNo = new Schedule();
+      scheduleNo.setScheduleNo(schedule.getScheduleNo());
+      userAndScheduleDTO.setScheduleNo(scheduleNo);
+
+      if (0 != userAndScheduleService.isParticipate(userAndScheduleDTO)) { //일정에 참석했는지 확인(0:알정에 참석하지 않은 인원)
+        participatedSchedules.add(schedule);
+      }
+
+    }
+
+    return participatedSchedules;
   }
 }
