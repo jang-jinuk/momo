@@ -8,38 +8,46 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 
       <!-- Navbar Brand-->
-      <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle-header" href="#!" style="display: none">
-          <img src="/assets/menu.png" style="height: 16px; width: 16px">
-      </a>
+      <div class="col-md-2">
+        <a class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle-header" href="#!" style="display: none">
+            <img src="/assets/menu.png" style="height: 36px; width: 36px">
+        </a>
+        <a class="navbar-brand ps-3" href="/">
+          <img src="/assets/momo_logo.png" style="width: 150px; height: 50px; object-fit: contain;">
+        </a>
+      </div>
 
-      <a class="navbar-brand ps-3" href="/">
-          <img src="/assets/momo_logo.png" style="width: 150px; height: 50px">
-      </a>
+      <div class="col-md-7">
 
-      <div class="col-md-8"></div>
+      </div>
       <div class="col-md-3 text-end">
-
-<!--        <button class="btn btn-primary" th:unless="${#authentication.name == 'anonymousUser'}"-->
-<!--                th:onclick="|location.href='@{/club/create}'|">+-->
-<!--        </button>-->
-      <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/club/create}">
-        <img src="/assets/club_add.png" style="width: 24px; height: 24px">
-      </a>
-<!--   알림   -->
-        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/alarm/list}">
-          <img src="/assets/alarm.png" style="width: 24px; height: 24px">
+        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/club/create}">
+          <img src="/assets/club_add.png" style="width: 24px; height: 24px">
         </a>
-        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/profile/{userId}(userId=${#authentication.principal.userId})}">
-<!--   프로필 사진   -->
-          <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
-               src="/assets/UserDefaultPhoto.png" style="width: 30px; height:30px">
-          <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
-               th:src="@{/view/{photo}(photo=${userPhoto})}" style="width: 30px; height:30px">
-        </a>
+  <!--   알림   -->
+          <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/alarm/list}">
+            <img src="/assets/alarm.png" style="width: 24px; height: 24px">
+          </a>
+          <div class="dropdown" th:unless="${#authentication.name == 'anonymousUser'}">
+              <a class="nav-menu dropbtn" th:href="@{/user/profile/{userId}(userId=${#authentication.principal.userId})}">
+                  <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                       src="/assets/UserDefaultPhoto.png" style="width: 30px; height:30px">
+                  <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                       th:src="@{/view/{photo}(photo=${userPhoto})}" style="width: 30px; height:30px">
+              </a>
+              <div class="dropdown-content">
+                  <a th:href="@{/user/profile/{userId}(userId=${#authentication.principal.userId})}">
+                      <span class="menu-icon"><img src="/assets/manage_account.png" alt="프로필"></span>
+                      <span class="menu-text">프로필</span>
+                  </a>
+                  <a th:href="@{/user/logout}">
+                      <span class="menu-icon"><img src="/assets/logout.png" alt="로그아웃"></span>
+                      <span class="menu-text">로그아웃</span>
+                  </a>
+              </div>
+          </div>
 
-        <a class="nav-menu" th:unless="${#authentication.name == 'anonymousUser'}" th:href="@{/user/logout}">로그아웃</a>
-
-        <a class="nav-menu" th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/user/login}">로그인</a>
+          <a class="nav-menu" th:if="${#authentication.name == 'anonymousUser'}" th:href="@{/user/login}">로그인</a>
 
       </div>
     </nav>
