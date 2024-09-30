@@ -32,9 +32,10 @@ public class HomeController {
 
     // 현재 로그인된 사용자 정보를 얻기
     User user = userService.getCurrentUser();
-    log.info("----------------- [정지유저 확인로직]-----------------{}",user.getUserState());
-    model.addAttribute("state",user.getUserState());
-
+    if (user != null) {
+      log.info("----------------- [정지유저 확인로직]-----------------{}",user.getUserState());
+      model.addAttribute("state",user.getUserState());
+    }
 
     List<ClubDTO> myClubDTOList = clubService.readMyClubs(user);
 
@@ -53,19 +54,10 @@ public class HomeController {
         .map(clubDTO -> photoService.getPhoto(clubDTO.getClubPhotoUUID()).toString())
         .collect(Collectors.toList());
 
-
     model.addAttribute("clubDTOList", clubDTOList);
     model.addAttribute("clubPhotoList", clubPhotoList);
     log.trace("----------------- [clubdtolist : {}]-----------------", clubDTOList);
     log.trace("----------------- [clubPhotoList : {}}]-----------------", clubPhotoList);
-
-    //프사 추가 (비활성화) aop?
-
-    if(user != null ) {
-      String userPhoto = photoService.getPhoto(user.getUserPhoto()).toString();
-      model.addAttribute("userPhoto", userPhoto);
-    }
-
 
     //user nickname 표시를 위해 모델에 추가 0804 YY
     model.addAttribute("user", user);
