@@ -120,9 +120,9 @@
             <div id="layoutSidenav_content">
 
                 <main>
-                    <div class="container-fluid" style="width: 80%">
+                    <div class="container-fluid" style="width: 90%">
                         <div class="row">
-                            <div class="col-12 d-flex align-items-center">
+                            <div class="col-12 d-flex align-items-center" style="margin-bottom: 2rem">
 
                                 <img th:if="${#strings.contains(clubProfilePhoto, 'ClubDefaultPhoto')}"
                                      class="club-cover" src="/assets/ClubDefaultPhoto.jpg">
@@ -131,45 +131,45 @@
                                      class="club-cover" th:src="@{/view/{photo}(photo=${clubProfilePhoto})}">
 
                                 <div class="club-info">
-                                    <h1 class="mt-4" th:text="${clubDTO.clubName}">모임명</h1>
+                                    <h1 th:text="${clubDTO.clubName}" style="font-family: Cafe24Ssurround; margin-top: -2.5rem">모임명</h1>
                                     <p th:text="${clubDTO.clubContent}">모임 소개</p>
                                 </div>
                             </div>
 
 
-                            <div class="align-right">
-                                <form th:action="@{/club/update-Wish}" method="post">
-                                    <input type="hidden" name="clubNo" th:value="${clubDTO.clubNo}"/>
-                                    <input type="hidden" name="isWish" id="isWishInput" th:value="${isWish}"/>
-                                    <button type="submit" class="heart-button">
-                                        <svg id="heartIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                             fill="none">
-                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                        </svg>
-                                    </button>
-                                    <span id="heartLabel">
-                ${isWish == 'Y' ? '즐겨찾는 모임' : '모임 즐겨찾기 하기'}
-            </span>
-                                </form>
-                            </div>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const isWishInput = document.getElementById('isWishInput').value;
-                                    const heartIcon = document.getElementById('heartIcon');
-                                    const heartLabel = document.getElementById('heartLabel');
-                                    if (isWishInput === 'Y') {
-                                        heartIcon.classList.add('filled-heart');
-                                        heartIcon.classList.remove('empty-heart');
-                                        heartIcon.classList.add('animated-heart');
-                                        heartLabel.textContent = '즐겨찾는 모임';
-                                    } else {
-                                        heartIcon.classList.add('empty-heart');
-                                        heartIcon.classList.remove('filled-heart');
-                                        heartIcon.classList.remove('animated-heart');
-                                        heartLabel.textContent = '모임 즐겨찾기 하기';
-                                    }
-                                });
-                            </script>
+<!--                            <div class="align-right">-->
+<!--                                <form th:action="@{/club/update-Wish}" method="post">-->
+<!--                                    <input type="hidden" name="clubNo" th:value="${clubDTO.clubNo}"/>-->
+<!--                                    <input type="hidden" name="isWish" id="isWishInput" th:value="${isWish}"/>-->
+<!--                                    <button type="submit" class="heart-button">-->
+<!--                                        <svg id="heartIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"-->
+<!--                                             fill="none">-->
+<!--                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>-->
+<!--                                        </svg>-->
+<!--                                    </button>-->
+<!--                                    <span id="heartLabel">-->
+<!--                ${isWish == 'Y' ? '즐겨찾는 모임' : '모임 즐겨찾기 하기'}-->
+<!--            </span>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                            <script>-->
+<!--                                document.addEventListener('DOMContentLoaded', function () {-->
+<!--                                    const isWishInput = document.getElementById('isWishInput').value;-->
+<!--                                    const heartIcon = document.getElementById('heartIcon');-->
+<!--                                    const heartLabel = document.getElementById('heartLabel');-->
+<!--                                    if (isWishInput === 'Y') {-->
+<!--                                        heartIcon.classList.add('filled-heart');-->
+<!--                                        heartIcon.classList.remove('empty-heart');-->
+<!--                                        heartIcon.classList.add('animated-heart');-->
+<!--                                        heartLabel.textContent = '즐겨찾는 모임';-->
+<!--                                    } else {-->
+<!--                                        heartIcon.classList.add('empty-heart');-->
+<!--                                        heartIcon.classList.remove('filled-heart');-->
+<!--                                        heartIcon.classList.remove('animated-heart');-->
+<!--                                        heartLabel.textContent = '모임 즐겨찾기 하기';-->
+<!--                                    }-->
+<!--                                });-->
+<!--                            </script>-->
 
 
                             <br><br>
@@ -177,7 +177,7 @@
                             <br>
                             <div style="display: flex; align-items: center; justify-content: space-between;">
                                 <div class="title-container">
-                                    <h2>진행 중인 일정</h2>
+                                    <h4 style="font-family: Cafe24Ssurround">진행 중인 일정</h4>
                                 </div>
                                 <a th:href="@{/schedule/create}" class="add-schedule">
                                     <h4>+</h4>
@@ -211,8 +211,8 @@
                                             <a class="link"
                                                th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                                                th:inline="text">
-                                                <h3 class="card-title truncate-title"
-                                                    th:text="${schedule.scheduleTitle}"></h3>
+                                                <h5 class="card-title truncate-title"
+                                                    th:text="${schedule.scheduleTitle}"></h5>
                                             </a>
                                             <p class="card-text"
                                                th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
@@ -232,7 +232,7 @@
                         <br>
                         <div class="row">
                             <div class="title-container">
-                                <h2>마감된 일정</h2>
+                                <h4 style="font-family: Cafe24Ssurround">마감된 일정</h4>
                             </div>
                             <div class="row row-cols-1 row-cols-md-3 g-0">
                                 <div class="col-3" th:each="schedule, iterStat : ${endSchedules}">
@@ -251,14 +251,13 @@
                                                  class="schedule-img"
                                                  th:src="@{/view/{photo}(photo=${endSchedulePhotoList[iterStat.index]})}">
 
-                                            <!--                      <img src="/assets/일정.jpg" class="card-img schedule" alt="...">-->
                                         </a>
                                         <div style="margin: 1rem 1rem;">
                                             <a class="link"
                                                th:href="@{/schedule/{scheduleNo}(scheduleNo = ${schedule.scheduleNo})}"
                                                th:inline="text">
-                                                <h3 class="card-title truncate-title"
-                                                    th:text="${schedule.scheduleTitle}"></h3>
+                                                <h5 class="card-title truncate-title"
+                                                    th:text="${schedule.scheduleTitle}"></h5>
                                             </a>
                                             <p class="card-text"
                                                th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
@@ -280,7 +279,7 @@
                         <div class="row">
                             <div style="display: flex; align-items: center; justify-content: space-between;">
                                 <div class="title-container">
-                                    <h2>후기</h2>
+                                    <h4 style="font-family: Cafe24Ssurround">후기</h4>
                                 </div>
                                 <a th:href="@{/article/create}" class="add-review-link">
                                     <h4>+</h4>
@@ -306,7 +305,7 @@
                                         </a>
                                         <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}"
                                            th:inline="text">
-                                            <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+                                            <h5 class="card-title" th:text="${article.articleTitle}">후기글 제목</h5>
                                         </a>
                                         <div class="card-body">
                                             <p class="card-text" th:text="${article.userNo.userNickname}"></p>
