@@ -285,7 +285,7 @@
                                     <h4>+</h4>
                                 </a>
                             </div>
-                            <div class="row row-cols-1 row-cols-md-4 g-0">
+                            <div class="row row-cols-1 row-cols-md-4 g-0" style="padding: 1rem 1rem;">
                                 <div class="col-3" th:each="article, iterStat : ${articles}">
                                     <div class="card h-100 cardBody"
                                          th:classappend="${iterStat.index >= 4} ? 'd-none more-review'">
@@ -295,19 +295,19 @@
 
                                             <!-- schedule 스타일 적용으로 class = schedule YY -->
                                             <img th:if="${#lists.size(articlePhotoList) > iterStat.index and #strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
-                                                 class="card-img schedule" src="/assets/NullPhoto.png">
+                                                 class="article-img" src="/assets/NullPhoto.png">
 
                                             <img th:if="${#lists.size(articlePhotoList) > iterStat.index}"
                                                  th:unless="${#strings.contains(articlePhotoList[iterStat.index], 'NullPhoto')}"
-                                                 class="card-img schedule"
+                                                 class="article-img"
                                                  th:src="@{/view/{photo}(photo=${articlePhotoList[iterStat.index]})}">
 
                                         </a>
-                                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}"
-                                           th:inline="text">
-                                            <h5 class="card-title" th:text="${article.articleTitle}">후기글 제목</h5>
-                                        </a>
                                         <div class="card-body">
+                                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}"
+                                               th:inline="text">
+                                                <h5 class="card-title" th:text="${article.articleTitle}">후기글 제목</h5>
+                                            </a>
                                             <p class="card-text" th:text="${article.userNo.userNickname}"></p>
                                         </div>
                                     </div>
