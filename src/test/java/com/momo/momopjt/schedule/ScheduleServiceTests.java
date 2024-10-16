@@ -1,4 +1,3 @@
-/*
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
@@ -51,11 +50,20 @@ public class ScheduleServiceTests {
         .build();
 
     //When
-     Long createScheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+    try {
+      Long createScheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
+      //Then
+      Long expectedScheduleNo = scheduleService.readOneSchedule(createScheduleNo).getScheduleNo();
+      assertEquals(createScheduleNo, expectedScheduleNo);
 
-    //Then
-    Long expectedScheduleNo = scheduleService.readOneSchedule(createScheduleNo).getScheduleNo();
-    assertEquals(createScheduleNo, expectedScheduleNo);
+    } catch (ScheduleService.ScheduleDateException e) {
+      e.printStackTrace();
+    } catch (ScheduleService.ScheduleMaxException e) {
+      e.printStackTrace();
+    }
+
+
+
   }
 
   //일정 정보 수정 테스트
@@ -101,7 +109,7 @@ public class ScheduleServiceTests {
         schedule.getScheduleNo(),
         schedule.getScheduleTitle(),
         schedule.getScheduleContent(),
-        schedule.getSchedulePhoto(),
+        schedule.getSchedulePhotoUUID(),
         schedule.getSchedulePlace(),
         schedule.getScheduleMax(),
         schedule.getScheduleParticipants(),
@@ -156,5 +164,22 @@ public class ScheduleServiceTests {
     Long deleteScheduleNo = 5L;
     scheduleService.deleteSchedule(deleteScheduleNo);
   }
+
+  //나의 참가일정 조회
+  @Test
+  public void readMyParticipatedSchedulesTest() {
+    //Given
+    User user = new User();
+    user.setUserNo(1L);
+
+    Club club = new Club();
+    club.setClubNo(2L);
+
+    //When
+     List<ScheduleDTO> schedules = scheduleService.readMyParticipatedSchedules(club, user);
+
+    //Then
+    schedules.forEach(schedule -> log.info("참가 일정 : {}",schedule.getScheduleTitle()));
+  }
 }
-*/
+
