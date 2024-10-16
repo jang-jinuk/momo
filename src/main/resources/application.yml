@@ -77,6 +77,10 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope: profile,email
 
+# kakao api
+kakao:
+  api:
+    key: ${KAKAO_API_KEY}
 
   # Mail Setting
   mail:
@@ -95,32 +99,9 @@ spring:
             protocols: TLSv1.2
         debug: true
 
-# MVC Setting
-#  mvc:
-#    path-match:
-#      matching-strategy: ant_path_matcher
-#    view:
-#      prefix: /WEB-INF/views/
-#      suffix: .jsp
-
-# Web Resource Setting
-#  mvc:
-#    static-path-pattern: /static/**
-
-
-#  web:
-#    resources:
-#      static-locations: /static/**
-#      - file:/{user.home}/upload/
-
-
 # File Upload Setting
 UploadPath: ${user.home}/upload/
 #UploadPath: classpath:/assets/upload/ class path is readonly path
-
-
-
-
 
 # Server Setting
 server:
@@ -137,10 +118,6 @@ logging:
     org.springframework.security: info
     com.momo: trace
 
-# kakao api
-kakao:
-  api:
-    key: ${KAKAO_API_KEY}
 
 
 
