@@ -1,114 +1,197 @@
 package com.momo.momopjt.alarm;
 
+import com.momo.momopjt.article.Article;
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
-import lombok.extern.log4j.Log4j2;
+import com.momo.momopjt.alarm.Alarm;
+import com.momo.momopjt.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.Instant;
-import java.util.stream.Collectors;
-import java.util.List;
-import java.util.Optional;
 
+import java.time.Instant;
+import java.util.List;
 
 @Service
-@Transactional
-@Log4j2
 public class AlarmServiceImpl implements AlarmService {
 
   private final AlarmRepository alarmRepository;
-  private final NotificationService notificationService; // (쏘켓예정)
+  private final UserServiceImpl userServiceImpl;
 
   @Autowired
-  public AlarmServiceImpl(AlarmRepository alarmRepository, NotificationService notificationService) {
+  public AlarmServiceImpl(AlarmRepository alarmRepository, UserServiceImpl userServiceImpl) {
     this.alarmRepository = alarmRepository;
-    this.notificationService = notificationService;
+    this.userServiceImpl = userServiceImpl;
   }
 
   @Override
-  public void createAlarm(Long userNo, String alarmType, String alarmContent) {
+  public List<Alarm> getAlarmsByUserId(User user) {
+    // 최신순으로 알림을 정렬하여 반환
+    return alarmRepository.findByUserNoOrderByAlarmCreateDateDesc(user);
+  }
+
+  //모임 생성시 모임장이 받는 알람
+  @Override
+  public void createClubCreatedAlarm(User user, Club club) {
     Alarm alarm = new Alarm();
-    User user = new User();
-    user.setUserNo(userNo);
     alarm.setUserNo(user);
-    alarm.setIsRead('0');
-    alarm.setAlarmType(alarmType);
-    alarm.setAlarmContent(alarmContent);
+    alarm.setAlarmType(AlarmType.CREATE);
+    alarm.setAlarmContent(club.getClubName() + " 모임이 생성되었습니다.");
     alarm.setAlarmCreateDate(Instant.now());
-
-    Alarm savedAlarm = alarmRepository.save(alarm);
-
-    // 알람 생성 후 알림 전송
-    sendNotification(convertToDTO(savedAlarm));
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
   }
 
-  //Alarm 엔티티의 식별자(alarmNo)를 사용하여 해당 알람을 데이터베이스에서 조회
-  // 그 결과를 AlarmDTO로 변환하여 Optional로 감싸서 반환
+  //모임 삭제시 모임장이 받는 알람
   @Override
-  public Optional<AlarmDTO> getAlarmById(Long alarmNo) {
-    return alarmRepository.findById(alarmNo).map(this::convertToDTO);
+  public void createClubDeletedAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.DELETE);
+    alarm.setAlarmContent(club.getClubName() + " 모임이 삭제되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
   }
 
-  //모든 알람 보기
+
+
+  // 모임 가입시 뜨는 알람
   @Override
-  public List<AlarmDTO> getAllAlarms() {
-    return alarmRepository.findAll().stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+  public void createJoinApprovalAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.JOIN);
+    alarm.setAlarmContent(club.getClubName()+"에 가입되셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
   }
 
-  //알람 업데이트
+
+  //회원이 모임 탈퇴시 뜨는 알람
   @Override
-  public void updateAlarm(AlarmDTO alarmDTO) {
-    Optional<Alarm> optionalAlarm = alarmRepository.findById(alarmDTO.getAlarmNo());
-    if (optionalAlarm.isPresent()) {
-      Alarm alarm = optionalAlarm.get();
-      alarm.setIsRead(alarmDTO.getIsRead());
-      alarm.setAlarmType(alarmDTO.getAlarmType());
-      alarm.setAlarmContent(alarmDTO.getAlarmContent());
-      alarm.setAlarmCreateDate(alarmDTO.getAlarmCreateDate());
-      alarmRepository.save(alarm);
-    }
+  public void createLeaveAlarm(User user, Club club) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.LEAVE);
+    alarm.setAlarmContent(club.getClubName() + "에서 탈퇴하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
   }
 
-  //알람 지우기
+  //일정주최자가 일정 생성시 뜨는 알람
+  @Override
+  public void createScheduleCreatedAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.CREATE);
+    alarm.setAlarmContent(schedule.getScheduleTitle() + " 일정을 생성하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //회원이 일정 참가시 뜨는 알람
+  @Override
+  public void createParticipateAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.PARTICIPATE);
+    alarm.setAlarmContent(schedule.getScheduleTitle() + "일정에 참가하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //회원이 일정 참가 취소시 뜨는 알람
+  @Override
+  public void createCancelParticipateAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.CANCEL_PARTICIPATE);
+    alarm.setAlarmContent(schedule.getScheduleTitle() + " 일정 참가를 취소하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //일정주최자가 일정 삭제시 뜨는 알람
+  @Override
+  public void createScheduleDeletedAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.DELETE);
+    alarm.setAlarmContent(schedule.getScheduleTitle() + " 일정을 삭제하셨습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+
+  //회원이 후기글을 생성할때 뜨는 알람
+  @Override
+  public void createArticleCreatedAlarm(User user, Article article) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.CREATE);
+    alarm.setAlarmContent(article.getArticleTitle() + "'이(가) 작성되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //후기글 작성자가 후기글을 삭제할때 쓰는 알람
+  public void createArticleDeletedAlarm(User user, Article article) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.DELETE);
+    alarm.setAlarmContent("후기글 '" + article.getArticleTitle() + "'이(가) 삭제되었습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //누군가 후기글에 댓글을 작성했을때 뜨는 알람
+  @Override
+  public void createCommentAddedAlarm(User user, Article article) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.COMMENT); // COMMENT 유형의 알림
+    alarm.setAlarmContent("귀하의 후기글 \"" + article.getArticleTitle() + "\"에 댓글이 달렸습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+  }
+
+  //누군가 스케줄에 댓글을 작성했을때 뜨는 알람
+  @Override
+  public void createCommentScheduleAlarm(User user, Schedule schedule) {
+    Alarm alarm = new Alarm();
+    alarm.setUserNo(user);
+    alarm.setAlarmType(AlarmType.COMMENT);
+    alarm.setAlarmContent("귀하의 일정 \"" + schedule.getScheduleTitle() + "\"에 댓글이 달렸습니다.");
+    alarm.setAlarmCreateDate(Instant.now());
+    alarm.setIsRead('0');
+    alarmRepository.save(alarm);
+
+  }
+
+  //알람 삭제 기능
   @Override
   public void deleteAlarm(Long alarmNo) {
     alarmRepository.deleteById(alarmNo);
   }
 
   @Override
-  public void isReadUpdate(User user, Long alarmNo) {
-    log.info("-------- [isreadupdate]-------you");
-    List<Alarm> alarmList = alarmRepository.findAlarmByUserNo(user);
-
-    for (Alarm alarm : alarmList) {
-      if (alarmNo.equals(alarm.getAlarmNo())) {
-        AlarmDTO alarmDTO = getAlarmById(alarmNo).orElseThrow();
-        alarmDTO.setIsRead('1');
-        updateAlarm(alarmDTO);
-        log.info("-------- [read update success]-------you");
-      } else {
-        log.info("-------- [alarm read update Fail]-------you");
-      }
-
+  @Transactional
+  public void deleteAllAlarmsForCurrentUser() {
+    User currentUser = userServiceImpl.getCurrentUser();
+    if (currentUser != null) {
+      alarmRepository.deleteByUserNo(currentUser);
     }
   }
 
-  //Alarm 엔티티 객체를 AlarmDTO 객체로 변환
-  private AlarmDTO convertToDTO(Alarm alarm) {
-    AlarmDTO dto = new AlarmDTO();
-    dto.setAlarmNo(alarm.getAlarmNo());
-    dto.setUserNo(alarm.getUserNo().getUserNo());
-    dto.setIsRead(alarm.getIsRead());
-    dto.setAlarmType(alarm.getAlarmType());
-    dto.setAlarmContent(alarm.getAlarmContent());
-    dto.setAlarmCreateDate(alarm.getAlarmCreateDate());
-    return dto;
-  }
-
-  private void sendNotification(AlarmDTO alarmDTO) {
-    // 알림 전송 로직 구현
-    notificationService.send(alarmDTO); // 필요에 따라 NotificationService와 협력
-  }
 }

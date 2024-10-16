@@ -22,10 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserAndScheduleServiceImpl implements UserAndScheduleService {
 
-  private final UserAndScheduleRepository userAndScheduleRepository;
   private final UserRepository userRepository;
-  private final ModelMapper modelMapper;
   private final ScheduleRepository scheduleRepository;
+  private final UserAndScheduleRepository userAndScheduleRepository;
+
+  private final ModelMapper modelMapper;
 
 
   //참가 인원 추가
@@ -65,7 +66,6 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
   public List<UserDTO> readAllParticipants(Schedule scheduleNo) {
 
     List<UserAndSchedule> userAndSchedules = userAndScheduleRepository.findByAllParticipants(scheduleNo);
-    List<User> users = new ArrayList<>();
     List<UserDTO> userDTOs = new ArrayList<>();
 
     for (UserAndSchedule userAndSchedule : userAndSchedules) {
@@ -80,13 +80,13 @@ public class UserAndScheduleServiceImpl implements UserAndScheduleService {
 
   //일정에 참석한 회원인지 확인하는 기능
   @Override
-  public int isParticipanting(UserAndScheduleDTO userAndScheduleDTO) {
+  public int isParticipate(UserAndScheduleDTO userAndScheduleDTO) {
     UserAndSchedule userAndSchedule = userAndScheduleRepository.findByParticipant(userAndScheduleDTO.getScheduleNo(),
         userAndScheduleDTO.getUserNo());
 
     if (userAndSchedule == null) {
       return 0; //일정에 참가하지 않은 회원
-    } else if (userAndSchedule.getIsHost() ==  true) {
+    } else if (userAndSchedule.getIsHost()) {
       return 1; //일정 주체자
     }
 

@@ -1,26 +1,21 @@
 package com.momo.momopjt.global.security;
 
-import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
-import com.momo.momopjt.user.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import com.momo.momopjt.user.UserSecurityDTO;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
 
 
 @Log4j2
@@ -28,17 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+
     //TODO 0716 error YY
 
-    public CustomOAuth2UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
+    public CustomOAuth2UserService(UserRepository userRepository) {this.userRepository = userRepository;
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("OAuth2UserRequest: {}", userRequest);
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         // 사용자 정보 디버깅 로그 추가
@@ -81,14 +75,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if (email == null || id == null) {
             throw new OAuth2AuthenticationException("Email or ID not found from provider: " + provider);
         }
-        
+
         Map<String, Object> modifiedAttributes = new HashMap<>(oAuth2User.getAttributes());
         modifiedAttributes.put("id", id); // 'id' 속성을 추가합니다.
 
         return new DefaultOAuth2User(
             Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-            modifiedAttributes,
-            "id" // 사용자 ID 속성의 이름
+            modifiedAttributes, "id" // 사용자 ID 속성의 이름
         );
     }
 

@@ -1,9 +1,5 @@
 package com.momo.momopjt.report;
 
-import com.momo.momopjt.report.Report;
-import com.momo.momopjt.report.ReportDTO;
-import com.momo.momopjt.report.ReportRepository;
-import com.momo.momopjt.report.ReportService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.Data;
@@ -14,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @SpringBootTest
@@ -22,15 +17,16 @@ import java.util.List;
 public class ReportServiceTests {
 
   @Autowired
-  private ReportService reportService;
-
-  @Autowired
   private UserRepository userRepository;
 
   @Autowired
-  private ModelMapper modelMapper;
-  @Autowired
   private ReportRepository reportRepository;
+
+  @Autowired
+  private ReportService reportService;
+
+  @Autowired
+  private ModelMapper modelMapper;
 
   //    신고했을때 DB에 추가
   @Test
@@ -104,8 +100,8 @@ public class ReportServiceTests {
 //    }
 //      @Test
 //      public void allreadTest(){
-//        List<ReportDTO> repotr = reportService.readAllReport();
-//        log.info(repotr);
+//        List<ReportDTO> report = reportService.readAllReport();
+//        log.info(report);
 //  }
 
 }

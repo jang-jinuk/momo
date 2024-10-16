@@ -1,16 +1,210 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
 <head>
-    <title>Article Detail</title>
+    <style>
+        .input-group-text {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            margin: 0 5px;
+        }
+
+        #replyContent {
+            margin-right: 10px;
+        }
+
+        .btn-outline-primary {
+            margin-left: 10px;
+        }
+
+        .input-group-text img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px; /* Space between icon and text */
+        }
+
+    </style>
 </head>
-<body>
-<h1>Article Detail</h1>
-<h2 th:text="${article.articleTitle}">Title</h2>
-<p th:text="${article.articleContent}">Content</p>
-<a th:href="@{/article}">Back to List</a>
-<a th:href="@{/article/{articleNo}/edit(articleNo=${article.articleNo})}">Edit</a>
-<form th:action="@{/article/{articleNo}/delete(articleNo=${article.articleNo})}" method="post" style="display:inline;">
-    <button type="submit">Delete</button>
-</form>
-</body>
-</html>
+<th:block layout:fragment="content">
+
+    <div class="container" style="width: 850px">
+        <div class="row" style="margin: 1.5rem 0;">
+            <div class="col-2">
+                <a th:href="@{/club/main/{clubNo}(clubNo =${articleDTO.clubNo.clubNo})}">
+                    <img src="/assets/모임홈.png" style="width: 1.2rem; margin-left: 0.5rem">
+                </a>
+            </div>
+            <div class="col-10"></div>
+        </div>
+
+        <!-- article 조회 부분 -->
+
+        <div class="row">
+            <div class="col-10 member-container">
+                <div class="member-container"> <!-- 작성자 정보 -->
+                    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                         src="/assets/UserDefaultPhoto.png"
+                         style="width: 5rem; height: 5rem; object-fit: cover;">
+
+
+                    <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                         th:src="@{/view/{photo}(photo=${userPhoto})}"
+                         style="width: 5rem; height: 5rem; object-fit: cover;">
+                    <div class="member-info">
+                        <h5>
+                            <a th:href="@{/user/profile/{userId}(userId=${articleDTO.userNo.userId})}"
+                               th:text="${articleDTO.userNo.userNickname}"></a>
+                        </h5>
+                        <p th:text="${#dates.format(articleDTO.articleCreateDate, 'yyyy.MM.dd HH:mm')}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2" th:if="${articleDTO.userNo.userId} == ${#authentication.name}"
+                 style="float: right; margin-top: 3rem;">
+                <button type="button" class="btn btn-success"
+                        th:onclick="|location.href='@{/article/update/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
+                    수정
+                </button>
+                <button class="btn btn-danger" type="button"
+                        th:onclick="|location.href='@{/article/delete/{articleNo}(articleNo=${articleDTO.articleNo})}'|">
+                    삭제
+                </button>
+            </div>
+        </div>
+
+        <br>
+        <hr>
+
+        <div class="row mt-3" style="margin-bottom: 5rem;">
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <img src="https://img.icons8.com/?size=100&id=rlfTrmk-CXB3&format=png&color=000000"
+                                     alt="Icon">
+                                글 제목</span>
+                            <input type="text" class="form-control" th:value="${articleDTO.articleTitle}" readonly>
+                        </div>
+
+                        <div class="input-group mb-3" th:if="${articleDTO.scheduleNo}">
+                            <span class="input-group-text">일정</span>
+                            <a class="form-control"
+                               th:href="@{/schedule/{scheduleNo}(scheduleNo = ${articleDTO.scheduleNo.scheduleNo})}"
+                               th:text="${articleDTO.scheduleNo.scheduleTitle}">
+                            </a>
+                        </div>
+
+                        <div class="col" style="text-align: center"> <!-- 후기글 사진 출력 -->
+
+                            <img th:if="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                                 src="/assets/NullPhoto.png" style="width:100%; height: auto; max-width: 800px;">
+                            <img th:unless="${#strings.contains(articlePhoto, 'NullPhoto')}" class="card-img-top"
+                                 th:src="@{/view/{photo}(photo=${articlePhoto})}"
+                                 style="width:100%; height: auto; max-width: 800px;">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <img src="https://img.icons8.com/?size=100&id=39459&format=png&color=000000" alt="Icon">
+                                내용
+                            </span>
+                            <textarea class="form-control col-sm-5" rows="5"
+                                      readonly>[[${articleDTO.articleContent}]]</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="_method" value="delete"/>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </div>
+            <br>
+            <hr>
+            <br>
+
+            <div class="row"> <!-- 댓글 입력창 부분 -->
+
+
+                <form id="articleReplyForm" action="/reply/create" method="post">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="replyContent">
+                                <img src="https://img.icons8.com/?size=100&id=ncVupLQ_3azP&format=png&color=000000"
+                                     alt="Icon 1" class="icon" width="20" height="20">
+                                댓글 내용 입력
+                                <img src="https://img.icons8.com/?size=100&id=v2Yg7p5PLAXO&format=png&color=000000"
+                                     alt="Icon 2" class="icon" width="20" height="20">
+                            </label>
+                        </div>
+                        <textarea id="replyContent" name="replyContent" rows="1" class="form-control"></textarea>
+                        <input type="hidden" name="articleNo.articleNo" th:value="${articleDTO.articleNo}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">댓글 등록</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+            <!-- 댓글 표시 부분 -->
+            <div class="reply" th:each="reply : ${replyList}">
+                <div class="row">
+                    <hr>
+                    <!--                    <span th:text="'좋아요 수 : ' + ${reply.getReplyLikeNumber()}"></span>-->
+                    <span> <!-- 댓글 작성자 이미지 -->
+          <a th:href="@{/user/profile/{userId}(userId=${reply.userNo.getUserId()})}"
+             th:text="${reply.getWriter}"></a>
+
+    <img style="width: 30px; height: auto" th:if="${#strings.contains(reply.getWriterPhotoStr(), 'UserDefaultPhoto')}"
+         class="profile-image"
+         src="/assets/UserDefaultPhoto.png">
+
+
+    <img style="width: 30px; height: auto"
+         th:unless="${#strings.contains(reply.getWriterPhotoStr(), 'UserDefaultPhoto')}" class="profile-image"
+         th:src="@{/view/{photo}(photo=${reply.getWriterPhotoStr()})}">
+
+                                            <span style="font-size: 14px; color: #4d5154"
+                                                  th:text="${#dates.format(reply.getReplyCreateDate(), 'yy-MM-dd HH:mm')}"></span>
+
+
+          </span>
+                </div>
+
+                <div class="row">
+                    <div class="col left" style="text-align: left">
+                        <span th:text="${reply.getReplyContent()}"></span>
+
+                    </div>
+                    <div class="col right" style="text-align: right">
+                        <form id="replyDeleteForm" action="/reply/delete" method="post">
+                            <input type="hidden" name="replyNo" th:value="${reply.getReplyNo()}"/>
+                            <button type="submit" class="btn btn-outline-danger deleteBtn">삭제하기</button>
+                            <!-- <button class="btn btn-outline-success modifyBtn">수정하기</button> -->
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</th:block>
+
+
+<th:block layout:fragment="script">
+
+
+</th:block>

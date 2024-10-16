@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 public class ReportServiceImpl implements ReportService {
 
   private final ReportRepository reportRepository;
-  private final ModelMapper modelMapper;
+
   private final UserRepository userRepository;
+
+  private final ModelMapper modelMapper;
 
   //신고하기 (추가)
   public void addReport(ReportDTO reportDTO) {
@@ -56,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
 
   //유저 제제 (수정)
   @Override
-  public void suspendUser(ReportDTO reportDTO) {
+  public void deactivateUser(ReportDTO reportDTO) {
     log.info("...... [updateReport START]..........KSW");
 
     Optional<Report> suspend = reportRepository.findById(reportDTO.getReportNo());
@@ -70,6 +72,7 @@ public class ReportServiceImpl implements ReportService {
           log.info("...... [userOptional is Present !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('1');
+
           userRepository.save(user);
         }
     }
@@ -89,6 +92,7 @@ public class ReportServiceImpl implements ReportService {
           log.info("...... [userOptional is Present? !!]..........KSW");
           User user = userOptional.get();
           user.setUserState('0');
+
           userRepository.save(user);
         }
     }
@@ -98,6 +102,7 @@ public class ReportServiceImpl implements ReportService {
   public void deleteReport(Long reportNo) {
         reportRepository.deleteById(reportNo);
     }
+
   //페이징 검색
   @Override
   public List<ReportDTO> searchReports(String query) {

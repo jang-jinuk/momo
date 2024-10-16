@@ -1,56 +1,79 @@
 package com.momo.momopjt.user;
 
 
+import com.momo.momopjt.club.Club;
+import com.momo.momopjt.userandclub.UserAndClubRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private final ModelMapper modelMapper;
+
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private final ModelMapper modelMapper;
+
     private static final int PASSWORD_LENGTH = 10;
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String SOCIAL_LOGIN_PASSWORD = "1111";
+    private final UserAndClubRepository userAndClubRepository;
 
+    public void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException {
+      log.info("----------------- [signup()]-----------------YY");
 
-    @Override
-    //@Transactional
-    public void signup(UserDTO userDTO) throws UserIdException, UserEmailException {
-        log.info("----------------- [signup()]-----------------YY");
-
-        //UserId 중복 검사
-        String userId = userDTO.getUserId();
+      String userId = userDTO.getUserId();
         String userEmail = userDTO.getUserEmail();
-        boolean existId = userRepository.existsByUserId(userId);
-        boolean existEmail = userRepository.existsByUserEmail(userEmail); // existsByUserId 사용
+        String userNickname = userDTO.getUserNickname();
+        String password = userDTO.getUserPw();
+        String confirmPassword = userDTO.getConfirmUserPw();
 
-        if (existId) {
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        // 아이디 중복 검사
+        if (userRepository.existsByUserId(userId)) {
             throw new UserIdException();
         }
-        if(existEmail){
+
+        // 이메일 중복 검사
+        if (userRepository.existsByUserEmail(userEmail)) {
             throw new UserEmailException();
         }
 
-//      Email 중복 검사
-        User user = modelMapper.map(userDTO, User.class);
+        // 닉네임 중복 검사
+        if (userRepository.existsByUserNickname(userNickname)) {
+            throw new UserNicknameException();
+        }
 
-        // 비밀번호 암호화
-        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
+        // User 엔티티 생성 및 설정
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserEmail(userEmail);
+        user.setUserNickname(userNickname);
+        user.changePassword(passwordEncoder.encode(password));
+        user.addRole(UserRole.USER);
+
+        // 비밀번호 암호화 TODO check 필요한건지 모르겠음
+//        user.changePassword(passwordEncoder.encode(userDTO.getUserPw()));
 
         // 역할 설정
         user.addRole(UserRole.USER);
@@ -67,17 +90,28 @@ public class UserServiceImpl implements UserService {
         // 기본 값 설정
         user.setUserState('0');
         user.setUserLikeNumber(0);
+        user.setUserPhoto("UserDefaultPhoto");
 
-        log.info(user);
-        log.info(user.getRoleSet());
+
+        user.setUserAddress(userDTO.getUserAddress());
+        user.setUserCategory(userDTO.getUserCategory());
+        user.setUserGender(userDTO.getUserGender());
+        user.setUserMBTI(userDTO.getUserMBTI());
+        user.setUserBirth(userDTO.getUserBirth());
 
         userRepository.save(user);
     }
 
-    //가입된 생년월일로 데이터베이스에 age항목에 넣는다.
-    private int calculateAge(LocalDate birthDate) {
-        return Period.between(birthDate, LocalDate.now()).getYears();
+
+    //나이 계산 로직 메소드
+  private int calculateAge(LocalDate userBirth) {
+    if (userBirth == null) {
+      throw new IllegalArgumentException("생년월일이 null입니다.");
     }
+    return Period.between(userBirth, LocalDate.now()).getYears();
+  }
+
+
 
     //TODO 리뷰 필요 YY JJ
     @Override
@@ -103,6 +137,7 @@ public class UserServiceImpl implements UserService {
             user.setUserNickname(userDTO.getUserNickname());
         }
 
+
         // 5. 카테고리 업데이트
         if (userDTO.getUserCategory() != null && !userDTO.getUserCategory().isEmpty()) {
             user.setUserCategory(userDTO.getUserCategory());
@@ -118,10 +153,9 @@ public class UserServiceImpl implements UserService {
             user.setUserMBTI(userDTO.getUserMBTI());
         }
 
-        // 8. 소셜 타입 업데이트
-        //if (userDTO.getUserSocial() != null) {
-        //   user.setUserSocial(userDTO.getUserSocial());
-        //}
+        if (userDTO.getUserGender() != null) {
+        user.setUserGender(userDTO.getUserGender());
+        }
 
         // 9. 수정일 업데이트
         user.setUserModifyDate(Instant.now());
@@ -143,8 +177,10 @@ public class UserServiceImpl implements UserService {
         // Optional에 값이 있는지 확인하고 값 추출
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            return user.getUserId(); // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
+            return user.getUserId();
+            // 예를 들어 User 객체에서 getUserID()을 사용하여 사용자 아이디반환
         } else {
+
             return null; // 값이 없을 경우 null 반환
         }
     }
@@ -272,23 +308,117 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(String userId, String userPw) {
-        log.info("----------------- [deleteAccount]-----------------");
-
-        if (userId == null || userId.isEmpty() || userPw == null || userPw.isEmpty()) {
-            throw new IllegalArgumentException("User ID and password cannot be null or empty");
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("User ID cannot be null or empty");
         }
 
         User user = userRepository.findByUserId(userId);
 
         if (user != null) {
-            if (passwordEncoder.matches(userPw, user.getUserPw())) { // 비밀번호 검증
-                userRepository.delete(user);
-                log.info("User account has been deleted.");
+            if (user.getUserSocial() != null && user.getUserSocial() != ' ') {
+                // 소셜 로그인 사용자일 경우 기본 비밀번호와 비교
+                if ("1111".equals(userPw)) {
+                    // 사용자가 가입된 클럽에서 삭제
+                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
+                    for (Club club : clubs) {
+                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+                    }
+
+                    // 사용자 삭제
+                    userRepository.delete(user);
+                    log.info("Social login user account has been deleted.");
+                } else {
+                    throw new IllegalArgumentException("Invalid password for social login user");
+                }
             } else {
-                throw new IllegalArgumentException("Incorrect password");
+                // 일반 사용자일 경우 실제 비밀번호와 비교
+                if (passwordEncoder.matches(userPw, user.getUserPw())) {
+                    // 사용자가 가입된 클럽에서 삭제
+                    List<Club> clubs = userAndClubRepository.findMyClubs(user);
+                    for (Club club : clubs) {
+                        userAndClubRepository.deleteByClubNoAndUserNo(club, user);
+                    }
+
+                    // 사용자 삭제
+                    userRepository.delete(user);
+                    log.info("User account has been deleted.");
+                } else {
+                    throw new IllegalArgumentException("Incorrect password");
+                }
             }
         } else {
             log.warn("User not found.");
         }
     }
+    @Override
+    public Optional<User> findByUserNo(Long userNo) {
+        return userRepository.findById(userNo); // userNo로 User 찾기
+    }
+
+  @Override
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.isAuthenticated()) {
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof UserDetails) {
+        String username = ((UserDetails) principal).getUsername();
+        return userRepository.findByUserId(username); // 사용자 ID로 User 객체를 조회
+      }
+    }
+    return null;
+  }
+  //User 모두 조회
+  @Override
+  public List<UserDTO> readALLUsers() {
+    // 모든 유저를 조회하여 리스트에 저장
+    List<User> users = userRepository.findAll();
+    // users 리스트를 userDTO 리스트로 변환
+    return users.stream()
+        .map(user -> modelMapper.map(user, UserDTO.class))
+        .collect(Collectors.toList());
+  }
+  //User 검색
+  @Override
+  public List<UserDTO> searchUsers(String query) {
+    List<UserDTO> allUsers = readALLUsers(); // 모든 유저를 조회
+    if (query == null || query.isEmpty()) {
+      return allUsers;
+    }
+    return allUsers.stream() // 각 칼럼이 쿼리를 포함하면 리스트로 수집
+        .filter(user -> user.getUserNo().toString().contains(query) || // userNo
+            user.getUserId().contains(query) || // userId
+            user.getUserNickname().contains(query) || // userNickname
+            user.getUserEmail().contains(query)) // userEmail
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public void chageRoleUser(UserDTO userDTO) {
+    // 메서드 시작 로그
+    log.info("권한 부여 시작: {}", userDTO.getUserNo());
+
+    // userDTO 에서 userNo를 가져옵니다.
+    Long userNo = userDTO.getUserNo();
+
+    // userNo를 사용해 사용자 정보를 조회합니다.
+    User user = userRepository.findById(userNo)
+        .orElseThrow(() -> {
+          log.error("찾을 수 없음: {}", userNo);
+          return new IllegalArgumentException("없는 유저: " + userNo);
+        });
+
+    // 현재 역할을 가져옵니다.
+    UserRole currentRole = user.getUserRole();
+    log.info("현재 유저 권한 {}: {}", userNo, currentRole);
+
+    // 역할을 전환합니다.
+    UserRole newRole = (currentRole == UserRole.ADMIN) ? UserRole.USER : UserRole.ADMIN;
+    log.info("새 유저 권한 {}: {}", userNo, newRole);
+
+    // 새로운 역할을 설정합니다.
+    user.setUserRole(newRole);
+    // 변경된 사용자 정보를 저장합니다.
+    userRepository.save(user);
+    log.info("권한 설정 완료: {}", userNo);
+  }
 }

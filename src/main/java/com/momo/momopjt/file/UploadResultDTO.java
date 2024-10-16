@@ -12,16 +12,19 @@ import lombok.extern.log4j.Log4j2;
 @NoArgsConstructor
 @Log4j2
 public class UploadResultDTO {
+
   private String uuid;
-  private String fileName;
+  private String extension;
+
   private boolean isImage; // 책에서 img
 
   public String getLink(){ // getLink 나중 JSON 처리?
     log.info("----------------- [getLink()]-----------------");
     if(isImage){
-      return "s_"+uuid+"_"+fileName; // 이미지인 경우 섬네일
+      return "t_"+uuid+extension; // 이미지인 경우 섬네일
     } else {
-      return uuid+"_"+fileName;
+      return uuid+extension;
     }
   }
+
 }

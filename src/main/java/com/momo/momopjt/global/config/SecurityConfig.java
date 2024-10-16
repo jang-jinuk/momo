@@ -48,17 +48,18 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/secured/**").authenticated()
         .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/home", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
-        .antMatchers("/admin/**").hasRole("ADMIN")
+        .antMatchers("/", "/", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
+        .antMatchers("/admin/**").permitAll()
+        //.antMatchers("/admin/**").hasRole("ADMIN") //todo 0802 안돼요 SW
         .and()
         .formLogin().loginPage("/user/login")
-        .defaultSuccessUrl("/home")
+        .defaultSuccessUrl("/")
         .successHandler(authenticationSuccessHandler())
         .permitAll()
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-        .logoutSuccessUrl("/home")
+        .logoutSuccessUrl("/")
         .invalidateHttpSession(true)
         .deleteCookies("JSESSIONID")
         .permitAll()
@@ -73,9 +74,10 @@ public class SecurityConfig {
 
 
     // 소셜 로그인 설정
-    http.oauth2Login()
+    http
+        .oauth2Login()
         .loginPage("/user/login")
-        .defaultSuccessUrl("/home", true)
+        .defaultSuccessUrl("/", true)
         .successHandler(authenticationSuccessHandler())
         .userInfoEndpoint()
         .userService(customOAuth2UserService);

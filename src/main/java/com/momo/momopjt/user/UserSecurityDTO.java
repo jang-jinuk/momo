@@ -16,6 +16,8 @@ import java.util.Map;
 @Log4j2
 public class UserSecurityDTO implements UserDetails {
 
+private String userPhoto;
+
     private String userId;
     private String userPw;
     private String userEmail;
@@ -24,10 +26,12 @@ public class UserSecurityDTO implements UserDetails {
     private Map<String,Object> props; // 소셜로그인 정보
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserSecurityDTO(String userId, String password, String email,
+
+    public UserSecurityDTO(String userPhoto, String userId, String password, String email,
                            boolean enabled, Character social,
                            Collection<? extends GrantedAuthority> authorities) {
-        log.info("----------------- [userSecDTO contructor]-----------------");
+        log.info("----------------- [userSecDTO constructor]-----------------");
+        this.userPhoto = userPhoto;
         this.userId = userId;
         this.userPw = password;
         this.userEmail = email;
@@ -65,4 +69,5 @@ public class UserSecurityDTO implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

@@ -1,47 +1,195 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+
+
 <head>
+    <link href="https://webfontworld.github.io/cookierun/CookieRun.css" rel="stylesheet">
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no,
-          initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>MoMo Login</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>MoMo 로그인</title>
     <!-- Core theme CSS (includes Bootstrap) -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
-</head>
-<body class="align-middle">
-<div class="container-fluid d-flex justify-content-center" style="height:100vh">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
 
-    <div class="card align-self-center">
-        <div class="card-header">
-            LOGIN Page
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #f8f9fa;
+            font-family: Cafe24SsurroundAir;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 20px; /* 로그인 박스와 광고 이미지 사이의 간격 */
+        }
+        .login-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd; /* 테두리 추가 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 336.8px; /* 로그인 박스 너비 */
+            height: 505.2px; /* 로그인 박스 높이 */
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #93d048;
+            font-family: Cafe24Ssurround;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            height: 45px;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            width: 100%;
+            height: 45px;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .btn-social {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+            margin: 5px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+        }
+        .btn-kakao {
+            background-color: #fee500;
+            color: #000;
+        }
+        .btn-google {
+            background-color: #db4437;
+        }
+        .btn-naver {
+            background-color: #03c75a;
+        }
+        .link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #93d048;
+            text-decoration: none;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+        .separator {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            color: #6c757d;
+        }
+        .separator::before, .separator::after {
+            content: '';
+            height: 1px;
+            width: 45%;
+            background: #e0e0e0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .separator::before {
+            left: 0;
+        }
+        .separator::after {
+            right: 0;
+        }
+        .separator span {
+            background: #ffffff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .social-login {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .member_login_right {
+            flex-shrink: 0;
+            width: 336.8px; /* 광고 이미지와 동일한 너비 */
+            height: 505.2px; /* 광고 이미지와 동일한 높이 */
+        }
+        .member_login_right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지 비율 유지 */
+            border-radius: 10px; /* 모서리 둥글게 */
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+<div class="content">
+
+    <div class="login-box">
+        <h2>로그인</h2>
+        <form id="loginForm" action="/user/login" method="post">
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="사용자 아이디" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="비밀번호" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3" style="background-color: #93d048">로그인</button>
+        </form>
+        <div class="separator"><span>또는</span></div>
+        <div class="social-login">
+            <a href="/oauth2/authorization/kakao" class="btn-social btn-kakao">
+                <i class="fa-solid fa-comment"></i>
+            </a>
+            <a href="/oauth2/authorization/google" class="btn-social btn-google">
+                <i class="fa-brands fa-google"></i>
+            </a>
+            <a href="/oauth2/authorization/naver" class="btn-social btn-naver">
+                <i class="fa-solid fa-n"></i>
+            </a>
         </div>
-        <div class="card-body">
-            <form id="loginForm" action="/user/login" method="post">
-                <div class="input-group mb-3">
-                    <span class="input-group-text">아이디</span>
-                    <input type="text" name="username" class="form-control" placeholder="USER ID">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">패스워드</span>
-                    <input type="password" name="password" class="form-control" placeholder="PASSWORD">
-                </div>
-                <div class="my-4">
-                    <div class="float-end">
-                        <button type="submit" class="btn btn-primary submitBtn">LOGIN</button>
-                        <a href="/oauth2/authorization/kakao" class="btn btn-warning ms-2">KAKAO</a>
-                        <a href="/oauth2/authorization/google" class="btn btn-warning ms-2">Google</a>
-                        <a href="/oauth2/authorization/naver" class="btn btn-warning ms-2">Naver</a>
-                        <a href="/user/signup" class="btn btn-primary ms-2">회원가입</a>
-                        <a href="/user/find-id" class="btn btn-link ms-2">아이디 찾기</a>
-                        <a href="/user/find-pw" class="btn btn-link ms-2">비밀번호 찾기</a>
-                    </div>
-                </div>
-            </form>
+        <a href="/user/signup" class="link">회원가입</a>
+        <div class="options mt-2">
+            <a href="/user/find/id" class="link">아이디 찾기</a>
+            <span>ㅣ</span>
+            <a href="/user/find/pw" class="link">비밀번호 찾기</a>
         </div>
     </div>
 </div>
-</body>
-</html>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var message = /*[[${message}]]*/ null;
+        if (message) {
+            alert(message);
+        }
+        /*]]>*/
+    </script>
+</th:block>
+

@@ -1,0 +1,253 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block layout:fragment="content">
+<head>
+
+    <meta charset="UTF-8">
+    <title>내 알림 목록</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* 버튼의 절대 위치를 설정할 부모 요소 */
+        }
+
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .alert-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .alert-item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative; /* 삭제 버튼의 위치를 절대 위치로 설정 */
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-type {
+            font-weight: bold;
+        }
+
+        .alert-content {
+            margin-top: 5px;
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .alert-date {
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* 개별 삭제 버튼 스타일 */
+        .delete-button {
+            position: absolute;
+            right: 15px;
+            transform: translateY(-50%);
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-end; /* 오른쪽 정렬 */
+            align-items: center; /* 세로 중앙 정렬 */
+            margin: 20px; /* 선택적 여백 */
+        }
+        .delete-all-button {
+            width: 50px; /* 버튼 너비 */
+            height: 50px; /* 버튼 높이 */
+            background: none; /* 기본 배경 제거 */
+            border: none; /* 기본 테두리 제거 */
+            cursor: pointer; /* 커서 모양 변경 */
+            padding: 0; /* 기본 패딩 제거 */
+            display: flex; /* 내부 아이콘 및 텍스트 중앙 정렬 */
+            align-items: center;
+            justify-content: center;
+            position: relative; /* 텍스트 위치 지정용 */
+        }
+        .delete-all-button img {
+            width: 100%; /* 아이콘 크기 버튼에 맞춤 */
+            height: 100%;
+            animation: spin 2s linear infinite; /* 회전 애니메이션 */
+        }
+        .delete-all-button .button-text {
+            position: absolute;
+            bottom: -20px; /* 버튼 하단에 텍스트 위치 */
+            font-size: 12px; /* 텍스트 크기 */
+            color: #333; /* 텍스트 색상 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            width: 100%; /* 텍스트 너비 버튼에 맞춤 */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .delete-all-button:hover img {
+            opacity: 0.8; /* 마우스 오버 시 불투명도 변경 */
+        }
+
+
+        .back-link {
+            display: inline-flex; /* 텍스트와 이미지를 가로로 배치 */
+            align-items: center; /* 수직 중앙 정렬 */
+            gap: 8px; /* 텍스트와 이미지 사이의 간격 */
+            text-decoration: none;
+            color: #000000;
+            padding: 8px 12px; /* 버튼 안쪽 여백 조정 */
+            border: 1px solid #c6dcf4;
+            border-radius: 28px;
+            background-color: #fff;
+            font-size: 14px; /* 텍스트 크기 설정 */
+            white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 설정 */
+            margin-right: 40px; !important; /* 오른쪽 여백 조정 */
+        }
+
+        .back-link:hover {
+            background-color: #7eb4ed;
+            color: #fff;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center; /* 수직 정렬 */
+            font-size: 24px; /* 제목 크기 조정 */
+            font-weight: bold; /* 제목 두께 조정 */
+            margin: 20px; /* 여백 추가 */
+        }
+        .title-container img {
+            width: 40px; /* 아이콘 크기 조정 */
+            height: 40px; /* 아이콘 크기 조정 */
+            margin-left: 10px; /* 제목과 아이콘 사이 여백 */
+        }
+        .container {
+            /* 전체 컨테이너 스타일 */
+            padding: 20px; /* 여백 추가 */
+            border: 1px solid #ddd; /* 컨테이너 테두리 (선택적) */
+        }
+        .title-wrapper {
+            display: flex;
+            justify-content: center; /* 가로 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            margin-bottom: 20px; /* 제목과 다른 내용 사이의 여백 */
+        }
+        .title-container {
+            display: flex;
+            align-items: center; /* 수직 정렬 */
+            font-size: 24px; /* 제목 크기 조정 */
+            font-weight: bold; /* 제목 두께 조정 */
+        }
+        .title-container img {
+            width: 40px; /* 아이콘 크기 조정 */
+            height: 40px; /* 아이콘 크기 조정 */
+            margin-left: 10px; /* 제목과 아이콘 사이 여백 */
+        }
+
+
+
+
+
+
+
+    </style>
+    <script>
+        function deleteAlarm(alarmNo) {
+            if (confirm('정말로 이 알림을 삭제하시겠습니까?')) {
+                fetch('/alarm/delete/' + alarmNo, {
+                    method: 'POST'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('알림 삭제에 실패했습니다.');
+                        }
+                    });
+            }
+        }
+        function deleteAllAlarms() {
+            if (confirm('정말로 모든 알림을 삭제하시겠습니까?')) {
+                fetch('/alarm/deleteAll/', {
+                    method: 'POST'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('모든 알림 삭제에 실패했습니다.');
+                        }
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="title-wrapper">
+        <h1>알람 목록</h1>
+        <img src="https://img.icons8.com/?size=100&id=rOnwYYXRvxmQ&format=png&color=000000" alt="Icon">
+    </div>
+    <div class="button-container">
+        <button class="delete-all-button" onclick="deleteAllAlarms()">
+            <img src="https://img.icons8.com/?size=100&id=5ShZdRXR3fGE&format=png&color=000000" alt="Delete Icon">
+            <div class="button-text">모두 삭제</div>
+        </button>
+    </div>
+
+    <br>
+    <ul class="alert-list" th:each="alarm : ${alarms}">
+        <li class="alert-item">
+            <div class="alert-content">
+                <span class="alert-type" th:text="${alarm.alarmType.message}"></span>
+                <div th:text="${alarm.alarmContent}"></div>
+                <div class="alert-date" th:text="${#dates.format(alarm.alarmCreateDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+            </div>
+            <button class="delete-button" th:onclick="'deleteAlarm(' + ${alarm.alarmNo} + ')'">삭제</button>
+        </li>
+    </ul>
+
+
+
+    <br>
+    <br>
+
+    <a href="/" class="back-link" style="margin-left: 20px;">
+        <img src="https://img.icons8.com/?size=100&id=nvP_H1Z7ulQz&format=png&color=000000" alt="Home Icon" width="20" height="20">
+        홈으로 돌아가기
+    </a>
+    <br>
+    <br>
+
+</div>
+</body>
+</th:block>
+</html>

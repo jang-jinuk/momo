@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user/find")
 @RequiredArgsConstructor
 @Log4j2
-public class FindController {
+public class FindController  {
 
   private final UserService userService;
   private final UserRepository userRepository;
@@ -26,19 +26,34 @@ public class FindController {
     return "user/find/id";
   }
 
-  // 아이디 찾기
+  //아이디찾기
   @PostMapping("/id")
   public String findUserId(@ModelAttribute("findUserIdRequest") FindUserIdRequest findUserIdRequest, Model model) {
     String userEmail = findUserIdRequest.getFindUserEmail();
     String userId = userService.findUsernameByEmail(userEmail);
+
     if (userId != null) {
-      model.addAttribute("userId", userId);
+      // 아이디의 일부를 마스킹합니다.
+      String maskedUserId = maskUserId(userId);
+      model.addAttribute("userId", maskedUserId);
       log.info("Found userId: {}", userId); // 유저 아이디 찾음을 로그
     } else {
-      model.addAttribute("errorMessageUserId", "User ID not found for email: " + userEmail);
+      model.addAttribute("errorMessageUserId", "가입된 내역이 없습니다.");
       log.warn("User ID not found for email: {}", userEmail); // 아이디를 못 찾음을 경고 로그
     }
     return "user/find/id";
+  }
+
+  private String maskUserId(String userId) {
+    if (userId.length() > 4) {
+      String prefix = userId.substring(0, 2); // 앞부분 두 자리를 보이게
+      String suffix = userId.substring(userId.length() - 2); // 끝부분 두 자리를 보이게
+      String middle = userId.substring(2, userId.length()-2);
+      middle = middle.replaceAll(".", "*");
+
+      return prefix + middle + suffix; // 가운데 부분을 **로 마스킹
+    }
+    return userId; // 아이디가 4자리 이하일 경우 마스킹하지 않음
   }
 
   // 비밀번호 찾기 폼 렌더링
@@ -64,19 +79,19 @@ public class FindController {
         log.info("----------------- [0716 YY 임시비번 ]-----------------{}",temporaryPassword);
         userService.updateUserPassword(user, temporaryPassword);
         emailService.sendTemporaryPasswordEmail(userEmail, temporaryPassword);
-        redirectAttributes.addFlashAttribute("resetPasswordMessage", "임시 비밀번호가 이메일로 전송되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "임시 비밀번호가 이메일로 전송되었습니다.");
         log.info("Temporary password sent to email: {}", userEmail);
-
-        return "redirect:/home";
+        return "redirect:/user/login";
       } else {
-        redirectAttributes.addFlashAttribute("errorMessage", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
+        redirectAttributes.addFlashAttribute("message", "해당 사용자 아이디와 이메일을 찾을 수 없습니다.");
         log.warn("User not found for username: {} and email: {}", userId, userEmail);
+        return "redirect:/user/find/pw";
       }
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+      redirectAttributes.addFlashAttribute("message", "요청 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
       log.error("Error during password reset request processing", e);
+      return "redirect:/user/find/pw";
     }
-    return "redirect:/pw"; // 오류 발생 시 올바른 경로로 리디렉트
   }
 
   // 비밀번호 재설정 처리 (토큰 없이)
@@ -106,7 +121,7 @@ public class FindController {
 
       if (resetSuccess) {
         redirectAttributes.addFlashAttribute("resetSuccessMessage", "비밀번호가 성공적으로 재설정되었습니다!");
-        return "redirect:/home"; // 여기서 경로 변경
+        return "redirect:/"; // 여기서 경로 변경
       } else {
         redirectAttributes.addFlashAttribute("errorMessage", "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요.");
         return "redirect:/reset-pw";

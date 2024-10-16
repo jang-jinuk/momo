@@ -1,11 +1,11 @@
 package com.momo.momopjt.club;
 
-import com.momo.momopjt.photo.Photo;
-import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Data
 @Builder
@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 public class ClubDTO {
 
   private Long clubNo;
-
-  private Photo photoUUID;
 
   private String clubName;
 
@@ -30,4 +28,9 @@ public class ClubDTO {
   private Character clubGender;
 
   private Instant clubCreateDate;
+
+  //YY 모임 대표 이미지
+  private String clubPhotoUUID; // uuid , no extension
+
+
 }

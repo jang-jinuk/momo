@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+
+<head>
+    <title>프로필 페이지</title>
+
+
+    <style>
+
+        body, html {
+
+            font-family: 'CookieRun', sans-serif;
+        }
+
+        /* 모달 */
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding-top: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        /* 카테고리 컨테이너 */
+        .category-container {
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        /* 신고 버튼 */
+        .report-button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .report-button-container button:hover {
+            background-color: #808080;
+        }
+
+        /* 프로필 이미지 스타일 */
+        .profile-image {
+            width: 100%;
+            height: auto;
+            max-width: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+
+        /* 프로필 정보 스타일 */
+        .user-info {
+            margin: 2% 0;
+        }
+
+        .card-title {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .card-text {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .profile-container {
+            padding: 2%;
+        }
+
+        /* 버튼 스타일 */
+        .btn-info, .btn-danger {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-bottom: 0.5rem;
+        }
+
+
+        /* btn-info 스타일 */
+        .btn-info {
+            background-color: #92d5e3;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #92d5e3;
+            transform: scale(1.05);
+        }
+
+        /* btn-danger 스타일 */
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        /* 버튼 그룹 위치 조정 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 1rem;
+        }
+
+        /* 후기 섹션 */
+        .review-section, .club-section {
+            border-top: 1px solid #ffffff;
+            border-bottom: 1px solid #ddd;
+            padding: 2% 5%;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .review-section h4, .club-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        /* 후기 및 모임 카드 컨테이너 */
+        .card-container {
+            flex: 1 0 21%;
+            max-width: 21%;
+            margin: 1%;
+            box-sizing: border-box;
+        }
+
+        /* 카드 스타일 */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+
+        /* 더 보기 버튼 스타일 */
+        .moreBtn {
+            background-color: #92d5e3;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+
+        }
+
+        .moreBtn:hover {
+            background-color: #92d5e3;
+            transform: scale(1.05);
+
+        }
+
+
+
+        /* 숨기기용 클래스 */
+        .d-none-custom {
+            display: none;
+        }
+
+        /* 버튼 레이아웃 조정 */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        /* 프로필과 후기 섹션을 포함한 컨테이너의 수직 정렬을 위한 스타일 */
+        .container.profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container.profile-container .row {
+            width: 100%;
+        }
+
+        .container.profile-container .col-md-3,
+        .container.profile-container .col-md-7,
+        .container.profile-container .col-md-2 {
+            flex: 1;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+<body>
+
+
+<div class="container profile-container">
+    <div class="row justify-content-center">
+        <div class="col-md-3 text-center">
+            <div class="img-profile">
+                <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                     src="/assets/UserDefaultPhoto.png">
+                <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+                     th:src="@{/view/{photo}(photo=${userPhoto})}">
+            </div>
+        </div>
+        <div class="col-md-7 user-info">
+            <h2 class="card-title" th:text="${user.userNickname}"></h2>
+            <p class="card-text">MBTI: <span th:text="${user.userMBTI}"></span></p>
+            <p class="card-text">나이: <span th:text="${user.userAge}"></span> / 성별: <span
+                    th:text="${user.userGender}"></span></p>
+            <p class="card-text">지역: <span th:text="${user.userAddress}"></span></p>
+            <p class="card-text">관심사: <span th:text="${user.userCategory}"></span></p>
+        </div>
+
+        <!-- 버튼 그룹 -->
+        <div class="col-md-2 d-flex flex-column align-items-center button-group" style="padding-bottom: 1%;">
+            <button th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+                    onclick="location.href='/user/delete-account'">탈퇴하기
+            </button>
+            <a th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+               th:href="@{/user/update/{userId}(userId=${loggedInUserId})}">정보수정</a>
+            <button th:if="${loggedInUserId == user.userId}" class="btn btn-info mb-2"
+                    onclick="location.href='/user/my-report'">신고내역
+            </button>
+            <button th:if="${loggedInUserId != user.userId}" class="btn btn-danger"
+                    onclick="openModal()">신고하기
+            </button>
+            <button th:if="${user.userRole == T(com.momo.momopjt.user.UserRole).ADMIN
+                and loggedInUserId == user.userId}"
+                    onclick="location.href='/admin/manage-user'">관리자 페이지
+            </button>
+
+            <input type="hidden" id="errorCategoryMessage" th:value="${errorCategoryMessage}">
+                    <input type="hidden" id="successMessage" th:value="${successMessage}">
+            </div>
+        </div>
+
+        <!-- 작성한 후기 섹션 -->
+        <div class="review-section col-10">
+            <h4 class="text-center">작성한 후기</h4>
+            <div class="d-flex flex-wrap justify-content-start" id="reviewSection">
+                <th:block th:if="${userArticles == null or #lists.isEmpty(userArticles)}">
+                        <div class="alert alert-info text-center">작성한 후기가 없습니다.</div>
+                </th:block>
+
+                <div class="card-container" th:each="article, iterStat : ${userArticles}"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
+                    <div class="card">
+                        <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text">
+                            <img
+                                    th:if="${#lists.size(userArticlePhotoList) > iterStat.index and #strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
+                                    src="/assets/NullPhoto.png"
+                                    class="club-cover"
+                                    style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                            <img
+                                    th:unless="${#strings.contains(userArticlePhotoList[iterStat.index], 'NullPhoto')}"
+                                    th:src="@{/view/{photo}(photo=${userArticlePhotoList[iterStat.index]})}"
+                                    class="club-cover"
+                                    style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        </a>
+
+                        <div class="card-body">
+                            <a th:href="@{/article/{articleNo}(articleNo=${article.articleNo})}" th:inline="text"
+                               style="display: block; padding: 10px; max-height: 62px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                                <h4 class="card-title" th:text="${article.articleTitle}">후기글 제목</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button id="loadMoreReviewsButton" class="moreBtn" type="button"
+                        th:if="${#lists.size(userArticles) > 4}">더 보기</button>
+                <button id="collapseReviewsButton" class="moreBtn d-none-custom" type="button"
+                        th:if="${#lists.size(userArticles) > 4}">접기</button>
+            </div>
+        </div>
+
+
+        <!-- 즐겨찾는 모임 섹션 -->
+        <div class="club-section col-10">
+            <h4 class="text-center">즐겨찾는 모임</h4>
+            <div class="d-flex flex-wrap justify-content-start" id="clubSection">
+                <th:block th:if="${userWishClub == null or #lists.isEmpty(userWishClub)}">
+                        <div class="alert alert-info text-center">즐겨찾는 모임이 없습니다.</div>
+                </th:block>
+
+                <div class="card-container" th:each="club, iterStat : ${userWishClub}"
+                     th:classappend="${iterStat.index >= 4} ? 'd-none-custom'">
+                    <div class="card h-100 cardBody">
+                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text">
+                            <img th:if="${#lists.size(clubPhotoList) > iterStat.index and #strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                                 class="club-cover" src="/assets/ClubDefaultPhoto.jpg"
+                                 style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                            <img th:if="${#lists.size(clubPhotoList) > iterStat.index}"
+                                 th:unless="${#strings.contains(clubPhotoList[iterStat.index], 'ClubDefaultPhoto')}"
+                                 class="club-cover"
+                                 th:src="@{/view/{photo}(photo=${clubPhotoList[iterStat.index]})}"
+                                 style="width: 100%; height: 200px; max-height: 100%; object-fit: cover;">
+                        </a>
+                        <a th:href="@{/club/main/{clubNo}(clubNo=${club.clubNo})}" th:inline="text"
+                           style="display: block; padding: 10px;  max-height: 62px; text-decoration: none; color: #333; border-top: 1px solid #ddd;">
+                            <h4 class="card-title" th:text="${club.clubName}">모임 이름</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+
+                <button id="loadMoreClubsButton" class="moreBtn" type="button"
+                        th:if="${#lists.size(userWishClub) > 4}">더 보기</button>
+                <button id="collapseClubsButton" class="moreBtn d-none-custom" type="button"
+                        th:if="${#lists.size(userWishClub) > 4}">접기</button>
+            </div>
+        </div>
+
+
+        <!-- 신고 모달창 -->
+        <div id="myModal">
+            <div class="modal-content">
+                <div class="container-fluid d-flex flex-column align-items-center">
+
+               
+
+                    <h2>신고하기</h2>
+                    <p>신고 사유를 선택해 주세요</p>
+
+                </div>
+
+                <form th:action="@{/report/create(reportedUserId =${user.userNo})}" method="post"
+                      class="form-container">
+                    <div class="category-container">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="스팸/도배" id="spam">
+                            <label class="form-check-label" for="spam">스팸/도배</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="음란물" id="porn">
+                            <label class="form-check-label" for="porn">음란성</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="사칭" id="illegal">
+                            <label class="form-check-label" for="illegal">사칭</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="닉네임"
+                                   id="political">
+                            <label class="form-check-label" for="political">부적절한 닉네임</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="게시물" id="privacy">
+                            <label class="form-check-label" for="privacy">부적절한 게시물 활동</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="부적절한 모임 활동"
+                                   id="unpleasant">
+                            <label class="form-check-label" for="unpleasant">부적절한 모임 활동</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="reportCategory" value="기타" id="harmful">
+                            <label class="form-check-label" for="harmful">기타</label>
+                        </div>
+                    </div>
+                    <div class="report-button-container d-flex gap-4 col-6 mx-auto mt-6">
+                        <input type="hidden" name="reporterId" th:value="${#authentication.name}">
+                        <input type="hidden" name="reportedNo" id="reportedNo"> <!-- 모달 안의 신고할 유저 ID -->
+                        <button type="button" class="btn btn-primary" onclick="document.forms[0].submit();">확인</button> <!-- 신고 제출 -->
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" style="cursor:pointer; float:right;">닫기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+    <!-- 모달 기능 -->
+    function openModal() {
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block'; // 모달을 표시
+        setTimeout(() => {
+            modal.style.opacity = '1'; // 모달을 완전히 불투명하게
+        }, 10); // 약간의 지연 후 opacity 변경
+
+        const radioButtons = document.querySelectorAll('#myModal input[type="radio"]');
+        radioButtons.forEach(function (radio) {
+            radio.checked = false; // 모든 라디오 버튼의 선택 해제
+        });
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('myModal');
+        modal.style.opacity = '0'; // 모달을 투명하게
+        setTimeout(() => {
+            modal.style.display = 'none'; // 모달을 숨김
+        }, 500); // 투명화 효과가 끝난 후 숨김
+    }
+
+    // 배경 클릭 시 모달 닫기
+    window.onclick = function (event) {
+        if (event.target === document.getElementById('myModal')) {
+            closeModal();
+        }
+    }
+
+    // ESC 키로 모달 닫기
+    window.onkeydown = function (event) {
+        if (event.key === "Escape") {
+            closeModal();
+        }
+    }
+    //신고 결과 모달창
+    const errorCategoryMessage = document.getElementById('errorCategoryMessage').value;
+    const successMessage = document.getElementById('successMessage').value;
+
+    // 값이 존재하면 alert 창을 표시 후 0.1초후에 이전페이지 이동
+    if (errorCategoryMessage) {
+        alert("Error: " + errorCategoryMessage);
+        // Set timeout to navigate back after 2 seconds if error message exists
+        setTimeout(function () {
+            history.back();
+        }, 100);
+    }
+    if (successMessage) {
+        alert("Success: " + successMessage);
+        // Set timeout to navigate back after 2 seconds if success message exists
+        setTimeout(function () {
+            history.back();
+        }, 100);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 작성한 후기 섹션 처리
+        const loadMoreReviewsButton = document.getElementById('loadMoreReviewsButton');
+        const collapseReviewsButton = document.getElementById('collapseReviewsButton');
+        const reviewCards = document.querySelectorAll('#reviewSection .card-container');
+
+        // Initially hide extra reviews
+        reviewCards.forEach((card, index) => {
+            if (index >= 4) {
+                card.classList.add('d-none-custom');
+            }
+        });
+
+        loadMoreReviewsButton.addEventListener('click', () => {
+            reviewCards.forEach((card) => {
+                card.classList.remove('d-none-custom');
+            });
+            loadMoreReviewsButton.classList.add('d-none-custom');
+            collapseReviewsButton.classList.remove('d-none-custom');
+        });
+
+        collapseReviewsButton.addEventListener('click', () => {
+            reviewCards.forEach((card, index) => {
+                if (index >= 4) {
+                    card.classList.add('d-none-custom');
+                }
+            });
+            collapseReviewsButton.classList.add('d-none-custom');
+            loadMoreReviewsButton.classList.remove('d-none-custom');
+        });
+
+        // 즐겨찾는 모임 섹션 처리
+        const loadMoreClubsButton = document.getElementById('loadMoreClubsButton');
+        const collapseClubsButton = document.getElementById('collapseClubsButton');
+        const clubCards = document.querySelectorAll('#clubSection .card-container');
+
+        // Initially show only a limited number of clubs
+        clubCards.forEach((card, index) => {
+            if (index >= 4) {
+                card.classList.add('d-none-custom');
+            }
+        });
+
+        loadMoreClubsButton.addEventListener('click', () => {
+            clubCards.forEach((card) => {
+                card.classList.remove('d-none-custom');
+            });
+            loadMoreClubsButton.classList.add('d-none-custom');
+            collapseClubsButton.classList.remove('d-none-custom');
+        });
+
+        collapseClubsButton.addEventListener('click', () => {
+            clubCards.forEach((card, index) => {
+                if (index >= 4) {
+                    card.classList.add('d-none-custom');
+                }
+            });
+            collapseClubsButton.classList.add('d-none-custom');
+            loadMoreClubsButton.classList.remove('d-none-custom');
+        });
+    });
+
+</script>
+</body>
+</th:block>
+</html>

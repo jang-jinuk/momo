@@ -1,16 +1,19 @@
 package com.momo.momopjt.photo;
 
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Optional;
-
 import com.momo.momopjt.club.ClubRepository;
+import com.momo.momopjt.reply.ReplyDTO;
+import com.momo.momopjt.user.User;
+import com.momo.momopjt.user.UserDTO;
+import com.momo.momopjt.user.UserService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -18,64 +21,133 @@ import org.springframework.stereotype.Service;
 @Log4j2
 public class PhotoServiceImpl implements PhotoService {
 
-  private final ModelMapper modelMapper;
   private final PhotoRepository photoRepository;
   private final ClubRepository clubRepository;
 
+  private final ModelMapper modelMapper;
+  private final UserService userService;
+
   @Override
   public Photo savePhoto(PhotoDTO photoDTO) {
+    log.trace("--------save photo start-----------");
 
     Photo photo = new Photo();
-
     //사진을 등록하지 않으면 "default"사진 자동 저장
-    if(photoDTO.getPhotoUUID().equals("")) {
-      photo.setPhotoUUID("default.jpg"); //TODO 실제 디폴트 사진으로 변경 필요 JW
+    if (photoDTO.getPhotoUUID().equals("") || photoDTO.getPhotoUUID() == null) {
+      log.error("uuid is null or empty");
+      photo.setPhotoUUID("default"); //TODO 실제 디폴트 사진으로 변경 필요 JW
       return photo;
     }
-
 
     photoDTO.setPhotoCreateDate(Instant.now()); //생성(등록)일 자동으로 넣기
 
     photo = modelMapper.map(photoDTO, Photo.class);
+
     photoRepository.save(photo);
 
-    log.info(photo);
-    log.info(photo.getPhotoUUID());
+    log.info("DB에 저장된 photoUUID : {}", photo.getPhotoUUID());
     log.info("------------------Photo saved--------------------");
     return photo;
   }
 
-  /* 일단은 필요없어서 주석처리
-  public Photo updatePhoto(PhotoDTO photoDTO) {
-    String photoUUID = photoDTO.getPhotoUUID();
-    deletePhoto(photoUUID);
-    return savePhoto(photoDTO);
-  }
-   */
 
   @Override
   public Photo getPhoto(String photoUUID) {
+    log.info("------------ getPhoto() ----------jinuk");
 
-    log.info("------------ getphoto [07-02-11:13:41]----------jinuk");
+    if (photoUUID == null) { // TODO 너무 Rough 한 처리 0802 YY 
+      log.warn("No existing Photo...... null photo return");
+
+      Photo NullPhoto = new Photo();
+      NullPhoto.setPhotoUUID("NullPhoto");
+      return NullPhoto;
+    }
+
+
+    // 기본 사진 조회 설정
+    switch (photoUUID) {
+
+      case "ClubDefaultPhoto":
+        log.info("try  get photo-ClubDefaultPhoto");
+        Photo clubDefaultPhoto = new Photo();
+        clubDefaultPhoto.setPhotoUUID("ClubDefaultPhoto");
+        clubDefaultPhoto.setPhotoExtension("");
+        return clubDefaultPhoto;
+
+      case "UserDefaultPhoto":
+        log.info("try  get photo-UserDefaultPhoto");
+        Photo userDefaultPhoto = new Photo();
+        userDefaultPhoto.setPhotoUUID("UserDefaultPhoto");
+        userDefaultPhoto.setPhotoExtension("");
+        return userDefaultPhoto;
+
+
+      case "ScheduleDefaultPhoto":
+        log.info("try  get photo-ScheduleDefaultPhoto");
+        Photo scheduleDefaultPhoto = new Photo();
+        scheduleDefaultPhoto.setPhotoUUID("ScheduleDefaultPhoto");
+        scheduleDefaultPhoto.setPhotoExtension("");
+        return scheduleDefaultPhoto;
+
+    }
+
+    boolean existCheck = photoRepository.existsById(photoUUID);
+
+    if (!existCheck) {
+      log.warn("No existing Photo...... null photo return");
+
+      Photo NullPhoto = new Photo();
+      NullPhoto.setPhotoUUID("NullPhoto");
+      NullPhoto.setPhotoExtension("");
+      return NullPhoto;
+    }
+
+
+    log.info("----------------- [uuid : {}, exist : {}]-----------------", photoUUID, existCheck);
+
     Optional<Photo> photoOptional = photoRepository.findById(photoUUID);
+    log.trace("----------------- [{}]-----------------", photoOptional);
 
     return photoOptional.orElseThrow();
 
   }
 
+  //현재는 안씀
   @Override
-  public void deletePhoto(String photoUUID) {
-    photoRepository.deleteById(photoUUID);
+  public List<Photo> getPhotoList(Character condition) {
+    List<Photo> photoList = photoRepository.findAll();
+    return photoList;
   }
 
+  @Override
+  public void deletePhoto(String photoUUID) {
+
+    if (photoUUID == null || photoUUID.equals("")) {
+      log.warn("----------------- [deletePhoto(UUID) UUID is null or empty]-----------------{}", photoUUID);
+      return;
+    } else {
+      log.info("----------------- [deletePhoto : {} at DB]-----------------", photoUUID);
+      photoRepository.deleteById(photoUUID);
+    }
+
+
+  }
 
   @Override
-  public String getPhoto64(String photoUUID) {
+  public UserDTO addPhotoStr(UserDTO userDTO) {
+    userDTO.setUserPhotoStr(
+        getPhoto(userDTO.getUserPhoto()).toString()
+    );
+    return userDTO;
+  }
 
-    Photo Photo = photoRepository.findById(photoUUID).orElseThrow();
-    String base64str = Base64.getEncoder().encodeToString(Photo.getPhotoData());
-
-    return base64str;
+  @Override
+  public ReplyDTO addPhotoStr(ReplyDTO replyDTO) {
+    User author = userService.findByUserNo(replyDTO.getUserNo().getUserNo()).orElseThrow();
+    replyDTO.setWriterPhotoStr(
+        "t_"+getPhoto(author.getUserPhoto()).toString()
+    );
+    return replyDTO;
   }
 
 }

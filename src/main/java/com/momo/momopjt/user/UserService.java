@@ -1,34 +1,47 @@
 package com.momo.momopjt.user;
 
 
-
+import java.util.List;
+import java.util.Optional;
 public interface UserService {
 
-    void signup(UserDTO userDTO) throws UserIdException, UserEmailException;
+  Optional<User> findByUserNo(Long userNo);
 
-    void updateUser(UserDTO userDTO);
+  void signup(UserDTO userDTO) throws UserIdException, UserEmailException, UserNicknameException;
 
-    String findUsernameByEmail(String userEmail);
+  void updateUser(UserDTO userDTO);
 
-    boolean resetPassword(String userId, String userEmail, String newPassword);
+  String findUsernameByEmail(String userEmail);
 
-    User findByEmail(String userEmail);
+  boolean resetPassword(String userId, String userEmail, String newPassword);
 
-    User findByUserId(String userId);
+  User findByEmail(String userEmail);
 
-    String generateTemporaryPassword(); // 임시 비밀번호 생성 메소드 추가
+  User findByUserId(String userId);
 
-    void updateUserPassword(User user, String temporaryPassword);
+  String generateTemporaryPassword(); // 임시 비밀번호 생성 메소드 추가
 
-    boolean resetPasswordByUserId(String userId, String newPassword);
-    static class UserIdException extends Exception {
-        // 추가적인 예외 처리가 필요한 경우에만 사용
-    }
-    class UserEmailException extends Exception{
-    }
+  void updateUserPassword(User user, String temporaryPassword);
 
-    User findByUserIdAndUserEmail(String userId, String userEmail);
+  boolean resetPasswordByUserId(String userId, String newPassword);
 
-    void deleteAccount(String userId, String userPw);
+  User findByUserIdAndUserEmail(String userId, String userEmail);
+
+  void deleteAccount(String userId, String userPw);
+
+  User getCurrentUser();
+
+  // 추가적인 예외 처리가 필요한 경우에만 사용
+  class UserEmailException extends Exception {}
+
+  class UserIdException extends Exception {}
+
+  class UserNicknameException extends Exception {}
+  //관리자 유저 전체 조회
+  List<UserDTO> readALLUsers();
+  //관리자 유저 검색
+  List<UserDTO> searchUsers(String query);
+
+  void chageRoleUser(UserDTO userDTO);
 
 }

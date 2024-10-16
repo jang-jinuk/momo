@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -22,10 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Map;
 
-//@Service //불필요 ? 0716 YY
 @Log4j2
 @RequiredArgsConstructor
 public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -34,84 +31,83 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
   private final UserRepository userRepository;
 
   @Override
-//  @Transactional // 불필요 ? 0716 YY
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
     log.info("---------------------------------------");
-    log.info("CustomLoginSuccessHandler onAuthenticationSuccess............");
+    log.info("CustomSocialLoginSuccessHandler onAuthenticationSuccess............");
     log.info(authentication.getPrincipal());
 
     Object principal = authentication.getPrincipal();
-    UserSecurityDTO userSecurityDTO = null;
-    String encodedPw = null;
+    String id;
+    String email;
+    Character social;
 
     if (principal instanceof DefaultOAuth2User) {
       DefaultOAuth2User oAuth2User = (DefaultOAuth2User) principal;
       String provider = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
-      String id = null;
-      String email = null;
-      Character social = null;
 
+      // Extract user info based on provider
       if ("google".equals(provider)) {
         id = (String) oAuth2User.getAttribute("sub");
         email = (String) oAuth2User.getAttribute("email");
         social = 'G';
       } else if ("kakao".equals(provider)) {
         Object idObject = oAuth2User.getAttribute("id");
-        if (idObject instanceof String) {
-          id = (String) idObject;
-        } else if (idObject instanceof Long) {
-          id = Long.toString((Long) idObject); // Long 타입인 경우 문자열로 변환
-        } else {
-          throw new IllegalStateException("Unexpected type for 'id' attribute: " + idObject.getClass().getName());
-        }
+        id = idObject instanceof String ? (String) idObject : Long.toString((Long) idObject);
         email = getKakaoEmail(oAuth2User.getAttributes());
         social = 'K';
       } else if ("naver".equals(provider)) {
         id = getNaverId(oAuth2User.getAttributes());
         email = getNaverEmail(oAuth2User.getAttributes());
         social = 'N';
+      } else {
+        throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
       }
 
       if (id == null || email == null) {
         throw new OAuth2AuthenticationException("ID or email not found from provider: " + provider);
       }
 
-      String password = passwordEncoder.encode("defaultPassword"); // 적절한 기본 비밀번호 설정
-      boolean enabled = true; // 계정 활성화 여부
-      Collection<? extends GrantedAuthority> authorities = oAuth2User.getAuthorities();
-      userSecurityDTO = new UserSecurityDTO(id, password, email, enabled, social, authorities);
-      encodedPw = userSecurityDTO.getUserPw();
-
-      // 사용자 엔티티 생성 및 저장
-      User user = userRepository.findByUserId(id);
+      User user = userRepository.findByUserEmail(email).orElse(null);
       if (user == null) {
+        // New user: Create and save user, then redirect to update page
         user = User.builder()
             .userId(id)
             .userEmail(email)
-            .userPw(encodedPw)
+            .userPhoto("UserDefaultPhoto")
+            .userPw(passwordEncoder.encode("defaultPassword")) // Default password
             .userSocial(social)
-            .userRole(UserRole.USER) // 기본값 설정
-            .userCreateDate(Instant.now()) // 생성 날짜 설정
+            .userRole(UserRole.USER)
+            .userCreateDate(Instant.now())
             .userState('0')
             .build();
         userRepository.save(user);
         log.info("New user saved to database: {}", user);
+
+        // Set new user in SecurityContext
+        UserSecurityDTO userSecurityDTO = new UserSecurityDTO(user.getUserPhoto(), id, passwordEncoder.encode("defaultPassword"), email, true, social, oAuth2User.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(
+            new UsernamePasswordAuthenticationToken(userSecurityDTO, null, oAuth2User.getAuthorities())
+        );
+
         response.sendRedirect(request.getContextPath() + "/user/update/" + id);
         return;
       }
 
+      // Existing user: Update security context and redirect to home
+      UserSecurityDTO userSecurityDTO = new UserSecurityDTO(user.getUserPhoto(), user.getUserId(), user.getUserPw(), user.getUserEmail(), true, user.getUserSocial(), oAuth2User.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(
           new UsernamePasswordAuthenticationToken(userSecurityDTO, null, oAuth2User.getAuthorities())
       );
       log.info("UserSecurityDTO created and set in SecurityContext: {}", userSecurityDTO);
     } else if (principal instanceof UserSecurityDTO) {
-      userSecurityDTO = (UserSecurityDTO) principal;
-      encodedPw = userSecurityDTO.getUserPw();
+      // For existing non-OAuth2 users
+      UserSecurityDTO userSecurityDTO = (UserSecurityDTO) principal;
+      log.info("Existing user logged in: {}", userSecurityDTO);
     }
 
-    // 일반 로그인 흐름
-    response.sendRedirect(request.getContextPath() + "/home");
+    // Redirect to home for all users
+    response.sendRedirect(request.getContextPath() + "/");
   }
 
   private String getKakaoEmail(Map<String, Object> paramMap) {
@@ -127,7 +123,6 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
       if (emailObj instanceof String) {
         String email = (String) emailObj;
         log.info("Kakao Email: {}", email);
-
         return email;
       }
     }
@@ -170,4 +165,6 @@ public class CustomSocialLoginSuccessHandler implements AuthenticationSuccessHan
     }
     return null;
   }
+
+
 }

@@ -1,20 +1,34 @@
 package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.user.User;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ScheduleService {
-   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO);
-   ScheduleDTO findSchedule(Long scheduleNo);
+
+   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws ScheduleMaxException, ScheduleDateException;
+
+   ScheduleDTO readOneSchedule(Long scheduleNo);
+
    Boolean updateSchedule(ScheduleDTO scheduleDTO);
+
    String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
+
    String leaveSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
-   List<ScheduleDTO> getOngoingSchedules(Club clubNo);
-   List<ScheduleDTO> getEndSchedules(Club clubNo);
+
+   List<ScheduleDTO> readOngoingSchedules(Club clubNo);
+
+   List<ScheduleDTO> readEndSchedules(Club clubNo);
+
    void deleteSchedule(Long scheduleNo);
-   void deleteScheduleByClub(Club clubNo);
+
    Boolean isScheduleFull(Long scheduleNo);
+
+   List<ScheduleDTO> readMyParticipatedSchedules(Club clubNo, User userNo);
+
+   class ScheduleMaxException extends Exception {}
+
+   class ScheduleDateException extends Exception {}
 }

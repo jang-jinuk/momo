@@ -2,20 +2,14 @@ package com.momo.momopjt.article;
 
 
 import com.momo.momopjt.club.Club;
-
 import com.momo.momopjt.user.User;
-
 import lombok.extern.log4j.Log4j2;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 import java.time.Instant;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
@@ -24,9 +18,6 @@ public class ArticleServiceTests {
 
   @Autowired
   private ArticleService articleService;
-  @Autowired
-  private ArticleRepository articleRepository;
-
 
   //후기글 작성
   @Test
@@ -44,7 +35,7 @@ public class ArticleServiceTests {
         .articleState('0')
         .articleScore(2)
         .build();
-    Article createdArticle = articleService.createArticle(articleDTO);
+    Long articleNo = articleService.createArticle(articleDTO);
   }
 
 
@@ -70,15 +61,16 @@ public class ArticleServiceTests {
         .articleScore(2)
         .build();
 
-    Article createdArticle = articleService.createArticle(articleDTO);
+    Long articleNo = articleService.createArticle(articleDTO);
 
   }
 
 
   //후기글 모두 조회
   @Test
-  void getAllArticles() {
-    List<ArticleDTO> articles = articleService.getAllArticles();
+  void getAllArticlesByClub() {
+    Club club = Club.builder().clubNo(1L).build();
+    List<ArticleDTO> articles = articleService.getAllArticlesByClub(club);
     log.info(articles);
   }
 

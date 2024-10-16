@@ -1,7 +1,7 @@
 package com.momo.momopjt.reply;
 
-import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.article.Article;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,10 +23,6 @@ public class Reply {
   @JoinColumn(name = "user_no", nullable = false)
   private User userNo;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "schedule_no")
-  private Schedule scheduleNo;
-
   @Column(name = "reply_content", nullable = false, length = 50)
   private String replyContent;
 
@@ -45,5 +41,9 @@ public class Reply {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "article_no")
   private Article articleNo;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "schedule_no")
+  private Schedule scheduleNo;
 
 }

@@ -4,11 +4,14 @@ import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
@@ -23,34 +26,44 @@ public class ReportController {
   private ReportService reportService;
   @Autowired
   private UserRepository userRepository;
+  //모달창으로 바뀌어서 사라짐
 
-  //신고하기 페이지
-  @GetMapping("/create")
-  public String showReportPage(Model model) {
-    log.info("...... [report /create Get]..........KSW");
-    //TODO 넘어올 페이지에서 넣어줘야 함
-    Long reportedNo = 1L;
-    model.addAttribute("reportedNo", reportedNo);
-    return "report/create";
-  }
 
-  //TODO 신고하기 컨트롤러
+  //신고하기
   @PostMapping("/create")
-  public String reportUser(ReportDTO reportDTO, HttpServletRequest request) {
+  public String reportUserPOST(@RequestParam Long reportedUserId, ReportDTO reportDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
     log.info("...... [report /create POST ]..........KSW");
-    // 서비스로 데이터 전달
-    reportDTO.setReportNo(-1L);
-    reportDTO.setReportResult('0');
-    reportDTO.setReportDate(Instant.now());
-    //User 객체 만들어줌
-    User user1 = userRepository.findById(4L).orElseThrow();
-    User user2 = userRepository.findById(1L).orElseThrow();
+    reportDTO.setReportResult('0'); // 신고 상태(쓰이진 않음)
+    reportDTO.setReportDate(Instant.now()); // 신고 날짜
 
-    reportDTO.setReporterNo(user1); // 로그인 한 유저 정보가 들어와야함
-    reportDTO.setReportedNo(user2); // 신고하기 눌러서 들어올때 값 전달받아서 와야함.
-    log.info("...... [{}]..........KSW", reportDTO.getReportCategory());
-    reportService.addReport(reportDTO);
-    return "redirect:" + request.getHeader("Referer"); // 이전 페이지 리디렉션 (현재 신고 생성 창으로 가짐)
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+      String userNameTest = authentication.getName();
+      try {
+        User reporter = userRepository.findByUserId(userNameTest); // 신고자 정보
+        User reported = userRepository.findById(reportedUserId)
+            .orElseThrow(() -> new RuntimeException("신고할 유저를 찾을 수 없습니다.")); // 신고할 유저 정보
+
+        // 신고 카테고리 검증
+        if (reportDTO.getReportCategory() == null || reportDTO.getReportCategory().isEmpty()) {
+          throw new RuntimeException("신고 카테고리를 선택해주세요."); // 카테고리가 선택되지 않은 경우 예외 처리
+        }
+        reportDTO.setReporterNo(reporter); // 신고자 설정
+        reportDTO.setReportedNo(reported); // 신고당한 유저 설정
+
+        log.info("...... [{}]..........KSW", reportDTO.getReportCategory()); // 카테고리 로그 출력
+        reportService.addReport(reportDTO); // 신고 저장
+        redirectAttributes.addFlashAttribute("successMessage", "신고가 성공적으로 제출되었습니다.");
+        return "redirect:/user/profile/" + reported.getUserId(); // 성공 시 이동
+
+      } catch (RuntimeException e) {
+        log.info("...... [카테고리 들어온 값이 없음!]..........KSW");
+        redirectAttributes.addFlashAttribute("errorCategoryMessage", e.getMessage());
+        return "redirect:" + request.getHeader("Referer"); // 기존 뷰로 가기
+      }
+    } else {
+      redirectAttributes.addFlashAttribute("errorUserMessage", "알 수 없는 에러"); // 인증 실패 메시지
+      return "redirect:" + request.getHeader("Referer"); // 기존 뷰로 가기
+    }
   }
 }
-

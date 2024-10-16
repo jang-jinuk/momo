@@ -1,6 +1,5 @@
 package com.momo.momopjt.userandschedule;
 
-import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
@@ -30,7 +30,7 @@ public interface UserAndScheduleRepository extends JpaRepository<UserAndSchedule
   @Query("SELECT us FROM UserAndSchedule us WHERE us.scheduleNo = :scheduleNo AND us.userNo = :userNo")
   UserAndSchedule findByParticipant(@Param("scheduleNo") Schedule scheduleNo, @Param("userNo") User userNo);
 
-  //특정 회원이 주체한 모든 일정 조회
+  //특정 회원이 주최한 모든 일정 조회
   @Query("SELECT  us.scheduleNo FROM UserAndSchedule us WHERE us.userNo = :userNo AND us.isHost = true")
   List<Schedule> findSchedulesHostedByUser(@Param("userNo")User userNo);
 

@@ -1,32 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>회원 탈퇴</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+<th:block layout:fragment="content">
 <div class="container">
-    <h2>회원 탈퇴</h2>
-    <form th:action="@{/user/deleteAccount}" method="post">
-        <div class="form-group">
-            <label for="userId">사용자 ID</label>
-            <input type="text" id="userId" name="userId" required>
-        </div>
-        <div class="form-group">
-            <label for="userPw">비밀번호</label>
-            <input type="password" id="userPw" name="userPw" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm">탈퇴 확인</label>
-            <input type="checkbox" id="confirm" name="confirm" required>
-            <span>회원 탈퇴를 확인합니다.</span>
-        </div>
-        <button type="submit">탈퇴</button>
-    </form>
-    <div th:if="${message}">
-        <p th:text="${message}"></p>
-    </div>
+    <header>
+        <h1>회원 탈퇴</h1>
+    </header>
+    <main>
+        <form th:action="@{/user/delete-account}" method="post" class="form">
+            <input type="hidden" name="userId" th:value="${userId}" />
+
+            <div class="info-message" th:if="${userSocial != null and userSocial != ''}">
+                <input type="hidden" name="userPw" value="1111" />
+                <p>계정을 삭제하려면 아래 버튼을 클릭하세요.</p>
+            </div>
+
+            <div class="password-field" th:unless="${userSocial != null and userSocial != ''}">
+                <label for="userPw">비밀번호:</label>
+                <input type="password" id="userPw" name="userPw" required />
+            </div>
+
+            <button type="submit" class="submit-button">계정 삭제</button>
+        </form>
+        <a href="/" class="home-link">홈으로 돌아가기</a>
+    </main>
 </div>
-</body>
-</html>
+</th:block>
+
+

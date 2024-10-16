@@ -1,5 +1,6 @@
 package com.momo.momopjt.user;
 
+import com.momo.momopjt.alarm.Alarm;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,21 +34,22 @@ public class User {
     private String  userCategory;
     private String userAddress;
     private String userMBTI;
-    private Character userState;
-    private Character userSocial;
-    private String userPhoto;
-    private Integer userLikeNumber;
+    private Character userState='0';
+    private Character userSocial= 'M';
+    private String userPhoto="";
+    private Integer userLikeNumber= 0;
     private Instant userCreateDate;
     private Instant userModifyDate;
 
     @Enumerated(EnumType.ORDINAL)
     private UserRole userRole = UserRole.USER; // 기본값 설정
 
-
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     private Set<UserRole> roleSet = new HashSet<>();
 
+    @OneToMany(mappedBy = "userNo")
+    private List<Alarm> alarms;
 
   // 비밀번호 변경 메서드
   public void changePassword(String userPw){this.userPw = userPw;

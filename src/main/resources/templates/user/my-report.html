@@ -1,0 +1,141 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://webfontworld.github.io/cookierun/CookieRun.css" rel="stylesheet">
+
+    <title>신고 내역</title>
+    <style>
+        body {
+            font-family: 'CookieRun', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+
+        .container-fluid {
+            flex: 1; /* 화면 전체 높이 사용 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 중앙 정렬 */
+            padding: 20px;
+        }
+
+        .table-wrapper {
+            max-height: 600px; /* 테이블의 최대 높이 설정 */
+            overflow-y: auto; /* 세로 스크롤 추가 */
+            margin-bottom: 20px; /* 아래 여백 추가 */
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px;
+            margin-top: auto;
+            border-top: 1px solid #ddd;
+        }
+        .
+
+    </style>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+
+<div class="container-fluid">
+    <div class="mb-3">
+        <button class="btn btn-secondary" onclick="window.history.back()">뒤로가기</button>
+    </div>
+
+
+    <!-- 테이블을 감싸는 div에 스크롤을 추가하여 테이블 내용이 적어도 페이지 레이아웃이 깨지지 않도록 합니다. -->
+    <div class="table-wrapper">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">신고번호</th>
+                <th scope="col">피신고자 아이디</th>
+                <th scope="col">피신고자 닉네임</th>
+                <th scope="col">사유</th>
+                <th scope="col">신고일시</th>
+                <th scope="col">처리상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report : ${reportDTOS}">
+                <td th:text="${report.reportNo}"></td>
+                <td th:text="${report.reportedNo.getUserId()}"></td>
+                <td>
+                    <a th:href="@{/user/profile/{userId}(userId=${report.reportedNo.userId})}"
+                       th:text="${report.reportedNo.getUserNickname()}"></a>
+                </td>
+                <td th:text="${report.reportCategory}"></td>
+                <td th:text="${#dates.format(report.reportDate, 'yyyy-MM-dd HH시 mm분')}"></td>
+                <td>
+                    <input type="hidden" name="reportNo" th:value="${report.reportNo}">
+                    <div th:switch="${report.reportedNo.getUserState}">
+                        <button class="btn btn-danger" type="submit" th:case="'0'" th:onclick="deleting()">처리중</button>
+                        <button class="btn btn-secondary" type="button" th:case="'1'" th:onclick="noDeleting()">처리완료</button>
+                        <button class="btn btn-warning" type="button" th:case="*">존재하지 않는 유저</button>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reportDTOS)}">
+                <td colspan="6" class="text-center">신고하신 내역이 존재하지 않습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 페이지 처리 -->
+    <div class="d-flex justify-content-center" th:if="${lastPage > 1}">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${startPage > 1} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/user/my-report(page=${startPage - 1})}">&laquo;</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                    th:classappend="${i == page} ? 'active'">
+                    <a class="page-link" th:href="@{/user/my-report(page=${i})}" th:text="${i}"></a>
+                </li>
+                <li class="page-item" th:classappend="${endPage < lastPage} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/user/my-report(page=${endPage + 1})}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- 페이지 처리 끝 -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // 버튼 알림 메세지
+        function deleting() {
+            alert('아직 처리중입니다.');
+        }
+        function noDeleting() {
+            alert('해당 유저는 정지되었습니다.');
+        }
+    </script>
+</div>
+
+
+</body>
+</html>

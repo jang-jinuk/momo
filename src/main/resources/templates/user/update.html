@@ -1,56 +1,507 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout.html">
 <head>
     <meta charset="UTF-8">
+
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원정보 수정</title>
+
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!--    <link href="https://webfontworld.github.io/cookierun/CookieRun.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+    <script type="text/javascript">
+        // 카카오 주소 API 초기화
+        Kakao.init('26cd30a42ec3ae950f6d7b677a47562c'); // 발급받은 카카오 API 키로 교체
+        function searchAddress() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    var fullAddr = data.address; // 최종 주소 변수
+                    document.getElementById('userAddress').value = fullAddr;
+                }
+            }).open();
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'CookieRun', sans-serif;
+        }
+        .btn-outline-info {
+            color: #5e9bd2; /* 버튼 텍스트 색상 */
+            border-color: #5e9bd2; /* 버튼 테두리 색상 */
+        }
+        .btn-outline-info:hover {
+            color: #fff; /* 버튼 텍스트 색상 (호버 상태) */
+            background-color: #5e9bd2; /* 버튼 배경색상 (호버 상태) */
+            border-color: #5e9bd2; /* 버튼 테두리 색상 (호버 상태) */
+        }
+        .btn-success {
+            color: #ffffff; /* 버튼 텍스트 색상 */
+            background-color: #a2d9ce; /* 버튼 배경색상 */
+            border-color: #a2d9ce; /* 버튼 테두리 색상 */
+        }
+        .btn-success:hover {
+            color: #ffffff; /* 버튼 텍스트 색상 (호버 상태) */
+            background-color: #7fbf9b; /* 버튼 배경색상 (호버 상태) */
+            border-color: #7fbf9b; /* 버튼 테두리 색상 (호버 상태) */
+        }
+        .form-container {
+            max-width: 800px; /* 최대 너비 설정 */
+            margin: 0 auto; /* 중앙 정렬 */
+        }
+        .full-height {
+            min-height: 100vh; /* 전체 화면 높이 */
+        }
+        /* 전체 푸터 컨테이너 스타일 */
+        .footer-container {
+            display: flex; /* 플렉스 박스 레이아웃 사용 */
+            justify-content: space-between; /* 섹션들을 양 끝으로 배치 */
+            align-items: flex-end; /* 세로 정렬을 하단으로 맞추기 */
+            padding: 20px; /* 푸터 내부 여백 */
+            background-color: #222; /* 배경색 설정 */
+            color: #ffffff; /* 텍스트 색상 설정 */
+            font-family: 'CookieRun', sans-serif; /* 폰트 설정 */
+            box-sizing: border-box; /* 박스 모델 설정 */
+            position: relative; /* 자식 요소를 절대 위치로 배치하기 위해 부모 요소를 상대 위치로 설정 */
+        }
+
+        /* 푸터 리스트 스타일 */
+        .footer-list {
+            font-size: 14px; /* 폰트 크기 설정 */
+        }
+
+        /* 푸터 섹션 스타일 */
+        .footer-section {
+            flex: 1; /* 섹션이 가로 공간을 동일하게 차지하도록 설정 */
+            margin: 10px; /* 섹션 간의 여백 설정 */
+        }
+
+        /* '모모주식회사' 섹션 스타일 */
+        .footer-section.about {
+            text-align: left; /* 좌측 정렬 */
+        }
+
+        /* 면책 조항 스타일 */
+        .disclaimer {
+            font-size: 12px; /* 폰트 크기 줄이기 */
+            color: #b0b0b0; /* 텍스트 색상 설정 */
+            text-align: right; /* 오른쪽 정렬 */
+        }
+
+        /* 섹션 제목 스타일 */
+        .footer-section h6 {
+            margin-bottom: 10px; /* 제목 하단 여백 설정 */
+        }
+
+        /* 섹션 내 문단과 리스트 스타일 */
+        .footer-section p,
+        .footer-section ul {
+            margin: 0; /* 여백 제거 */
+            padding: 0; /* 패딩 제거 */
+            list-style: none; /* 리스트 스타일 제거 */
+        }
+
+        /* 리스트 항목 스타일 */
+        .footer-section ul li {
+            margin-bottom: 10px; /* 리스트 항목 하단 여백 설정 */
+        }
+
+        /* 리스트 링크 스타일 */
+        .footer-section ul li a {
+            color: #ffffff; /* 링크 색상 설정 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+        }
+
+        /* 링크 호버 스타일 */
+        .footer-section ul li a:hover {
+            text-decoration: underline; /* 링크 호버 시 밑줄 추가 */
+        }
+
+        /* 푸터 하단 스타일 */
+        .footer-bottom {
+            text-align: center; /* 텍스트 중앙 정렬 */
+            padding: 10px; /* 여백 설정 */
+            background-color: #222; /* 배경색 설정 */
+            color: #ffffff; /* 텍스트 색상 설정 */
+            font-size: 14px; /* 폰트 크기 설정 */
+        }
+
+    </style>
+
 </head>
+
 <body>
-<h1>회원정보 수정</h1>
+<th:block layout:fragment="content">
 
-<form id="updateForm" th:action="@{/user/update}" method="post">
-    <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
-    <div>
-        <label for="userNickname">닉네임</label>
-        <input type="text" id="userNickname" name="userNickname" th:value="${userDTO.userNickname}" required>
-    </div>
 
-    <div>
-        <label for="userEmail">이메일</label>
-        <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" required>
-    </div>
+<div class="form-container">
 
-    <div>
-        <label for="userCategory">관심사</label>
-        <input type="text" id="userCategory" name="userCategory" th:value="${userDTO.userCategory}" required>
-    </div>
+    <img th:if="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+         src="/assets/UserDefaultPhoto.png">
 
-    <div>
-        <label for="userAddress">주소</label>
-        <input type="text" id="userAddress" name="userAddress" th:value="${userDTO.userAddress}" required>
-    </div>
+    <img th:unless="${#strings.contains(userPhoto, 'UserDefaultPhoto')}" class="profile-image"
+         th:src="@{/view/{photo}(photo=${userPhoto})}"
+         style="width: 50%; height: auto; max-width: 100%; object-fit: cover;">
 
-    <div>
-        <label for="userMBTI">MBTI</label>
-        <input type="text" id="userMBTI" name="userMBTI" th:value="${userDTO.userMBTI}" required>
-    </div>
+    <form id="updateForm" th:action="@{/user/update}" method="post">
+        <input type="text" name="userId" th:value="${userDTO.userId}" hidden aria-label="User ID">
+        <!--사진등록-->
+        <div class="col">
+            <!-- 이미지 업로드 YY -->
+            <div class="input-group d-grid gap-2 d-md-flex">
 
-    <div class="mt-4">
-        <div class="float-end">
-            <button type="submit" class="btn btn-primary">저장</button>
-            <button type="reset" class="btn btn-secondary" onclick="resetForm()">지우기</button>
-            <a href="/user/reset/userPw" class="btn btn-return">비밀번호 바꾸기</a>
-            <a href="/home" class="btn btn-return">돌아가기</a>
+                <div class="float-end uploadHidden">
+                    <button type="button" class="btn btn-primary uploadFileBtn">프로필 사진 변경</button>
+                </div>
+            </div>
+            <!-- Image Thumbnail display -->
+            <div class="row mt-3">
+                <div class="col ">
+                    <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                        첨부한 이미지
+                    </div>
+                </div>
+            </div>
+            <!-- 닉네임 -->
+            <div class="input-group mb-3">
+                <label for="userNickname" class="input-group-text">* 닉네임</label>
+                <input type="text" id="userNickname" name="userNickname" class="form-control" th:value="${userDTO.userNickname}"
+                       placeholder="abc" required>
+                <button type="button" class="btn btn-outline-dark" onclick="checkDuplicateUserNickname()">중복확인</button>
+            </div>
+            <div id="nicknameCheckResult" class="alert" role="alert"></div>
+            <!-- 성별 -->
+            <div class="input-group mb-3">
+                <span class="input-group-text">성별</span>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="userGender" id="male" value="m"
+                           th:checked="${userDTO.getUserGenderAsString() == 'm'}" required>
+                    <label class="form-check-label" for="male">남성</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="userGender" id="female" value="w"
+                           th:checked="${userDTO.getUserGenderAsString() == 'w'}" required>
+                    <label class="form-check-label" for="female">여성</label>
+                </div>
+            </div>
+            <!-- 이메일 -->
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">이메일</label>
+                <input type="email" id="userEmail" name="userEmail" th:value="${userDTO.userEmail}" class="form-control" readonly>
+                <small class="form-text text-muted">* 이메일은 변경할 수 없습니다.</small>
+            </div>
+            <!-- 관심사 -->
+            <div class="mb-4">
+                <label for="userCategory" class="form-label">관심사</label>
+                <input type="text" id="userCategory" name="userCategory" class="form-control" th:value="${userDTO.userCategory}" placeholder="관심사를 선택하세요" readonly>
+            </div>
+            <div class="container mb-4">
+                <nav class="navbar bg-body-tertiary">
+                    <div class="container-fluid justify-content-start">
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="동네친구">#동네친구
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="또래친구">#또래친구
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="성별모임">#성별모임
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="20대 모임">#20대 모임
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="30대 모임">#30대 모임
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="술친구">#술친구</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="운동">#운동</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="악기">#악기</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="그림">#그림</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="사진">#사진</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="수집">#수집</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="노래">#노래</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="낚시">#낚시</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="캠핑">#캠핑</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="국내여행">#국내여행
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="해외여행">#해외여행
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="맛집투어">#맛집투어
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="힐링투어">#힐링투어
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="LOL">#LOL</button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="마인크래프트">#마인크래프트
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="오버워치">#오버워치
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="배틀그라운드">#배틀그라운드
+                        </button>
+                        <button class="btn btn-outline-info me-4 category-btn rounded-pill" type="button" value="게임">#게임</button>
+                    </div>
+                </nav>
+            </div>
+            <!-- 주소 -->
+            <div class="input-group mb-3">
+                <label for="userAddress" class="input-group-text">주소</label>
+                <input type="text" id="userAddress" name="userAddress" class="form-control" th:value="${userDTO.userAddress}" placeholder="주소를 입력하세요"/>
+                <button type="button" class="btn btn-outline-dark" onclick="searchAddress()">주소 검색</button>
+            </div>
+            <!-- MBTI -->
+            <div class="input-group mb-3">
+                <label for="userMBTI" class="input-group-text">MBTI</label>
+                <input type="text" id="userMBTI" name="userMBTI" class="form-control" th:value="${userDTO.userMBTI}">
+            </div>
+            <div class="mt-4">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success me-2 submitBtn">저장</button>
+                    <button type="reset" class="btn btn-secondary me-2" onclick="resetForm()">지우기</button>
+                    <a href="/user/find/reset-pw" class="btn btn-outline-info me-2">비밀번호 바꾸기</a>
+                    <a href="/" class="btn btn-outline-info">돌아가기</a>
+
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+    </form>
+</div>
+<!--    upload Modal Part YY -->
+<div class="modal uploadModal" tabindex="-1" id="uploadModal">
+
+
+
+     <h4>프로필 사진 변경</h4>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">파일을 선택해주세요</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="file" name="files" accept="image/*" class="form-control"> <!-- 모임 대표사진 multiple x  -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary uploadBtn">Upload</button>
+                <button type="button" class="btn btn-outline-dark closeUploadBtn" data-bs-dismiss="modal">Close
+                </button>
+            </div>
         </div>
     </div>
-</form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
 
 <script>
+    window.addEventListener('DOMContentLoaded', function()
+    {
+        const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+        document.querySelector(".uploadFileBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.show()
+        }, false)
+        //업로드 파일 확장자 검사 0801 YY
+        function imageCheck(obj) {
+            if(obj){
+                const allowedExtensions = ['jpg', 'png', 'jpeg'];
+                const fileExtension = obj.name.split('.').pop().toLowerCase();
+                console.log(fileExtension)
+                if (allowedExtensions.includes(fileExtension)) {
+                    return true;
+                } else {
+                    alert("jpg, png, jpeg 파일만 업로드 가능합니다.");
+                    return false;
+                }
+            }
+            return false;
+        }
+        //file upload for modal and thumb
+        document.querySelector(".uploadBtn").addEventListener("click", function (e) {
+            const formObj = new FormData();
+            const fileInput = document.querySelector("input[name='files']")
+            console.log("fileInput.files--------")
+            console.log(fileInput.files)
+            const files = fileInput.files
+            let imageCheckResult = true;
+            for (let i = 0; i < files.length; i++) {
+                // 0801 YY 파일 확인 로직
+                if(imageCheck(files[i])){
+                    formObj.append("files", files[i]); }
+                else {
+                    imageCheckResult = false;
+                    break;
+                }
+            }
+            if(imageCheckResult){
+                uploadToServer(formObj).then(result => {
+                    console.log("result-------")
+                    console.log(result)
+                    for (const uploadResult of result) {
+                        showUploadFile(uploadResult)
+                    }
+                    uploadModal.hide()
+                }).catch(e => {
+                    uploadModal.hide()
+                })
+            }
+        }, false)
+        //이미지 업로드 처리 JS  YY
+        async function uploadToServer(formObj) {
+            console.log("upload to server.....................+formObj")
+            console.log(formObj)
+            const response = await axios({
+                method: 'post',
+                url: '/upload',
+                data: formObj,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            return response.data
+        }
+        async function removeFileToServer(uuid, extension) {
+            const response = await axios.delete(`/remove/${uuid}${extension}`)
+            // const response2 = await axios.delete(`/remove/t_${uuid}${extension}`)썸네일 삭제
+            return response.data
+        }
+        //656p showUploadFile
+        const uploadResult = document.querySelector(".uploadResult")
+        function showUploadFile({uuid, extension, link}) {
+            const str = `<div class="card col-4">
+<div class="card-header d-flex justify-content-center">
+<button class="btn btn-sm btn-danger" onclick="javascript:removeFile('${uuid}','${extension}',this)">X</button>
+</div>
+<div class="card-body">
+<img src="/view/${link}" data-src="${uuid}${extension}" alt="uploadfile image on card body">
+</div>
+</div>`
+            console.log("uploadResult link  str --------------------")
+            console.log(link)
+            console.log(str)
+            uploadResult.innerHTML += str;
+        }
+        //upload remove,, local file and div card all deleted
+        function removeFile(uuid, extension, obj) {
+            console.log("remove file log--------------")
+            console.log(uuid)
+            console.log(extension)
+            console.log(obj)
+            const targetDiv = obj.closest(".card")
+            removeFileToServer(uuid, extension).then(data => {
+                targetDiv.remove()
+            })
+        }
+        // After Image, finally Article Form Submitted !!
+        document.querySelector(".submitBtn").addEventListener("click", function (e) {
+            console.log("submitBtn start----------------")
+            e.preventDefault()
+            e.stopPropagation()
+            const target = document.querySelector(".uploadHidden")
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            console.log("---------uploadFile select img")
+            let str = ''
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                console.log("uploadFile in for loop")
+                console.log(uploadFile)
+                const imgLink = uploadFile.getAttribute("data-src")
+                //
+                // str += `<input type='hidden' name='clubPhotoFileName' value="${imgLink}">`
+                const imgUUID = imgLink.split('.')[0] // Extract the UUID part by splitting at the '.' and taking the first part
+                console.log("imgUUID")
+                console.log(imgUUID)
+                str += `<input type='hidden' name='userPhoto' value="${imgUUID}">`
+            }
+            const formObj = document.querySelector("form")
+            target.innerHTML = str;
+            console.log(str)
+            formObj.submit();
+            formObj.reset();
+        }, false)
+        // upload modal close btn
+        document.querySelector(".closeUploadBtn").addEventListener("click", function (e) {
+            e.stopPropagation()
+            e.preventDefault()
+            uploadModal.hide();
+        }, false)
+    });
     function resetForm() {
         document.getElementById('updateForm').reset();
     }
+    function validateForm() {
+        const userNickname = document.getElementById('userNickname').value;
+        const userGender = document.querySelector('input[name="userGender"]:checked').value;
+        const NicknamePattern = /^[가-힣a-zA-Z0-9]{1,6}$/;
+        if (!NicknamePattern.test(userNickname)) {
+            alert("닉네임은 6글자까지 가능합니다.");
+            return false;
+        }
+        if (userGender !== "m" && userGender !== "w") {
+            alert("성별이 유효하지 않습니다.");
+            return false;
+        }
+        return true;
+    }
+    function checkDuplicateUserNickname() {
+        const userNickname = document.getElementById('userNickname').value;
+        $.ajax({
+            type: "GET",
+            url: "/user/checkUserNicknameDuplicate",
+            data: { userNickname: userNickname },
+            success: function (response) {
+                if (response === true) {
+                    $('#nicknameCheckResult').text("닉네임이 중복되었습니다. 다른 닉네임을 사용해주세요.");
+                    $('#nicknameCheckResult').removeClass('alert-success').addClass('alert-danger');
+                } else {
+                    $('#nicknameCheckResult').text("사용 가능한 닉네임입니다.");
+                    $('#nicknameCheckResult').removeClass('alert-danger').addClass('alert-success');
+                }
+                $('#nicknameCheckResult').show();
+            },
+            error: function () {
+                alert("서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.");
+            }
+        });
+        return false; // 폼의 기본 동작을 막습니다.
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const userCategoryInput = document.getElementById('userCategory');
+        let selectedCategories = [];
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const category = this.value;
+                if (selectedCategories.includes(category)) {
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-info');
+                    selectedCategories = selectedCategories.filter(item => item !== category);
+                } else {
+                    if (selectedCategories.length < 3) {
+                        this.classList.remove('btn-outline-info');
+                        this.classList.add('btn-success');
+                        selectedCategories.push(category);
+                    } else {
+                        alert('최대 3개의 카테고리까지 선택할 수 있습니다.');
+                        return;
+                    }
+                }
+                userCategoryInput.value = selectedCategories.join(', ');
+            });
+        });
+    });
 </script>
 
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"-->
+<!--        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"-->
+<!--        crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"-->
+<!--        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"-->
+<!--        crossorigin="anonymous"></script>-->
+
 </body>
-</html>
+

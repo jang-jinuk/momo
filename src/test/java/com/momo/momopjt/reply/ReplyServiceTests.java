@@ -16,8 +16,7 @@ class ReplyServiceTests {
 
   @Autowired
   private ReplyService replyService;
-  @Autowired
-  private ReplyRepository replyRepository;
+
   @Autowired
   private ModelMapper modelMapper;
 
@@ -92,4 +91,5 @@ class ReplyServiceTests {
 
 
   }
+
 }

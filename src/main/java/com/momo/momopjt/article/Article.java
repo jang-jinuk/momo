@@ -1,22 +1,23 @@
 package com.momo.momopjt.article;
 
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
 
+@Entity
 @Getter
 @Setter
-@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "article", schema = "momodb")
+
 public class Article {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "article_no", nullable = false)
@@ -45,12 +46,26 @@ public class Article {
   @JoinColumn(name = "user_no")
   private User userNo;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "schedule_no")
+  private Schedule scheduleNo;
+
+  @Column(name = "article_photo")
+  private String articlePhotoUUID;
+
   // Article 업데이트 메서드
   public void update(ArticleDTO articleDTO, Club clubNo) {
     this.articleTitle = articleDTO.getArticleTitle();
     this.articleContent = articleDTO.getArticleContent();
     this.articleState = articleDTO.getArticleState();
     this.articleScore = articleDTO.getArticleScore();
-    this.clubNo = clubNo;
+
+    this.articlePhotoUUID = articleDTO.getArticlePhotoUUID();
+
+    this.clubNo = articleDTO.getClubNo();
+    this.userNo = articleDTO.getUserNo();
+
   }
+
 }
+
