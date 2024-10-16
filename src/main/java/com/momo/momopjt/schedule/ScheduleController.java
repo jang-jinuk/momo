@@ -12,6 +12,7 @@ import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,9 @@ public class ScheduleController {
   @Autowired
   private PhotoService photoService;
 
+  @Value("${kakao.api.key}")
+  private String kakaoApiKey;
+
   //일정 생성 페이지 이동
   @GetMapping("/create")
   public String createScheduleGet(Model model) {
@@ -59,6 +63,8 @@ public class ScheduleController {
     club.setClubNo(clubNo);
     int countMembers = userAndClubService.countMembers(club); //일정 생성 시 최대 참가 인원은 모임 전체 인원과 같음
     model.addAttribute("countMembers", countMembers);
+    model.addAttribute("kakaoApiKey", kakaoApiKey);
+    log.info("------------ {} ------------", kakaoApiKey);
     return "schedule/create";
   }
 
@@ -149,7 +155,9 @@ public class ScheduleController {
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
     model.addAttribute("isParticipant", isParticipant); //현재 로그인한 회원이 해당 일정에 참석했는지 여부
+    model.addAttribute("kakaoApiKey", kakaoApiKey);
     session.setAttribute("scheduleNo", scheduleNo); //일정 번호
+
 
     //출력할 댓글 추가
     model.addAttribute("replyList", replyList);
@@ -231,6 +239,7 @@ public class ScheduleController {
     model.addAttribute("countMembers", countMembers);
     model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
+    model.addAttribute("kakaoApiKey", kakaoApiKey);
 
     //출력할 일정 사진 추가
     String schedulePhoto = photoService.getPhoto(scheduleDTO.getSchedulePhotoUUID()).toString();
