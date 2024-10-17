@@ -3,6 +3,7 @@ package com.momo.momopjt.schedule;
 
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
+import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.reply.ReplyDTO;
 import com.momo.momopjt.reply.ReplyService;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 public class ScheduleServiceImpl implements ScheduleService {
 
   private final ScheduleRepository scheduleRepository;
+  private final ClubRepository clubRepository;
 
   private final UserAndScheduleService userAndScheduleService;
   private final PhotoService photoService;
@@ -41,11 +43,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 생성
   @Override
-  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws ScheduleMaxException, ScheduleDateException {
+  public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
+
+    //해당 모임 정원 확인
+    Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
+    Club club = clubRepository.findById(currentClubNo).orElseThrow();
+    int clubMax = club.getClubMax();
 
     //일정 참가 수 검사 로직
     if (scheduleDTO.getScheduleMax() <= 0) {
-      throw new ScheduleMaxException();
+      throw new MinimumParticipantNotMetException();
+    }else if (scheduleDTO.getScheduleMax() > clubMax ) {
+      throw new ScheduleParticipantLimitExceededException();
     }
 
     //일정 시작 날짜 검사 로직
