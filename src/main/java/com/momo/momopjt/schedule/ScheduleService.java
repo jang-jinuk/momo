@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws ScheduleMaxException, ScheduleDateException;
+   Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException;
 
    ScheduleDTO readOneSchedule(Long scheduleNo);
 
@@ -28,7 +28,11 @@ public interface ScheduleService {
 
    List<ScheduleDTO> readMyParticipatedSchedules(Club clubNo, User userNo);
 
-   class ScheduleMaxException extends Exception {}
+   class MinimumParticipantNotMetException extends Exception {}
+
+   class ScheduleParticipantLimitExceededException extends Exception {}
 
    class ScheduleDateException extends Exception {}
+
+
 }
