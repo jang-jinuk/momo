@@ -102,15 +102,19 @@ public class ScheduleController {
 
     try {
       Long scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
-      log.info("------------ [일정 등록 완료] ------------");
+      log.info("------------ [Succeed to set schedule] ------------");
       return "redirect:/schedule/" + scheduleNo;
     } catch (ScheduleService.ScheduleDateException e) {
-      log.trace("------------ [Failed to set schedule date] ------------");
+      log.trace("------------ [Failed to set schedule: Attempted to set time in the past] ------------");
       redirectAttributes.addFlashAttribute("message", "현재 시간보다 과거의 시간을 설정할 수 없습니다.");
       return "redirect:/schedule/create";
-    } catch (ScheduleService.ScheduleMaxException e) {
-      log.trace("------------ [Failed to set schedule max] ------------");
-      redirectAttributes.addFlashAttribute("message", "참가 인원수는 0보다 적게 설정할 수 없습니다.");
+    } catch (ScheduleService.MinimumParticipantNotMetException e) {
+      log.trace("------------ [Failed to set schedule: Minimum participant not met] ------------");
+      redirectAttributes.addFlashAttribute("message", "일정 참가 인원은 최소 1명 이상이어야 합니다.");
+      return "redirect:/schedule/create";
+    } catch (ScheduleService.ScheduleParticipantLimitExceededException e) {
+      log.trace("------------ [Failed to set schedule: Participant count exceeds total club members] ------------");
+      redirectAttributes.addFlashAttribute("message", "일정 참가 인원은 모임 전체 회원 수을 초과할 수 없습니다.");
       return "redirect:/schedule/create";
     }
   }
