@@ -105,7 +105,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
   //일정 정보 수정
   @Override
-  public Boolean updateSchedule(ScheduleDTO scheduleDTO) {
+  public Long updateSchedule(ScheduleDTO scheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
     Optional<Schedule> result = scheduleRepository.findById(scheduleDTO.getScheduleNo());
     Schedule schedule = result.orElseThrow();
     log.info("------------ [수정할 일정 조회 완료] ------------");
@@ -113,22 +113,34 @@ public class ScheduleServiceImpl implements ScheduleService {
     Integer currentParticipants = schedule.getScheduleParticipants();
     Integer updateMax = scheduleDTO.getScheduleMax();
 
+    //해당 모임 정원 확인
+    Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
+    Club club = clubRepository.findById(currentClubNo).orElseThrow();
+    int clubMax = club.getClubMax();
+
     //수정할려는 정원수가 현재 정원수보다 크거나 같으면 수정 가능
     if (currentParticipants > updateMax) {
-      log.info("------------ [현재 참가자 수보다 작게 설정할 수 없습니다.] ------------");
-      return true;
-    } else {
-      schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
-      schedule.setScheduleContent(scheduleDTO.getScheduleContent());
-      schedule.setScheduleMax(scheduleDTO.getScheduleMax());
-      schedule.setSchedulePlace(scheduleDTO.getSchedulePlace());
-      schedule.setScheduleStartDate(scheduleDTO.getScheduleStartDate());
-      schedule.setSchedulePhotoUUID(scheduleDTO.getSchedulePhotoUUID());
-
-      scheduleRepository.save(schedule);
+      throw new MinimumParticipantNotMetException();
+    } else if (scheduleDTO.getScheduleMax() > clubMax ){
+      throw new ScheduleParticipantLimitExceededException();
     }
 
-    return false;
+    //일정 시작 날짜 검사 로직
+    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
+      throw new ScheduleDateException();
+    }
+
+    schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
+    schedule.setScheduleContent(scheduleDTO.getScheduleContent());
+    schedule.setScheduleMax(scheduleDTO.getScheduleMax());
+    schedule.setSchedulePlace(scheduleDTO.getSchedulePlace());
+    schedule.setScheduleStartDate(scheduleDTO.getScheduleStartDate());
+    schedule.setSchedulePhotoUUID(scheduleDTO.getSchedulePhotoUUID());
+
+    Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
+
+
+    return scheduleNo;
   }
 
 

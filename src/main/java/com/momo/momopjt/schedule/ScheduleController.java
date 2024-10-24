@@ -264,6 +264,7 @@ public class ScheduleController {
     ScheduleDTO oldScheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
     scheduleDTO.setScheduleNo(scheduleNo);
+    scheduleDTO.setClubNo(oldScheduleDTO.getClubNo());
     log.info("----------------- [session get scheduleNo]-----------------", scheduleNo);
     //날짜/시간 포매팅
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
@@ -291,16 +292,19 @@ public class ScheduleController {
       scheduleDTO.setSchedulePhotoUUID(oldPhotoUUID);
     }
 
-
-    Boolean updateFail = scheduleService.updateSchedule(scheduleDTO);
-
-    //일정 수정 실패
-    if (updateFail) {
-      redirectAttributes.addFlashAttribute("message", "현재 참자가 수보다 작게 설정할 수 없습니다.");
+    try {
+      Long updateScheduleNo = scheduleService.updateSchedule(scheduleDTO);
+      return "redirect:/schedule/" + updateScheduleNo;
+    }  catch (ScheduleService.ScheduleDateException e) {
+      redirectAttributes.addFlashAttribute("message", "현재 시간보다 과거의 시간을 설정할 수 없습니다.");
+      return "redirect:/schedule/update";
+    } catch (ScheduleService.MinimumParticipantNotMetException e) {
+      redirectAttributes.addFlashAttribute("message", "현재 참가자 수보다 적은 인원으로 설정할 수 없습니다.");
+      return "redirect:/schedule/update";
+    } catch (ScheduleService.ScheduleParticipantLimitExceededException e) {
+      redirectAttributes.addFlashAttribute("message", "일정 참가 인원은 모임 전체 회원 수을 초과할 수 없습니다.");
       return "redirect:/schedule/update";
     }
-    redirectAttributes.addFlashAttribute("message", "일정 수정이 완료되었습니다.");
-    return "redirect:/schedule/" + scheduleNo;
   }
 
   //일정 삭제

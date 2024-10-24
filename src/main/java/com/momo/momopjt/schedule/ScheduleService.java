@@ -12,7 +12,7 @@ public interface ScheduleService {
 
    ScheduleDTO readOneSchedule(Long scheduleNo);
 
-   Boolean updateSchedule(ScheduleDTO scheduleDTO);
+   Long updateSchedule(ScheduleDTO scheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException;
 
    String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO);
 
