@@ -45,22 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   @Override
   public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
 
-    //해당 모임 정원 확인
-    Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
-    Club club = clubRepository.findById(currentClubNo).orElseThrow();
-    int clubMax = club.getClubMax();
-
-    //일정 참가 수 검사 로직
-    if (scheduleDTO.getScheduleMax() <= 0) {
-      throw new MinimumParticipantNotMetException();
-    }else if (scheduleDTO.getScheduleMax() > clubMax ) {
-      throw new ScheduleParticipantLimitExceededException();
-    }
-
-    //일정 시작 날짜 검사 로직
-    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
-      throw new ScheduleDateException();
-    }
+    validateInfo(scheduleDTO, 0);
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
 
@@ -106,29 +91,11 @@ public class ScheduleServiceImpl implements ScheduleService {
   //일정 정보 수정
   @Override
   public Long updateSchedule(ScheduleDTO scheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
-    Optional<Schedule> result = scheduleRepository.findById(scheduleDTO.getScheduleNo());
-    Schedule schedule = result.orElseThrow();
-    log.info("------------ [수정할 일정 조회 완료] ------------");
+    Schedule schedule = scheduleRepository.findById(scheduleDTO.getScheduleNo()).orElseThrow();
 
     Integer currentParticipants = schedule.getScheduleParticipants();
-    Integer updateMax = scheduleDTO.getScheduleMax();
 
-    //해당 모임 정원 확인
-    Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
-    Club club = clubRepository.findById(currentClubNo).orElseThrow();
-    int clubMax = club.getClubMax();
-
-    //수정할려는 정원수가 현재 정원수보다 크거나 같으면 수정 가능
-    if (currentParticipants > updateMax) {
-      throw new MinimumParticipantNotMetException();
-    } else if (scheduleDTO.getScheduleMax() > clubMax ){
-      throw new ScheduleParticipantLimitExceededException();
-    }
-
-    //일정 시작 날짜 검사 로직
-    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
-      throw new ScheduleDateException();
-    }
+    validateInfo(scheduleDTO, currentParticipants);
 
     schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
     schedule.setScheduleContent(scheduleDTO.getScheduleContent());
@@ -137,10 +104,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     schedule.setScheduleStartDate(scheduleDTO.getScheduleStartDate());
     schedule.setSchedulePhotoUUID(scheduleDTO.getSchedulePhotoUUID());
 
-    Long scheduleNo = scheduleRepository.save(schedule).getScheduleNo();
-
-
-    return scheduleNo;
+    return scheduleRepository.save(schedule).getScheduleNo();
   }
 
 
@@ -151,6 +115,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   // 참가인원 테이블에 참가자 정보와 일정 번호를 저장한다.
   @Override
   public String joinSchedule(Long scheduleNo, UserAndScheduleDTO userAndScheduleDTO) {
+    //해당 일정 정보 조회
     Optional<Schedule> result = scheduleRepository.findById(scheduleNo);
     Schedule schedule = result.orElseThrow();
     log.info("------------ [해당 일정 정보 조회] ------------");
@@ -305,4 +270,35 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     return participatedSchedules;
   }
+
+  @Override
+  public void validateInfo(ScheduleDTO scheduleDTO,int participants) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
+
+    //해당 모임 정원 확인
+    Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
+    Club club = clubRepository.findById(currentClubNo).orElseThrow();
+    int clubMax = club.getClubMax();
+
+    //최소 정원수 검사 로직
+    if(participants == 0){ //생성할 경우
+      if (scheduleDTO.getScheduleMax() <= 0) {
+        throw new MinimumParticipantNotMetException();
+      }
+    } else { //수정할 경우
+      if (participants > scheduleDTO.getScheduleMax()) {
+        throw new MinimumParticipantNotMetException();
+      }
+    }
+
+    //최대 정원수 검사 로직
+    if (scheduleDTO.getScheduleMax() > clubMax) {
+      throw new ScheduleParticipantLimitExceededException();
+    }
+
+    //일정 시작 날짜 검사 로직
+    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
+      throw new ScheduleDateException();
+    }
+  }
+
 }
