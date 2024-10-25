@@ -103,6 +103,7 @@ public class ScheduleController {
     try {
       Long scheduleNo = scheduleService.createSchedule(scheduleDTO, userAndScheduleDTO);
       log.info("------------ [Succeed to set schedule] ------------");
+      redirectAttributes.addFlashAttribute("message", "일정이 정상적으로 등록되었습니다.");
       return "redirect:/schedule/" + scheduleNo;
     } catch (ScheduleService.ScheduleDateException e) {
       log.trace("------------ [Failed to set schedule: Attempted to set time in the past] ------------");
@@ -294,6 +295,7 @@ public class ScheduleController {
 
     try {
       Long updateScheduleNo = scheduleService.updateSchedule(scheduleDTO);
+      redirectAttributes.addFlashAttribute("message", "일정이 정상적으로 수정되었습니다.");
       return "redirect:/schedule/" + updateScheduleNo;
     }  catch (ScheduleService.ScheduleDateException e) {
       redirectAttributes.addFlashAttribute("message", "현재 시간보다 과거의 시간을 설정할 수 없습니다.");
