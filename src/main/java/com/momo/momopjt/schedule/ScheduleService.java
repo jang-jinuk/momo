@@ -28,6 +28,8 @@ public interface ScheduleService {
 
    List<ScheduleDTO> readMyParticipatedSchedules(Club clubNo, User userNo);
 
+   void validateInfo (ScheduleDTO scheduleDTO, int participants) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException;
+
    class MinimumParticipantNotMetException extends Exception {}
 
    class ScheduleParticipantLimitExceededException extends Exception {}
