@@ -96,7 +96,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     Integer currentParticipants = schedule.getScheduleParticipants();
 
     validateScheduleData(scheduleDTO, currentParticipants);
-
+    
     schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
     schedule.setScheduleContent(scheduleDTO.getScheduleContent());
     schedule.setScheduleMax(scheduleDTO.getScheduleMax());
@@ -272,6 +272,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
   @Override
+
   public void validateScheduleData(ScheduleDTO scheduleDTO, int participants) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
 
     //해당 모임 정원 확인
