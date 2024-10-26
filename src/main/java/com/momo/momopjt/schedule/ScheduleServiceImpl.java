@@ -45,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   @Override
   public Long createSchedule(ScheduleDTO scheduleDTO, UserAndScheduleDTO userAndScheduleDTO) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
 
-    validateInfo(scheduleDTO, 0);
+    validateScheduleData(scheduleDTO, 0);
 
     Schedule schedule = modelMapper.map(scheduleDTO, Schedule.class);
 
@@ -95,8 +95,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     Integer currentParticipants = schedule.getScheduleParticipants();
 
-    validateInfo(scheduleDTO, currentParticipants);
-
+    validateScheduleData(scheduleDTO, currentParticipants);
+    
     schedule.setScheduleTitle(scheduleDTO.getScheduleTitle());
     schedule.setScheduleContent(scheduleDTO.getScheduleContent());
     schedule.setScheduleMax(scheduleDTO.getScheduleMax());
@@ -272,7 +272,8 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
   @Override
-  public void validateInfo(ScheduleDTO scheduleDTO,int participants) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
+
+  public void validateScheduleData(ScheduleDTO scheduleDTO, int participants) throws MinimumParticipantNotMetException, ScheduleDateException, ScheduleParticipantLimitExceededException {
 
     //해당 모임 정원 확인
     Long currentClubNo = scheduleDTO.getClubNo().getClubNo();
