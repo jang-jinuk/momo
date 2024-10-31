@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -43,7 +43,7 @@ public class Schedule {
   private String schedulePlace;
 
   @Column(name = "schedule_start_date", nullable = false)
-  private Instant scheduleStartDate;
+  private LocalDateTime scheduleStartDate;
 
   @OneToMany(mappedBy = "scheduleNo")
   private Set<UserAndSchedule> userAndSchedules = new LinkedHashSet<>();

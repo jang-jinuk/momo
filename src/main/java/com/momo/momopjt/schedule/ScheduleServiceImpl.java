@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -297,7 +297,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     //일정 시작 날짜 검사 로직
-    if (scheduleDTO.getScheduleStartDate().isBefore(Instant.now())) {
+    if (scheduleDTO.getScheduleStartDate().isBefore(LocalDateTime.now())) {
       throw new ScheduleDateException();
     }
   }

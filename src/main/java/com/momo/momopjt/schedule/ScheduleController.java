@@ -85,9 +85,7 @@ public class ScheduleController {
     club.setClubNo(clubNo);
     scheduleDTO.setClubNo(club);
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
-    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-    Instant instant = zonedDateTime.toInstant();
-    scheduleDTO.setScheduleStartDate(instant);
+    scheduleDTO.setScheduleStartDate(localDateTime);
     log.info("------------ [날짜/시간 포매팅 완료] ------------");
 
 
@@ -155,7 +153,7 @@ public class ScheduleController {
 
     int isParticipant = userAndScheduleService.isParticipate(userAndScheduleDTO);
 
-    model.addAttribute("currentTime", Instant.now());
+    model.addAttribute("currentTime", LocalDateTime.now());
     model.addAttribute("scheduleDTO", scheduleDTO); //일정 정보
     model.addAttribute("isScheduleFull", isScheduleFull); //일정인원 마감 여부
     model.addAttribute("userDTOList", userDTOList); //참가자 정보
@@ -232,17 +230,11 @@ public class ScheduleController {
     Long scheduleNo = (Long) session.getAttribute("scheduleNo");
     ScheduleDTO scheduleDTO = scheduleService.readOneSchedule(scheduleNo);
 
-    //날짜/시간 포매팅
-    Instant originStartDate = scheduleDTO.getScheduleStartDate();
-    ZonedDateTime zonedDate = originStartDate.atZone(ZoneId.systemDefault());
-    LocalDateTime formattedDate = zonedDate.toLocalDateTime();
-
     Long clubNo = (Long) session.getAttribute("clubNo");
     Club club = new Club();
     club.setClubNo(clubNo);
     int countMembers = userAndClubService.countMembers(club); //일정 수정 시 최대 참가 인원은 모임 전체 인원과 같음
     model.addAttribute("countMembers", countMembers);
-    model.addAttribute("scheduleStartDate", formattedDate);
     model.addAttribute("scheduleDTO", scheduleDTO);
     model.addAttribute("kakaoApiKey", kakaoApiKey);
 
@@ -269,9 +261,7 @@ public class ScheduleController {
     log.info("----------------- [session get scheduleNo]-----------------", scheduleNo);
     //날짜/시간 포매팅
     LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
-    ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-    Instant instant = zonedDateTime.toInstant();
-    scheduleDTO.setScheduleStartDate(instant);
+    scheduleDTO.setScheduleStartDate(localDateTime);
 
 //    사진 업데이트 준비 로직
     log.trace("update club photo 조회");
