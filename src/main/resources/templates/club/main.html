@@ -214,9 +214,8 @@
                                                 <h5 class="card-title truncate-title"
                                                     th:text="${schedule.scheduleTitle}"></h5>
                                             </a>
-                                            <p class="card-text"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
-                                            </p>
+                                            <p class="card-text" th:text="${#temporals.format(schedule.scheduleStartDate,
+                                             'M월 d일, HH:mm')}">일정 시간</p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
                                         </div>
                                     </div>
@@ -259,10 +258,8 @@
                                                 <h5 class="card-title truncate-title"
                                                     th:text="${schedule.scheduleTitle}"></h5>
                                             </a>
-                                            <p class="card-text"
-                                               th:text="${#dates.format(schedule.scheduleStartDate, 'M월 d일, HH:mm')}">
-                                                일정 시작시간
-                                            </p>
+                                            <p class="card-text" th:text="${#temporals.format(schedule.scheduleStartDate,
+                                             'M월 d일, HH:mm')}">일정 시간</p>
                                             <p class="card-text" th:text="${schedule.schedulePlace}">장소</p>
                                         </div>
                                     </div>
