@@ -20,7 +20,7 @@
 
 
 ## 📊 ERD
-<img width="6" alt="모두의 모임 ERD" src="https://github.com/user-attachments/assets/6423c6d9-42a0-45cc-bb39-6f866bc08a63">
+<img width="800" alt="모두의 모임 ERD" src="https://github.com/user-attachments/assets/6423c6d9-42a0-45cc-bb39-6f866bc08a63">
 
 ## 🛠️ Skill Stack
 
