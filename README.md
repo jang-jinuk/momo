@@ -1,11 +1,5 @@
 # 모두의 모임 - 하나의 접점, 무한한 연결
 
----
-
-### 
-
-
-
 ## 📖 Outline
 **소개**
 
@@ -15,19 +9,12 @@
 
 - 개발 기간 : 2024-06-27 ~ 2024-08-07
 
-**주요 기능**
-
-
-
-## 📊 ERD
-<img width="800" alt="모두의 모임 ERD" src="https://github.com/user-attachments/assets/6423c6d9-42a0-45cc-bb39-6f866bc08a63">
-
 ## 🛠️ Skill Stack
 
 #### BackEnd
 <p>
     <img src="https://github.com/user-attachments/assets/c2c9f5c1-a8a5-4a53-bbf9-c68928a335e3" width="80">
-    <img src="https://github.com/user-attachments/assets/987881a9-4ab7-4769-bb5a-1bd3a11e0240" width="80">
+    <img src="https://github.com/user-attachments/assets/46608d0e-29c2-47f5-8d54-5e78188bf96d" width="80">
     <img src="https://github.com/user-attachments/assets/424eb591-53b9-428a-94f3-7cc303ced130" width="80">
     <img src="https://github.com/user-attachments/assets/14e8ad37-2f7d-4b08-ba69-34e33bcba6a1" width="80">
     <img src="https://github.com/user-attachments/assets/f6ee986c-e307-46a4-8ee6-1760e214aabe" width="80">
@@ -56,8 +43,23 @@
     <img src="https://github.com/user-attachments/assets/7d69cc58-1432-49ed-a520-ddccc62b271b" width="80">
 </p>
 
+## 📊 ERD
+<img width="800" alt="모두의 모임 ERD" src="https://github.com/user-attachments/assets/6423c6d9-42a0-45cc-bb39-6f866bc08a63">
+
 
 ## 🗂️ Package Structure
+
+**프로젝트 구조**
+
+- DDD(Domain-Driven Design)
+
+**선택 이유**
+- 많은 도메인을 다룰 것으로 예상되어 DDD 구조를 선택하였습니다. 
+- 이를 통해 각 도메인을 독립적으로 관리하여 개발 과정에서 효율성을 높였습니다.
+
+<details>
+<summary>프로젝트 구조 보기</summary>
+<div markdown="1">
 
 ```
 📂momopjt_
@@ -180,5 +182,24 @@
                               |_📋UserAndScheduleService.java
                               |_📋UserAndScheduleServiceImpl.java
 ```
+</div>
+</details>
 
-##  Project Architecture
+## 💡 Main Feature
+
+| 기능            | 내용                                                  |
+|---------------|-----------------------------------------------------|
+| 카테고리별 모임 생성   | 카테고리를 선택하여 모임을 생성할 수 있습니다.                          |
+| 모임 가입 신청 및 승인 | 자신이 원하는 모임에 가입 신청을 하고 모임장은 가입 신청을 승인하거나 거절할 수 있습니다. |
+| 일정 생성         | 장소, 시간, 인원을 원하는대로 설정하여 일정을 생성할 수 있습니다.              |
+| 일정 참가         | 참가하고 싶은 일정에 참가할 수 있습니다.                             |
+| 일정 후기 작성      | 오프라인 모임 일정을 마친 후 그에 대한 후기를 작성할 수 있습니다.              |
+
+
+## ⚙️ Project Architecture
+
+<img src="https://github.com/user-attachments/assets/db69ad15-b56c-4845-823f-565573dba850">
+
+## 🖥️ Service View
+
+## 🚀 API
