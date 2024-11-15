@@ -4,30 +4,27 @@ package com.momo.momopjt.userandclub;
 
 import com.momo.momopjt.alarm.AlarmService;
 import com.momo.momopjt.club.Club;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-
-import com.momo.momopjt.club.ClubDTO;
 import com.momo.momopjt.club.ClubRepository;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.schedule.ScheduleService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserRepository;
 import com.momo.momopjt.user.UserService;
-import com.momo.momopjt.user.UserServiceImpl;
 import com.momo.momopjt.userandschedule.UserAndScheduleDTO;
 import com.momo.momopjt.userandschedule.UserAndScheduleRepository;
 import com.momo.momopjt.userandschedule.UserAndScheduleService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 
@@ -35,8 +32,6 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @Transactional
 @RequiredArgsConstructor
-
-
 public class UserAndClubServiceImpl implements UserAndClubService {
 
   private final ClubRepository clubRepository;

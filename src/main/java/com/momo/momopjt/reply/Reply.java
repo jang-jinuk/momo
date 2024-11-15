@@ -3,10 +3,10 @@ package com.momo.momopjt.reply;
 import com.momo.momopjt.article.Article;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.Instant;
 
 @Getter

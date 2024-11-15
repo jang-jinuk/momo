@@ -1,9 +1,9 @@
 package com.momo.momopjt.user;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
 import java.time.Instant;
 import java.time.LocalDate;
 
