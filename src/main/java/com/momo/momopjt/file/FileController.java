@@ -5,7 +5,7 @@ import com.momo.momopjt.photo.PhotoRepository;
 import com.momo.momopjt.photo.PhotoService;
 import com.momo.momopjt.user.User;
 import com.momo.momopjt.user.UserService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -42,7 +42,7 @@ public class FileController {
   private String uploadPath;
 
   //599p
-  @ApiOperation(value = "파일업로드")
+  @Operation(summary = "파일업로드")
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //  public String uploadFile(FileDto fileDto){
   //605p
@@ -151,7 +151,7 @@ public class FileController {
 
 //  GET방식 파일 조회
     //608p
-  @ApiOperation(value = "파일조회")
+  @Operation(summary = "파일조회")
   @GetMapping("/view/{fileName}") // 원래 view/{fileName}
   public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName){
 
@@ -201,7 +201,7 @@ public class FileController {
 
   // Delete 방식 삭제
 //  609p
-  @ApiOperation(value = "파일삭제")
+  @Operation(summary = "파일삭제")
   @DeleteMapping("/remove/{fileName}")
   public Map<String, Boolean> deleteFile(@PathVariable String fileName){
 

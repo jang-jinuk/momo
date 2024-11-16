@@ -1,10 +1,10 @@
 package com.momo.momopjt.report;
 
 import com.momo.momopjt.user.User;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.Instant;
 
 @Getter

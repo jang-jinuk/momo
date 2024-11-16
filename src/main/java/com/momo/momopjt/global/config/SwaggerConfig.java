@@ -1,58 +1,36 @@
 package com.momo.momopjt.global.config;
 
-import java.util.List;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerConfig {
 
   @Bean
-  public Docket api() {
-    return new Docket(DocumentationType.OAS_30)
-    .useDefaultResponseMessages(false)
-    .select()
-    .apis(RequestHandlerSelectors.basePackage("com.momo.momopjt"))
-    .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
-    .paths(PathSelectors.any())
-    .build()
-    .securitySchemes(List.of(apiKey())) // 815p
-    .securityContexts(List.of(securityContext())) // 815p
-    .apiInfo(apiInfo());
+  public OpenAPI openAPI() {
+    Info info = new Info()
+        .title("Momo Project API Documentation")
+        .version("v1.0");
+
+    // JWT 보안 스키마 설정
+    SecurityScheme securityScheme = new SecurityScheme()
+        .type(SecurityScheme.Type.HTTP)
+        .scheme("bearer")
+        .bearerFormat("JWT")
+        .in(SecurityScheme.In.HEADER)
+        .name("Authorization");
+
+    // 보안 요구사항 설정
+    SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+
+    return new OpenAPI()
+        .info(info)
+        .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+        .addSecurityItem(securityRequirement);
   }
-
-  private ApiInfo apiInfo() {
-    return new ApiInfoBuilder()
-            .title("Boot 01 Project Swagger")
-            .build();
-  }
-
-  private ApiKey apiKey() {
-    return new ApiKey("Authorization", "Bearer Token", "header");
-  }
-
-  private SecurityContext securityContext() {
-    return SecurityContext.builder().securityReferences(defaultAuth())
-            .operationSelector(selector ->
-                    selector.requestMappingPattern().startsWith("/api/"))
-            .build();
-  }
-
-  private List<SecurityReference> defaultAuth() {
-    AuthorizationScope authorizationScope = new AuthorizationScope("global", "global access");
-
-    return List.of(new SecurityReference("Authorization", new AuthorizationScope[]{authorizationScope}));
-  }
-
 }

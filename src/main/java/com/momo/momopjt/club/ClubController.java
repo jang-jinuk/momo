@@ -11,9 +11,11 @@ import com.momo.momopjt.user.UserDTO;
 import com.momo.momopjt.user.UserService;
 import com.momo.momopjt.userandclub.UserAndClubDTO;
 import com.momo.momopjt.userandclub.UserAndClubService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,9 @@ import java.util.stream.Collectors;
 
 @Controller
 @Log4j2
+
 @RequestMapping("/club")
 public class ClubController {
-
   @Autowired
   private ClubService clubService;
   @Autowired

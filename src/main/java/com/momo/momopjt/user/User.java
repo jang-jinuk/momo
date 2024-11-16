@@ -1,10 +1,10 @@
 package com.momo.momopjt.user;
 
 import com.momo.momopjt.alarm.Alarm;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;

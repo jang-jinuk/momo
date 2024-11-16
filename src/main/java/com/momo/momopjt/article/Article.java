@@ -3,9 +3,9 @@ package com.momo.momopjt.article;
 import com.momo.momopjt.club.Club;
 import com.momo.momopjt.schedule.Schedule;
 import com.momo.momopjt.user.User;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.Instant;
 
 @Entity

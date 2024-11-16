@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,11 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 @Log4j2
 @Configuration
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -44,59 +41,47 @@ public class SecurityConfig {
     log.info("------------configure----------------");
 
     http
-        .csrf().disable()// CSRF 보호 활성화
-        .authorizeRequests()
-        .antMatchers("/secured/**").authenticated()
-        .antMatchers("/find/**").permitAll()
-        .antMatchers("/", "/", "/register", "/login", "/css/**", "/js/**", "/images/**", "/public/**", "/user/**", "/find/**","/article/**").permitAll()
-        .antMatchers("/admin/**").permitAll()
-        //.antMatchers("/admin/**").hasRole("ADMIN") //todo 0802 안돼요 SW
-        .and()
-        .formLogin().loginPage("/user/login")
-        .defaultSuccessUrl("/")
-        .successHandler(authenticationSuccessHandler())
-        .permitAll()
-        .and()
-        .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-        .logoutSuccessUrl("/")
-        .invalidateHttpSession(true)
-        .deleteCookies("JSESSIONID")
-        .permitAll()
-        .and()
-        .exceptionHandling()
-        .accessDeniedPage("/403")
-        .and()
-        .sessionManagement()  // 세션 관리 설정 추가
-        .invalidSessionUrl("/user/login?expired=true")  // 세션이 무효화되었을 때 리다이렉트할 URL 추가
-        .maximumSessions(1)  // 동시 세션 최대 수 설정
-        .expiredUrl("/user/login?expired=true");  // 세션 만료 시 리다이렉트할 URL 추가
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/secured/**").authenticated()
+                .requestMatchers("/", "/register", "/login", "/css/**", "/js/**",
+                    "/images/**", "/public/**", "/user/**", "/find/**","/article/**","/assets/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+            .anyRequest().authenticated()
 
+        )
+        .formLogin(form -> form
+            .loginPage("/user/login")
+            .defaultSuccessUrl("/")
+            .successHandler(authenticationSuccessHandler())
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+            .logoutSuccessUrl("/")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+            .permitAll()
+        )
+        .exceptionHandling(exception -> exception
+            .accessDeniedPage("/403")
+        )
+        .sessionManagement(session -> session
+            .invalidSessionUrl("/user/login?expired=true")
+            .maximumSessions(1)
+            .expiredUrl("/user/login?expired=true")
+        );
 
     // 소셜 로그인 설정
-    http
-        .oauth2Login()
+    http.oauth2Login(oauth2 -> oauth2
         .loginPage("/user/login")
         .defaultSuccessUrl("/", true)
         .successHandler(authenticationSuccessHandler())
-        .userInfoEndpoint()
-        .userService(customOAuth2UserService);
+        .userInfoEndpoint(userInfo -> userInfo
+            .userService(customOAuth2UserService)
+        )
+    );
 
     return http.build();
   }
-
-
-  //0716 불필요 코드 주석처리 YY
-//  @Bean
-//  public WebSecurityCustomizer webSecurityCustomizer() {
-//    log.info("------------web configure----------");
-//
-//    return (web) -> web.ignoring()
-//        .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
-//  }
-
-//  @Bean
-//  public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService2() {
-//    return new CustomOAuth2UserService(userRepository);
-//  }
 }
