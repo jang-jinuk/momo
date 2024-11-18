@@ -199,7 +199,3 @@
 ## ⚙️ Project Architecture
 
 <img src="https://github.com/user-attachments/assets/db69ad15-b56c-4845-823f-565573dba850">
-
-## 🖥️ Service View
-
-## 🚀 API
